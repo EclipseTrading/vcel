@@ -32,8 +32,8 @@ namespace SpelBenchmark
         // Null
         private static readonly TestRow RowNull = new TestRow
         {
-            PosSwimDelta = null,
-            OptionEquivalentSplitPosition = null
+            P = null,
+            O = null
         };
 
         [Benchmark(Baseline = true)]
@@ -106,8 +106,8 @@ namespace SpelBenchmark
             var p = -0.9286 * b * b - 5.7381 * b + 7.25;
             return new TestRow
             {
-                PosSwimDelta = negCase ? p : 100 - p,
-                OptionEquivalentSplitPosition = 100.0
+                P = negCase ? p : 100 - p,
+                O = 100.0
             };
         }
 

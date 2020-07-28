@@ -18,7 +18,7 @@ namespace SpelBenchmark
     {
         private static readonly ExpressionParser<Maybe<object>> vcelMonadParser =
             new ExpressionParser<Maybe<object>>(new MaybeExpressionFactory(MaybeMonad.Instance));
-        private static readonly TestRow Row = new TestRow { OptionEquivalentSplitPosition = 1.0, PosSwimDelta = 1.0 };
+        private static readonly TestRow Row = new TestRow { O = 1.0, P = 1.0 };
 
         private static readonly VCEx VcelAddExpr = vcelMonadParser.Parse(Expressions.Add);
         private static readonly VCEx VcelSubExpr = vcelMonadParser.Parse(Expressions.Subtract);

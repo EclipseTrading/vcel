@@ -6,16 +6,16 @@ namespace SpelBenchmark
     {
         public double? Evaluate(TestRow r)
         {
-            if (r.PosSwimDelta == null)
+            if (r.P == null)
             {
                 return null;
             }
-            var v1 = r.PosSwimDelta.Value;
-            if (r.OptionEquivalentSplitPosition == null)
+            var v1 = r.P.Value;
+            if (r.O == null)
             {
                 return null;
             }
-            var v2 = r.OptionEquivalentSplitPosition.Value;
+            var v2 = r.O.Value;
             var ud = (double?)v1 / v2;
             if (ud == null)
             {
@@ -93,16 +93,16 @@ namespace SpelBenchmark
 
         public double? EvaluateBucket(TestRow r)
         {
-            if (r.PosSwimDelta == null)
+            if (r.P == null)
             {
                 return null;
             }
-            var v1 = r.PosSwimDelta.Value;
-            if (r.OptionEquivalentSplitPosition == null)
+            var v1 = r.P.Value;
+            if (r.O == null)
             {
                 return null;
             }
-            var v2 = r.OptionEquivalentSplitPosition.Value;
+            var v2 = r.O.Value;
             var ud = (double?)v1 / v2;
             if (ud == null)
             {
