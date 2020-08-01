@@ -33,3 +33,6 @@ jobs:
     - name: Push NuGet
       working-directory: src
       run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.Core/bin/Release/VCEL.Core.${{ env.RELEASE_VERSION }}.nupkg
+    - name: Push GitHub Packages
+      working-directory: src
+      run: dotnet nuget push -k ${{secrets.GITHUB_TOKEN}} -s https://nuget.pkg.github.com/EclipseTrading/index.json VCEL.Core/bin/Release/VCEL.Core.${{ env.RELEASE_VERSION }}.nupkg
