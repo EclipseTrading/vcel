@@ -1,0 +1,33 @@
+name: .NET Core
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      working-directory: src
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: src
+    - name: Test
+      working-directory: src
+      run: dotnet test --no-restore --verbosity normal
+    - name: Publish NuGet
+      uses: brandedoutcase/publish-nuget@v2.5.5
+      with:
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        PROJECT_FILE_PATH: src/VCEL.Core/VCEL.Core.csproj
+        VERSION_STATIC: ${{ github.ref }}
