@@ -49,7 +49,7 @@ equalityExpr
 	;
 
 booleanOpExpr
-	: booleanOpExpr IN expr #In 
+	: booleanOpExpr IN expr #InOp 
 	| booleanOpExpr MATCHES expr #Matches
 	| booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
