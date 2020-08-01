@@ -25,9 +25,11 @@ jobs:
     - name: Test
       working-directory: src
       run: dotnet test --no-restore --verbosity normal
+    - name: Push
+      working-directory: src
+    - name: Pack NuGet
+      working-directory: src
+      run: dotnet pack --configuration Release /p:Version=${{ github.ref }}
     - name: Publish NuGet
-      uses: brandedoutcase/publish-nuget@v2.5.5
-      with:
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        PROJECT_FILE_PATH: src/VCEL.Core/VCEL.Core.csproj
-        VERSION_STATIC: ${{ github.ref }}
+      working-directory: src
+      run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.Core/bin/Release/VCEL.Core.${{ github.ref }}.nupkg
