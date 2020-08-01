@@ -89,7 +89,7 @@ namespace VCEL.Core.Lang
             => exprFactory.GreaterOrEqual(
                 Visit(context.GetChild(0)),
                 Visit(context.GetChild(2)));
-        public override IExpression<T> VisitIn([NotNull] VCELParser.InContext context)
+        public override IExpression<T> VisitInOp([NotNull] VCELParser.InOpContext context)
             => exprFactory.In(
                 Visit(context.GetChild(0)),
                 Visit(context.GetChild(2)));
