@@ -18,7 +18,6 @@ namespace VCEL.Core.Lang
             var inputStream = new AntlrInputStream(expression);
             var lexer = new VCELLexer(inputStream);
             var commonTokenStream = new CommonTokenStream(lexer);
-            var tok = GetTokenTypes(commonTokenStream);
 
             var parser = new VCELParser(commonTokenStream);
             var expr = parser.expression();
@@ -26,7 +25,7 @@ namespace VCEL.Core.Lang
             return visitor.Visit(expr);
         }
 
-        private string GetTokenTypes(CommonTokenStream commonTokenStream)
+        public string GetTokenTypes(CommonTokenStream commonTokenStream)
         {
             commonTokenStream.Fill();
             var tokens = commonTokenStream.GetTokens();
