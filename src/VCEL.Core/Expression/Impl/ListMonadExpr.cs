@@ -11,12 +11,12 @@ namespace VCEL.Core.Expression.Impl
 
         public ListMonadExpr(IReadOnlyList<IExpression<List<object>>> values)
         {
-            this.list = new List<IExpression<List<object>>>(values);
+            list = new List<IExpression<List<object>>>(values);
         }
 
         public IMonad<List<object>> Monad => ListMonad<object>.Instance;
 
-        public List<object> Evaluate(IContext<List<object>> context) 
-            => this.list.SelectMany(e => e.Evaluate(context)).ToList();
+        public List<object> Evaluate(IContext<List<object>> context)
+            => list.SelectMany(e => e.Evaluate(context)).ToList();
     }
 }

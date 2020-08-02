@@ -9,7 +9,7 @@ namespace VCEL.Core.Expression.Impl
            IMonad<TMonad> monad,
            IExpression<TMonad> expr)
         {
-            this.Monad = monad;
+            Monad = monad;
             this.expr = expr;
         }
 

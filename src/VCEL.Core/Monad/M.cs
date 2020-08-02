@@ -4,10 +4,9 @@
     {
         public M(T value)
         {
-            this.Value = value;
+            Value = value;
         }
 
-        public T Value { get;  }
+        public T Value { get; }
     }
-
 }

@@ -4,7 +4,7 @@ namespace VCEL.Core.Expression.Op
 {
     public class Binary<T, TResult> : Binary<T, T, TResult>
     {
-        public Binary(Func<T, T, TResult> evaluate) 
+        public Binary(Func<T, T, TResult> evaluate)
             : base(evaluate)
         {
         }

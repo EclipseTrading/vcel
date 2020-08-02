@@ -13,7 +13,7 @@ namespace VCEL.Expression
             IOperators operators = null,
             IFunctions functions = null)
             : base(
-                  monad, 
+                  monad,
                   operators ?? new DefaultOperators(),
                   functions ?? new DefaultFunctions())
         {

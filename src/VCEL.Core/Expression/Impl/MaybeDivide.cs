@@ -7,14 +7,14 @@ namespace VCEL.Core.Expression.Impl
 {
     public class MaybeDivide : IExpression<Maybe<object>>
     {
-        public MaybeDivide( 
+        public MaybeDivide(
             IBinaryOperator op,
-            IExpression<Maybe<object>> left, 
-            IExpression<Maybe<object>> right) 
+            IExpression<Maybe<object>> left,
+            IExpression<Maybe<object>> right)
         {
-            this.Op = op;
-            this.Left = left;
-            this.Right = right;
+            Op = op;
+            Left = left;
+            Right = right;
         }
 
         public IExpression<Maybe<object>> Left { get; }

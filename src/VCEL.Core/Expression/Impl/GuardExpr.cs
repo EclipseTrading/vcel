@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -14,7 +13,7 @@ namespace VCEL.Core.Expression.Impl
             IReadOnlyList<(IExpression<TMonad>, IExpression<TMonad>)> clauses,
             IExpression<TMonad> otherwise)
         {
-            this.Monad = monad;
+            Monad = monad;
             this.clauses = clauses;
             this.otherwise = otherwise;
         }
@@ -32,7 +31,7 @@ namespace VCEL.Core.Expression.Impl
                     result,
                     BindNext);
                 TMonad BindNext(object r)
-                    => r is bool b 
+                    => r is bool b
                         ? (b ? ce.Current.Res.Evaluate(context) : Next(ce))
                         : Monad.Unit;
             }

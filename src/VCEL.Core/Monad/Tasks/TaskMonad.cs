@@ -4,7 +4,6 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Monad.Tasks
 {
-
     public class TaskMonad : IMonad<Task<object>>
     {
         public Task<object> Unit { get; } = Task.FromResult(default(object));
@@ -33,8 +32,9 @@ namespace VCEL.Core.Monad.Tasks
                 return GetTaskResult(task, type.GetGenericArguments()[0]);
             }
             // Type is a Task with no return value
-            return Task.FromResult(value); 
+            return Task.FromResult(value);
         }
+
         public static TaskMonad Instance { get; } = new TaskMonad();
 
         private async Task<object> GetTaskResult(Task task, Type genericType)

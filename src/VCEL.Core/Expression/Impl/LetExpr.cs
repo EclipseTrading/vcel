@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -11,7 +10,7 @@ namespace VCEL.Core.Expression.Impl
 
         public LetExpr(
             IMonad<TMonad> monad,
-            IReadOnlyList<(string, IExpression<TMonad>)> bindings, 
+            IReadOnlyList<(string, IExpression<TMonad>)> bindings,
             IExpression<TMonad> expr)
         {
             Monad = monad;
@@ -24,7 +23,7 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var ctx = context;
-            foreach (var (name, exp) in bindings)
+            foreach(var (name, exp) in bindings)
             {
                 var br = exp.Evaluate(ctx);
                 ctx = ctx.OverrideName(name, br);

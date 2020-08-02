@@ -17,6 +17,6 @@ namespace VECL.Test
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
-    
+
     }
 }

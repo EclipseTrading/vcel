@@ -6,7 +6,7 @@ namespace VCEL.Core.Expression.Op
     {
         private Func<bool, bool, bool> combine;
 
-        public BooleanOperator(string opChar, Func<bool, bool, bool> combine) 
+        public BooleanOperator(string opChar, Func<bool, bool, bool> combine)
         {
             OpChar = opChar;
             this.combine = combine;
@@ -16,7 +16,7 @@ namespace VCEL.Core.Expression.Op
 
         public bool Evaluate(bool l, bool r)
         {
-            return this.combine(l, r);
+            return combine(l, r);
         }
 
         public void SetFunc(Func<bool, bool, bool> combine)

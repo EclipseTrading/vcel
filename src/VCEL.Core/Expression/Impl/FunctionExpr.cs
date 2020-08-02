@@ -11,14 +11,14 @@ namespace VCEL.Core.Expression.Impl
         private Func<object[], object> func;
         public FunctionExpr(
             IMonad<TMonad> monad,
-            string name, 
-            IReadOnlyList<IExpression<TMonad>> args, 
+            string name,
+            IReadOnlyList<IExpression<TMonad>> args,
             IFunctions functions)
         {
             Monad = monad;
             Name = name;
             Args = args;
-            this.func = functions.GetFunction(Name);
+            func = functions.GetFunction(Name);
         }
 
         public IMonad<TMonad> Monad { get; }
@@ -38,7 +38,8 @@ namespace VCEL.Core.Expression.Impl
                     => i < args.Count
                         ? Monad.Bind(
                             args[i],
-                            o => {
+                            o =>
+                            {
                                 resolved[i] = o;
                                 return EvalInner(i + 1);
                             })

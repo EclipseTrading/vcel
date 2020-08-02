@@ -10,7 +10,7 @@ namespace VCEL.Monad.Maybe
 
         public Maybe<object> Bind(Maybe<object> a, Func<object, Maybe<object>> f)
         {
-            if (!a.HasValue)
+            if(!a.HasValue)
             {
                 return Maybe<object>.None;
             }
@@ -19,5 +19,4 @@ namespace VCEL.Monad.Maybe
 
         public static MaybeMonad Instance { get; } = new MaybeMonad();
     }
-
 }

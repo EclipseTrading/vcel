@@ -6,7 +6,7 @@ namespace VCEL.Core.Expression.Impl
     {
         public NullExpr(IMonad<TMonad> monad)
         {
-            this.Monad = monad;
+            Monad = monad;
         }
 
         public IMonad<TMonad> Monad { get; }

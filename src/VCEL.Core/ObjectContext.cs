@@ -11,13 +11,13 @@ namespace VCEL
 
         public ObjectContext(IMonad<TMonad> monad, object obj)
         {
-            this.Monad = monad;
-            this.Object = obj;
+            Monad = monad;
+            Object = obj;
         }
-        
+
         public virtual IContext<TMonad> OverrideName(string name, TMonad br)
             => new OverrideContext<TMonad>(
-                this, 
+                this,
                 ImmutableDictionary<string, TMonad>.Empty.SetItem(name, br));
 
         public virtual bool TryGetAccessor(string propName, out IValueAccessor<TMonad> accessor)

@@ -20,7 +20,7 @@ namespace VCEL.Core.Expression.Op
 
         public void RegisterTypes<T>(Func<T, T, BinaryOperator, T> eval, params BinaryOperator[] ops)
         {
-            foreach (var op in ops)
+            foreach(var op in ops)
             {
                 op.RegisterType<T, T>((a, b) => eval(a, b, op));
             }
@@ -28,14 +28,14 @@ namespace VCEL.Core.Expression.Op
 
         public void RegisterUpcasts(Type a, Type b, Type type, params BinaryOperator[] ops)
         {
-            foreach (var op in ops)
+            foreach(var op in ops)
             {
                 op.RegisterUpCast(a, b, type);
             }
         }
         public void RegisterUpcastOrder(Type[] types, params BinaryOperator[] ops)
         {
-            foreach (var op in ops)
+            foreach(var op in ops)
             {
                 op.RegisterUpCastOrder(types);
             }

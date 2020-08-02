@@ -6,9 +6,9 @@ namespace VCEL.Core.Expression.Impl
     public abstract class ComparableExpr<T> : BinaryExprBase<T>
     {
         public ComparableExpr(
-            IMonad<T> monad, 
-            IExpression<T> left, 
-            IExpression<T> right) 
+            IMonad<T> monad,
+            IExpression<T> left,
+            IExpression<T> right)
             : base(monad, left, right)
         {
         }
@@ -30,9 +30,9 @@ namespace VCEL.Core.Expression.Impl
         protected abstract T Evaluate(IComparable l, IComparable r);
 
         protected bool TryUpCast(
-            object l, 
-            object r, 
-            out object ol, 
+            object l,
+            object r,
+            out object ol,
             out object or)
             => TryUpCastOneSide(l, r, out ol, out or)
                 || TryUpCastOneSide(r, l, out or, out ol);
@@ -46,7 +46,7 @@ namespace VCEL.Core.Expression.Impl
             ol = l;
             or = r;
 
-            switch (l)
+            switch(l)
             {
                 case double _ when r is decimal dr:
                     or = (double)dr;
