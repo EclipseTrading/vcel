@@ -52,7 +52,7 @@ namespace VCEL.Test
             var expr = VCExpression.ParseMaybe(exprStr);
             var result = expr.Evaluate(new { });
             Assert.That(result.HasValue, Is.EqualTo(hasValue));
-            if (hasValue)
+            if(hasValue)
             {
                 Assert.That(result.Value, Is.EqualTo(expected));
             }
@@ -107,7 +107,7 @@ namespace VCEL.Test
             var expr = parser.Parse(exprString);
             var parseTime = sw.Elapsed;
             sw.Restart();
-            for (var i = 0; i < 50; i++)
+            for(var i = 0; i < 50; i++)
             {
                 result = expr.Evaluate(o);
             }

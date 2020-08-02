@@ -16,11 +16,11 @@ namespace VCEL.Core.Expression.Impl
 
         public List<object> Evaluate(IContext<List<object>> context)
         {
-            if (valueAccessor == null)
+            if(valueAccessor == null)
             {
-                if (!context.TryGetAccessor(propName, out this.valueAccessor))
+                if(!context.TryGetAccessor(propName, out valueAccessor))
                 {
-                    this.valueAccessor = new UnitAccessor<List<object>>(Monad);
+                    valueAccessor = new UnitAccessor<List<object>>(Monad);
                 }
             }
             return valueAccessor.GetValue(context);

@@ -14,8 +14,8 @@ namespace VCEL.Expression
             IOperators operators = null,
             IFunctions functions = null)
         {
-            this.Monad = monad;
-            this.Operators = operators ?? new DefaultOperators();
+            Monad = monad;
+            Operators = operators ?? new DefaultOperators();
             Functions = functions ?? new DefaultFunctions();
         }
 
@@ -48,7 +48,7 @@ namespace VCEL.Expression
             => new GreaterThan<T>(Monad, l, r);
         public virtual IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r)
             => new GreaterOrEqual<T>(Monad, l, r);
-        
+
         public virtual IExpression<T> In(IExpression<T> l, IExpression<T> r)
             => new InExpr<T>(Monad, l, r);
         public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> r)

@@ -1,9 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Spring.Expressions;
+using VCEL;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.Monad.Maybe;
-using VCEL;
 using VCEL.Test.Shared;
 
 namespace SpelBenchmark

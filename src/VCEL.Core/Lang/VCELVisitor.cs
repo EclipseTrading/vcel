@@ -1,9 +1,8 @@
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
 using VCEL.Expression;
 
 namespace VCEL.Core.Lang
@@ -106,7 +105,7 @@ namespace VCEL.Core.Lang
         public override IExpression<T> VisitBetweenArgs([NotNull] VCELParser.BetweenArgsContext context)
             => exprFactory.List(new[] {
                 Visit(context.GetChild(1)),
-                Visit(context.GetChild(3)) 
+                Visit(context.GetChild(3))
             });
         public override IExpression<T> VisitAnd([NotNull] VCELParser.AndContext context)
             => exprFactory.And(

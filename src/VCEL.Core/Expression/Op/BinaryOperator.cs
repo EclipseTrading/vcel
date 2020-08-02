@@ -24,22 +24,22 @@ namespace VCEL.Core.Expression.Op
             var rType = r?.GetType();
 
             if(lType != null
-                && lType == rType 
+                && lType == rType
                 && operators.TryGetValue(l.GetType(), out var oper))
             {
                 return oper.Evaluate(l, r);
             }
 
-            if(lType != null 
-                && rType != null 
+            if(lType != null
+                && rType != null
                 && dualTypeOperators.TryGetValue((lType, rType), out var dop))
-            { 
+            {
                 return dop.Evaluate(l, r);
             }
 
-            if (!TryUpCast(l, r, out var ul, out var ur, out var t)
-            || t == null 
-            ||!operators.TryGetValue(t, out var op))
+            if(!TryUpCast(l, r, out var ul, out var ur, out var t)
+            || t == null
+            || !operators.TryGetValue(t, out var op))
             {
                 return null;
             }
@@ -48,24 +48,24 @@ namespace VCEL.Core.Expression.Op
 
         public void RegisterType<TLeft, TRight, TResult>(Func<TLeft, TRight, TResult> append)
         {
-            this.dualTypeOperators[(typeof(TLeft), typeof(TRight))] = new Binary<TLeft, TRight, TResult>(append);
+            dualTypeOperators[(typeof(TLeft), typeof(TRight))] = new Binary<TLeft, TRight, TResult>(append);
         }
 
         public void RegisterType<T, TResult>(Func<T, T, TResult> append)
         {
-            this.operators[typeof(T)] = new Binary<T, TResult>(append);
+            operators[typeof(T)] = new Binary<T, TResult>(append);
         }
 
         public void RegisterType<T>(Func<T, T, T> append)
         {
-            this.operators[typeof(T)] = new Binary<T, T>(append);
+            operators[typeof(T)] = new Binary<T, T>(append);
         }
 
         public void RegisterUpCastOrder(params Type[] types)
         {
-            for (var i = 0; i < types.Length; i++)
+            for(var i = 0; i < types.Length; i++)
             {
-                for (var j = i + 1; j < types.Length; j++)
+                for(var j = i + 1; j < types.Length; j++)
                 {
                     RegisterUpCast(types[i], types[j], types[j]);
                 }
@@ -75,10 +75,10 @@ namespace VCEL.Core.Expression.Op
         public void RegisterUpCast<TA, TB>() => RegisterUpCast(typeof(TA), typeof(TB), typeof(TB));
         public void RegisterUpCast<TA, TB, TC>() => RegisterUpCast(typeof(TA), typeof(TB), typeof(TC));
 
-        public void RegisterUpCast(Type a, Type b, Type c) 
+        public void RegisterUpCast(Type a, Type b, Type c)
         {
-            this.upcasts[(a, b)] = c;
-            this.upcasts[(b, a)] = c;
+            upcasts[(a, b)] = c;
+            upcasts[(b, a)] = c;
         }
 
         public bool TryUpCast(object l, object r, out object ul, out object ur, out Type type)
@@ -87,7 +87,7 @@ namespace VCEL.Core.Expression.Op
             ur = null;
             type = null;
 
-            if (l == null && r == null || l?.GetType() == r?.GetType())
+            if(l == null && r == null || l?.GetType() == r?.GetType())
             {
                 ul = l;
                 ur = r;
@@ -95,7 +95,7 @@ namespace VCEL.Core.Expression.Op
                 return true;
             }
 
-            if(l == null || r == null) 
+            if(l == null || r == null)
             {
                 return false;
             }
@@ -103,7 +103,7 @@ namespace VCEL.Core.Expression.Op
             var lt = l.GetType();
             var rt = r.GetType();
 
-            if(upcasts.TryGetValue((lt, rt), out type)) 
+            if(upcasts.TryGetValue((lt, rt), out type))
             {
                 ul = Convert.ChangeType(l, type);
                 ur = Convert.ChangeType(r, type);

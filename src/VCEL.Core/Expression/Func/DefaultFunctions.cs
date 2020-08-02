@@ -6,14 +6,14 @@ namespace VCEL.Core.Expression.Func
 {
     public class DefaultFunctions : IFunctions
     {
-        private readonly Dictionary<string, Func<object[], object>> functions 
+        private readonly Dictionary<string, Func<object[], object>> functions
             = new Dictionary<string, Func<object[], object>>();
 
         public DefaultFunctions()
         {
-            Register("abs", args => 
-                args[0] == null 
-                    ? null 
+            Register("abs", args =>
+                args[0] == null
+                    ? null
                     : Convert.ChangeType(Math.Abs(Convert.ToDouble(args[0])), args[0].GetType()));
             Register("min", Enumerable.Min);
             Register("max", Enumerable.Max);

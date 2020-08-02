@@ -10,10 +10,10 @@ namespace VCEL.Core.Expression.Impl
             IExpression<TMonad> trueExpr,
             IExpression<TMonad> falseExpr)
         {
-            this.Monad = factory;
-            this.ConditionExpr = conditionExpr;
-            this.TrueExpr = trueExpr;
-            this.FalseExpr = falseExpr;
+            Monad = factory;
+            ConditionExpr = conditionExpr;
+            TrueExpr = trueExpr;
+            FalseExpr = falseExpr;
         }
 
         public IExpression<TMonad> ConditionExpr { get; }

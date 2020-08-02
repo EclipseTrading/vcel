@@ -7,12 +7,12 @@ namespace VCEL.Expression
     using Monad = M<string>;
     public class ToStringExpressionFactory<TContext> : ExpressionFactory<Monad>
     {
-        public ToStringExpressionFactory(IMonad<M<string>> monad) 
+        public ToStringExpressionFactory(IMonad<M<string>> monad)
             : base(monad, new ToStringOperators())
         {
         }
 
         public override IExpression<Monad> Property(string name)
-            => new ValueExpr<Monad>(this.Monad, name);
+            => new ValueExpr<Monad>(Monad, name);
     }
 }

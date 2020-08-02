@@ -9,9 +9,9 @@ namespace VCEL.Core.Expression.Impl
           IExpression<T> left,
           IExpression<T> right)
         {
-            this.Monad = monad;
-            this.Left = left;
-            this.Right = right;
+            Monad = monad;
+            Left = left;
+            Right = right;
         }
         public IExpression<T> Left { get; }
         public IExpression<T> Right { get; }
@@ -28,7 +28,7 @@ namespace VCEL.Core.Expression.Impl
             T BindL(object lv)
             {
                 return Monad.Bind(r, BindR);
-                T BindR(object rv) => Evaluate(lv, rv);                
+                T BindR(object rv) => Evaluate(lv, rv);
             }
         }
 

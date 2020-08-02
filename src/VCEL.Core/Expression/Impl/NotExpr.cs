@@ -7,10 +7,10 @@ namespace VCEL.Core.Expression.Impl
         private readonly IExpression<TMonad> expr;
 
         public NotExpr(
-            IMonad<TMonad> monad, 
+            IMonad<TMonad> monad,
             IExpression<TMonad> expr)
         {
-            this.Monad = monad;
+            Monad = monad;
             this.expr = expr;
         }
 
@@ -19,7 +19,7 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var result = expr.Evaluate(context);
-            return Monad.Bind(result, 
+            return Monad.Bind(result,
                 o => Monad.Lift(o is bool b ? !b : (bool?)null));
         }
 

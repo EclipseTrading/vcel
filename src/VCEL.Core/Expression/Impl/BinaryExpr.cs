@@ -12,7 +12,7 @@ namespace VCEL.Core.Expression.Impl
             IExpression<T> right)
             : base(monad, left, right)
         {
-            this.Op = op;
+            Op = op;
         }
 
         public IBinaryOperator Op { get; }

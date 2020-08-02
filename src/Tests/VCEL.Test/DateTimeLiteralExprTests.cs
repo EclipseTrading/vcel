@@ -9,7 +9,7 @@ namespace VECL.Test
 {
     public class DateTimeLiteralExprTests
     {
-        
+
         [TestCase("(@2020-03-04T08:35:15.341Z - @2020-03-04T08:30:00.000Z) < 00:05:00", false)]
         [TestCase("(@2020-03-04T08:35:15.341Z - @2020-03-04T08:30:00.000Z) < 00:06:00", true)]
         [TestCase("@2020-03-04T08:35:15.341Z - @2020-03-04T08:30:00.000Z < 00:05:00", false)]

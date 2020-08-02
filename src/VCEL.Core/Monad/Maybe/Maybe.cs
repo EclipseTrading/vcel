@@ -1,11 +1,11 @@
 ﻿namespace VCEL.Monad.Maybe
 {
-    public class Maybe<T> 
+    public class Maybe<T>
     {
         public Maybe(T value)
         {
-            this.Value = value;
-            this.HasValue = true;
+            Value = value;
+            HasValue = true;
         }
 
         internal Maybe() { }
@@ -15,5 +15,4 @@
         public static Maybe<T> Some(T value) => new Maybe<T>(value);
         public static Maybe<T> None { get; } = new Maybe<T>();
     }
-
 }

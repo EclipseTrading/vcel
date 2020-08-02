@@ -28,8 +28,8 @@ namespace VCEL.Expression
         // Primitive Types
         IExpression<T> Int(int i);
         IExpression<T> Long(long l);
-        IExpression<T> Double(double d);        
-        IExpression<T> String(string s);        
+        IExpression<T> Double(double d);
+        IExpression<T> String(string s);
         IExpression<T> Bool(bool b);
         IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset);
         IExpression<T> TimeSpan(TimeSpan timeSpan);
@@ -43,7 +43,7 @@ namespace VCEL.Expression
         IExpression<T> Multiply(IExpression<T> l, IExpression<T> r);
         IExpression<T> Subtract(IExpression<T> l, IExpression<T> r);
         IExpression<T> Divide(IExpression<T> l, IExpression<T> r);
-        IExpression<T> Pow(IExpression<T> l, IExpression<T> r);    
+        IExpression<T> Pow(IExpression<T> l, IExpression<T> r);
 
         IExpression<T> Paren(IExpression<T> expr);
 

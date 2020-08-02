@@ -20,6 +20,5 @@ namespace VCEL
             var value = prop.GetValue(oc.Object);
             return monad.Lift(value);
         }
-
     }
 }

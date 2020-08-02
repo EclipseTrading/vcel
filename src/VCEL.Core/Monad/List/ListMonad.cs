@@ -23,6 +23,7 @@ namespace VCEL.Core.Monad.List
         {
             return value is T t ? new List<T> { t } : new List<T>();
         }
+
         public static ListMonad<T> Instance { get; } = new ListMonad<T>();
     }
 }

@@ -8,8 +8,8 @@ namespace VCEL.Core.Expression.Impl
     {
         public BetweenExpr(
             IMonad<T> monad,
-            IExpression<T> left, 
-            IExpression<T> right) 
+            IExpression<T> left,
+            IExpression<T> right)
             : base(monad, left, right)
         {
         }

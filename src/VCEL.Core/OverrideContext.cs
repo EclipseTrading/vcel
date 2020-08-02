@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using VCEL.Monad;
 
 namespace VCEL
@@ -11,7 +10,7 @@ namespace VCEL
         public OverrideContext(IContext<TMonad> context, ImmutableDictionary<string, TMonad> overrides)
         {
             this.context = context;
-            this.Overrides = overrides;
+            Overrides = overrides;
         }
 
         public IMonad<TMonad> Monad => context.Monad;

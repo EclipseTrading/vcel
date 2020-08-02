@@ -10,7 +10,7 @@ namespace VCEL.Core.Expression.Impl
         public Property(IMonad<TMonad> monad, string propName)
         {
             this.propName = propName;
-            this.Monad = monad;
+            Monad = monad;
 
         }
 
@@ -18,12 +18,12 @@ namespace VCEL.Core.Expression.Impl
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            if (accessor == null)
+            if(accessor == null)
             {
                 if(!context.TryGetAccessor(propName, out accessor))
                 {
                     accessor = new UnitAccessor<TMonad>(Monad);
-                }                
+                }
             }
 
             return accessor.GetValue(context);

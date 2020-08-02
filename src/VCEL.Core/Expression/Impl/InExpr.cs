@@ -6,9 +6,9 @@ namespace VCEL.Core.Expression.Impl
     public class InExpr<T> : BinaryExprBase<T>
     {
         public InExpr(
-            IMonad<T> monad, 
-            IExpression<T> left, 
-            IExpression<T> right) 
+            IMonad<T> monad,
+            IExpression<T> left,
+            IExpression<T> right)
             : base(monad, left, right)
         {
         }
