@@ -17,7 +17,6 @@ namespace VCEL.Test
         [TestCase(Expressions.DateExprTotalDays)]
         [TestCase(Expressions.TimeExprTotalExconds)]
         [TestCase(Expressions.LiteralExpr3, true, "ORDER")]
-        [TestCase(Expressions.LiteralExpr1, true, 1.0)]
         [TestCase(Expressions.LiteralExpr2, true, 1.0)]
         [TestCase(Expressions.ArithExpr14, true, 1)]
         [TestCase(Expressions.ArithExpr1)]

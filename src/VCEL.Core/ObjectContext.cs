@@ -33,5 +33,11 @@ namespace VCEL
             accessor = new PropertyValueAccessor<TMonad>(Monad, prop);
             return true;
         }
+
+        public bool TryGetContext(object o, out IContext<TMonad> context)
+        {
+            context = new ObjectContext<TMonad>(Monad, o);
+            return true;
+        }
     }
 }

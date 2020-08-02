@@ -184,6 +184,10 @@ namespace VCEL.Core.Lang
 
         public override IExpression<T> VisitNot([NotNull] VCELParser.NotContext context)
             => exprFactory.Not(Visit(context.GetChild(1)));
-    }
 
+        public override IExpression<T> VisitMemberExpr([NotNull] VCELParser.MemberExprContext context)
+            => exprFactory.Member(
+                Visit(context.GetChild(0)), 
+                Visit(context.GetChild(2)));
+    }
 }
