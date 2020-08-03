@@ -66,6 +66,7 @@ arithExpr
 	| functionExpr # FuncExpr
 	| listExpr #List
 	| term #ExprListTerm
+	| legacyNode #LegacyNodeExpr
 	;
 
 
@@ -91,12 +92,12 @@ member
 
 listExpr: (OPEN_BRACE expr? (COMMA expr)* CLOSE_BRACE);
 
-functionExpr
-	: LEGACY_MATH '.' legacyFunc=function #LegacyMath
-	| LEGACY_DATETIME '.' legacyFunc=ID #LegacyDateTime
-	| function #Func
+legacyNode
+	: LEGACY_MATH
+	| LEGACY_DATETIME
 	;
-function: ID '(' expr? (COMMA expr)* ')';
+
+functionExpr: ID '(' expr? (COMMA expr)* ')';
 
 term
 	: literal

@@ -30,7 +30,7 @@ namespace VECL.Test
         {
             var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance);
             var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(exprString);
+            var expr = parser.Parse(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -47,7 +47,7 @@ namespace VECL.Test
         {
             var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultOperators());
             var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(dateStr);
+            var expr = parser.Parse(dateStr).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(DateTimeOffset.Parse(dateStr.Substring(1))));
         }
@@ -61,7 +61,7 @@ namespace VECL.Test
         {
             var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultOperators());
             var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(timeStr);
+            var expr = parser.Parse(timeStr).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(TimeSpan.Parse(timeStr)));
         }

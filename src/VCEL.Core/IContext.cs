@@ -7,5 +7,6 @@ namespace VCEL
         bool TryGetAccessor(string propName, out IValueAccessor<T> accessor);
         IContext<T> OverrideName(string name, T br);
         IMonad<T> Monad { get; }
+        T Value { get; }
     }
 }

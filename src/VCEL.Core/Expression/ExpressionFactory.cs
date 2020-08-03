@@ -134,5 +134,7 @@ namespace VCEL.Expression
             => new NotEqExpr<T>(Monad, l, r);
 
         public IExpression<T> Null() => new NullExpr<T>(Monad);
+
+        public IExpression<T> This() => new ThisExpr<T>(Monad);
     }
 }

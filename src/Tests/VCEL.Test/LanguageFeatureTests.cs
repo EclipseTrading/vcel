@@ -10,7 +10,7 @@ namespace VECL.Test
         public void LetOp()
         {
             var exprStr = "let x = 1, y = 2 in x + y";
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new object());
 
             Assert.That(result.HasValue);
@@ -40,7 +40,7 @@ match
     | A < 0.97  = 0.95
     | otherwise 0.99";
 
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { A = a });
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
@@ -71,7 +71,7 @@ match
     | A < 0.97  = 0.95
     | A >= 0.97 = 0.99";
 
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { A = a });
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
@@ -84,7 +84,7 @@ match
         [TestCase("(A ? B : C) + 1", false, 5, 10, 11)]
         public void TernaryOp(string exprStr, object a, object b, object c, object expected)
         {
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { A = a, B = b, C = c });
 
             Assert.That(result.HasValue);
@@ -94,7 +94,7 @@ match
         [TestCase("A ? B + 1 : C + 2", null, 5, 10)]
         public void TernaryMaybeNone(string exprStr, object a, object b, object c)
         {
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { A = a, B = b, C = c });
             Assert.That(result.HasValue, Is.False);
         }

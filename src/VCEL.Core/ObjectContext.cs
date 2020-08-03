@@ -33,5 +33,7 @@ namespace VCEL
             accessor = new PropertyValueAccessor<TMonad>(Monad, prop);
             return true;
         }
+
+        public TMonad Value => Monad.Lift(Object);
     }
 }

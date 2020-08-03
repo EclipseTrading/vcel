@@ -16,8 +16,8 @@ namespace SpelBenchmark
         private static readonly ExpressionParser<Maybe<object>> vcelMonadParser =
             new ExpressionParser<Maybe<object>>(new MaybeExpressionFactory(MaybeMonad.Instance));
         private static readonly IExpression SpelExpr = Expression.Parse(Expressions.NestedTernary1);
-        private static readonly IExpression<Maybe<object>> VcelExpr = vcelMonadParser.Parse(Expressions.NestedTernary1);
-        private static readonly IExpression<Maybe<object>> VcelExprLetGuard = vcelMonadParser.Parse(Expressions.LetGuard);
+        private static readonly IExpression<Maybe<object>> VcelExpr = vcelMonadParser.Parse(Expressions.NestedTernary1).Expression;
+        private static readonly IExpression<Maybe<object>> VcelExprLetGuard = vcelMonadParser.Parse(Expressions.LetGuard).Expression;
         private static readonly CustomExpr customExpr = new CustomExpr();
 
         // 1 Branch

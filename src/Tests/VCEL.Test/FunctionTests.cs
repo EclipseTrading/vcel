@@ -19,7 +19,7 @@ namespace VECL.Test
         [TestCase("abs(-1.1)", 1.1)]
         public void EvalDefaultFunction(string exprString, object expected)
         {
-            var expr = VCExpression.ParseDefault(exprString);
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -31,7 +31,7 @@ namespace VECL.Test
         public void EvalDateFunction(string exprString, string dateTime)
         {
             var expected = DateTimeOffset.Parse(dateTime);
-            var expr = VCExpression.ParseDefault(exprString);
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -39,7 +39,7 @@ namespace VECL.Test
         [Test]
         public void EvalNow()
         {
-            var expr = VCExpression.ParseDefault("now()");
+            var expr = VCExpression.ParseDefault("now()").Expression;
             var value = expr.Evaluate(new { });
             Assert.That(value, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(1)));
         }
@@ -47,7 +47,7 @@ namespace VECL.Test
         [Test]
         public void EvalToday()
         {
-            var expr = VCExpression.ParseDefault("today()");
+            var expr = VCExpression.ParseDefault("today()").Expression;
             var value = expr.Evaluate(new { });
             Assert.That(value, Is.EqualTo(DateTime.Today));
         }

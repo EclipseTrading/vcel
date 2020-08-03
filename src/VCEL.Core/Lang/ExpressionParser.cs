@@ -1,19 +1,18 @@
 ﻿using Antlr4.Runtime;
-using System.Linq;
 using VCEL.Expression;
 
 namespace VCEL.Core.Lang
 {
-    public class ExpressionParser<TMonad> : IExpressionParser<TMonad>
+    public class ExpressionParser<T> : IExpressionParser<T>
     {
-        private readonly IExpressionFactory<TMonad> expressionFactory;
+        private readonly IExpressionFactory<T> expressionFactory;
 
-        public ExpressionParser(IExpressionFactory<TMonad> expressionFactory)
+        public ExpressionParser(IExpressionFactory<T> expressionFactory)
         {
             this.expressionFactory = expressionFactory;
         }
 
-        public IExpression<TMonad> Parse(string expression)
+        public ParseResult<T> Parse(string expression)
         {
             var inputStream = new AntlrInputStream(expression);
             var lexer = new VCELLexer(inputStream);
@@ -21,17 +20,8 @@ namespace VCEL.Core.Lang
 
             var parser = new VCELParser(commonTokenStream);
             var expr = parser.expression();
-            var visitor = new VCELVisitor<TMonad>(expressionFactory);
+            var visitor = new VCELVisitor<T>(expressionFactory);
             return visitor.Visit(expr);
-        }
-
-        public string GetTokenTypes(CommonTokenStream commonTokenStream)
-        {
-            commonTokenStream.Fill();
-            var tokens = commonTokenStream.GetTokens();
-            commonTokenStream.Reset();
-
-            return string.Join(" ", tokens.Select(t => $"[{VCELLexer.DefaultVocabulary.GetSymbolicName(t.Type)}:{t.Text}]"));
         }
     }
 }
