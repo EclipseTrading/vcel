@@ -24,20 +24,15 @@ namespace VCEL.Core.Lang
             if (exprString == null)
                 return null;
 
-            var lines = exprString.Split('\n', '\r');
-            if(Line > lines.Length)
+            if(Start >= exprString.Length)
             {
-                return $"Line: {Line} not found in '{exprString}'";
+                return "Expected more input - fount <EOF>";
             }
-            var lineStr = lines[Line - 1];
-            if(Start >= lineStr.Length || Stop >= lineStr.Length)
-            {
-                return $"Invalid Start/Stop index in error message.";
-            }
-            return lineStr.Substring(0, Start) 
-                + " >>> " 
-                + lineStr.Substring(Start, Stop - Start + 1) 
-                + " <<< " + lineStr.Substring(Stop + 1);
+
+            return exprString.Substring(0, Start) 
+                + ">>>" 
+                + exprString.Substring(Start, Stop - Start + 1) 
+                + "<<<" + exprString.Substring(Stop + 1);
         }
     }
 }

@@ -7,7 +7,10 @@ namespace VCEL.Core.Lang
     public static class VCExpression
     {
         public static ParseResult<object> ParseDefault(string exprString)
-            => DefaultParser().Parse(exprString);
+        {
+            var parser = DefaultParser();
+            return parser.Parse(exprString);
+        }
 
         public static ParseResult<Maybe<object>> ParseMaybe(string exprString)
             => MaybeParser().Parse(exprString);

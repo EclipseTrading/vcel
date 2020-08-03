@@ -46,16 +46,15 @@ namespace VCEL.Test
         [TestCase(Expressions.ArithExpr26)]
         [TestCase(Expressions.ArithExpr27)]
         [TestCase(Expressions.ArithExpr28)]
-        public void EvalNothing(string exprStr, bool hasValue = false, object expected = null)
+        public void Eval(string exprStr, bool hasValue = false, object expected = null)
         {
             // Verifies that these expressions all return Maybe.Nothing when called with an empty expression
-            var parseResult = VCExpression.ParseMaybe(exprStr);
+            var parseResult = VCExpression.ParseMaybe(exprStr);            
             if (!parseResult.Success)
             {
                 var errorString = string.Join("\n", parseResult.ParseErrors.Select(p => $"Error parsing at token '{p.Token}' in {p.GetExprError(exprStr)}"));
                 Console.WriteLine(errorString);
             }
-
             Assert.That(parseResult.Success, Is.True);
 
             var expr = parseResult.Expression;

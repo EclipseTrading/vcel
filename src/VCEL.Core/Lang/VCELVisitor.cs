@@ -3,6 +3,7 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using VCEL.Expression;
 
@@ -18,7 +19,16 @@ namespace VCEL.Core.Lang
         }
 
         public override ParseResult<T> VisitExpression([NotNull] VCELParser.ExpressionContext context)
-            => Compose(context, a => a, 0);
+        {
+            return Compose(context,
+                a => a[0],
+                Enumerable.Range(0, context.ChildCount - 1).ToArray());
+        }
+
+        public override ParseResult<T> VisitErrorNode([NotNull] IErrorNode node)
+            => new ParseResult<T>(new ParseError("Error node matched", node.GetText(), node.Symbol.Line, node.Symbol.StartIndex, node.Symbol.StopIndex));
+        public override ParseResult<T> VisitExpr([NotNull] VCELParser.ExprContext context)
+            => CheckAndVisitChildren(context);
         public override ParseResult<T> VisitParen([NotNull] VCELParser.ParenContext context)
             => Compose(context, r => exprFactory.Paren(r), 1);
         public override ParseResult<T> VisitProperty([NotNull] VCELParser.PropertyContext context)
@@ -198,7 +208,18 @@ namespace VCEL.Core.Lang
                 return new ParseResult<T>(new[] { new ParseError(context.exception.Message, token.Text, token.Line, token.StartIndex, token.StopIndex) });
             }
 
-            var results = nodes.Select(n => Visit(context.GetChild(n))).ToList();
+            var childNodes = nodes.Select(n => context.GetChild(n)).ToList();
+            var errors = childNodes.OfType<ParserRuleContext>().Where(c => c.exception != null);
+            if (errors.Any())
+            {
+                return new ParseResult<T>(
+                    errors
+                        .Select(e => (ex: e.exception, t: e.exception.OffendingToken))
+                        .Select(e => new ParseError(e.ex.Message, e.t.Text, e.t.Line, e.t.StartIndex, e.t.StopIndex))
+                        .ToList());
+            }
+
+            var results = childNodes.Select(n => Visit(n)).ToList();
             if (results.Any(r => !r.Success))
             {
                 return new ParseResult<T>(results.SelectMany(r => r.ParseErrors).ToList());
@@ -206,6 +227,17 @@ namespace VCEL.Core.Lang
 
             return new ParseResult<T>(f(results.Select(r => r.Expression).ToList()));
         }
+
+        private ParseResult<T> CheckAndVisitChildren(ParserRuleContext context)
+        {
+            if (context.exception != null)
+            {
+                var e = context.exception;
+                var t = context.exception.OffendingToken;
+                return new ParseResult<T>(new ParseError(e.Message, t.Text, t.Line, t.StartIndex, t.StopIndex));
+            }
+
+            return VisitChildren(context);
+        }
     }
-    
 }
