@@ -116,13 +116,20 @@ namespace VCEL.Expression
         private T CastBool(T monad)
             => Monad.Bind(monad, v => Monad.Lift((v is bool b) ? b : false));
 
-        public IExpression<T> LegacyFunction(IExpression<T> expression)
+        public IExpression<T> LegacyType(string typeName)
         {
-            var func = expression as FunctionExpr<T>;
-            return Function(func.Name.ToLower(), func.Args);
+            switch(typeName)
+            {
+                case "DateTime":
+                case "System.DateTime":
+                    return Value(new DateTimeType());
+                case "System.Math":
+                case "Math":
+                    return This();
+            }
+            return Null();
         }
-        public IExpression<T> LegacyProperty(string name)
-            => Function(name.ToLower(), new List<IExpression<T>>());
+
 
         public IExpression<T> UnaryMinus(IExpression<T> expression)
             => new UnaryMinusExpr<T>(Monad, expression);
@@ -134,8 +141,8 @@ namespace VCEL.Expression
             => new NotEqExpr<T>(Monad, l, r);
 
         public IExpression<T> Null() => new NullExpr<T>(Monad);
-
         public IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
             => new ObjectMember<T>(Monad, obj, memberExpr);
+        public IExpression<T> This() => new ThisExpr<T>(Monad);
     }
 }

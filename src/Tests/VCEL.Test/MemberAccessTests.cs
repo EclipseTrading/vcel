@@ -18,7 +18,7 @@ namespace VCEL.Test
         [TestCase("@2020-01-01.(Month + Year)", 2021)]
         public void EvalMember(string exprString, object expected)
         {
-            var expr = VCExpression.ParseDefault(exprString);
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }

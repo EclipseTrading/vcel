@@ -199,13 +199,13 @@ namespace VCEL.Test
 
         private void Compare(string exprString, bool expected, object o = null)
         {
-            var expr = VCExpression.ParseDefault(exprString);
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(o ?? new { });
             Assert.That(result, Is.EqualTo(expected).Within(0.0001));
         }
         private void CompareMaybeNone(string exprString)
         {
-            var expr = VCExpression.ParseMaybe(exprString);
+            var expr = VCExpression.ParseMaybe(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result.HasValue, Is.EqualTo(false));
         }

@@ -58,15 +58,16 @@ booleanOpExpr
 arithExpr
 	: MINUS arithExpr #UnaryMinus
 	| '(' expr ')' #Paren
+	| arithExpr DOT expr #MemberExpr
 	| arithExpr MULTIPLY arithExpr # Mult
 	| arithExpr DIVIDE arithExpr # Div	
 	| arithExpr PLUS arithExpr # Plus
 	| arithExpr MINUS arithExpr # Minus
 	| arithExpr POW arithExpr # Pow
-	| arithExpr DOT expr #MemberExpr
 	| functionExpr # FuncExpr
 	| listExpr #List
 	| term #ExprListTerm
+	| legacyNode #LegacyNodeExpr
 	;
 
 
@@ -83,12 +84,12 @@ argList: '(' expr? (COMMA expr)* ')';
 
 listExpr: (OPEN_BRACE expr? (COMMA expr)* CLOSE_BRACE);
 
-functionExpr
-	: LEGACY_MATH '.' legacyFunc=function #LegacyMath
-	| LEGACY_DATETIME '.' legacyFunc=ID #LegacyDateTime
-	| function #Func
+legacyNode
+	: LEGACY_MATH
+	| LEGACY_DATETIME
 	;
-function: ID '(' expr? (COMMA expr)* ')';
+
+functionExpr: ID '(' expr? (COMMA expr)* ')';
 
 term
 	: literal

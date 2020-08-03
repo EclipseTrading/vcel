@@ -30,12 +30,21 @@ namespace VCEL.Core.Expression.Impl
 
             return Monad.Bind(
                 r,
-                rv => Convert.ToDouble(rv) == 0.0
+                rv => IsZeroOrNonNumeric(rv) 
                         ? Maybe<object>.None
                         : Monad.Bind(
                             l,
                             lv => new Maybe<object>(Op.Evaluate(lv, rv))));
+        }
 
+        private bool IsZeroOrNonNumeric(object rv)
+        {
+            return !(rv is IConvertible)
+                || rv is double d && d == 0.0
+                || rv is int i && i == 0
+                || rv is float f && f == 0
+                || rv is short s && s == 0
+                || rv is byte b && b == 0;
         }
     }
 }

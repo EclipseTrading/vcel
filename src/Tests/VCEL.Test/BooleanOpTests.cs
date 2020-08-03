@@ -48,7 +48,7 @@ namespace VCEL.Test
 
         private void Compare(string exprString, bool expected)
         {
-            var expr = VCExpression.ParseDefault(exprString);
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
