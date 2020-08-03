@@ -63,6 +63,7 @@ arithExpr
 	| arithExpr PLUS arithExpr # Plus
 	| arithExpr MINUS arithExpr # Minus
 	| arithExpr POW arithExpr # Pow
+	| arithExpr DOT expr #MemberExpr
 	| functionExpr # FuncExpr
 	| listExpr #List
 	| term #ExprListTerm
@@ -79,15 +80,6 @@ objExpr
 	;
 
 argList: '(' expr? (COMMA expr)* ')';
-
-memberAccess
-	: DOT member memberAccess
-	| DOT member;
-
-member
-	: ID
-	| ID argList
-	;
 
 listExpr: (OPEN_BRACE expr? (COMMA expr)* CLOSE_BRACE);
 

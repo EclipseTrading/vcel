@@ -29,6 +29,14 @@ namespace VCEL
                 ? TryGetOverride(propName, out accessor)
                 : context.TryGetAccessor(propName, out accessor);
 
+        public bool TryGetContext(object o, out IContext<TMonad> context)
+        {
+            context = this.context.TryGetContext(o, out var c)
+                ? new OverrideContext<TMonad>(c, this.Overrides)
+                : null;
+            return context != null;
+        }
+
         private bool TryGetOverride(string propName, out IValueAccessor<TMonad> accessor)
         {
             accessor = new OverrideAccessor<TMonad>(this, propName);

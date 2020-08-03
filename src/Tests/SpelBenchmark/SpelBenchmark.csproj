@@ -7,7 +7,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
-    <PackageReference Include="Spring.Core" Version="2.0.1" />
+    <!-- We know these are .NET Framework Packages, but we still want to leave this 
+         as a .NET Core project so we can build on Linux
+         -->
+    <PackageReference Include="Spring.Core" Version="2.0.1" NoWarn="NU1701"/>
+    <PackageReference Include="Common.Logging" Version="3.0.0" NoWarn="NU1701"/>
+    <PackageReference Include="Common.Logging.Core" Version="3.0.0" NoWarn="NU1701"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\VCEL.Core\VCEL.Core.csproj" />
