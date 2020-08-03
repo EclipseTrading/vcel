@@ -23,7 +23,7 @@ namespace VCEL.Core.Expression.Func
 
         public Func<object[], object> GetFunction(string name)
         {
-            return functions.TryGetValue(name, out var f) ? f : null;
+            return functions.TryGetValue(name.ToLower(), out var f) ? f : null;
         }
 
         public void Register(string name, Func<object[], object> func)

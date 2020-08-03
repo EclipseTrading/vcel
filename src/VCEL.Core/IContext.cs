@@ -8,5 +8,6 @@ namespace VCEL
         IContext<T> OverrideName(string name, T br);
         IMonad<T> Monad { get; }
         bool TryGetContext(object o, out IContext<T> context);
+        T Value { get; }
     }
 }

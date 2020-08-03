@@ -18,7 +18,7 @@ namespace VECL.Test
         {
             var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance);
             var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5");
+            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
             Assert.That((double)result, Is.EqualTo(1.5).Within(0.00000001));
@@ -30,7 +30,7 @@ namespace VECL.Test
         {
             var exprFactory = new MaybeExpressionFactory(MaybeMonad.Instance);
             var parser = new ExpressionParser<Maybe<object>>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5");
+            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
             Assert.That(result.HasValue);
@@ -42,7 +42,7 @@ namespace VECL.Test
         {
             var exprFactory = new MaybeExpressionFactory(MaybeMonad.Instance);
             var parser = new ExpressionParser<Maybe<object>>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5");
+            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { });
 
             Assert.That(result.HasValue, Is.False);
@@ -53,7 +53,7 @@ namespace VECL.Test
         {
             var exprFactory = new ListExpressionFactory<object>(ListMonad<object>.Instance);
             var parser = new ExpressionParser<List<object>>(exprFactory);
-            var expr = parser.Parse("A + { 0.5, 0.6 } + 0.5");
+            var expr = parser.Parse("A + { 0.5, 0.6 } + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
             Assert.That(result, Is.EquivalentTo(new[] { 1.5, 1.6 }));
@@ -64,7 +64,7 @@ namespace VECL.Test
         {
             var exprFactory = new ExpressionFactory<Task<object>>(TaskMonad.Instance);
             var parser = new ExpressionParser<Task<object>>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5");
+            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
 
             var resultTask = expr.Evaluate(
                 new { A = Task.Delay(500).ContinueWith(t => 0.5d) });
@@ -79,7 +79,7 @@ namespace VECL.Test
                 ConcatStringMonad.Instance);
 
             var parser = new ExpressionParser<M<string>>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5");
+            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
             Assert.That(result.Value, Is.EqualTo("A + 0.5 + 0.5"));
@@ -90,7 +90,7 @@ namespace VECL.Test
         {
             var exprFactory = new MaybeExpressionFactory(MaybeMonad.Instance);
             var parser = new ExpressionParser<Maybe<object>>(exprFactory);
-            var expr = parser.Parse("1/0");
+            var expr = parser.Parse("1/0").Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(Maybe<object>.None));
         }

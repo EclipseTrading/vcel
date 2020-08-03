@@ -52,12 +52,12 @@ namespace VCEL.Expression
 
         // Functions
         IExpression<T> Function(string name, IReadOnlyList<IExpression<T>> args);
-        IExpression<T> LegacyFunction(IExpression<T> expression);
-        IExpression<T> LegacyProperty(string name);
+        IExpression<T> LegacyType(string typeString);
         IExpression<T> UnaryMinus(IExpression<T> expression);
         IExpression<T> Null();
         IExpression<T> Eq(IExpression<T> l, IExpression<T> r);
         IExpression<T> NotEq(IExpression<T> l, IExpression<T> r);
         IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr);
+        IExpression<T> This();
     }
 }

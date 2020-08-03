@@ -1,7 +1,7 @@
 ﻿namespace VCEL.Core.Lang
 {
-    public interface IExpressionParser<TMonad>
+    public interface IExpressionParser<T>
     {
-        IExpression<TMonad> Parse(string expression);
+        ParseResult<T> Parse(string expression);
     }
 }

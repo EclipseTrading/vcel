@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using VCEL.Core.Lang;
 using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
@@ -48,7 +49,17 @@ namespace VCEL.Test
         public void EvalNothing(string exprStr, bool hasValue = false, object expected = null)
         {
             // Verifies that these expressions all return Maybe.Nothing when called with an empty expression
-            var expr = VCExpression.ParseMaybe(exprStr);
+            var parseResult = VCExpression.ParseMaybe(exprStr);
+            if (!parseResult.Success)
+            {
+                var errorString = string.Join("\n", parseResult.ParseErrors.Select(p => $"Error parsing at token '{p.Token}' in {p.GetExprError(exprStr)}"));
+                Console.WriteLine(errorString);
+            }
+
+            Assert.That(parseResult.Success, Is.True);
+
+            var expr = parseResult.Expression;
+
             var result = expr.Evaluate(new { });
             Assert.That(result.HasValue, Is.EqualTo(hasValue));
             if(hasValue)
@@ -103,12 +114,12 @@ namespace VCEL.Test
             Maybe<object> result = null;
             var parser = VCExpression.MaybeParser();
             var sw = Stopwatch.StartNew();
-            var expr = parser.Parse(exprString);
+            var pr = parser.Parse(exprString);
             var parseTime = sw.Elapsed;
             sw.Restart();
             for(var i = 0; i < 50; i++)
             {
-                result = expr.Evaluate(o);
+                result = pr.Expression.Evaluate(o);
             }
             var evalTime = sw.Elapsed;
             Assert.That(result.Value, Is.EqualTo(expected));

@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
+using System;
 using VCEL;
 using VCEL.Core.Lang;
-using VCEL.Expression;
-using VCEL.Monad;
 
 namespace VECL.Test
 {
@@ -11,12 +10,30 @@ namespace VECL.Test
         [TestCase("T(System.Math).Abs(-1)", 1)]
         public void EvalLegacyFunction(string exprString, object expected)
         {
-            var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance);
-            var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(exprString);
+            var parseResult = VCExpression.ParseDefault(exprString);
+            var expr = parseResult.Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
 
+        [TestCase("T(System.DateTime).Today")]
+        [TestCase("(T(System.DateTime).Today)")]
+        public void EvalLegacyToday(string exprString)
+        {
+            var parseResult = VCExpression.ParseDefault(exprString);
+            var expr = parseResult.Expression;
+            var result = expr.Evaluate(new { });
+            Assert.That(result, Is.EqualTo(DateTime.Today));
+        }
+
+        [TestCase("T(System.DateTime).Today.Day")]
+        [TestCase("(T(System.DateTime).Today).Day")]
+        public void EvalLegacyTodayDay(string exprString)
+        {
+            var parseResult = VCExpression.ParseDefault(exprString);
+            var expr = parseResult.Expression;
+            var result = expr.Evaluate(new { });
+            Assert.That(result, Is.EqualTo(DateTime.Today.Day));
+        }
     }
 }

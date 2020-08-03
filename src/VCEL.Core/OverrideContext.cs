@@ -42,5 +42,7 @@ namespace VCEL
             accessor = new OverrideAccessor<TMonad>(this, propName);
             return true;
         }
+
+        public TMonad Value => context.Value;
     }
 }
