@@ -1,28 +1,19 @@
-﻿using System;
-using VCEL.Core.Expression.Op;
-using VCEL.Monad;
+﻿using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
-    public class BooleanExpr<TMonad> : IExpression<TMonad>
+    public abstract class BooleanExpr<TMonad> : IExpression<TMonad>
     {
-        private readonly Func<TMonad, TMonad> castBool;
-
         public BooleanExpr(
-            BooleanOperator op,
             IMonad<TMonad> monad,
             IExpression<TMonad> left,
-            IExpression<TMonad> right,
-            Func<TMonad, TMonad> castBool)
+            IExpression<TMonad> right)
         {
-            Op = op;
             Monad = monad;
             Left = left;
             Right = right;
-            this.castBool = castBool;
         }
 
-        public BooleanOperator Op { get; }
         public IExpression<TMonad> Left { get; }
         public IExpression<TMonad> Right { get; }
 
@@ -31,21 +22,29 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var l = Left.Evaluate(context);
-            var r = Right.Evaluate(context);
-            return Monad.Bind(l, BindL);
+            return Monad.Bind(l, Bind);
 
-            TMonad BindL(object lv)
+            TMonad Bind(object lv)
             {
-                return lv is bool lb ? Monad.Bind(r, BindR) : Monad.Unit;
+                if(lv is bool lb)
+                {
+                    return ShortCircuit(lb, out var res)
+                        ? Monad.Lift(res)
+                        : Monad.Bind(
+                            Right.Evaluate(context), 
+                            BindR);
+                }
+                return Monad.Unit;
+
                 TMonad BindR(object rv)
                 {
-                    return rv is bool rb
-                        ? Monad.Lift(Op.Evaluate(lb, rb))
+                    return rv is bool rb 
+                        ? Monad.Lift(Evaluate(lb, rb)) 
                         : Monad.Unit;
                 }
             }
         }
-
-        public override string ToString() => $"{Left} {Op} {Right}";
+        public abstract bool Evaluate(bool l, bool r);
+        public abstract bool ShortCircuit(bool l, out bool res);
     }
 }

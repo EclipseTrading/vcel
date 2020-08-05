@@ -126,6 +126,22 @@ namespace VCEL.Test
             Console.WriteLine("Parse: " + parseTime.TotalMilliseconds + "ms");
             Console.WriteLine("Eval: " + evalTime.TotalMilliseconds * 20 + "µs");
         }
+
+        [TestCase(1.0, 1.0, 0.01)]
+        [TestCase(0.02, 1.0, 0.02)]
+        [TestCase(0.02, -1.0, 0.01)]
+        [TestCase(0.04, -1.0, 0.02)]
+        public void Expr5Compare(double p, double o, double expected)
+        {
+            var row = new { P = p, O = o };
+            var parsed = VCExpression.ParseDefault(Expressions.TestExpr5);
+            var result = parsed.Expression.Evaluate(row);
+            Assert.That(result, Is.EqualTo(expected).Within(0.00001));
+
+            var parsedLetGuard = VCExpression.ParseDefault(Expressions.TestExpr5LetGuard);
+            var letGuardResult = parsedLetGuard.Expression.Evaluate(row);
+            Assert.That(letGuardResult, Is.EqualTo(expected).Within(0.000001));
+        }
     }
 }
 

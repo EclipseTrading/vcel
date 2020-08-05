@@ -2,22 +2,19 @@
 using Spring.Expressions;
 using VCEL;
 using VCEL.Core.Lang;
-using VCEL.Expression;
-using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
 namespace SpelBenchmark
 {
     using SpEx = IExpression;
-    using VCEx = IExpression<Maybe<object>>;
+    using VCEx = IExpression<object>;
 
     [MemoryDiagnoser]
     [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
     [RankColumn]
     public class BasicEvaluatorBenchmarks
     {
-        private static readonly ExpressionParser<Maybe<object>> vcelMonadParser =
-            new ExpressionParser<Maybe<object>>(new MaybeExpressionFactory(MaybeMonad.Instance));
+        private static readonly IExpressionParser<object> vcelMonadParser = VCExpression.DefaultParser();
         private static readonly TestRow Row = new TestRow { O = 1.0, P = 1.0 };
 
         private static readonly VCEx VcelAddExpr = vcelMonadParser.Parse(Expressions.Add).Expression;
@@ -129,7 +126,7 @@ namespace SpelBenchmark
         [Benchmark]
         public void SpelExp4() => EvalSpel(SpelExpr4);
         [Benchmark]
-        public void SpelExp5() => EvalSpel(SpelExpr4);
+        public void SpelExp5() => EvalSpel(SpelExpr5);
 
         private void EvalSpel(SpEx expression)
         {

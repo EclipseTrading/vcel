@@ -3,7 +3,7 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
-    public class GreaterOrEqual<T> : ComparableExpr<T>
+    public class GreaterOrEqual<T> : BinaryExprBase<T>
     {
         public GreaterOrEqual(
             IMonad<T> monad,
@@ -13,7 +13,24 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        protected override T Evaluate(IComparable lv, IComparable rv)
-            => Monad.Lift(lv.CompareTo(rv) >= 0);
+        public override T Evaluate(object l, object r)
+        {
+            if(l is IComparable cl && r.GetType() == l?.GetType())
+            {
+                return Monad.Lift(cl.CompareTo(r) >= 0);
+            }
+
+            if (l == null || r == null)
+            {
+                return Monad.Unit;
+            }
+
+            if (UpCastEx.UpCast(ref l, ref r) && l is IComparable lc)
+            {
+                return Monad.Lift(lc.CompareTo(r) >= 0);
+            }
+
+            return Monad.Unit;
+        }
     }
 }

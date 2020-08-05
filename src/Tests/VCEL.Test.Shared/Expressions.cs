@@ -34,6 +34,15 @@
 (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O)) <= 0.03)
     ? 0.01
     : 0.02";
+        public const string TestExpr5LetGuard = @"
+let 
+    v = P / O,
+    x = v < 0 ? abs(v) : 1 - v
+in match
+   | x <= 0.03 = 0.01
+   | otherwise 0.02
+";
+            
 
         public const string TernaryArith1 = @"
 (

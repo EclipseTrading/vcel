@@ -13,7 +13,7 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        protected override T Evaluate(object lv, object rv)
+        public override T Evaluate(object lv, object rv)
         {
             if(lv?.GetType() != rv?.GetType()
                 && !TryUpCast(lv, rv, out lv, out rv))

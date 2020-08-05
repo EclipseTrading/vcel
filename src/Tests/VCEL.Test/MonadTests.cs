@@ -75,14 +75,13 @@ namespace VECL.Test
         [Test]
         public void ToStringM()
         {
-            var exprFactory = new ToStringExpressionFactory<object>(
-                ConcatStringMonad.Instance);
+            var exprFactory = new ToStringExpressionFactory<object>(ConcatStringMonad.Instance);
 
-            var parser = new ExpressionParser<M<string>>(exprFactory);
+            var parser = new ExpressionParser<string>(exprFactory);
             var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
-            Assert.That(result.Value, Is.EqualTo("A + 0.5 + 0.5"));
+            Assert.That(result, Is.EqualTo("A + 0.5 + 0.5"));
         }
 
         [Test]

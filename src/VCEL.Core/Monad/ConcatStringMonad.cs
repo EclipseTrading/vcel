@@ -3,13 +3,18 @@
 namespace VCEL.Expression
 {
     using System;
-    using Monad = M<string>;
 
-    public class ConcatStringMonad : IMonad<M<string>>
+    public class ConcatStringMonad : IMonad<string>
     {
-        public Monad Unit => new Monad("");
-        public Monad Bind(Monad m, Func<object, Monad> f) => new Monad(f(m.Value).Value);
-        public Monad Lift(object value) => new Monad(value.ToString());
+        public string Unit => "";
+        public string Bind(string m, Func<object, string> f) => f(m);
+        public string Lift(object value) => value.ToString();
+
         public static ConcatStringMonad Instance { get; } = new ConcatStringMonad();
+
+        public string Bind(string a, string b, Func<object, object, string> f)
+        {
+            return f(a, b);
+        }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using VCEL;
-using VCEL.Core.Expression.Op;
 using VCEL.Core.Lang;
-using VCEL.Expression;
-using VCEL.Monad;
 
 namespace VECL.Test
 {
@@ -28,9 +25,7 @@ namespace VECL.Test
         [TestCase("(0.5)", 0.5d)]
         public void TestPrimitives(string exprString, object expected)
         {
-            var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance);
-            var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(exprString).Expression;
+            var expr = VCExpression.ParseDefault(exprString).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
         }
@@ -45,9 +40,7 @@ namespace VECL.Test
         // Need to add invalid dates
         public void TestDateTimeOffset(string dateStr)
         {
-            var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultOperators());
-            var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(dateStr).Expression;
+            var expr = VCExpression.ParseDefault(dateStr).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(DateTimeOffset.Parse(dateStr.Substring(1))));
         }
@@ -59,9 +52,7 @@ namespace VECL.Test
         // Need to add invalid times
         public void TestTimeSpan(string timeStr)
         {
-            var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultOperators());
-            var parser = new ExpressionParser<object>(exprFactory);
-            var expr = parser.Parse(timeStr).Expression;
+            var expr = VCExpression.ParseDefault(timeStr).Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(TimeSpan.Parse(timeStr)));
         }

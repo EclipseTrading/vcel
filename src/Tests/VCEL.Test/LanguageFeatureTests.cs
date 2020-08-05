@@ -78,6 +78,40 @@ match
 
         }
 
+        [TestCase(0.7, 2.0, "Low")]
+        [TestCase(1.2, 2.0, "Normal")]
+        [TestCase(1.6, 2.0, "Near Breach")]
+        [TestCase(2.2, 2.0, "Breach")]
+        [TestCase(5.0, 2.0, "Critical")]
+        public void StringLetGuard(double a, double l, string expected)
+        {
+            var exprStr = @"
+let 
+   p = a / l
+in (match
+   | p < 0.5  = 'Low'
+   | p < 0.75 = 'Normal'
+   | p < 1.0  = 'Near Breach'
+   | p < 1.25 = 'Breach'
+   | otherwise 'Critical')
+";          
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
+            var result = expr.Evaluate(new { a, l });
+            Assert.That(result.HasValue);
+            Assert.That(result.Value, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void MultipleLetEval()
+        {
+            var exprString = "let x = a + 1 in x + b";
+            var expr = VCExpression.ParseDefault(exprString);
+            var result1 = expr.Expression.Evaluate(new { a = 5, b = 6 });
+            var result2 = expr.Expression.Evaluate(new { a = 10, b = 11 });
+            Assert.That(result1, Is.EqualTo(12));
+            Assert.That(result2, Is.EqualTo(22));
+        }
+
         [TestCase("A ? (B + 1) : (C + 2)", true, 5, 10, 6)]
         [TestCase("A ? B + 1 : C + 2", false, 5, 10, 12)]
         [TestCase("(A ? B : C) + 1", true, 5, 10, 6)]

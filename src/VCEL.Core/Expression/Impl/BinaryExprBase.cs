@@ -22,17 +22,10 @@ namespace VCEL.Core.Expression.Impl
         {
             var l = Left.Evaluate(context);
             var r = Right.Evaluate(context);
-
-            return Monad.Bind(l, BindL);
-
-            T BindL(object lv)
-            {
-                return Monad.Bind(r, BindR);
-                T BindR(object rv) => Evaluate(lv, rv);
-            }
+            return Monad.Bind(l, r, Evaluate);
         }
 
-        protected abstract T Evaluate(object lv, object rv);
+        public abstract T Evaluate(object lv, object rv);
 
     }
 }
