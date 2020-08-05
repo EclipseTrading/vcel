@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
-using VCEL.Core.Expression.Op;
 using VCEL.Monad;
 
 namespace VCEL.Expression
@@ -11,16 +10,13 @@ namespace VCEL.Expression
     {
         public ExpressionFactory(
             IMonad<T> monad,
-            IOperators operators = null,
             IFunctions functions = null)
         {
             Monad = monad;
-            Operators = operators ?? new DefaultOperators();
             Functions = functions ?? new DefaultFunctions();
         }
 
         public IMonad<T> Monad { get; }
-        public IOperators Operators { get; }
         public IFunctions Functions { get; }
 
         public virtual IExpression<T> Ternary(
@@ -69,38 +65,25 @@ namespace VCEL.Expression
             => new ValueExpr<T>(Monad, o);
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
-
         public virtual IExpression<T> Add(IExpression<T> l, IExpression<T> r)
-            => BinaryOp(Operators.Add, l, r);
+            => new AddExpr<T>(Monad, l, r);
         public virtual IExpression<T> Multiply(IExpression<T> l, IExpression<T> r)
-            => BinaryOp(Operators.Multiply, l, r);
+            => new MultExpr<T>(Monad, l, r);
 
         public virtual IExpression<T> Subtract(IExpression<T> l, IExpression<T> r)
-            => BinaryOp(Operators.Subtract, l, r);
+            => new SubtractExpr<T>(Monad, l, r);
         public virtual IExpression<T> Divide(IExpression<T> l, IExpression<T> r)
-            => BinaryOp(Operators.Divide, l, r);
+            => new DivideExpr<T>(Monad, l, r);
         public virtual IExpression<T> Pow(IExpression<T> l, IExpression<T> r)
-            => BinaryOp(Operators.Pow, l, r);
-
-        public virtual IExpression<T> BinaryOp(
-            IBinaryOperator op,
-            IExpression<T> l,
-            IExpression<T> r)
-            => new BinaryExpr<T>(op, Monad, l, r);
+            => new PowExpr<T>(Monad, l, r);
 
         public virtual IExpression<T> And(IExpression<T> l, IExpression<T> r)
-            => BooleanOp(Operators.And, l, r);
+            => new AndExpr<T>(Monad, l, r);
         public virtual IExpression<T> Or(IExpression<T> l, IExpression<T> r)
-            => BooleanOp(Operators.Or, l, r);
+            => new OrExpr<T>(Monad, l, r);
 
         public virtual IExpression<T> Not(IExpression<T> e)
             => new NotExpr<T>(Monad, e);
-
-        public virtual IExpression<T> BooleanOp(
-            BooleanOperator op,
-            IExpression<T> l,
-            IExpression<T> r)
-            => new BooleanExpr<T>(op, Monad, l, r, CastBool);
 
         public virtual IExpression<T> Function(
             string name,
@@ -112,9 +95,6 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Paren(IExpression<T> expr)
             => new ParenExpr<T>(Monad, expr);
-
-        private T CastBool(T monad)
-            => Monad.Bind(monad, v => Monad.Lift((v is bool b) ? b : false));
 
         public IExpression<T> LegacyType(string typeName)
         {

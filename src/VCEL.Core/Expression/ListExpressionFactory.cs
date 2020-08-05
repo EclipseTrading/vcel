@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
-using VCEL.Core.Expression.Op;
 using VCEL.Monad;
 
 namespace VCEL.Expression
@@ -10,11 +9,9 @@ namespace VCEL.Expression
     {
         public ListExpressionFactory(
             IMonad<List<object>> monad,
-            IOperators operators = null,
             IFunctions functions = null)
             : base(
                   monad,
-                  operators ?? new DefaultOperators(),
                   functions ?? new DefaultFunctions())
         {
         }

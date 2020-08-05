@@ -44,5 +44,8 @@ namespace VCEL.Core.Monad.Tasks
             var resultProp = genericTaskType.GetProperty(nameof(Task<object>.Result));
             return resultProp.GetValue(task);
         }
+
+        public Task<object> Bind(Task<object> a, Task<object> b, Func<object, object, Task<object>> f)
+            => BindEx.Bind(a, b, f, this);
     }
 }

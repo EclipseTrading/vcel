@@ -1,11 +1,13 @@
-﻿using VCEL.Monad;
+﻿using System;
+using System.Collections.Generic;
+using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
     public class Property<TMonad> : IExpression<TMonad>
     {
         private readonly string propName;
-        private IValueAccessor<TMonad> accessor;
+        private readonly IDictionary<Type, IValueAccessor<TMonad>> accessors = new Dictionary<Type, IValueAccessor<TMonad>>();
 
         public Property(IMonad<TMonad> monad, string propName)
         {
@@ -18,12 +20,13 @@ namespace VCEL.Core.Expression.Impl
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            if(accessor == null)
+            if(!accessors.TryGetValue(context.GetType(), out var accessor))
             {
                 if(!context.TryGetAccessor(propName, out accessor))
                 {
                     accessor = new UnitAccessor<TMonad>(Monad);
                 }
+                accessors[context.GetType()] = accessor;
             }
 
             return accessor.GetValue(context);

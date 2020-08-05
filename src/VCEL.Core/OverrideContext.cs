@@ -25,9 +25,10 @@ namespace VCEL
         }
 
         public bool TryGetAccessor(string propName, out IValueAccessor<TMonad> accessor)
-            => Overrides.ContainsKey(propName)
-                ? TryGetOverride(propName, out accessor)
-                : context.TryGetAccessor(propName, out accessor);
+        {
+            accessor = new OverrideAccessor<TMonad>(propName);
+            return true;
+        }
 
         public bool TryGetContext(object o, out IContext<TMonad> context)
         {
@@ -37,12 +38,9 @@ namespace VCEL
             return context != null;
         }
 
-        private bool TryGetOverride(string propName, out IValueAccessor<TMonad> accessor)
-        {
-            accessor = new OverrideAccessor<TMonad>(this, propName);
-            return true;
-        }
 
         public TMonad Value => context.Value;
+
+        public IContext<TMonad> BaseContext => context;
     }
 }

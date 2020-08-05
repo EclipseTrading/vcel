@@ -16,6 +16,14 @@ namespace VCEL.Monad.Maybe
             }
             return f(a.Value);
         }
+        public Maybe<object> Bind(Maybe<object> a, Maybe<object> b, Func<object, object, Maybe<object>> f)
+        {
+            if (!a.HasValue || !b.HasValue)
+            {
+                return Maybe<object>.None;
+            }
+            return f(a.Value, b.Value);
+        }
 
         public static MaybeMonad Instance { get; } = new MaybeMonad();
     }

@@ -10,7 +10,7 @@ expression
 	;
 
 letexpr
-	: LET assignExpr (COMMA assignExpr) IN expr
+	: LET assignExpr (COMMA assignExpr)* IN expr
 	;
 
 assignExpr
