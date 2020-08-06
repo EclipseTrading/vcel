@@ -22,15 +22,7 @@ namespace VCEL
 
         public virtual bool TryGetAccessor(string propName, out IValueAccessor<TMonad> accessor)
         {
-            var type = Object?.GetType();
-            var prop = type?.GetProperty(propName);
-            if(prop == null)
-            {
-                accessor = null;
-                return false;
-            }
-
-            accessor = new PropertyValueAccessor<TMonad>(Monad, prop);
+            accessor = new PropertyValueAccessor<TMonad>(Monad, propName);
             return true;
         }
         public bool TryGetContext(object o, out IContext<TMonad> context)
