@@ -8,6 +8,8 @@ namespace VCEL.Core.Expression.Impl
     {
         private readonly string propName;
         private readonly IDictionary<Type, IValueAccessor<TMonad>> accessors = new Dictionary<Type, IValueAccessor<TMonad>>();
+        private Type lastType;
+        private IValueAccessor<TMonad> lastAccessor;
 
         public Property(IMonad<TMonad> monad, string propName)
         {
@@ -20,14 +22,22 @@ namespace VCEL.Core.Expression.Impl
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            if(!accessors.TryGetValue(context.GetType(), out var accessor))
+            var cType = context.GetType();
+            if(cType == lastType)
+            {
+                return lastAccessor.GetValue(context);
+            }
+
+            if(!accessors.TryGetValue(cType, out var accessor))
             {
                 if(!context.TryGetAccessor(propName, out accessor))
                 {
                     accessor = new UnitAccessor<TMonad>(Monad);
                 }
-                accessors[context.GetType()] = accessor;
+                accessors[cType] = accessor;
             }
+            lastType = cType;
+            lastAccessor = accessor;
 
             return accessor.GetValue(context);
         }
