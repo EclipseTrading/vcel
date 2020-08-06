@@ -25,8 +25,9 @@ namespace VCEL
                 prop = type?.GetProperty(propName);
                 propSet = true;
             }
-            var value = prop?.GetValue(oc.Object);
-            return monad.Lift(value);
+            return prop == null 
+                ? monad.Unit 
+                : monad.Lift(prop?.GetValue(oc.Object));
         }
     }
 }
