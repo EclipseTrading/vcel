@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -7,7 +9,9 @@ namespace VCEL.Core.Expression.Impl
         private readonly IExpression<TMonad> obj;
         private readonly IExpression<TMonad> member;
 
-        public ObjectMember(IMonad<TMonad> monad, IExpression<TMonad> obj, IExpression<TMonad> member) 
+        public ObjectMember(IMonad<TMonad> monad, 
+            IExpression<TMonad> obj, 
+            IExpression<TMonad> member) 
         {
             this.Monad = monad;
             this.obj = obj;
@@ -15,6 +19,9 @@ namespace VCEL.Core.Expression.Impl
         }
 
         public IMonad<TMonad> Monad { get; }
+
+        public IEnumerable<IDependency> Dependencies 
+            => obj.Dependencies.Union(member.Dependencies).Distinct();
 
         public TMonad Evaluate(IContext<TMonad> context) 
         {

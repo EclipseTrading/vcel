@@ -1,4 +1,5 @@
-﻿using VCEL.Monad;
+﻿using System.Collections.Generic;
+using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
@@ -13,6 +14,8 @@ namespace VCEL.Core.Expression.Impl
         }
 
         public IMonad<TMonad> Monad { get; }
+
+        public IEnumerable<IDependency> Dependencies => expr.Dependencies;
 
         public TMonad Evaluate(IContext<TMonad> context)
         {

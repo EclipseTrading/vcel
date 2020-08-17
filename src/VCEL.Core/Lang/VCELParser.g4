@@ -72,7 +72,7 @@ arithExpr
 
 
 betweenArgs
-	: (OPEN_BRACE expr COMMA expr CLOSE_BRACE)
+	: (OPEN_BRACE arithExpr COMMA arithExpr CLOSE_BRACE)
 	;
 
 objExpr

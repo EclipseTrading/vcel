@@ -16,6 +16,8 @@ namespace VCEL.Core.Expression.Impl
 
         public IMonad<TMonad> Monad { get; }
 
+        public IEnumerable<IDependency> Dependencies => list.SelectMany(i => i.Dependencies).Distinct();
+
         public TMonad Evaluate(IContext<TMonad> context)
             => Monad.Lift(list.Select(e => e.Evaluate(context)).ToList());
     }

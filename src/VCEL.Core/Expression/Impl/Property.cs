@@ -6,19 +6,22 @@ namespace VCEL.Core.Expression.Impl
 {
     public class Property<TMonad> : IExpression<TMonad>
     {
-        private readonly string propName;
         private readonly IDictionary<Type, IValueAccessor<TMonad>> accessors = new Dictionary<Type, IValueAccessor<TMonad>>();
         private Type lastType;
         private IValueAccessor<TMonad> lastAccessor;
 
         public Property(IMonad<TMonad> monad, string propName)
         {
-            this.propName = propName;
-            Monad = monad;
-
+            this.Name = propName;
+            this.Monad = monad;
+            this.Dependencies = new[] { new PropDependency(propName) };
         }
 
         public IMonad<TMonad> Monad { get; }
+
+        public string Name { get; }
+
+        public IEnumerable<IDependency> Dependencies { get; }
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
@@ -30,7 +33,7 @@ namespace VCEL.Core.Expression.Impl
 
             if(!accessors.TryGetValue(cType, out var accessor))
             {
-                if(!context.TryGetAccessor(propName, out accessor))
+                if(!context.TryGetAccessor(Name, out accessor))
                 {
                     accessor = new UnitAccessor<TMonad>(Monad);
                 }
@@ -42,6 +45,6 @@ namespace VCEL.Core.Expression.Impl
             return accessor.GetValue(context);
         }
 
-        public override string ToString() => propName;
+        public override string ToString() => Name;
     }
 }

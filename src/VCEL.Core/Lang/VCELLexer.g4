@@ -47,8 +47,8 @@ LONG_LITERAL: (DIGIT)+ LONG_SUFFIX;
 INT_LITERAL: (DIGIT)+;
 FLOAT_LITERAL: NUMBER ('f'|'F');
 DATE_LITERAL: '@' TDG TDG '-' TDG '-' TDG ('T' TIME_LITERAL (TZ)?)?;
-TZ: 'Z' | (('+'|'-') TDG (':'?) TDG?);
-TIME_SPECIFIER: 'T';
+fragment TZ: 'Z' | (('+'|'-') TDG (':'?) TDG?);
+fragment TIME_SPECIFIER: 'T';
 fragment TDG: DIGIT DIGIT;
 fragment TIME: TDG ':' TDG ':' TDG (DOT TDG DIGIT)?;
 

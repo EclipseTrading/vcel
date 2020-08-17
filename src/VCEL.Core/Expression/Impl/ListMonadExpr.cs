@@ -16,6 +16,8 @@ namespace VCEL.Core.Expression.Impl
 
         public IMonad<List<object>> Monad => ListMonad<object>.Instance;
 
+        public IEnumerable<IDependency> Dependencies => Enumerable.Empty<IDependency>();
+
         public List<object> Evaluate(IContext<List<object>> context)
             => list.SelectMany(e => e.Evaluate(context)).ToList();
     }
