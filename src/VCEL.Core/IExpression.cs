@@ -1,4 +1,5 @@
-﻿using VCEL.Monad;
+﻿using System.Collections.Generic;
+using VCEL.Monad;
 
 namespace VCEL
 {
@@ -6,5 +7,6 @@ namespace VCEL
     {
         TMonad Evaluate(IContext<TMonad> context);
         IMonad<TMonad> Monad { get; }
+        IEnumerable<IDependency> Dependencies { get; }
     }
 }

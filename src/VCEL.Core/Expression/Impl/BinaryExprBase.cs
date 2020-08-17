@@ -1,4 +1,6 @@
-﻿using VCEL.Monad;
+﻿using System.Collections.Generic;
+using System.Linq;
+using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
@@ -15,8 +17,9 @@ namespace VCEL.Core.Expression.Impl
         }
         public IExpression<T> Left { get; }
         public IExpression<T> Right { get; }
-
         public IMonad<T> Monad { get; }
+        public IEnumerable<IDependency> Dependencies
+            => Left.Dependencies.Union(Right.Dependencies).Distinct();
 
         public virtual T Evaluate(IContext<T> context)
         {

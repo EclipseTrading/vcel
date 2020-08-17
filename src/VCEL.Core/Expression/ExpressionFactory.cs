@@ -88,7 +88,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> Function(
             string name,
             IReadOnlyList<IExpression<T>> args)
-            => new FunctionExpr<T>(Monad, name, args, Functions);
+            => new FunctionExpr<T>(Monad, name, args, Functions.GetFunction(name));
 
         public virtual IExpression<T> Property(string name)
             => new Property<T>(Monad, name);

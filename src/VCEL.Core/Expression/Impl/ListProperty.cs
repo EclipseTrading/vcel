@@ -12,6 +12,7 @@ namespace VCEL.Core.Expression.Impl
         public ListProperty(string propName)
         {
             this.propName = propName;
+            this.Dependencies = new[] { new PropDependency(propName) };
         }
 
         public List<object> Evaluate(IContext<List<object>> context)
@@ -26,5 +27,7 @@ namespace VCEL.Core.Expression.Impl
             return valueAccessor.GetValue(context);
         }
         public IMonad<List<object>> Monad => ListMonad<object>.Instance;
+
+        public IEnumerable<IDependency> Dependencies { get; }
     }
 }

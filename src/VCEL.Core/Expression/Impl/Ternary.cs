@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -21,6 +23,13 @@ namespace VCEL.Core.Expression.Impl
         public IExpression<TMonad> FalseExpr { get; }
 
         public IMonad<TMonad> Monad { get; }
+
+        public IEnumerable<IDependency> Dependencies
+            => ConditionExpr
+                .Dependencies
+                .Union(TrueExpr.Dependencies)
+                .Union(FalseExpr.Dependencies)
+                .Distinct();
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
