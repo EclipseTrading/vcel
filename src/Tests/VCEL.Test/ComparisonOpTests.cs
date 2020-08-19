@@ -55,6 +55,11 @@ namespace VCEL.Test
         public void GreaterNone(string exprString)
             => CompareMaybeNone(exprString);
 
+        [TestCase("A < L")]
+        [TestCase("X < Y")]
+        [TestCase("null < null")]
+        public void LessNone(string exprString)
+            => CompareMaybeNone(exprString, new { A = (double?)null, L = (double?)null });
 
         [TestCase("1 < 0", false)]
         [TestCase("0 < 1", true)]
@@ -203,11 +208,21 @@ namespace VCEL.Test
             var result = expr.Evaluate(o ?? new { });
             Assert.That(result, Is.EqualTo(expected).Within(0.0001));
         }
-        private void CompareMaybeNone(string exprString)
+        private void CompareMaybeNone(string exprString, object o = null)
         {
             var expr = VCExpression.ParseMaybe(exprString).Expression;
-            var result = expr.Evaluate(new { });
+            var result = expr.Evaluate(o ?? new { });
             Assert.That(result.HasValue, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void CompareNoneAfterPropertyCache()
+        {
+            var o = new { };
+            var expr = VCExpression.ParseMaybe("A + B");
+            expr.Expression.Evaluate(o); // First Eval to Cache Property Infos
+            var res = expr.Expression.Evaluate(o);
+            Assert.That(res.HasValue, Is.False);
         }
     }
 }
