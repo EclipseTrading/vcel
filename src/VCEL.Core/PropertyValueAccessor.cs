@@ -20,7 +20,7 @@ namespace VCEL
         {
             var oc = context as ObjectContext<TMonad>;
             var type = oc.Object?.GetType();
-            if (!propSet || prop.DeclaringType != type)
+            if (!propSet || prop?.DeclaringType != type)
             {
                 prop = type?.GetProperty(propName);
                 propSet = true;
