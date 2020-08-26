@@ -7,7 +7,8 @@ namespace VCEL.Test
     public class ParseErrorTests
     {
         [TestCase("A in", "A >>>in<<<")]
-        [TestCase("1.", "Expected more input - fount <EOF>")]
+        [TestCase("x()", ">>>x<<<()")]
+        [TestCase("1.", "Expected more input - found <EOF>")]
         [TestCase(@"
 A + B @ C 
 * D
@@ -24,5 +25,6 @@ A + B @ >>>C<<<
                 parseResult.ParseErrors.Select(e => e.GetExprError(exprString)));
             Assert.That(exprMessage, Is.EqualTo(exprError));
         }
+
     }
 }

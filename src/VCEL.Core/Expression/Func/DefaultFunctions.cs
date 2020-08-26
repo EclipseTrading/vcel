@@ -23,14 +23,14 @@ namespace VCEL.Core.Expression.Func
         }
 
         public Function GetFunction(string name)
-        {
-            return functions.TryGetValue(name.ToLower(), out var f) ? f : null;
-        }
+            => functions.TryGetValue(name.ToLower(), out var f) ? f : null;
 
-        public void Register(string name, Func<object[], object> func, params IDependency[] deps)
-        {
-            functions[name] = new Function(func, deps);
-        }
+        public bool HasFunction(string name) => functions.ContainsKey(name);
+
+        public void Register(string name, Func<object[], object> func)
+            => this.Register(name, func, new FuncDependency(name));
+
+        protected void Register(string name, Func<object[], object> func, params IDependency[] deps)
+            => functions[name] = new Function(func, deps);
     }
-
 }
