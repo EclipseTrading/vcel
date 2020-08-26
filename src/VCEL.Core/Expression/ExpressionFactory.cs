@@ -88,7 +88,9 @@ namespace VCEL.Expression
         public virtual IExpression<T> Function(
             string name,
             IReadOnlyList<IExpression<T>> args)
-            => new FunctionExpr<T>(Monad, name, args, Functions.GetFunction(name));
+            => Functions.HasFunction(name)
+                ? new FunctionExpr<T>(Monad, name, args, Functions.GetFunction(name))
+                : throw new MissingFunctionException($"Missing function: '{name}'");
 
         public virtual IExpression<T> Property(string name)
             => new Property<T>(Monad, name);
@@ -98,7 +100,7 @@ namespace VCEL.Expression
 
         public IExpression<T> LegacyType(string typeName)
         {
-            switch(typeName)
+            switch (typeName)
             {
                 case "DateTime":
                 case "System.DateTime":

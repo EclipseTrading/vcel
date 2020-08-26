@@ -26,7 +26,7 @@ namespace VCEL.Core.Lang
 
             if(Start >= exprString.Length)
             {
-                return "Expected more input - fount <EOF>";
+                return "Expected more input - found <EOF>";
             }
 
             return exprString.Substring(0, Start) 

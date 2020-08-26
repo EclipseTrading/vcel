@@ -24,7 +24,6 @@ namespace VECL.Test
             Assert.That((double)result, Is.EqualTo(1.5).Within(0.00000001));
         }
 
-
         [Test]
         public void MaybeSome()
         {
@@ -92,6 +91,14 @@ namespace VECL.Test
             var expr = parser.Parse("1/0").Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(Maybe<object>.None));
+        }
+
+        [Test]
+        public void NaNTest()
+        {
+            var expr = VCExpression.ParseMaybe("A / B / C * 100");
+            var res = expr.Expression.Evaluate(new { A = 1.0, B = 1.0, C = double.NaN });
+            Assert.That(res.Value, Is.EqualTo(double.NaN));
         }
     }
 }

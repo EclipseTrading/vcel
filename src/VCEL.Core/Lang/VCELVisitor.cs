@@ -224,7 +224,17 @@ namespace VCEL.Core.Lang
                 return new ParseResult<T>(results.SelectMany(r => r.ParseErrors).ToList());
             }
 
-            return new ParseResult<T>(f(results.Select(r => r.Expression).ToList()));
+            try
+            {
+                var re = f(results.Select(r => r.Expression).ToList());
+                return new ParseResult<T>(re);
+            }
+            catch (Exception ex)
+            {
+                var t = context.Start;
+                return new ParseResult<T>(
+                    new ParseError(ex.Message, t.Text, t.Line, t.StartIndex, t.StopIndex));
+            }
         }
 
         private ParseResult<T> CheckAndVisitChildren(ParserRuleContext context)
