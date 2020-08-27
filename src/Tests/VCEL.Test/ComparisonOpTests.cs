@@ -19,6 +19,12 @@ namespace VCEL.Test
         [TestCase("true == true", true)]
         [TestCase("false == true", false)]
         [TestCase("false == false", true)]
+        [TestCase("null == null", true)]
+        [TestCase("null == false", false)]
+        [TestCase("false == null", false)]
+        [TestCase("null == 4.2", false)]
+        [TestCase("null == 'ABC'", false)]
+        [TestCase("'ABC' == null", false)]
         public void Eq(string exprString, bool expected)
             => Compare(exprString, expected);
 
@@ -28,6 +34,10 @@ namespace VCEL.Test
         [TestCase("'ABC' != 'A' + 'BC'", false)]
         [TestCase("'A' + 'BC' != 'AB' + 'C'", false)]
         [TestCase("'A' + 'BC' != 'AB' + 'F'", true)]
+        [TestCase("null != 1", true)]
+        [TestCase("1 != null", true)]
+        [TestCase("null != 'ABC'", true)]
+        [TestCase("'ABC' != null", true)]
         public void NotEq(string exprString, bool expected)
             => Compare(exprString, expected);
 
@@ -44,7 +54,6 @@ namespace VCEL.Test
         [TestCase("2 > 1.0", true)]
         [TestCase("2L > 1.0", true)]
         [TestCase("2.0 > 1L", true)]
-
         public void Greater(string exprString, bool expected)
             => Compare(exprString, expected);
 

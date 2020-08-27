@@ -94,7 +94,7 @@ in (match
    | p < 1.0  = 'Near Breach'
    | p < 1.25 = 'Breach'
    | otherwise 'Critical')
-";          
+";
             var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { a, l });
             Assert.That(result.HasValue);
@@ -131,6 +131,24 @@ in (match
             var expr = VCExpression.ParseMaybe(exprStr).Expression;
             var result = expr.Evaluate(new { A = a, B = b, C = c });
             Assert.That(result.HasValue, Is.False);
+        }
+
+        [TestCase("A == null ? 1 : 2", null, 1)]
+        [TestCase("A == null ? 1 : 2", "A", 2)]
+        [TestCase("null == A ? 1 : 2", "A", 2)]
+        [TestCase("null != A ? 1 : 2", "A", 1)]
+        [TestCase("A != null ? 1 : 2", "A", 1)]
+        [TestCase("A != null ? 1 : 2", null, 2)]
+        [TestCase("null != A ? 1 : 2", null, 2)]
+        public void TernaryNullCase(string exprStr, object a, object c)
+        {
+            var expr = VCExpression.ParseMaybe(exprStr).Expression;
+            var result = expr.Evaluate(new { A = a });
+            Assert.That(result.HasValue, Is.True);
+            if (result.HasValue)
+            {
+                Assert.AreEqual(c, result.Value);
+            }
         }
     }
 }

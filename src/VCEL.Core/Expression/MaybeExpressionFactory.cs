@@ -16,5 +16,11 @@ namespace VCEL.Expression
 
         public override IExpression<Maybe<object>> Divide(IExpression<Maybe<object>> l, IExpression<Maybe<object>> r)
             => new MaybeDivide(Monad, l, r);
+
+        public override IExpression<Maybe<object>> Eq(IExpression<Maybe<object>> l, IExpression<Maybe<object>> r)
+            => new MaybeEqExpr<Maybe<object>>(Monad, l, r);
+
+        public override IExpression<Maybe<object>> NotEq(IExpression<Maybe<object>> l, IExpression<Maybe<object>> r)
+            => new MaybeNotEqExpr<Maybe<object>>(Monad, l, r);
     }
 }
