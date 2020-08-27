@@ -116,10 +116,10 @@ namespace VCEL.Expression
         public IExpression<T> UnaryMinus(IExpression<T> expression)
             => new UnaryMinusExpr<T>(Monad, expression);
 
-        public IExpression<T> Eq(IExpression<T> l, IExpression<T> r)
+        public virtual IExpression<T> Eq(IExpression<T> l, IExpression<T> r)
             => new EqExpr<T>(Monad, l, r);
 
-        public IExpression<T> NotEq(IExpression<T> l, IExpression<T> r)
+        public virtual IExpression<T> NotEq(IExpression<T> l, IExpression<T> r)
             => new NotEqExpr<T>(Monad, l, r);
 
         public IExpression<T> Null() => new NullExpr<T>(Monad);

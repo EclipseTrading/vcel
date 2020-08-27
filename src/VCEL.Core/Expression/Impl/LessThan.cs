@@ -14,7 +14,7 @@ namespace VCEL.Core.Expression.Impl
         }
         public override T Evaluate(object l, object r)
         {
-            if (l is IComparable cl && r.GetType() == l?.GetType())
+            if (l is IComparable cl && r?.GetType() == l?.GetType())
             {
                 return Monad.Lift(cl.CompareTo(r) < 0);
             }
