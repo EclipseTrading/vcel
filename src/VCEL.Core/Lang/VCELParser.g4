@@ -25,8 +25,8 @@ expr
 
 guardExpr
 	: MATCH (matcher=ID)? (varName=ID)?
-	     (BAR booleanExpr ASSIGN arithExpr)+ 
-		 (BAR otherwiseExpr arithExpr)?
+		(BAR booleanExpr ASSIGN arithExpr)+
+		(BAR otherwiseExpr arithExpr)?
 	;
 
 otherwiseExpr: OTHERWISE;
@@ -49,7 +49,7 @@ equalityExpr
 	;
 
 booleanOpExpr
-	: booleanOpExpr IN expr #InOp 
+	: booleanOpExpr IN expr #InOp
 	| booleanOpExpr MATCHES expr #Matches
 	| booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
@@ -59,17 +59,14 @@ arithExpr
 	: MINUS arithExpr #UnaryMinus
 	| '(' expr ')' #Paren
 	| arithExpr DOT expr #MemberExpr
-	| arithExpr MULTIPLY arithExpr # Mult
-	| arithExpr DIVIDE arithExpr # Div	
-	| arithExpr PLUS arithExpr # Plus
-	| arithExpr MINUS arithExpr # Minus
-	| arithExpr POW arithExpr # Pow
+	| <assoc=right>arithExpr POW arithExpr # Pow
+	| arithExpr op=(MULTIPLY | DIVIDE) arithExpr # MultDiv
+	| arithExpr op=(PLUS | MINUS) arithExpr # PlusMinus
 	| functionExpr # FuncExpr
 	| listExpr #List
 	| term #ExprListTerm
 	| legacyNode #LegacyNodeExpr
 	;
-
 
 betweenArgs
 	: (OPEN_BRACE arithExpr COMMA arithExpr CLOSE_BRACE)
@@ -96,7 +93,7 @@ term
 	| var;
 
 var
-	: property 
+	: property
 	| variable;
 
 property: ID;
