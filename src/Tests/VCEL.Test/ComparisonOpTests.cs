@@ -175,10 +175,15 @@ namespace VCEL.Test
         [TestCase("4.4 between {1.1, 3.3}", false)]
         [TestCase("@2020-01-02 between {@2020-01-01, @2020-01-03}", true)]
         [TestCase("@2020-01-04 between {@2020-01-01, @2020-01-03}", false)]
-        [TestCase("null between {'A', 'C'}", false)]
-        [TestCase("1 between { null, null }", false)]
         public void Between(string exprString, bool expected)
             => Compare(exprString, expected);
+
+        [TestCase("1 between { null, null }")]
+        [TestCase("1 between { null, 2 }")]
+        [TestCase("1 between { 0, null }")]
+        [TestCase("null between {'A', 'C'}")]
+        public void BetweenMaybeNone(string exprString)
+            => CompareMaybeNone(exprString);
 
         [TestCase(2.0, 1.0f, true)]
         [TestCase(2.0, 1L, true)]
