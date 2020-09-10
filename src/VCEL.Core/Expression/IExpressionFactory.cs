@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace VCEL.Expression
 {
     public interface IExpressionFactory<T>
@@ -17,7 +18,7 @@ namespace VCEL.Expression
         IExpression<T> LessOrEqual(IExpression<T> l, IExpression<T> r);
         IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r);
         IExpression<T> Between(IExpression<T> l, IExpression<T> r);
-        IExpression<T> In(IExpression<T> l, IExpression<T> r);
+        IExpression<T> In(IExpression<T> l, ISet<object> set);
         IExpression<T> Matches(IExpression<T> l, IExpression<T> r);
 
         // Boolean

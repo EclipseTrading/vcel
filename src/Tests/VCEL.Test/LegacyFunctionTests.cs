@@ -18,6 +18,8 @@ namespace VECL.Test
 
         [TestCase("T(System.DateTime).Today")]
         [TestCase("(T(System.DateTime).Today)")]
+        [TestCase("T(DateTime).Today")]
+        [TestCase("(T(DateTime).Today)")]
         public void EvalLegacyToday(string exprString)
         {
             var parseResult = VCExpression.ParseDefault(exprString);
@@ -28,12 +30,23 @@ namespace VECL.Test
 
         [TestCase("T(System.DateTime).Today.Day")]
         [TestCase("(T(System.DateTime).Today).Day")]
+        [TestCase("T(DateTime).Today.Day")]
+        [TestCase("(T(DateTime).Today).Day")]
         public void EvalLegacyTodayDay(string exprString)
         {
             var parseResult = VCExpression.ParseDefault(exprString);
             var expr = parseResult.Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(DateTime.Today.Day));
+        }
+
+        [TestCase("(@2020-10-10 - @2020-10-09).TotalDays")]
+        public void EvalTotalDays(string exprString)
+        {
+            var parseResult = VCExpression.ParseDefault(exprString);
+            var expr = parseResult.Expression;
+            var result = expr.Evaluate(new { });
+            Assert.That(result, Is.EqualTo(1));
         }
     }
 }

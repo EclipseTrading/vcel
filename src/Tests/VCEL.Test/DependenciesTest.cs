@@ -16,7 +16,6 @@ namespace VCEL.Test
         [TestCase("X between {1, 2}", "X")]
         [TestCase("X between {Y, 2}", "X", "Y")]
         [TestCase("X between {Y, Z}", "X", "Y", "Z")]
-        [TestCase("X in {A, B}", "X", "A", "B")]
         [TestCase("let X = A / B in X + C", "A", "B", "C")]
         [TestCase("match | X == A = B | X == C = D | otherwise E", "X", "A", "B", "C", "D", "E")]
         public void PropertyDeps(string exprString, params string[] deps)

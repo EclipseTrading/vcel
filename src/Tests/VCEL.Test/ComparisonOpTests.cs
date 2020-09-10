@@ -102,19 +102,44 @@ namespace VCEL.Test
             => Compare(exprString, expected);
 
         [TestCase("'A' in {'A', 'B', 'C' }", true)]
+        [TestCase("'A' in {'C', 'B', 'A' }", true)]
+        [TestCase("'A' in {'A', 'A', 'A' }", true)]
+        [TestCase("'A' in {'B', 'B', 'B' }", false)]
         [TestCase("'A' in {'D', 'B', 'C' }", false)]
         [TestCase("'A' + 'B' in {'AB', 'B', 'C' }", true)]
         [TestCase("3 in {1, 2, 3 }", true)]
         [TestCase("4 in {1, 2, 3 }", false)]
         [TestCase("4 - 1 in {1, 2, 3 }", true)]
         [TestCase("4.1 in {1.1, 2.1, 4.1 }", true)]
-        [TestCase("null in {1.1, 2.1, 4.1 }", false)]
-        [TestCase("4.1 in null", false)]
-        [TestCase("null in null", false)]
+        [TestCase("4.1 in { 1, 2, 4.1, null }", true)]
         [TestCase("4.1 in { 1, 2, null, 4.1 }", true)]
         [TestCase("4.1 in { 1, 2, null }", false)]
         public void In(string exprString, bool expected)
             => Compare(exprString, expected);
+
+        [TestCase("null in null")]
+        [TestCase("4.1 in null")]
+        [TestCase("'A' in {'A', 'B', Value }")]
+        [TestCase("'A' in Value")]
+        [TestCase("'A' in 1")]
+        [TestCase("'A' in 'A'")]
+        public void InInvalid(string exprString)
+        {
+            var parsed = VCExpression.ParseDefault(exprString);
+            Assert.False(parsed.Success);
+            var parsedMaybe = VCExpression.ParseMaybe(exprString);
+            Assert.False(parsedMaybe.Success);
+        }
+
+        [TestCase("null in {1.1, 2.1, 4.1 }")]
+        [TestCase("null in { 1.1, null, 4.1 }")]
+        public void InMaybe(string exprString)
+        {
+            var parsedMaybe = VCExpression.ParseMaybe(exprString);
+            Assert.True(parsedMaybe.Success);
+            var maybeResult = parsedMaybe.Expression.Evaluate(new { });
+            Assert.False(maybeResult.HasValue);
+        }
 
         [TestCase("'ABC' matches 'A.*'", true)]
         [TestCase("'A' + 'BC' matches 'A.*'", true)]
@@ -129,7 +154,16 @@ namespace VCEL.Test
         [TestCase("(null + '') ~ 'Y.*'", false)]
         [TestCase("(null + '') ~ ('Y' + null)", false)]
         public void Matches(string exprString, bool expected)
-            => Compare(exprString, expected);
+            => CompareDefault(exprString, expected);
+
+        [TestCase("'ABC' matches null")]
+        [TestCase("null matches 'Y.*'")]
+        [TestCase("'ABC' ~ null")]
+        [TestCase("null ~ 'Y.*'")]
+        [TestCase("(null + '') ~ 'Y.*'")]
+        [TestCase("(null + '') ~ ('Y' + null)")]
+        public void MatchesMaybeNone(string exprString)
+            => CompareMaybeNone(exprString);
 
         [TestCase("2 between {1, 3}", true)]
         [TestCase("1 between {1, 3}", true)]
@@ -145,7 +179,6 @@ namespace VCEL.Test
         [TestCase("1 between { null, null }", false)]
         public void Between(string exprString, bool expected)
             => Compare(exprString, expected);
-
 
         [TestCase(2.0, 1.0f, true)]
         [TestCase(2.0, 1L, true)]
@@ -213,10 +246,26 @@ namespace VCEL.Test
 
         private void Compare(string exprString, bool expected, object o = null)
         {
-            var expr = VCExpression.ParseDefault(exprString).Expression;
-            var result = expr.Evaluate(o ?? new { });
+            var expr = VCExpression.ParseDefault(exprString);
+            Assert.True(expr.Success);
+            var result = expr.Expression.Evaluate(o ?? new { });
+            Assert.That(result, Is.EqualTo(expected).Within(0.0001));
+
+            var maybeExpr = VCExpression.ParseMaybe(exprString);
+            Assert.True(maybeExpr.Success);
+            var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
+            Assert.True(maybeResult.HasValue);
+            Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001));
+        }
+
+        private void CompareDefault(string exprString, bool expected, object o = null)
+        {
+            var expr = VCExpression.ParseDefault(exprString);
+            Assert.True(expr.Success);
+            var result = expr.Expression.Evaluate(o ?? new { });
             Assert.That(result, Is.EqualTo(expected).Within(0.0001));
         }
+
         private void CompareMaybeNone(string exprString, object o = null)
         {
             var expr = VCExpression.ParseMaybe(exprString).Expression;

@@ -1,4 +1,5 @@
-﻿using VCEL.Core.Expression.Impl;
+﻿using System.Collections.Generic;
+using VCEL.Core.Expression.Impl;
 using VCEL.Monad;
 
 namespace VCEL.Expression
@@ -21,8 +22,6 @@ namespace VCEL.Expression
             => new ToStringBinaryOp(Monad, "/", l, r);
         public override IExpression<string> Multiply(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(Monad, "*", l, r);
-        public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
-            => new ToStringBinaryOp(Monad, "in", l, r);
         public override IExpression<string> Between(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(Monad, "between", l, r);
     }

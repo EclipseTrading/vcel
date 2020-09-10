@@ -48,17 +48,6 @@ namespace VECL.Test
         }
 
         [Test]
-        public void List()
-        {
-            var exprFactory = new ListExpressionFactory<object>(ListMonad<object>.Instance);
-            var parser = new ExpressionParser<List<object>>(exprFactory);
-            var expr = parser.Parse("A + { 0.5, 0.6 } + 0.5").Expression;
-            var result = expr.Evaluate(new { A = 0.5d });
-
-            Assert.That(result, Is.EquivalentTo(new[] { 1.5, 1.6 }));
-        }
-
-        [Test]
         public async Task TaskM()
         {
             var exprFactory = new ExpressionFactory<Task<object>>(TaskMonad.Instance);
