@@ -1,30 +1,51 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
-    public class BetweenExpr<T> : BinaryExprBase<T>
+    public class BetweenExpr<T> : IExpression<T>
     {
         public BetweenExpr(
             IMonad<T> monad,
             IExpression<T> left,
             IExpression<T> right)
-            : base(monad, left, right)
         {
+            Monad = monad;
+            Left = left;
+            Right = right;
+        }
+        public IExpression<T> Left { get; }
+        public IExpression<T> Right { get; }
+        public IMonad<T> Monad { get; }
+        public IEnumerable<IDependency> Dependencies
+            => Left.Dependencies.Union(Right.Dependencies).Distinct();
+
+        public T Evaluate(IContext<T> context)
+        {
+            var lv = Left.Evaluate(context);
+            var values = Right.Evaluate(context);
+
+            return Monad.Bind(lv, values, EvaluateBetween);
         }
 
-        public override T Evaluate(object lv, object rv)
+        private T EvaluateBetween(object l, object v)
         {
-            if(lv is IComparable v
-                && rv is IList l
-                && l.Count == 2
-                && l[0] is IComparable from
-                && l[1] is IComparable to)
+            if (l is IComparable left && v is IList list && list.Count == 2)
             {
-                var frCmp = v.CompareTo(from);
-                var toCmp = v.CompareTo(to);
-                return Monad.Lift(frCmp >= 0 && toCmp <= 0);
+                if (list[0] is T f && list[1] is T s)
+                {
+                    return Monad.Bind(f, s, EvaluateBetweenItems);
+
+                    T EvaluateBetweenItems(object first, object second)
+                    {
+                        var frCmp = left.CompareTo(first);
+                        var toCmp = left.CompareTo(second);
+                        return Monad.Lift(frCmp >= 0 && toCmp <= 0);
+                    }
+                }
             }
             return Monad.Lift(false);
         }

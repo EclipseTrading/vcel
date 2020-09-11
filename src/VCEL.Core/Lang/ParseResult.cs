@@ -21,9 +21,9 @@ namespace VCEL.Core.Lang
         public ParseResult(params ParseError[] errors)
             : this((IReadOnlyList<ParseError>)errors) { }
 
-        public bool Success { get; }
-        public IExpression<T> Expression { get; }
-        public IReadOnlyList<ParseError> ParseErrors { get; }
+        public bool Success { get; protected set; }
+        public IExpression<T> Expression { get; protected set; }
+        public IReadOnlyList<ParseError> ParseErrors { get; protected set; }
 
     }
 }

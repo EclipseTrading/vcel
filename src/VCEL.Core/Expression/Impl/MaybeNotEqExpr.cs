@@ -35,7 +35,7 @@ namespace VCEL.Core.Expression.Impl
                 return Monad.Lift(false);
             }
 
-            return Monad.Lift(!Equals(l, r));
+            return Monad.Lift(!Equals(l.Value, r.Value));
         }
     }
 }

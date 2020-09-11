@@ -49,7 +49,7 @@ equalityExpr
 	;
 
 booleanOpExpr
-	: booleanOpExpr IN expr #InOp
+	: booleanOpExpr IN setLiteral #InOp
 	| booleanOpExpr MATCHES expr #Matches
 	| booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
@@ -63,7 +63,6 @@ arithExpr
 	| arithExpr op=(MULTIPLY | DIVIDE) arithExpr # MultDiv
 	| arithExpr op=(PLUS | MINUS) arithExpr # PlusMinus
 	| functionExpr # FuncExpr
-	| listExpr #List
 	| term #ExprListTerm
 	| legacyNode #LegacyNodeExpr
 	;
@@ -78,8 +77,6 @@ objExpr
 	;
 
 argList: '(' expr? (COMMA expr)* ')';
-
-listExpr: (OPEN_BRACE expr? (COMMA expr)* CLOSE_BRACE);
 
 legacyNode
 	: LEGACY_MATH
@@ -98,6 +95,8 @@ var
 
 property: ID;
 variable: HASH ID;
+
+setLiteral: (OPEN_BRACE literal? (COMMA literal)* CLOSE_BRACE);
 
 dateLiteral
 	: timeLiteral

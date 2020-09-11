@@ -45,8 +45,8 @@ namespace VCEL.Expression
         public virtual IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r)
             => new GreaterOrEqual<T>(Monad, l, r);
 
-        public virtual IExpression<T> In(IExpression<T> l, IExpression<T> r)
-            => new InExpr<T>(Monad, l, r);
+        public virtual IExpression<T> In(IExpression<T> l, ISet<object> set)
+            => new InExpr<T>(Monad, l, set);
         public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> r)
             => new BetweenExpr<T>(Monad, l, r);
         public virtual IExpression<T> Matches(IExpression<T> l, IExpression<T> r)
@@ -61,8 +61,10 @@ namespace VCEL.Expression
             => Value(dateTimeOffset);
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan)
             => Value(timeSpan);
+        public virtual IExpression<T> Set(ISet<object> s) => Value(s);
         public virtual IExpression<T> Value(object o)
             => new ValueExpr<T>(Monad, o);
+
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
         public virtual IExpression<T> Add(IExpression<T> l, IExpression<T> r)
