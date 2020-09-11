@@ -34,13 +34,19 @@ namespace VCEL.Core.Expression.Impl
                 {
                     if (list[0] is T f && list[1] is T s)
                     {
-                        // Perhaps this next bind goes slightly against a pure implementation
-                        return Monad.Bind(f, s, (first, second) =>
+                        return Monad.Bind(f, EvaluateFirst);
+
+                        T EvaluateFirst(object first)
                         {
-                            var frCmp = left.CompareTo(first);
-                            var toCmp = left.CompareTo(second);
-                            return Monad.Lift(frCmp >= 0 && toCmp <= 0);
-                        });
+                            return Monad.Bind(s, EvaluateSecond);
+
+                            T EvaluateSecond(object second)
+                            {
+                                var frCmp = left.CompareTo(first);
+                                var toCmp = left.CompareTo(second);
+                                return Monad.Lift(frCmp >= 0 && toCmp <= 0);
+                            }
+                        }
                     }
                 }
                 return Monad.Lift(false);
