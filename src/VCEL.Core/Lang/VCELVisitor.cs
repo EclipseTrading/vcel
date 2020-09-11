@@ -36,94 +36,80 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitProperty([NotNull] VCELParser.PropertyContext context)
             => new ParseResult<T>(exprFactory.Property(context.GetText()));
 
-        public override ParseResult<T> VisitLiteral([NotNull] VCELParser.LiteralContext context)
+        public override ParseResult<T> VisitDoubleLiteral([NotNull] VCELParser.DoubleLiteralContext context)
+           => double.TryParse(context.GetText(), out var d)
+                ? new ValueParseResult<T>(exprFactory.Double(d), d)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse '{d}' as double", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitFloatLiteral([NotNull] VCELParser.FloatLiteralContext context)
+           => float.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var f)
+                ? new ValueParseResult<T>(exprFactory.Value(f), f)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse '{f} as float", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitIntegerLiteral([NotNull] VCELParser.IntegerLiteralContext context)
+          => int.TryParse(context.GetText(), out var i)
+                ? new ValueParseResult<T>(exprFactory.Int(i), i)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse {i} as int", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitLongLiteral([NotNull] VCELParser.LongLiteralContext context)
+            => long.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var l)
+                ? new ValueParseResult<T>(exprFactory.Long(l), l)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse {l} as long", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitBoolLiteral([NotNull] VCELParser.BoolLiteralContext context)
         {
-            var parsedValue = ParseLiteral(context);
-            return parsedValue.Success
-                ? new ParseResult<T>(parsedValue.Parsed)
-                : new ParseResult<T>(parsedValue.ParseErrors);
+            var b = Equals(context.GetText(), "true");
+            return new ValueParseResult<T>(exprFactory.Bool(b), b);
         }
 
-        /// <summary>
-        /// Parses the base literal types, we do not use the Visitor methods to allow reuse of this logic to create higher level literals such as setLiteral
-        /// </summary>
-        private ValueParseResult<T> ParseLiteral(VCELParser.LiteralContext context)
+        public override ParseResult<T> VisitStringLiteral([NotNull] VCELParser.StringLiteralContext context)
         {
-            var doubleLiteral = context.doubleLiteral();
-            if (doubleLiteral != null)
-            {
-                return double.TryParse(context.GetText(), out var d)
-                    ? new ValueParseResult<T>(d, exprFactory.Double(d))
-                    : new ValueParseResult<T>(new ParseError($"Unable to parse '{d}' as double", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
-            }
-
-            var floatLiteral = context.floatLiteral();
-            if (floatLiteral != null)
-            {
-                return float.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var f)
-                    ? new ValueParseResult<T>(f, exprFactory.Value(f))
-                    : new ValueParseResult<T>(new ParseError($"Unable to parse '{f} as float", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
-            }
-
-            var integerLiteral = context.integerLiteral();
-            if (integerLiteral != null)
-            {
-                return int.TryParse(context.GetText(), out var i)
-                    ? new ValueParseResult<T>(i, exprFactory.Int(i))
-                    : new ValueParseResult<T>(new ParseError($"Unable to parse {i} as int", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
-            }
-
-            var longLiteral = context.longLiteral();
-            if (longLiteral != null)
-            {
-                return long.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var l)
-                    ? new ValueParseResult<T>(l, exprFactory.Long(l))
-                    : new ValueParseResult<T>(new ParseError($"Unable to parse {l} as long", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
-            }
-
-            var boolLiteral = context.boolLiteral();
-            if (boolLiteral != null)
-            {
-                bool b = Equals(context.GetText(), "true");
-                return new ValueParseResult<T>(b, exprFactory.Bool(b));
-            }
-
-            var stringLiteral = context.stringLiteral();
-            if (stringLiteral != null)
-            {
-                string s = context.GetText().Substring(1, context.GetText().Length - 2);
-                return new ValueParseResult<T>(s, exprFactory.String(s));
-            }
-
-            var dateLiteral = context.dateLiteral();
-            if (dateLiteral != null)
-            {
-
-                var dateTimeLiteral = dateLiteral.dateTimeLiteral();
-                if (dateTimeLiteral != null)
-                {
-                    return DateTimeOffset.TryParse(dateLiteral.GetText().Substring(1), out var d)
-                        ? new ValueParseResult<T>(d, exprFactory.DateTimeOffset(d))
-                        : new ValueParseResult<T>(new ParseError($"Unable to parse {d} as DateTimeOffset", dateLiteral.GetText(), dateLiteral.Start.Line, dateLiteral.Start.StartIndex, dateLiteral.Stop.StopIndex));
-                }
-
-                var timeLiteral = dateLiteral.timeLiteral();
-                if (timeLiteral != null)
-                {
-                    return TimeSpan.TryParse(dateLiteral.GetText(), out var ts)
-                        ? new ValueParseResult<T>(ts, exprFactory.TimeSpan(ts))
-                        : new ValueParseResult<T>(new ParseError($"Unable to parse {ts} as TimeSpan", dateLiteral.GetText(), dateLiteral.Start.Line, dateLiteral.Start.StartIndex, dateLiteral.Stop.StopIndex));
-                }
-            }
-
-            var nullLiteral = context.nullLiteral();
-            if (nullLiteral != null)
-            {
-                return new ValueParseResult<T>(null, exprFactory.Null());
-            }
-
-            return new ValueParseResult<T>(new ParseError($"Unable to parse, unhandled literal type", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+            var s = context.GetText().Substring(1, context.GetText().Length - 2);
+            return new ValueParseResult<T>(exprFactory.String(s), s);
         }
+
+        public override ParseResult<T> VisitDateTimeLiteral([NotNull] VCELParser.DateTimeLiteralContext context)
+           => DateTimeOffset.TryParse(context.GetText().Substring(1), out var d)
+                ? new ValueParseResult<T>(exprFactory.DateTimeOffset(d), d)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse {d} as DateTimeOffset", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitTimeLiteral([NotNull] VCELParser.TimeLiteralContext context)
+            => TimeSpan.TryParse(context.GetText(), out var ts)
+                ? new ValueParseResult<T>(exprFactory.TimeSpan(ts), ts)
+                : new ValueParseResult<T>(new ParseError($"Unable to parse {ts} as TimeSpan", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+
+        public override ParseResult<T> VisitSetLiteral([NotNull] VCELParser.SetLiteralContext context)
+            => ComposeWithChildren(context, (setChildNodes) =>
+            {
+                var valueParsedSetItems = new List<ValueParseResult<T>>();
+                foreach (var setItem in setChildNodes)
+                {
+                    var parsedItem = base.Visit(setItem);
+                    if (parsedItem is ValueParseResult<T> valueParsedItem)
+                    {
+                        valueParsedSetItems.Add(valueParsedItem);
+                    }
+                    else
+                    {
+                        ParseError error = new ParseError($"Unable to parse as set literal", setItem.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex);
+                        return new ParseResult<T>(error);
+                    }
+                }
+
+                if (valueParsedSetItems.Any(item => !item.Success))
+                {
+                    return new ParseResult<T>(valueParsedSetItems.SelectMany(r => r.ParseErrors).ToList());
+                }
+
+                var set = new HashSet<object>(valueParsedSetItems.Select(item => item.Value));
+
+                return new ValueParseResult<T>(exprFactory.Set(set), set);
+            }, Enumerable
+                .Range(0, (context.ChildCount - 1) / 2)
+                .Select(i => i * 2 + 1).ToArray());
+
+        public override ParseResult<T> VisitNullLiteral([NotNull] VCELParser.NullLiteralContext context)
+            => new ValueParseResult<T>(exprFactory.Null(), null);
 
         public override ParseResult<T> VisitPlusMinus([NotNull] VCELParser.PlusMinusContext context)
             => Compose(context, (a, b) => context.PLUS() != null ? exprFactory.Add(a, b) : exprFactory.Subtract(a, b), 0, 2);
@@ -147,37 +133,22 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitInOp([NotNull] VCELParser.InOpContext context)
             => ComposeWithChildren(context, (inChildNodes) =>
             {
-                var left = Visit(inChildNodes[0]);
-
+                var left = base.Visit(inChildNodes[0]);
                 if (!left.Success)
                 {
-                    return (null, new ParseResult<T>(left.ParseErrors));
+                    return new ParseResult<T>(left.ParseErrors);
                 }
 
-                var setNode = inChildNodes[1];
-                var setChildNodes = Enumerable.Range(0, setNode.ChildCount - 1).Select(n => setNode.GetChild(n));
-                var errors = inChildNodes.OfType<ParserRuleContext>().Where(c => c.exception != null);
-                if (errors.Any())
+                var set = base.Visit(inChildNodes[1]);
+                if (set is ValueParseResult<T> valueParsedSet && valueParsedSet.Value is ISet<object> setValue)
                 {
-                    return (null, new ParseResult<T>(
-                        errors
-                            .Select(e => (ex: e.exception, t: e.exception.OffendingToken))
-                            .Select(e => new ParseError(e.ex.Message, e.t.Text, e.t.Line, e.t.StartIndex, e.t.StopIndex))
-                            .ToList()));
+                    return new ParseResult<T>(exprFactory.In(left.Expression, setValue));
                 }
-
-                var setItems = setChildNodes
-                    .OfType<VCELParser.LiteralContext>()
-                    .Select(setItem => ParseLiteral(setItem));
-
-                if (setItems.Any(item => !item.Success))
+                else
                 {
-                    return (null, new ParseResult<T>(setItems.SelectMany(r => r.ParseErrors).ToList()));
+                    ParseError error = new ParseError($"Unable to parse as in expression", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex);
+                    return new ParseResult<T>(error);
                 }
-
-                var set = new HashSet<object>(setItems.Select(item => item.Value));
-
-                return (exprFactory.In(left.Expression, set), null);
             }, 0, 2);
 
         public override ParseResult<T> VisitMatches([NotNull] VCELParser.MatchesContext context)
@@ -289,13 +260,13 @@ namespace VCEL.Core.Lang
                 var results = childNodes.Select(n => Visit(n)).ToList();
                 if (results.Any(r => !r.Success))
                 {
-                    return (null, new ParseResult<T>(results.SelectMany(r => r.ParseErrors).ToList()));
+                    return new ParseResult<T>(results.SelectMany(r => r.ParseErrors).ToList());
                 }
 
-                return (f(results.Select(r => r.Expression).ToList()), null);
+                return new ParseResult<T>(f(results.Select(r => r.Expression).ToList()));
             }, nodes);
 
-        private ParseResult<T> ComposeWithChildren(ParserRuleContext context, Func<IReadOnlyList<IParseTree>, (IExpression<T>, ParseResult<T>)> f, params int[] nodes)
+        private ParseResult<T> ComposeWithChildren(ParserRuleContext context, Func<IReadOnlyList<IParseTree>, ParseResult<T>> f, params int[] nodes)
         {
             if (context.exception != null)
             {
@@ -316,10 +287,7 @@ namespace VCEL.Core.Lang
 
             try
             {
-                var processed = f(childNodes);
-                if (processed.Item2 != null) return processed.Item2;
-                var re = processed.Item1;
-                return new ParseResult<T>(re);
+                return f(childNodes);
             }
             catch (Exception ex)
             {

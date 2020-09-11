@@ -2,12 +2,12 @@
 
 namespace VCEL.Core.Lang
 {
-    public class ValueParseResult<T>
+    public class ValueParseResult<T> : ParseResult<T>
     {
-        public ValueParseResult(object value, IExpression<T> parsed)
+        public ValueParseResult(IExpression<T> expression, object value)
         {
             this.Value = value;
-            this.Parsed = parsed;
+            this.Expression = expression;
             this.ParseErrors = new ParseError[0];
             this.Success = true;
         }
@@ -22,10 +22,7 @@ namespace VCEL.Core.Lang
         public ValueParseResult(params ParseError[] errors)
             : this((IReadOnlyList<ParseError>)errors) { }
 
-        public bool Success { get; }
         public object Value { get; }
-        public IExpression<T> Parsed { get; }
-        public IReadOnlyList<ParseError> ParseErrors { get; }
 
     }
 }

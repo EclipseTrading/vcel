@@ -61,6 +61,7 @@ namespace VCEL.Expression
             => Value(dateTimeOffset);
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan)
             => Value(timeSpan);
+        public virtual IExpression<T> Set(ISet<object> s) => Value(s);
         public virtual IExpression<T> Value(object o)
             => new ValueExpr<T>(Monad, o);
 

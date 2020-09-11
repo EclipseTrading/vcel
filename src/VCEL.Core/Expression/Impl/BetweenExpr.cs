@@ -28,29 +28,26 @@ namespace VCEL.Core.Expression.Impl
             var lv = Left.Evaluate(context);
             var values = Right.Evaluate(context);
 
-            return Monad.Bind(lv, values, (l, v) =>
+            return Monad.Bind(lv, values, EvaluateBetween);
+        }
+
+        private T EvaluateBetween(object l, object v)
+        {
+            if (l is IComparable left && v is IList list && list.Count == 2)
             {
-                if (l is IComparable left && v is IList list && list.Count == 2)
+                if (list[0] is T f && list[1] is T s)
                 {
-                    if (list[0] is T f && list[1] is T s)
+                    return Monad.Bind(f, s, EvaluateBetweenItems);
+
+                    T EvaluateBetweenItems(object first, object second)
                     {
-                        return Monad.Bind(f, EvaluateFirst);
-
-                        T EvaluateFirst(object first)
-                        {
-                            return Monad.Bind(s, EvaluateSecond);
-
-                            T EvaluateSecond(object second)
-                            {
-                                var frCmp = left.CompareTo(first);
-                                var toCmp = left.CompareTo(second);
-                                return Monad.Lift(frCmp >= 0 && toCmp <= 0);
-                            }
-                        }
+                        var frCmp = left.CompareTo(first);
+                        var toCmp = left.CompareTo(second);
+                        return Monad.Lift(frCmp >= 0 && toCmp <= 0);
                     }
                 }
-                return Monad.Lift(false);
-            });
+            }
+            return Monad.Lift(false);
         }
     }
 }
