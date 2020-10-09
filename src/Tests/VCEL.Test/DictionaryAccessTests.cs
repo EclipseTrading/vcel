@@ -75,16 +75,44 @@ namespace VCEL.Test
             var expr = VCExpression.ParseDefault(
                 "(a + b.b_value) ^ 2 * c + 25");
 
-            var dic = new Dictionary<string, object>();
-            dic.Add("a", 10);
-            dic.Add("b", new Dictionary<string, object>()
+            var dic = new Dictionary<string, object>
             {
-                { "b_value", 5 }
-            });
-            dic.Add("c", 3);
+                { "a", 10 },
+                {
+                    "b",
+                    new Dictionary<string, object>()
+                    {
+                        { "b_value", 5 }
+                    }
+                },
+                { "c", 3 }
+            };
 
             var result = expr.Expression.Evaluate(dic);
             Assert.That(result, Is.EqualTo(700));
+        }
+
+
+        [Test]
+        public void AccessDictionaryInDictionary_WithOverride()
+        {
+            var expr = VCExpression.ParseDefault(
+                "let x = a + b.b_value in x");
+
+            var dic = new Dictionary<string, object>
+            {
+                { "a", 10 },
+                {
+                    "b",
+                    new Dictionary<string, object>()
+                    {
+                        { "b_value", 5 }
+                    }
+                }
+            };
+
+            var result = expr.Expression.Evaluate(dic);
+            Assert.That(result, Is.EqualTo(15));
         }
     }
 }

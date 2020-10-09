@@ -12,7 +12,11 @@
         public T GetValue(IContext<T> o)
         {
             var dictContext = (DictionaryContext<T>)o;
-            return o.Monad.Lift(dictContext.Dict[propName]);
+            if (!dictContext.Dict.TryGetValue(propName, out var value))
+            {
+                return o.Monad.Unit;
+            }
+            return o.Monad.Lift(value);
         }
     }
 }
