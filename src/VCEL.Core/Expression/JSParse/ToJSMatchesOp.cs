@@ -3,11 +3,11 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSMatchesOp : BinaryExprBase<string>
+    internal class ToJsMatchesOp : BinaryExprBase<string>
     {
         private readonly IMonad<string> monad;
 
-        public ToJSMatchesOp(
+        public ToJsMatchesOp(
             IMonad<string> monad,
             IExpression<string> left,
             IExpression<string> right)
@@ -18,7 +18,7 @@ namespace VCEL.Core.Expression.JSParse
 
         public override string Evaluate(object lv, object rv)
         {
-            return $"{lv}.match({rv})  != null";
+            return $"{lv}.match({rv}) != null";
         }
     }
 }

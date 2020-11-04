@@ -4,11 +4,11 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSDateTimeOffSet : IExpression<string>
+    internal class ToJsDateTimeOffSet : IExpression<string>
     {
         private DateTimeOffset dateTimeOffset;
 
-        public ToJSDateTimeOffSet(IMonad<string> monad, DateTimeOffset dateTimeOffset)
+        public ToJsDateTimeOffSet(IMonad<string> monad, DateTimeOffset dateTimeOffset)
         {
             this.Monad = monad;
             this.dateTimeOffset = dateTimeOffset;

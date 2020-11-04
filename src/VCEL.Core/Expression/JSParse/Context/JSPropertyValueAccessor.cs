@@ -5,7 +5,7 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse.Context
 {
-    public class JSPropertyValueAccessor : IValueAccessor<string>
+    public class JsPropertyValueAccessor : IValueAccessor<string>
     {
         private readonly IReadOnlyDictionary<string, string> jsDatePropertyMethods = new Dictionary<string, string>()
         {
@@ -27,7 +27,7 @@ namespace VCEL.Core.Expression.JSParse.Context
         private readonly string propName;
         private readonly IReadOnlyDictionary<string, Func<string>> overridePropertyFunc;
 
-        public JSPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>> overridePropertyFunc = null)
+        public JsPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>> overridePropertyFunc = null)
         {
             this.monad = monad;
             this.propName = propName;

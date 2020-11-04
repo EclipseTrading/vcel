@@ -3,13 +3,13 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSCodeInOp : BinaryExprBase<string>
+    internal class ToJsCodeInOp : BinaryExprBase<string>
     {
         private IMonad<string> monad;
         private IExpression<string> l;
         private object r;
 
-        public ToJSCodeInOp(
+        public ToJsCodeInOp(
             IMonad<string> monad,
             IExpression<string> l,
             IExpression<string> r)

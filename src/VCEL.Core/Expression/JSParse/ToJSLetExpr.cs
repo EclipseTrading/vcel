@@ -6,12 +6,12 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSLetExpr : IExpression<string>
+    internal class ToJsLetExpr : IExpression<string>
     {
         private IReadOnlyList<(string, IExpression<string>)> bindings;
         private IExpression<string> expr;
 
-        public ToJSLetExpr(IMonad<string> monad, IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
+        public ToJsLetExpr(IMonad<string> monad, IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
         {
             this.Monad = monad;
             this.bindings = bindings;
@@ -29,12 +29,12 @@ namespace VCEL.Core.Expression.JSParse
                 .Distinct()
                 .ToDictionary(p => p, p => new Func<string>(() => p));
 
-            var jsContext = new JSObjectContext(Monad, context.Value, propFuncs);
+            var jsContext = new JsObjectContext(Monad, context.Value, propFuncs);
 
-            var letCauses = this.bindings.Select(b => $"let {b.Item1} = {b.Item2.Evaluate(jsContext)}\n");
+            var letCauses = this.bindings.Select(b => $"let {b.Item1} = {b.Item2.Evaluate(jsContext)}");
             var returnCause = this.expr.Evaluate(jsContext);
 
-            var result = "(() => {" + $" {string.Join(" ", letCauses)} return {returnCause}" + "})()";
+            var result = $"(() => {{{string.Join("; ", letCauses)}; return {returnCause};}})()";
             return result;
         }
     }

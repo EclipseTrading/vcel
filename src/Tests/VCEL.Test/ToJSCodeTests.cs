@@ -12,20 +12,20 @@ namespace VCEL.Test
 
         public ToJsCodeTests()
         {
-            var jsParserfactory = new ToJSCodeFactory<string>(ConcatStringMonad.Instance);
+            var jsParserfactory = new ToJsCodeFactory<string>(ConcatStringMonad.Instance);
             parser = new ExpressionParser<string>(jsParserfactory);
         }
 
-        [TestCase("t == 'C'", "(vcelContext.t == 'C')")]
+        [TestCase("t == 'C'", "(vcelContext.t === 'C')")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
-        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)')  != null")]
-        [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K == 'C') || (vcelContext.K == 'AC'))")]
+        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)') != null")]
+        [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K === 'C') || (vcelContext.K === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
-        [TestCase("s == 'ACTIVE'", "(vcelContext.s == 'ACTIVE')")]
+        [TestCase("s == 'ACTIVE'", "(vcelContext.s === 'ACTIVE')")]
         public void TestJsParser_ProdRulesExamples(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -35,7 +35,7 @@ namespace VCEL.Test
         public void TestJsParser_Paren(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -47,7 +47,7 @@ namespace VCEL.Test
         public void TestJsParser_Op(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -59,7 +59,7 @@ namespace VCEL.Test
         public void TestJsParser_Datetime(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -67,7 +67,7 @@ namespace VCEL.Test
 
         [TestCase("T(System.DateTime).Today", "(new Date()).getDate()")]
         [TestCase("T(System.DateTime).Now", "(new Date()).getTime()")]
-        [TestCase("now()", "(Date.now())")]
+        [TestCase("now()", "(new Date())")]
         [TestCase("today()", "(new Date())")]
         [TestCase("abc.ToUpper()", "(vcelContext.abc.toUpperCase())")]
         [TestCase("abc.ToLower()", "(vcelContext.abc.toLowerCase())")]
@@ -76,7 +76,7 @@ namespace VCEL.Test
         public void TestJsParser_Functions(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -90,15 +90,15 @@ namespace VCEL.Test
         [TestCase("a - b", "(vcelContext.a - vcelContext.b)")]
         [TestCase("a / b", "(vcelContext.a / vcelContext.b)")]
         [TestCase("a * b", "(vcelContext.a * vcelContext.b)")]
-        [TestCase("a == b", "(vcelContext.a == vcelContext.b)")]
+        [TestCase("a == b", "(vcelContext.a === vcelContext.b)")]
         [TestCase("a != b", "(vcelContext.a != vcelContext.b)")]
-        [TestCase("a ^ b", "(vcelContext.a ^ vcelContext.b)")]
+        [TestCase("a ^ b", "(Math.pow(vcelContext.a, vcelContext.b))")]
         [TestCase("a and b", "(vcelContext.a && vcelContext.b)")]
         [TestCase("a or b", "(vcelContext.a || vcelContext.b)")]
         public void TestJsParser_BinaryOp(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -110,7 +110,7 @@ namespace VCEL.Test
         public void TestJsParser_Ternary(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -120,7 +120,7 @@ namespace VCEL.Test
         public void TestJsParser_In(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -152,7 +152,7 @@ namespace VCEL.Test
         public void TestJsParser_Match(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
@@ -160,7 +160,7 @@ namespace VCEL.Test
 
 
         [TestCase("let x = 1, y = 2 + x in x + y + position",
-            "(() => { let x = 1\n let y = (2 + x)\n return ((x + y) + vcelContext.position)})()")]
+            "(() => {let x = 1; let y = (2 + x); return ((x + y) + vcelContext.position);})()")]
 
         [TestCase(@"
             let 
@@ -172,17 +172,17 @@ namespace VCEL.Test
                | p < 1.25 = 'Breach'
                | otherwise 'Critical')
             ",
-            "(() => { let p = (vcelContext.a / vcelContext.l)\n return (() => { " +
+            "(() => {let p = (vcelContext.a / vcelContext.l); return (() => { " +
             "switch(true) {" +
             "case (p < 0.5): return 'Low'; " +
             "case (p < 0.75): return 'Normal'; " +
             "case (p < 1): return 'Near Breach'; " +
             "case (p < 1.25): return 'Breach'; " +
-            "default: return 'Critical'}})()})()")]
+            "default: return 'Critical'}})();})()")]
         public void TesJSParser_Let(string expr, string expected)
         {
             var result = parser.Parse(expr);
-            var parsedExpr = result.Expression.Evaluate(new JSObjectContext(ConcatStringMonad.Instance, new { }));
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);

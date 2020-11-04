@@ -4,17 +4,17 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSFunction : IExpression<string>
+    internal class ToJsFunction : IExpression<string>
     {
         private static Dictionary<string, string> JSFunctionMap
              = new Dictionary<string, string>()
              {
                  { "abs", "Math.abs" },
                  { "round", "Math.round" },
-                 { "sqrt", "Math.round" },
+                 { "sqrt", "Math.sqrt" },
                  { "min", "Math.min" },
                  { "max", "Math.max" },
-                 { "now", "Date.now" },
+                 { "now", "new Date" },
                  { "today", "new Date" },
                  { "startswith", "startsWith" },
                  { "substring", "substring" },
@@ -25,7 +25,7 @@ namespace VCEL.Core.Expression.JSParse
         private string name;
         private IReadOnlyList<IExpression<string>> args;
 
-        public ToJSFunction(IMonad<string> monad, string name, IReadOnlyList<IExpression<string>> args)
+        public ToJsFunction(IMonad<string> monad, string name, IReadOnlyList<IExpression<string>> args)
         {
             this.Monad = monad;
             this.name = name;
@@ -38,7 +38,7 @@ namespace VCEL.Core.Expression.JSParse
 
         public string Evaluate(IContext<string> context)
         {
-            if (ToJSFunction.JSFunctionMap.TryGetValue(name.ToLower(), out var jsFunc))
+            if (ToJsFunction.JSFunctionMap.TryGetValue(name.ToLower(), out var jsFunc))
             {
                 return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"

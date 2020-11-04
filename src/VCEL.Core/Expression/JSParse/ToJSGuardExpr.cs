@@ -4,12 +4,12 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSGuardExpr : IExpression<string>
+    internal class ToJsGuardExpr : IExpression<string>
     {
         private IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses;
         private IExpression<string> otherwise;
 
-        public ToJSGuardExpr(IMonad<string> monad, IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string> otherwise)
+        public ToJsGuardExpr(IMonad<string> monad, IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string> otherwise)
         {
             this.Monad = monad;
             this.guardClauses = guardClauses;

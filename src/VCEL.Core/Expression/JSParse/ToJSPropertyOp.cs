@@ -4,11 +4,11 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSPropertyOp : IExpression<string>
+    internal class ToJsPropertyOp : IExpression<string>
     {
         private string name;
 
-        public ToJSPropertyOp(string name, IMonad<string> monad)
+        public ToJsPropertyOp(string name, IMonad<string> monad)
         {
             this.name = name;
             this.Monad = monad;

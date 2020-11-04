@@ -4,11 +4,11 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.JSParse
 {
-    internal class ToJSTimeSpan : IExpression<string>
+    internal class ToJsTimeSpan : IExpression<string>
     {
         private TimeSpan timeSpan;
 
-        public ToJSTimeSpan(IMonad<string> monad, TimeSpan timeSpan)
+        public ToJsTimeSpan(IMonad<string> monad, TimeSpan timeSpan)
         {
             this.Monad = monad;
             this.timeSpan = timeSpan;
