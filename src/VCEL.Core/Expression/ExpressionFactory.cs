@@ -25,12 +25,12 @@ namespace VCEL.Expression
             IExpression<T> falseCondition)
             => new Ternary<T>(Monad, conditional, trueConditon, falseCondition);
 
-        public IExpression<T> Let(
+        public virtual IExpression<T> Let(
             IReadOnlyList<(string, IExpression<T>)> bindings,
             IExpression<T> expr)
             => new LetExpr<T>(Monad, bindings, expr);
 
-        public IExpression<T> Guard(
+        public virtual IExpression<T> Guard(
             IReadOnlyList<(IExpression<T>, IExpression<T>)> guardClauses,
             IExpression<T> otherwise = null)
             => new GuardExpr<T>(Monad, guardClauses, otherwise);
@@ -100,7 +100,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> Paren(IExpression<T> expr)
             => new ParenExpr<T>(Monad, expr);
 
-        public IExpression<T> LegacyType(string typeName)
+        public virtual IExpression<T> LegacyType(string typeName)
         {
             switch (typeName)
             {
@@ -114,8 +114,7 @@ namespace VCEL.Expression
             return Null();
         }
 
-
-        public IExpression<T> UnaryMinus(IExpression<T> expression)
+        public virtual IExpression<T> UnaryMinus(IExpression<T> expression)
             => new UnaryMinusExpr<T>(Monad, expression);
 
         public virtual IExpression<T> Eq(IExpression<T> l, IExpression<T> r)
@@ -124,7 +123,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> NotEq(IExpression<T> l, IExpression<T> r)
             => new NotEqExpr<T>(Monad, l, r);
 
-        public IExpression<T> Null() => new NullExpr<T>(Monad);
+        public virtual IExpression<T> Null() => new NullExpr<T>(Monad);
         public IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
             => new ObjectMember<T>(Monad, obj, memberExpr);
         public IExpression<T> This() => new ThisExpr<T>(Monad);

@@ -25,7 +25,7 @@ namespace VCEL
             accessor = new PropertyValueAccessor<TMonad>(Monad, propName);
             return true;
         }
-        public bool TryGetContext(object o, out IContext<TMonad> context)
+        public virtual bool TryGetContext(object o, out IContext<TMonad> context)
         {
             context = new ObjectContext<TMonad>(Monad, o);
             return true;
