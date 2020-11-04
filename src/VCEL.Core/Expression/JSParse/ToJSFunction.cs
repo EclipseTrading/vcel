@@ -18,6 +18,7 @@ namespace VCEL.Core.Expression.JSParse
                  { "today", "new Date" },
                  { "startswith", "startsWith" },
                  { "substring", "substring" },
+                 { "replace", "replace" },
                  { "tolower", "toLowerCase" },
                  { "toupper", "toUpperCase" }
              };

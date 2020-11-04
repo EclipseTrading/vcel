@@ -16,12 +16,12 @@ namespace VCEL.Test
             parser = new ExpressionParser<string>(jsParserfactory);
         }
 
-        [TestCase("type == 'COMBO'", "(vcelContext.type == 'COMBO')")]
-        [TestCase("(Position_Cash_Swim_Delta > 500000 or Position_Cash_Swim_Delta < -500000)", "((vcelContext.Position_Cash_Swim_Delta > 500000) || (vcelContext.Position_Cash_Swim_Delta < -500000))")]
-        [TestCase("BBO_buyerCodes matches '(?:.+,|^)([9][6,7]\\d\\d)(?:,.+|$)'", "vcelContext.BBO_buyerCodes.match('(?:.+,|^)([9][6,7]\\d\\d)(?:,.+|$)')  != null")]
-        [TestCase("(Kind == 'Call' or Kind == 'AsianAROCall')", "((vcelContext.Kind == 'Call') || (vcelContext.Kind == 'AsianAROCall'))")]
-        [TestCase("(BBO_ask < CalculatedColumn_tv and BBO_ask > 0)", "((vcelContext.BBO_ask < vcelContext.CalculatedColumn_tv) && (vcelContext.BBO_ask > 0))")]
-        [TestCase("Order_orderStatus == 'ACTIVE'", "(vcelContext.Order_orderStatus == 'ACTIVE')")]
+        [TestCase("t == 'C'", "(vcelContext.t == 'C')")]
+        [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
+        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)')  != null")]
+        [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K == 'C') || (vcelContext.K == 'AC'))")]
+        [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
+        [TestCase("s == 'ACTIVE'", "(vcelContext.s == 'ACTIVE')")]
         public void TestJsParser_ProdRulesExamples(string expr, string expected)
         {
             var result = parser.Parse(expr);
