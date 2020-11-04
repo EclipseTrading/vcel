@@ -53,9 +53,9 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("@2020-01-01.Year", "(new Date(1577808000000)).getFullYear()")]
-        [TestCase("@2020-01-01.Month", "(new Date(1577808000000)).getMonth()")]
-        [TestCase("@2020-01-01.Day", "(new Date(1577808000000)).getDay()")]
+        [TestCase("@2020-03-04T08:35:15.341Z.Year", "(new Date(1583310915341)).getFullYear()")]
+        [TestCase("@2020-03-04T08:35:15.341Z.Month", "(new Date(1583310915341)).getMonth()")]
+        [TestCase("@2020-03-04T08:35:15.341Z.Day", "(new Date(1583310915341)).getDay()")]
         public void TestJsParser_Datetime(string expr, string expected)
         {
             var result = parser.Parse(expr);
