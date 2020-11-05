@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse.Context
+namespace VCEL.JS
 {
     public class JsObjectContext : ObjectContext<string>
     {

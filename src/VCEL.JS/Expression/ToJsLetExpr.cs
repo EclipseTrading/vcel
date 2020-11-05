@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VCEL.Core.Expression.JSParse.Context;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse
+namespace VCEL.JS.Expression
 {
     internal class ToJsLetExpr : IExpression<string>
     {

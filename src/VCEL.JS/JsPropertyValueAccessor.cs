@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse.Context
+namespace VCEL.JS
 {
     public class JsPropertyValueAccessor : IValueAccessor<string>
     {

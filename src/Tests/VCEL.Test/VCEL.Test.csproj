@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\VCEL.Core\VCEL.Core.csproj" />
+    <ProjectReference Include="..\..\VCEL.JS\VCEL.JS.csproj" />
     <ProjectReference Include="..\VCEL.Test.Shared\VCEL.Test.Shared.csproj" />
   </ItemGroup>
 

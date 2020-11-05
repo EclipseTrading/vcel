@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-using VCEL.Core.Expression.JSParse;
-using VCEL.Core.Expression.JSParse.Context;
 using VCEL.Core.Lang;
 using VCEL.Expression;
+using VCEL.JS;
 
 namespace VCEL.Test
 {

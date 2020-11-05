@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse
+namespace VCEL.JS.Expression
 {
     internal class ToJsDateTimeOffSet : IExpression<string>
     {

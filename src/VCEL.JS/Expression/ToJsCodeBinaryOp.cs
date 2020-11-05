@@ -1,7 +1,7 @@
 ﻿using VCEL.Core.Expression.Impl;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse
+namespace VCEL.JS.Expression
 {
     internal class ToJsCodeBinaryOp : BinaryExprBase<string>
     {

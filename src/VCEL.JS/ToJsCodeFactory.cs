@@ -4,9 +4,10 @@ using System.Linq;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
 using VCEL.Expression;
+using VCEL.JS.Expression;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.JSParse
+namespace VCEL.JS
 {
     public class ToJsCodeFactory<IContext> : ExpressionFactory<string>
     {
