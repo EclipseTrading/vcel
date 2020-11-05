@@ -18,7 +18,7 @@ namespace VCEL.Core.Expression.JSParse
 
         public override string Evaluate(object lv, object rv)
         {
-            return $"{lv}.match({rv}) != null";
+            return $"{lv}.match({rv}) !== null";
         }
     }
 }

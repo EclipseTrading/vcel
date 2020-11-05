@@ -30,7 +30,7 @@ namespace VCEL.Core.Expression.JSParse
             => new ToJsCodeInOp(Monad, l, Set(set));
 
         public override IExpression<string> Set(ISet<object> s)
-            => new ToJsStringOp((context) => $"[{string.Join(",", s.Select(str => $"'{str}'"))}]", Monad);
+            => new ToJsStringOp((context) => $"(new Set([{string.Join(",", s.Select(str => $"'{str}'"))}]))", Monad);
 
         public override IExpression<string> And(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeBinaryOp("&&", Monad, l, r);
@@ -66,7 +66,7 @@ namespace VCEL.Core.Expression.JSParse
             => new ToJsCodeBinaryOp("===", Monad, l, r);
 
         public override IExpression<string> NotEq(IExpression<string> l, IExpression<string> r)
-            => new ToJsCodeBinaryOp("!=", Monad, l, r);
+            => new ToJsCodeBinaryOp("!==", Monad, l, r);
 
         public override IExpression<string> Pow(IExpression<string> l, IExpression<string> r)
             => new ToJsPowOp(Monad, l, r);

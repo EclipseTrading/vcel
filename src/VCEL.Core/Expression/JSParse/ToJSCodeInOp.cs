@@ -22,7 +22,7 @@ namespace VCEL.Core.Expression.JSParse
 
         public override string Evaluate(object lv, object rv)
         {
-            return $"{rv}.includes({lv})";
+            return $"{rv}.has({lv})";
         }
     }
 }

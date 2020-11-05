@@ -18,7 +18,7 @@ namespace VCEL.Test
 
         [TestCase("t == 'C'", "(vcelContext.t === 'C')")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
-        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)') != null")]
+        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)') !== null")]
         [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K === 'C') || (vcelContext.K === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
         [TestCase("s == 'ACTIVE'", "(vcelContext.s === 'ACTIVE')")]
@@ -91,7 +91,7 @@ namespace VCEL.Test
         [TestCase("a / b", "(vcelContext.a / vcelContext.b)")]
         [TestCase("a * b", "(vcelContext.a * vcelContext.b)")]
         [TestCase("a == b", "(vcelContext.a === vcelContext.b)")]
-        [TestCase("a != b", "(vcelContext.a != vcelContext.b)")]
+        [TestCase("a != b", "(vcelContext.a !== vcelContext.b)")]
         [TestCase("a ^ b", "(Math.pow(vcelContext.a, vcelContext.b))")]
         [TestCase("a and b", "(vcelContext.a && vcelContext.b)")]
         [TestCase("a or b", "(vcelContext.a || vcelContext.b)")]
@@ -116,7 +116,7 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("buyerParticipants in {'MOR', 'BBY', 'CAM'}", "['MOR','BBY','CAM'].includes(vcelContext.buyerParticipants)")]
+        [TestCase("buyerParticipants in {'MOR', 'BBY', 'CAM'}", "(new Set(['MOR','BBY','CAM'])).has(vcelContext.buyerParticipants)")]
         public void TestJsParser_In(string expr, string expected)
         {
             var result = parser.Parse(expr);
