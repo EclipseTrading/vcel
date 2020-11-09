@@ -13,7 +13,7 @@ namespace VCEL.JS
     {
         public ToJsCodeFactory(
             IMonad<string> monad,
-            IFunctions functions = null)
+            IFunctions<string> functions = null)
             : base(monad, functions)
         {
         }
@@ -106,9 +106,6 @@ namespace VCEL.JS
         {
             switch (typeName)
             {
-                case "DateTime":
-                case "System.DateTime":
-                    return Value("(new Date())");
                 case "System.Math":
                 case "Math":
                     return new ThisExpr<string>(Monad);

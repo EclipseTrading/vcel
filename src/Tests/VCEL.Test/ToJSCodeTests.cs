@@ -64,8 +64,6 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("T(System.DateTime).Today", "(new Date()).getDate()")]
-        [TestCase("T(System.DateTime).Now", "(new Date()).getTime()")]
         [TestCase("now()", "(new Date())")]
         [TestCase("today()", "(new Date())")]
         [TestCase("abc.ToUpper()", "(vcelContext.abc.toUpperCase())")]
