@@ -1,8 +1,8 @@
 ﻿namespace VCEL.Core.Expression.Func
 {
-    public interface IFunctions
+    public interface IFunctions<TMonad>
     {
-        Function GetFunction(string name);
         bool HasFunction(string name);
+        Function<TMonad> GetFunction(string name);
     }
 }
