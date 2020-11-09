@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Brian Flynn</Authors>
+    <Company>Eclipse Trading</Company>
+    <Product>View Client Expression Language Extension</Product>
+    <Description>Extension package to VCEL</Description>
+    <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
