@@ -9,10 +9,10 @@ namespace VCEL.Expression
     {
         public ListExpressionFactory(
             IMonad<List<object>> monad,
-            IFunctions functions = null)
+            IFunctions<List<object>> functions = null)
             : base(
                   monad,
-                  functions ?? new DefaultFunctions())
+                  functions ?? new DefaultFunctions<List<object>>())
         {
         }
 

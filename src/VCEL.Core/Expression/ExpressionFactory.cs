@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
+using VCEL.Core.Monad.Tasks;
 using VCEL.Monad;
 
 namespace VCEL.Expression
@@ -10,14 +11,14 @@ namespace VCEL.Expression
     {
         public ExpressionFactory(
             IMonad<T> monad,
-            IFunctions functions = null)
+            IFunctions<T> functions = null)
         {
             Monad = monad;
-            Functions = functions ?? new DefaultFunctions();
+            Functions = functions ?? new DefaultFunctions<T>();
         }
 
         public IMonad<T> Monad { get; }
-        public IFunctions Functions { get; }
+        public IFunctions<T> Functions { get; }
 
         public virtual IExpression<T> Ternary(
             IExpression<T> conditional,
