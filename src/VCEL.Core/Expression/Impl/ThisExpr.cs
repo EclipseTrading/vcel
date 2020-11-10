@@ -4,7 +4,7 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
-    internal class ThisExpr<T> : IExpression<T>
+    public class ThisExpr<T> : IExpression<T>
     {
         public ThisExpr(IMonad<T> monad)
         {
