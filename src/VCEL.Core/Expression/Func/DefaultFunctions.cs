@@ -18,9 +18,19 @@ namespace VCEL.Core.Expression.Func
                     : Convert.ChangeType(Math.Abs(Convert.ToDouble(args[0])), args[0].GetType()));
             Register(
                 "round",
-                args => args.Length == 1 && args[0] != null
-                    ? Math.Round(Convert.ToDouble(args[0]))
-                    : (object)null);
+                args =>
+                {
+                    if (args.Length == 1 && args[0] != null)
+                    {
+                        return Math.Round(Convert.ToDouble(args[0]));
+                    }
+                    else if (args.Length == 2 && args[0] != null && args[1] != null)
+                    {
+                        return Math.Round(Convert.ToDouble(args[0]), Convert.ToInt32(args[1]));
+                    }
+
+                    return (object)null;
+                });
             Register(
                 "sqrt",
                 args => args.Length == 1 && args[0] != null
