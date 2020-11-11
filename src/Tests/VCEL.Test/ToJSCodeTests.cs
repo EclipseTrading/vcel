@@ -17,7 +17,7 @@ namespace VCEL.Test
 
         [TestCase("t == 'C'", "(vcelContext.t === 'C')")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
-        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)') !== null")]
+        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "vcelContext.code?.match('(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)') !== undefined")]
         [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K === 'C') || (vcelContext.K === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
         [TestCase("s == 'ACTIVE'", "(vcelContext.s === 'ACTIVE')")]
