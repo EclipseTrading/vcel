@@ -18,7 +18,7 @@ namespace VCEL.JS.Expression
 
         public override string Evaluate(object lv, object rv)
         {
-            return $"{lv}?.match({rv}) !== undefined";
+            return $"new RegExp({rv}).test({lv})";
         }
     }
 }
