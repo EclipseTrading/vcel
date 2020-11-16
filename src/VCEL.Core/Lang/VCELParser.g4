@@ -64,7 +64,8 @@ arithExpr
 	| arithExpr op=(PLUS | MINUS) arithExpr # PlusMinus
 	| functionExpr # FuncExpr
 	| term #ExprListTerm
-	| legacyNode #LegacyNodeExpr
+	| legacyNode DOT var #LegacyNodeExpr
+	| legacyNode DOT functionExpr #LegacyNodeExpr
 	;
 
 betweenArgs
