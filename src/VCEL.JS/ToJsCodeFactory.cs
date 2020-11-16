@@ -101,16 +101,5 @@ namespace VCEL.JS
 
         public override IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
             => new ToJsDateTimeOffSet(Monad, dateTimeOffset);
-
-        public override IExpression<string> LegacyType(string typeName)
-        {
-            switch (typeName)
-            {
-                case "System.Math":
-                case "Math":
-                    return new ThisExpr<string>(Monad);
-            }
-            return Null();
-        }
     }
 }

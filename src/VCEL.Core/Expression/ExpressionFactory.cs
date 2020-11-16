@@ -101,20 +101,6 @@ namespace VCEL.Expression
         public virtual IExpression<T> Paren(IExpression<T> expr)
             => new ParenExpr<T>(Monad, expr);
 
-        public virtual IExpression<T> LegacyType(string typeName)
-        {
-            switch (typeName)
-            {
-                case "DateTime":
-                case "System.DateTime":
-                    return Value(new DateTimeType());
-                case "System.Math":
-                case "Math":
-                    return This();
-            }
-            return Null();
-        }
-
         public virtual IExpression<T> UnaryMinus(IExpression<T> expression)
             => new UnaryMinusExpr<T>(Monad, expression);
 

@@ -54,7 +54,6 @@ namespace VCEL.Expression
 
         // Functions
         IExpression<T> Function(string name, IReadOnlyList<IExpression<T>> args);
-        IExpression<T> LegacyType(string typeString);
         IExpression<T> UnaryMinus(IExpression<T> expression);
         IExpression<T> Null();
         IExpression<T> Eq(IExpression<T> l, IExpression<T> r);

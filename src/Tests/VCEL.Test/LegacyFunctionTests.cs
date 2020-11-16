@@ -1,13 +1,28 @@
 ﻿using NUnit.Framework;
 using System;
 using VCEL;
+using VCEL.Core.Expression.Func;
 using VCEL.Core.Lang;
 
 namespace VECL.Test
 {
     public class LegacyFunctionTests
     {
+        [TestCase("-T(System.Math).Round(GetValue('parameter_volatility', 0.3) + GetValue('parameter_volatility', 0.7), 2)", -1)]
+        public void EvalLegacyMathFunction(string exprString, object expected)
+        {
+            var funcs = new DefaultFunctions<object>();
+            funcs.Register("GetValue", (a, b) => Convert.ToDouble(a[1]));
+            var expr = VCExpression.ParseDefault(exprString, funcs).Expression;
+            var result = expr.Evaluate(new { });
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
         [TestCase("T(System.Math).Abs(-1)", 1)]
+        [TestCase("-T(System.Math).Abs(-1)", -1)]
+        [TestCase("-1 + -T(System.Math).Abs(-1)", -2)]
+        [TestCase("-T(System.Math).Abs(-1) + -1", -2)]
+        [TestCase("-T(System.Math).Abs(-1) + -T(System.Math).Abs(-1)", -2)]
         public void EvalLegacyFunction(string exprString, object expected)
         {
             var parseResult = VCExpression.ParseDefault(exprString);

@@ -175,7 +175,7 @@ namespace VCEL.Core.Lang
 
             var exp = Visit(context.GetChild(context.ChildCount - 1));
 
-            if(bindings.Any(b => !b.Item2.Success) || !exp.Success)
+            if (bindings.Any(b => !b.Item2.Success) || !exp.Success)
             {
                 return new ParseResult<T>(
                     bindings
@@ -239,8 +239,26 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitMemberExpr([NotNull] VCELParser.MemberExprContext context)
             => Compose(context, (a, b) => exprFactory.Member(a, b), 0, 2);
 
-        public override ParseResult<T> VisitLegacyNode([NotNull] VCELParser.LegacyNodeContext context)
-            => new ParseResult<T>(exprFactory.LegacyType(context.GetText().Substring(2, context.GetText().Length-3)));
+        public override ParseResult<T> VisitLegacyNodeExpr([NotNull] VCELParser.LegacyNodeExprContext context)
+        {
+            var legacyNodeText = context.GetChild(0).GetText();
+            var typeName = legacyNodeText.Substring(2, legacyNodeText.Length - 3);
+            var func = context.GetChild(2).GetText();
+
+            switch (typeName)
+            {
+                case "DateTime" when func == "Today":
+                case "System.DateTime" when func == "Today":
+                    return new ParseResult<T>(exprFactory.Value(DateTime.Today));
+                case "DateTime" when func == "Now":
+                case "System.DateTime" when func == "Now":
+                    return new ParseResult<T>(exprFactory.Value(DateTime.Now));
+                case "System.Math":
+                case "Math":
+                    return Visit(context.GetChild(2));
+            }
+            return new ParseResult<T>(exprFactory.Null());
+        }
 
         public override ParseResult<T> VisitNot([NotNull] VCELParser.NotContext context)
             => Compose(context, r => exprFactory.Not(r), 1);
