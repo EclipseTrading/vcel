@@ -22,6 +22,15 @@ namespace VCEL.JS.Expression
                  { "tolower", "toLowerCase" },
                  { "toupper", "toUpperCase" }
              };
+
+        private static Dictionary<string, string> JSFunctionDefaultResultMap
+            = new Dictionary<string, string>()
+             {
+                { "startsWith", "false" },
+                { "substring", "''" },
+                { "toLowerCase", "''" },
+                { "toUpperCase", "''" }
+             };
         private string name;
         private IReadOnlyList<IExpression<string>> args;
 
@@ -38,13 +47,22 @@ namespace VCEL.JS.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            if (ToJsFunction.JSFunctionMap.TryGetValue(name.ToLower(), out var jsFunc))
+            if (JSFunctionMap.TryGetValue(name.ToLower(), out var jsFunc))
             {
                 return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"
-                    : $"({context.Value}.{jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
+                    : WarpVariableForNullChecking(context.Value, jsFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
             }
             return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
+        }
+
+        private string WarpVariableForNullChecking(string variable, string func, string args)
+        {
+            var defaultReturnVal = JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
+                ? defaultVal
+                : "false";
+
+            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
         }
     }
 }

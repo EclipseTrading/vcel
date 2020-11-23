@@ -47,6 +47,9 @@ namespace VCEL.JS
                 finalPropOrMethod = jsDateMethod;
             }
 
+            if (context.Value.Contains(defaultVCELContextName))
+                return $"{defaultVCELContextName}.{finalPropOrMethod}";
+
             return monad.Lift(context.Value == "{ }"
                 ? $"{defaultVCELContextName}.{finalPropOrMethod}"
                 : $"{context.Value}.{finalPropOrMethod}");
