@@ -18,7 +18,7 @@ namespace VCEL.Test
         [TestCase("fd.startsWith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
         [TestCase("t == 'C'", "(vcelContext.t === 'C')")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
-        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp('/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm').test(vcelContext.code)")]
+        [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp(/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm).test(vcelContext.code)")]
         [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K === 'C') || (vcelContext.K === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
         [TestCase("s == 'ACTIVE'", "(vcelContext.s === 'ACTIVE')")]
