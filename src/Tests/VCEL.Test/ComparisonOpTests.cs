@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using VCEL.Core.Lang;
 
 namespace VCEL.Test
@@ -178,6 +179,40 @@ namespace VCEL.Test
         public void Between(string exprString, bool expected)
             => Compare(exprString, expected);
 
+        [TestCase("A between {0, 100}", true, 10.1)]
+        [TestCase("A between {0, 100}", false, 120.0)]
+        [TestCase("A between {0, 100}", false, -20.0)]
+        public void BetweenWithDecimal(string exprString, bool expected, object a)
+            => CompareResult(exprString, expected, new { A = Convert.ToDecimal(a) });
+
+        [TestCase("A between {0, 100}", true, 10.1)]
+        [TestCase("A between {0, 100}", false, 120.0)]
+        [TestCase("A between {0, 100}", false, -20.0)]
+        public void BetweenWithInt(string exprString, bool expected, object a)
+            => CompareResult(exprString, expected, new { A = Convert.ToInt32(a) });
+
+        [TestCase("A between {0, 100}", true, 10.1)]
+        [TestCase("A between {0, 100}", false, 120.0)]
+        [TestCase("A between {0, 100}", false, -20.0)]
+        public void BetweenWithDouble(string exprString, bool expected, object a)
+            => CompareResult(exprString, expected, new { A = Convert.ToDouble(a) });
+
+        [TestCase("A between {0, 100}", true, 10.1)]
+        [TestCase("A between {0, 100}", false, 120.0)]
+        [TestCase("A between {0, 100}", false, -20.0)]
+        public void BetweenWithLong(string exprString, bool expected, object a)
+            => CompareResult(exprString, expected, new { A = Convert.ToInt64(a) });
+
+        [TestCase("A between {@2020-01-01, @2020-01-03}", false, 10.1)]
+        [TestCase("A between {@2020-01-01, @2020-01-03}", false, 10.1)]
+        public void BetweenWithWrongTypeInObject(string exprString, bool expected, object a)
+            => CompareResult(exprString, expected, new { A = Convert.ToDecimal(a) });
+
+        [TestCase("A between {0, 100}", false)]
+        [TestCase("A between {0, 100}", false)]
+        public void BetweenWithWrongTypeInExpression(string exprString, bool expected)
+            => CompareResult(exprString, expected, new { A = DateTime.Now });
+
         [TestCase("1 between { null, null }")]
         [TestCase("1 between { null, 2 }")]
         [TestCase("1 between { 0, null }")]
@@ -276,6 +311,22 @@ namespace VCEL.Test
             var expr = VCExpression.ParseMaybe(exprString).Expression;
             var result = expr.Evaluate(o ?? new { });
             Assert.That(result.HasValue, Is.EqualTo(false));
+        }
+
+        private void CompareResult(string exprString, bool expected, object o)
+        {
+            var expr = VCExpression.ParseDefault(exprString);
+            Assert.True(expr.Success);
+
+            var maybeExpr = VCExpression.ParseMaybe(exprString);
+            Assert.True(maybeExpr.Success);
+
+            var result = expr.Expression.Evaluate(o ?? new { });
+            var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
+
+            Assert.True(maybeResult.HasValue);
+            Assert.AreEqual(expected, maybeResult.Value);
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
