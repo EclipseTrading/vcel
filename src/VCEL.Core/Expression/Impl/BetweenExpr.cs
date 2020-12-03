@@ -41,8 +41,19 @@ namespace VCEL.Core.Expression.Impl
 
                     T EvaluateBetweenItems(object first, object second)
                     {
-                        var frCmp = left.CompareTo(first);
-                        var toCmp = left.CompareTo(second);
+                        int frCmp = -1;
+                        int toCmp = 1;
+
+                        if (first?.GetType() == l?.GetType() || UpCastEx.UpCast(ref first, ref l))
+                        {
+                            frCmp = left.CompareTo(first);
+                        }
+
+                        if (second?.GetType() == l?.GetType() || UpCastEx.UpCast(ref second, ref l))
+                        {
+                            toCmp = left.CompareTo(second);
+                        }
+
                         return Monad.Lift(frCmp >= 0 && toCmp <= 0);
                     }
                 }
