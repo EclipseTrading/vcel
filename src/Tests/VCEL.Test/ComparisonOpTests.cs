@@ -6,6 +6,24 @@ namespace VCEL.Test
 {
     public class ComparisonOpTests
     {
+        [TestCase("Pos > 100000 or FreeTextFilter matches '(?i)123'", true)]
+        [TestCase("Pos > 10 and FreeTextFilter matches '(?i)123'", true)]
+        [TestCase("FreeTextFilter matches '(?i)123' and Pos > 10", true)]
+        [TestCase("(FreeTextFilter matches '(?i)123') and Pos > 10", true)]
+        public void ComparsionMatchWithBooleanExpr(string exprStr, bool expected)
+        {
+            var expr = VCExpression.ParseDefault(exprStr);
+
+            var obj = new
+            {
+                FreeTextFilter = "123",
+                Pos = 100
+            };
+
+            var result = expr.Expression.Evaluate(obj);
+            Assert.AreEqual(expected, result);
+        }
+
         [TestCase("'ABC' == 'ABC'", true)]
         [TestCase("'ABC' == 'DEF'", false)]
         [TestCase("'A' + 'BC' == 'ABC'", true)]

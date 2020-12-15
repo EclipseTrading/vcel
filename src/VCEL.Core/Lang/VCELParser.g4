@@ -50,7 +50,7 @@ equalityExpr
 
 booleanOpExpr
 	: booleanOpExpr IN setLiteral #InOp
-	| booleanOpExpr MATCHES expr #Matches
+	| booleanOpExpr MATCHES arithExpr #Matches
 	| booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
 	;
