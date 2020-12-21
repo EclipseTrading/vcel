@@ -8,7 +8,12 @@ namespace VECL.Test
     public class LiteralTests
     {
         [TestCase("'aaa' + 'bbb'", "aaabbb")]
+        [TestCase("'aaa' + \"bbb\"", "aaabbb")]
         [TestCase("\"aaa\" + \"bbb\"", "aaabbb")]
+        [TestCase("\"aaa\" == 'aaa'", true)]
+        [TestCase("\"aaa\" == 'bbb'", false)]
+        [TestCase("'aaa' == 'aaa'", true)]
+        [TestCase("'aaa' == 'bbb'", false)]
         public void StringLiteralTest(string exprString, object expected)
         {
             var expr = VCExpression.ParseDefault(exprString).Expression;
