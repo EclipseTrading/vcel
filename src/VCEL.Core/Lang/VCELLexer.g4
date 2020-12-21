@@ -41,7 +41,7 @@ NULL: 'null';
 WS: [ \t\r\n]+ -> skip;
 LEGACY_DATETIME: ('T(System.DateTime)'|'T(DateTime)');
 LEGACY_MATH: 'T(System.Math)';
-STRING_LITERAL: '\'' (APOS | ~'\'')* '\'';
+STRING_LITERAL: '\'' (APOS | ~'\'')* '\''|'\"' (APOS | ~'\"')* '\"';
 TIME_LITERAL: ('-'? DIGIT+ '.')? TIME;
 LONG_LITERAL: (DIGIT)+ LONG_SUFFIX;
 INT_LITERAL: (DIGIT)+;

@@ -7,6 +7,14 @@ namespace VECL.Test
 {
     public class LiteralTests
     {
+        [TestCase("'aaa' + 'bbb'", "aaabbb")]
+        [TestCase("\"aaa\" + \"bbb\"", "aaabbb")]
+        public void StringLiteralTest(string exprString, object expected)
+        {
+            var expr = VCExpression.ParseDefault(exprString).Expression;
+            var result = expr.Evaluate(new { });
+            Assert.That(result, Is.EqualTo(expected));
+        }
 
         [TestCase("true", true)]
         [TestCase("false", false)]
