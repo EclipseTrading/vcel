@@ -160,6 +160,8 @@ namespace VCEL.Test
             Assert.False(maybeResult.HasValue);
         }
 
+        [TestCase("'\\' matches '\\'", true)]
+        [TestCase("'\\' ~ '\\'", true)]
         [TestCase("'ABC' matches 'A.*'", true)]
         [TestCase("'A' + 'BC' matches 'A.*'", true)]
         [TestCase("'A' + 'BC' matches 'A' + '.*'", true)]
