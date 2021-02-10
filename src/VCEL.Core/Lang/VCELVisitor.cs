@@ -163,8 +163,9 @@ namespace VCEL.Core.Lang
 
                 var varPart = results[0];
                 var patternPart = results[1];
-                var regexPattern = context.GetChild(2).GetText();
-                if (RegexHelper.IsValidRegexPattern(regexPattern.Trim('\'')))
+                if (patternPart is ValueParseResult<T> valueParsedPart &&
+                    valueParsedPart.Value is string pattern &&
+                    RegexHelper.IsValidRegexPattern(pattern))
                 {
                     return new ParseResult<T>(exprFactory.Matches(varPart.Expression, patternPart.Expression));
                 }
