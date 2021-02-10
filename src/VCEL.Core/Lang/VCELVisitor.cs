@@ -4,6 +4,7 @@ using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VCEL.Core.Helper;
 using VCEL.Expression;
 
 namespace VCEL.Core.Lang
@@ -152,7 +153,27 @@ namespace VCEL.Core.Lang
             }, 0, 2);
 
         public override ParseResult<T> VisitMatches([NotNull] VCELParser.MatchesContext context)
-            => Compose(context, (a, b) => exprFactory.Matches(a, b), 0, 2);
+            => ComposeWithChildren(context, (childNodes) =>
+            {
+                var results = childNodes.Select(n => Visit(n)).ToList();
+                if (results.Any(r => !r.Success))
+                {
+                    return new ParseResult<T>(results.SelectMany(r => r.ParseErrors).ToList());
+                }
+
+                var varPart = results[0];
+                var patternPart = results[1];
+                if (patternPart is ValueParseResult<T> valueParsedPart &&
+                    valueParsedPart.Value is string pattern &&
+                    RegexHelper.IsValidRegexPattern(pattern))
+                {
+                    return new ParseResult<T>(exprFactory.Matches(varPart.Expression, patternPart.Expression));
+                }
+
+                var token = context.Stop;
+                return new ParseResult<T>(new ParseError("Invalid Regex Pattern", token.Text, token.Line, token.StartIndex, token.StopIndex));
+            }, 0, 2);
+
         public override ParseResult<T> VisitBetween([NotNull] VCELParser.BetweenContext context)
             => Compose(context, (a, b) => exprFactory.Between(a, b), 0, 2);
         public override ParseResult<T> VisitBetweenArgs([NotNull] VCELParser.BetweenArgsContext context)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using VCEL.Core.Helper;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -19,14 +20,14 @@ namespace VCEL.Core.Expression.Impl
 
         public override T Evaluate(object lv, object rv)
         {
-            if(lv is string ls && rv is string rs)
+            if (lv is string ls && rv is string rs)
             {
-                if(!cache.TryGetValue(rs, out var regex))
+                if (!cache.TryGetValue(rs, out var regex))
                 {
-                    regex = new Regex(rs);
+                    regex = RegexHelper.CreateRegexPattern(rs);
                     cache[rs] = regex;
                 }
-                return Monad.Lift(regex.IsMatch(ls));
+                return Monad.Lift(regex?.IsMatch(ls) ?? false);
             }
             return Monad.Lift(false);
         }
