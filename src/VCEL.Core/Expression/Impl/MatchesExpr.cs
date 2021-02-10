@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using VCEL.Core.Helper;
 using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
@@ -24,40 +24,12 @@ namespace VCEL.Core.Expression.Impl
             {
                 if (!cache.TryGetValue(rs, out var regex))
                 {
-                    regex = CreateRegexPattern(rs);
+                    regex = RegexHelper.CreateRegexPattern(rs);
                     cache[rs] = regex;
                 }
                 return Monad.Lift(regex?.IsMatch(ls) ?? false);
             }
             return Monad.Lift(false);
-        }
-
-        private Regex CreateRegexPattern(string pattern)
-        {
-            if (IsValidRegexPattern(pattern))
-            {
-                return new Regex(pattern);
-            }
-            else
-            {
-                var escapedPattern = Regex.Escape(pattern);
-                return IsValidRegexPattern(escapedPattern)
-                    ? new Regex(escapedPattern)
-                    : null;
-            }
-        }
-
-        private bool IsValidRegexPattern(string pattern)
-        {
-            try
-            {
-                Regex.Match("", pattern);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
     }
 }

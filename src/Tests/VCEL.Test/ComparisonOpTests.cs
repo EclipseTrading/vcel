@@ -164,25 +164,18 @@ namespace VCEL.Test
         [TestCase("'\\' ~ '\\'", true)]
         [TestCase("'ABC' matches 'A.*'", true)]
         [TestCase("'A' + 'BC' matches 'A.*'", true)]
-        [TestCase("'A' + 'BC' matches 'A' + '.*'", true)]
         [TestCase("'X' matches 'Y.*'", false)]
         [TestCase("'ABC' ~ 'A.*'", true)]
         [TestCase("'X' ~ 'Y.*'", false)]
-        [TestCase("'ABC' matches null", false)]
         [TestCase("null matches 'Y.*'", false)]
-        [TestCase("'ABC' ~ null", false)]
         [TestCase("null ~ 'Y.*'", false)]
         [TestCase("(null + '') ~ 'Y.*'", false)]
-        [TestCase("(null + '') ~ ('Y' + null)", false)]
         public void Matches(string exprString, bool expected)
             => CompareDefault(exprString, expected);
 
-        [TestCase("'ABC' matches null")]
         [TestCase("null matches 'Y.*'")]
-        [TestCase("'ABC' ~ null")]
         [TestCase("null ~ 'Y.*'")]
         [TestCase("(null + '') ~ 'Y.*'")]
-        [TestCase("(null + '') ~ ('Y' + null)")]
         public void MatchesMaybeNone(string exprString)
             => CompareMaybeNone(exprString);
 
@@ -303,6 +296,21 @@ namespace VCEL.Test
         [TestCase(2, (byte)3, false)]
         public void CompareDecimalRight(double a, object b, bool expected)
             => Compare("B < A", expected, new { A = (decimal)a, B = b });
+
+        [TestCase("'ABC' ~ null")]
+        [TestCase("'ABC' matches null")]
+        [TestCase("'ABC' matches A + 'A'")]
+        [TestCase("'ABC' matches A + B")]
+        [TestCase("(null + '') ~ ('Y' + null)")]
+        [TestCase("'ABC' matches null")]
+        [TestCase("'ABC' ~ null")]
+        [TestCase("(null + '') ~ ('Y' + null)")]
+        [TestCase("'A' + 'BC' matches 'A' + '.*'")]
+        public void ParseShouldFail(string exprString)
+        {
+            var expr = VCExpression.ParseDefault(exprString);
+            Assert.False(expr.Success);
+        }
 
         private void Compare(string exprString, bool expected, object o = null)
         {
