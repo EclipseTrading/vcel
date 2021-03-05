@@ -160,6 +160,12 @@ namespace VCEL.Test
             Assert.False(maybeResult.HasValue);
         }
 
+        [TestCase("'ABC' matches 'A'", true)]
+        [TestCase("'A' + 'BC' matches 'A' + '.*'", true)]
+        [TestCase("'ABC' matches null", false)]
+        [TestCase("'ABC' ~ null", false)]
+        [TestCase("(null + '') ~ ('Y' + null)", false)]
+        [TestCase("(null + 'Y') ~ ('Y' + null)", true)]
         [TestCase("'\\' matches '\\'", true)]
         [TestCase("'\\' ~ '\\'", true)]
         [TestCase("'ABC' matches 'A.*'", true)]
@@ -170,9 +176,16 @@ namespace VCEL.Test
         [TestCase("null matches 'Y.*'", false)]
         [TestCase("null ~ 'Y.*'", false)]
         [TestCase("(null + '') ~ 'Y.*'", false)]
-        public void Matches(string exprString, bool expected)
-            => CompareDefault(exprString, expected);
+        [TestCase("'ABC' matches null", false)]
+        [TestCase("'ABC' matches A", true, "ABC")]
+        [TestCase("'ABC' matches A + 'BC'", true, "A")]
+        [TestCase("(null + 'A') matches (A + null)", true, "A")]
+        public void Matches(string exprString, bool expected, string value = null)
+            => CompareDefault(exprString, expected, new { A = value });
 
+        [TestCase("'ABC' matches null")]
+        [TestCase("'ABC' ~ null")]
+        [TestCase("(null + '') ~ ('Y' + null)")]
         [TestCase("null matches 'Y.*'")]
         [TestCase("null ~ 'Y.*'")]
         [TestCase("(null + '') ~ 'Y.*'")]
@@ -296,21 +309,6 @@ namespace VCEL.Test
         [TestCase(2, (byte)3, false)]
         public void CompareDecimalRight(double a, object b, bool expected)
             => Compare("B < A", expected, new { A = (decimal)a, B = b });
-
-        [TestCase("'ABC' ~ null")]
-        [TestCase("'ABC' matches null")]
-        [TestCase("'ABC' matches A + 'A'")]
-        [TestCase("'ABC' matches A + B")]
-        [TestCase("(null + '') ~ ('Y' + null)")]
-        [TestCase("'ABC' matches null")]
-        [TestCase("'ABC' ~ null")]
-        [TestCase("(null + '') ~ ('Y' + null)")]
-        [TestCase("'A' + 'BC' matches 'A' + '.*'")]
-        public void ParseShouldFail(string exprString)
-        {
-            var expr = VCExpression.ParseDefault(exprString);
-            Assert.False(expr.Success);
-        }
 
         private void Compare(string exprString, bool expected, object o = null)
         {

@@ -163,15 +163,18 @@ namespace VCEL.Core.Lang
 
                 var varPart = results[0];
                 var patternPart = results[1];
-                if (patternPart is ValueParseResult<T> valueParsedPart &&
-                    valueParsedPart.Value is string pattern &&
-                    RegexHelper.IsValidRegexPattern(pattern))
+                if (patternPart is ValueParseResult<T> valueParsedPart && valueParsedPart.Value is string pattern)
                 {
-                    return new ParseResult<T>(exprFactory.Matches(varPart.Expression, patternPart.Expression));
+                    if (RegexHelper.IsValidRegexPattern(pattern))
+                    {
+                        return new ParseResult<T>(exprFactory.Matches(varPart.Expression, patternPart.Expression));
+                    }
+
+                    var token = context.Stop;
+                    return new ParseResult<T>(new ParseError("Invalid Regex Pattern", token.Text, token.Line, token.StartIndex, token.StopIndex));
                 }
 
-                var token = context.Stop;
-                return new ParseResult<T>(new ParseError("Invalid Regex Pattern", token.Text, token.Line, token.StartIndex, token.StopIndex));
+                return new ParseResult<T>(exprFactory.Matches(varPart.Expression, patternPart.Expression));
             }, 0, 2);
 
         public override ParseResult<T> VisitBetween([NotNull] VCELParser.BetweenContext context)

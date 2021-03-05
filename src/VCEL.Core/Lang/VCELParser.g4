@@ -51,6 +51,7 @@ equalityExpr
 booleanOpExpr
 	: booleanOpExpr IN setLiteral #InOp
 	| booleanOpExpr MATCHES stringLiteral #Matches
+	| booleanOpExpr MATCHES arithExpr #Matches
 	| booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
 	;
