@@ -14,7 +14,7 @@ namespace VCEL.Core.Expression.Impl
 
         public override T Evaluate(object lv, object rv)
         {
-            return Monad.Lift(Equals(lv, rv));
+            return Monad.Lift(TypeOperation.EqualsMixedType(lv, rv));
         }
     }
 }

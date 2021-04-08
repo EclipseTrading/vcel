@@ -47,6 +47,65 @@ namespace VCEL.Test
         public void Eq(string exprString, bool expected)
             => Compare(exprString, expected);
 
+        [TestCase("IntValue == IntValue", true)]
+        [TestCase("IntValue == FloatValue", true)]
+        [TestCase("IntValue == LongValue", true)]
+        [TestCase("IntValue == DoubleValue", true)]
+        [TestCase("IntValue == DecimalValue", true)]
+        [TestCase("FloatValue == IntValue", true)]
+        [TestCase("FloatValue == FloatValue", true)]
+        [TestCase("FloatValue == LongValue", true)]
+        [TestCase("FloatValue == DoubleValue", true)]
+        [TestCase("FloatValue == DecimalValue", true)]
+        [TestCase("LongValue == IntValue", true)]
+        [TestCase("LongValue == FloatValue", true)]
+        [TestCase("LongValue == LongValue", true)]
+        [TestCase("LongValue == DoubleValue", true)]
+        [TestCase("LongValue == DecimalValue", true)]
+        [TestCase("LongValue == IntValue", true)]
+        [TestCase("LongValue == FloatValue", true)]
+        [TestCase("LongValue == LongValue", true)]
+        [TestCase("LongValue == DoubleValue", true)]
+        [TestCase("LongValue == DecimalValue", true)]
+        [TestCase("DoubleValue == IntValue", true)]
+        [TestCase("DoubleValue == FloatValue", true)]
+        [TestCase("DoubleValue == LongValue", true)]
+        [TestCase("DoubleValue == DoubleValue", true)]
+        [TestCase("DoubleValue == DecimalValue", true)]
+        [TestCase("DecimalValue == IntValue", true)]
+        [TestCase("DecimalValue == FloatValue", true)]
+        [TestCase("DecimalValue == LongValue", true)]
+        [TestCase("DecimalValue == DoubleValue", true)]
+        [TestCase("DecimalValue == DecimalValue", true)]
+        public void MixedNumericPropertiesEq(string exprString, bool expected)
+            => Compare(exprString, expected, new {
+                IntValue = 1,
+                FloatValue = 1f,
+                LongValue = 1L,
+                DoubleValue = 1d,
+                DecimalValue = 1m,
+            });
+
+        [TestCase("0 == IntValue", true)]
+        [TestCase("0 == FloatValue", true)]
+        [TestCase("0 == LongValue", true)]
+        [TestCase("0 == DoubleValue", true)]
+        [TestCase("0 == DecimalValue", true)]
+        [TestCase("IntValue == 0", true)]
+        [TestCase("FloatValue == 0", true)]
+        [TestCase("LongValue == 0", true)]
+        [TestCase("DoubleValue == 0", true)]
+        [TestCase("DecimalValue == 0", true)]
+        public void NumericEqZero(string exprString, bool expected)
+            => Compare(exprString, expected, new
+            {
+                IntValue = 0,
+                FloatValue = 0f,
+                LongValue = 0L,
+                DoubleValue = 0d,
+                DecimalValue = 0m,
+            });
+
         [TestCase("'ABC' != 'ABC'", false)]
         [TestCase("'ABC' != 'DEF'", true)]
         [TestCase("'A' + 'BC' != 'ABC'", false)]
@@ -313,15 +372,15 @@ namespace VCEL.Test
         private void Compare(string exprString, bool expected, object o = null)
         {
             var expr = VCExpression.ParseDefault(exprString);
-            Assert.True(expr.Success);
+            Assert.True(expr.Success, "Default expression parse");
             var result = expr.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(0.0001));
+            Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
 
             var maybeExpr = VCExpression.ParseMaybe(exprString);
-            Assert.True(maybeExpr.Success);
+            Assert.True(maybeExpr.Success, "Maybe expression parse");
             var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
-            Assert.True(maybeResult.HasValue);
-            Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001));
+            Assert.True(maybeResult.HasValue, "Maybe expression evaluate has value");
+            Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001), "Maybe expression evaluated");
         }
 
         private void CompareDefault(string exprString, bool expected, object o = null)
