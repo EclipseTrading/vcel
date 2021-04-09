@@ -9,12 +9,16 @@ namespace VCEL.Test
         [TestCaseSource(nameof(Cases))]
         public void ShouldTest(object left, object right, bool expected)
         {
-            Assert.AreEqual(expected, TypeOperation.EqualsMixedType(left, right), "Left Right");
-            Assert.AreEqual(expected, TypeOperation.EqualsMixedType(right, left), "Right Left");
+            Assert.AreEqual(expected, TypeOperation.EqualsChecked(left, right), "Left Right");
+            Assert.AreEqual(expected, TypeOperation.EqualsChecked(right, left), "Right Left");
         }
 
         public static object[] Cases =
         {
+            new object[] { null, null, true },
+            new object[] { null, 0, false },
+            new object[] { null, "", false },
+
             new object[] { 0, 0, true },
 
             new object[] { 1, 1, true },

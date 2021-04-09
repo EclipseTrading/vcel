@@ -35,7 +35,7 @@ namespace VCEL.Core.Expression.Impl
                 return Monad.Lift(true);
             }
 
-            return Monad.Lift(TypeOperation.EqualsMixedType(l.Value, r.Value));
+            return Monad.Lift(TypeOperation.EqualsChecked(l.Value, r.Value));
         }
     }
 }
