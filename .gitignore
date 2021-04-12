@@ -226,3 +226,7 @@ src/Views.Client/Properties/launchSettings.json
 src/Views.ViewClientHost/postbuild.cmd
 src/Tests/**/*.feature.cs
 src/VCEL.Core/Lang/.antlr/
+
+# BenchmarkDotNet
+
+src/Tests/**/results/
