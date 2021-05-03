@@ -25,6 +25,7 @@
         public const string And = @"true and false";
         public const string Or = @"true or false";
         public const string Not = @"!true";
+        public const string FunctionExpr = "counterpartyName.startsWith('ABC')";
         public const string TestExpr0 = "1 - P / O";
         public const string TestExpr1 = "1 - (P / O)";
         public const string TestExpr2 = "(P / O) < 0";
@@ -34,6 +35,25 @@
 (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O)) <= 0.03)
     ? 0.01
     : 0.02";
+        public const string TestExpr6 = "counterpartyName != null and " +
+            "(counterpartyName.startsWith('A') or " +
+            "counterpartyName.StartsWith('B') or " +
+            "counterpartyName.StartsWith('C') or " +
+            "counterpartyName.StartsWith('D') or " +
+            "counterpartyName.StartsWith('E') or " +
+            "counterpartyName.StartsWith('F') or " +
+            "counterpartyName.StartsWith('G') or " +
+            "counterpartyName.StartsWith('H') or " +
+            "counterpartyName.StartsWith('I') or " +
+            "counterpartyName.StartsWith('J') or " +
+            "counterpartyName.StartsWith('K') or " +
+            "counterpartyName.StartsWith('L') or " +
+            "counterpartyName.StartsWith('M') or " +
+            "counterpartyName.StartsWith('N') or " +
+            "counterpartyName.StartsWith('O'))";
+        public const string TestExpr7 = "A and (B or C or D or E or F or G or H or I or J or K or L)";
+        public const string TestExpr8 = "A and B or C or D or E or F or G or H or I or J or K or L";
+
         public const string TestExpr5LetGuard = @"
 let 
     v = P / O,
@@ -42,7 +62,7 @@ in match
    | x <= 0.03 = 0.01
    | otherwise 0.02
 ";
-            
+
 
         public const string TernaryArith1 = @"
 (
@@ -213,8 +233,6 @@ in match
         : true
 ";
         public const string VarFilter1 = "((BE != #BE and SE != #SE) and (fc == '2800' or fc == '2828'))";
-
-
 
     }
 }

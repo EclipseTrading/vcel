@@ -59,7 +59,9 @@ booleanOpExpr
 arithExpr
 	: MINUS arithExpr #UnaryMinus
 	| '(' expr ')' #Paren
-	| arithExpr DOT expr #MemberExpr
+	| arithExpr DOT var #MemberExpr
+	| arithExpr DOT functionExpr #MemberExpr
+	| arithExpr DOT arithExpr #MemberExpr
 	| <assoc=right>arithExpr POW arithExpr # Pow
 	| arithExpr op=(MULTIPLY | DIVIDE) arithExpr # MultDiv
 	| arithExpr op=(PLUS | MINUS) arithExpr # PlusMinus

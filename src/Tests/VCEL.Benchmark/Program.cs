@@ -9,7 +9,8 @@ namespace VcelBenchmark
         {
             BenchmarkRunner.Run(new BenchmarkRunInfo[]
             {
-                BenchmarkConverter.TypeToBenchmarks(typeof(TypeOperationBenchmarkTests))
+                BenchmarkConverter.TypeToBenchmarks(typeof(TypeOperationBenchmarkTests)),
+                BenchmarkConverter.TypeToBenchmarks(typeof(JscodeParserBenchmarkTests))
             });
         }
     }

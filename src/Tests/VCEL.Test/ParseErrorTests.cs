@@ -8,7 +8,7 @@ namespace VCEL.Test
     {
         [TestCase("A in", "A >>>in<<<")]
         [TestCase("x()", ">>>x<<<()")]
-        [TestCase("1.", "Expected more input - found <EOF>")]
+        [TestCase("1.", "1>>>.<<<")]
         [TestCase(@"
 A + B @ C 
 * D
