@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCEL.JS", "VCEL.JS\VCEL.JS.csproj", "{7857DF10-9A38-43BC-90BF-DA165605854B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCEL.Benchmark", "Tests\VCEL.Benchmark\VCEL.Benchmark.csproj", "{5AA60A1D-A896-4396-9EC4-A64A526E80D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCEL.Benchmark", "Tests\VCEL.Benchmark\VCEL.Benchmark.csproj", "{5AA60A1D-A896-4396-9EC4-A64A526E80D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
