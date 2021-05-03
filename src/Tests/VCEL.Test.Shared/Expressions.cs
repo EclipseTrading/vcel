@@ -37,20 +37,20 @@
     : 0.02";
         public const string TestExpr6 = "counterpartyName != null and " +
             "(counterpartyName.startsWith('A') or " +
-            "counterpartyName.StartsWith('B') or " +
-            "counterpartyName.StartsWith('C') or " +
-            "counterpartyName.StartsWith('D') or " +
-            "counterpartyName.StartsWith('E') or " +
-            "counterpartyName.StartsWith('F') or " +
-            "counterpartyName.StartsWith('G') or " +
-            "counterpartyName.StartsWith('H') or " +
-            "counterpartyName.StartsWith('I') or " +
-            "counterpartyName.StartsWith('J') or " +
-            "counterpartyName.StartsWith('K') or " +
-            "counterpartyName.StartsWith('L') or " +
-            "counterpartyName.StartsWith('M') or " +
-            "counterpartyName.StartsWith('N') or " +
-            "counterpartyName.StartsWith('O'))";
+            "counterpartyName.startsWith('B') or " +
+            "counterpartyName.startsWith('C') or " +
+            "counterpartyName.startsWith('D') or " +
+            "counterpartyName.startsWith('E') or " +
+            "counterpartyName.startsWith('F') or " +
+            "counterpartyName.startsWith('G') or " +
+            "counterpartyName.startsWith('H') or " +
+            "counterpartyName.startsWith('I') or " +
+            "counterpartyName.startsWith('J') or " +
+            "counterpartyName.startsWith('K') or " +
+            "counterpartyName.startsWith('L') or " +
+            "counterpartyName.startsWith('M') or " +
+            "counterpartyName.startsWith('N') or " +
+            "counterpartyName.startsWith('O'))";
         public const string TestExpr7 = "A and (B or C or D or E or F or G or H or I or J or K or L)";
         public const string TestExpr8 = "A and B or C or D or E or F or G or H or I or J or K or L";
 
