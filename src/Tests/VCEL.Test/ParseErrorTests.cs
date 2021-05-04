@@ -9,6 +9,8 @@ namespace VCEL.Test
         [TestCase("A in", "A >>>in<<<")]
         [TestCase("x()", ">>>x<<<()")]
         [TestCase("1.", "1>>>.<<<")]
+        [TestCase("1.1.1", "1.1>>>.1<<<")]
+        [TestCase(".1.1", ".1>>>.1<<<")]
         [TestCase(@"
 A + B @ C 
 * D

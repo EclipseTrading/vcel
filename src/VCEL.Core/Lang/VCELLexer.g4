@@ -60,7 +60,7 @@ fragment LONG_SUFFIX: ( 'L' | 'l');
 fragment HEX_DIGIT: [0-9A-Fa-f];
 
 fragment DIGIT: [0-9];
-NUMBER: DIGIT+ ([.] DIGIT+)?;
+NUMBER: DIGIT+ ([.] DIGIT+)? | '.' DIGIT+;
 ID: ('a' ..'z' | 'A' ..'Z' | '_') (
 		'a' ..'z'
 		| 'A' ..'Z'
