@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using System;
-using VCEL;
+﻿using System;
+using NUnit.Framework;
 using VCEL.Core.Lang;
+using VCEL.Test.Shared;
 
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class FunctionTests
     {
@@ -19,9 +19,12 @@ namespace VECL.Test
         [TestCase("abs(-1.1)", 1.1)]
         public void EvalDefaultFunction(string exprString, object expected)
         {
-            var expr = VCExpression.ParseDefault(exprString).Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(expected));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
         }
 
         [TestCase("min(@2019-11-01, @2020-01-01)", "2019-11-01")]
@@ -31,25 +34,36 @@ namespace VECL.Test
         public void EvalDateFunction(string exprString, string dateTime)
         {
             var expected = DateTimeOffset.Parse(dateTime);
-            var expr = VCExpression.ParseDefault(exprString).Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(expected));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
         }
 
         [Test]
         public void EvalNow()
         {
-            var expr = VCExpression.ParseDefault("now()").Expression;
-            var value = expr.Evaluate(new { });
-            Assert.That(value, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(1)));
+            var exprString = "now()";
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var value = expr.Evaluate(new { });
+                Assert.That(value, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(1)));
+            }
         }
 
         [Test]
         public void EvalToday()
         {
-            var expr = VCExpression.ParseDefault("today()").Expression;
-            var value = expr.Evaluate(new { });
-            Assert.That(value, Is.EqualTo(DateTime.Today));
+            var exprString = "today()";
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var value = expr.Evaluate(new { });
+                Assert.That(value, Is.EqualTo(DateTime.Today));
+            }
         }
     }
 }

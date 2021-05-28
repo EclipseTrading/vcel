@@ -2,7 +2,7 @@
 using VCEL.Core.Expression.Impl;
 using VCEL.Monad;
 
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class DefaultOperatorTests
     {
@@ -24,7 +24,6 @@ namespace VECL.Test
             Assert.That(res, Is.EqualTo(expected).Within(0.000001));
         }
 
-
         [TestCase(0, 0, 0)]
         [TestCase(3, 1, 2)]
         [TestCase(3L, 1, 2L)]
@@ -37,7 +36,6 @@ namespace VECL.Test
             Assert.That(res, Is.EqualTo(expected).Within(0.000001));
         }
 
-
         [TestCase(0, 0, 0)]
         [TestCase(2, 5, 10)]
         [TestCase(2L, 5, 10L)]
@@ -49,7 +47,6 @@ namespace VECL.Test
             var res = mult.Evaluate(l, r);
             Assert.That(res, Is.EqualTo(expected).Within(0.000001));
         }
-
 
         [TestCase(6, 2, 3)]
         [TestCase(5, 2, 2)]

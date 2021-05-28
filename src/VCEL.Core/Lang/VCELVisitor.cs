@@ -273,10 +273,10 @@ namespace VCEL.Core.Lang
             {
                 case "DateTime" when func == "Today":
                 case "System.DateTime" when func == "Today":
-                    return new ParseResult<T>(exprFactory.Value(DateTime.Today));
+                    return new ParseResult<T>(exprFactory.Today());
                 case "DateTime" when func == "Now":
                 case "System.DateTime" when func == "Now":
-                    return new ParseResult<T>(exprFactory.Value(DateTime.Now));
+                    return new ParseResult<T>(exprFactory.Now());
                 case "System.Math":
                 case "Math":
                     return Visit(context.GetChild(2));

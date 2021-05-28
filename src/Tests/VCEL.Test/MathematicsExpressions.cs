@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using VCEL.Core.Lang;
+using VCEL.Test.Shared;
 
 namespace VCEL.Test
 {
@@ -61,16 +62,24 @@ namespace VCEL.Test
         [TestCase("3^(2/2)^2", 3)]
         public void ShouldEvaluate(string exprStr, object expected)
         {
-            var parseResult = VCExpression.ParseMaybe(exprStr);
-            Assert.That(parseResult.Success, Is.True, "Is successful");
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                Assert.That(parseResult.Success, Is.True, "Is successful");
 
-            var expr = parseResult.Expression;
+                var expr = parseResult.Expression;
 
-            var result = expr.Evaluate(new { });
-            Assert.That(result.HasValue, Is.True, "Have value");
-            Assert.That(result.Value, Is.EqualTo(expected));
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+
+            var parseResult2 = VCExpression.ParseMaybe(exprStr);
+            Assert.That(parseResult2.Success, Is.True, "Is successful");
+
+            var expr2 = parseResult2.Expression;
+
+            var result2 = expr2.Evaluate(new { });
+            Assert.That(result2.HasValue, Is.True, "Have value");
+            Assert.That(result2.Value, Is.EqualTo(expected));
         }
-
     }
-
 }

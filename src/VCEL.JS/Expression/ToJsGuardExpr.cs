@@ -6,8 +6,8 @@ namespace VCEL.JS.Expression
 {
     internal class ToJsGuardExpr : IExpression<string>
     {
-        private IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses;
-        private IExpression<string> otherwise;
+        private readonly IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses;
+        private readonly IExpression<string> otherwise;
 
         public ToJsGuardExpr(IMonad<string> monad, IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string> otherwise)
         {

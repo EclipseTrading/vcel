@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using VCEL;
 using VCEL.Core.Lang;
+using VCEL.Test.Shared;
 
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class LanguageFeatureTests
     {
@@ -15,6 +15,13 @@ namespace VECL.Test
 
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(3));
+
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new object());
+                Assert.That(result2, Is.EqualTo(3));
+            }
         }
 
         [TestCase(-0.01, 0.01)]
@@ -45,7 +52,12 @@ match
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
 
-
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new { A = a });
+                Assert.That(result2, Is.EqualTo(expected));
+            }
         }
 
         [TestCase(-0.01, 0.01)]
@@ -76,6 +88,12 @@ match
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
 
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new { A = a });
+                Assert.That(result2, Is.EqualTo(expected));
+            }
         }
 
         [TestCase(0.7, 2.0, "Low")]
@@ -99,17 +117,27 @@ in (match
             var result = expr.Evaluate(new { a, l });
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
+
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new { a, l });
+                Assert.That(result2, Is.EqualTo(expected));
+            }
         }
 
         [Test]
         public void MultipleLetEval()
         {
             var exprString = "let x = a + 1 in x + b";
-            var expr = VCExpression.ParseDefault(exprString);
-            var result1 = expr.Expression.Evaluate(new { a = 5, b = 6 });
-            var result2 = expr.Expression.Evaluate(new { a = 10, b = 11 });
-            Assert.That(result1, Is.EqualTo(12));
-            Assert.That(result2, Is.EqualTo(22));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result1 = expr.Evaluate(new { a = 5, b = 6 });
+                var result2 = expr.Evaluate(new { a = 10, b = 11 });
+                Assert.That(result1, Is.EqualTo(12));
+                Assert.That(result2, Is.EqualTo(22));
+            }
         }
 
         [TestCase("A ? (B + 1) : (C + 2)", true, 5, 10, 6)]
@@ -123,6 +151,13 @@ in (match
 
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));
+
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new { A = a, B = b, C = c });
+                Assert.That(result2, Is.EqualTo(expected));
+            }
         }
 
         [TestCase("A ? B + 1 : C + 2", null, 5, 10)]
@@ -148,6 +183,13 @@ in (match
             if (result.HasValue)
             {
                 Assert.AreEqual(c, result.Value);
+            }
+
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var expr2 = parseResult.Expression;
+                var result2 = expr2.Evaluate(new { A = a });
+                Assert.AreEqual(result2, c);
             }
         }
     }

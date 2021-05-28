@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using VCEL.Core.Lang;
+using VCEL.Test.Shared;
 
 namespace VCEL.Test
 {
@@ -147,10 +148,12 @@ namespace VCEL.Test
 
         private void Evaluate(string exprString, object expected, object o = null, decimal precision = 0.0001m)
         {
-            var expr = VCExpression.ParseDefault(exprString);
-            Assert.True(expr.Success, "Default expression parse");
-            var result = expr.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(precision), "Default expression evaluated");
+            foreach (var expr in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.True(expr.Success, "Default expression parse");
+                var result = expr.Expression.Evaluate(o ?? new { });
+                Assert.That(result, Is.EqualTo(expected).Within(precision), "Default expression evaluated");
+            }
 
             var maybeExpr = VCExpression.ParseMaybe(exprString);
             Assert.True(maybeExpr.Success, "Maybe expression parse");

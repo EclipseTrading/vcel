@@ -6,7 +6,7 @@ namespace VCEL.JS.Expression
 {
     internal class ToJsPropertyOp : IExpression<string>
     {
-        private string name;
+        private readonly string name;
 
         public ToJsPropertyOp(string name, IMonad<string> monad)
         {
