@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using VCEL.Core.Lang;
 using VCEL.Test.Shared;
 
 namespace VCEL.Test

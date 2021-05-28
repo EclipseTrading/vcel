@@ -1,22 +1,32 @@
-﻿using VCEL.Core.Expression.Impl;
-using VCEL.Core.Helper;
+﻿using System.Collections.Generic;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression
 {
-    internal class ToCSharpMemberOp : BinaryExprBase<string>
+    internal class ToCSharpMemberOp : IExpression<string>
     {
         public ToCSharpMemberOp(
             IMonad<string> monad,
             IExpression<string> left,
             IExpression<string> right)
-            : base(monad, left, right)
         {
+            Monad = monad;
+            Left = left;
+            Right = right;
         }
 
-        public override string Evaluate(object lv, object rv)
+        private IExpression<string> Left { get; }
+        private IExpression<string> Right { get; }
+        public IMonad<string> Monad { get; }
+        public IEnumerable<IDependency> Dependencies
+            => Left.Dependencies.Union(Right.Dependencies).Distinct();
+
+        public string Evaluate(IContext<string> context)
         {
-            return rv.ToString().Replace(Constants.DefaultContext, lv.ToString());
+            var l = Left.Evaluate(context);
+            var r = Right.Evaluate(context);
+            return r.Replace(context.Value, l);
         }
     }
 }

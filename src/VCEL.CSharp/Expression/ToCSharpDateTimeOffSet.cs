@@ -6,12 +6,14 @@ namespace VCEL.CSharp.Expression
 {
     internal class ToCSharpDateTimeOffSet : IExpression<string>
     {
-        private readonly DateTimeOffset dateTimeOffset;
+        private readonly long ticks;
+        private readonly double offsetHour;
 
         public ToCSharpDateTimeOffSet(IMonad<string> monad, DateTimeOffset dateTimeOffset)
         {
             this.Monad = monad;
-            this.dateTimeOffset = dateTimeOffset;
+            this.ticks = dateTimeOffset.Ticks;
+            this.offsetHour = dateTimeOffset.Offset.TotalHours;
         }
 
         public IMonad<string> Monad { get; }
@@ -20,7 +22,7 @@ namespace VCEL.CSharp.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            return $@"(DateTimeOffset.Parse(""{dateTimeOffset:yyyy-MM-dd HH:mm:ss.fffzzz}""))";
+            return $"(new DateTimeOffset({this.ticks}, TimeSpan.FromHours({this.offsetHour})))";
         }
     }
 }

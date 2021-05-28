@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using VCEL.Core.Helper;
 using VCEL.Monad;
 
 namespace VCEL.CSharp
@@ -28,12 +27,10 @@ namespace VCEL.CSharp
                 return monad.Lift(func());
             }
 
-            return monad.Lift(context.Value == Constants.DefaultContext
-                ? $"(CSharpHelper.IsNumber({Constants.DefaultContext}.{propName}) " +
-                  $"? ((double)({Constants.DefaultContext}.{propName})) " + $": ({Constants.DefaultContext}.{propName}))"
-                : context.Value == "{ }"
-                    ? $@"{Constants.DefaultContext}[""{propName}""]"
-                    : propName);
+            var finalPropOrMethod = $"({context.Value}.{propName})";
+            return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
+                              $"? ((double)({finalPropOrMethod})) " +
+                              $": ({finalPropOrMethod}))");
         }
     }
 }
