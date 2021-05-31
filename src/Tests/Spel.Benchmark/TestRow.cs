@@ -1,4 +1,4 @@
-﻿namespace SpelBenchmark
+﻿namespace Spel.Benchmark
 {
     public class TestRow
     {

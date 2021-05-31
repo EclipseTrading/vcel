@@ -21,12 +21,11 @@ A + B @ >>>C<<<
         public void ParseErrorTest(string exprString, string exprError)
         {
             var parseResult = VCExpression.ParseDefault(exprString);
-            Assert.That(parseResult.Success, Is.False);            
+            Assert.That(parseResult.Success, Is.False);
             var exprMessage = string.Join(
-                "\n", 
+                "\n",
                 parseResult.ParseErrors.Select(e => e.GetExprError(exprString)));
             Assert.That(exprMessage, Is.EqualTo(exprError));
         }
-
     }
 }

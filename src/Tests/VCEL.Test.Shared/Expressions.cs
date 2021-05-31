@@ -13,7 +13,7 @@
         public const string Add = @"0.1 + 0.2";
         public const string Subtract = @"0.1 - 0.2";
         public const string Divide = @"0.1 / 0.2";
-        public const string Tern = @"true ? 0.1 : 0.2";
+        public const string Tern = @"P > 0 ? 0.1 : 0.2";
         public const string DateTime = @"T(System.DateTime).Now";
         public const string DivNull = @"1 / null";
         public const string Div0 = @"1 / 0";

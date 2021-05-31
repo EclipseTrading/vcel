@@ -11,7 +11,7 @@ namespace VCEL.Test.Shared
             return new List<ParseResult<object>>
             {
                 VCExpression.ParseDefault(exprString),
-                CSharpExpression.ParseNative(exprString)
+                CSharpExpression.ParseNativeDynamic(exprString)
             };
         }
     }

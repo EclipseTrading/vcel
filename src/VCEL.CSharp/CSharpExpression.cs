@@ -15,8 +15,17 @@ namespace VCEL.CSharp
         public static ParseResult<string> ParseCode(string exprString, IFunctions<string> functions = null)
             => CSharpParser(functions).Parse(exprString);
 
-        public static ParseResult<object> ParseNative(string exprString, params (string, Func<object[], string>)[] funcs)
-            => ParseNative(exprString, CreateFunctions(funcs));
+        public static ParseResult<object> ParseNativeDynamic(string exprString, params (string, Func<object[], string>)[] funcs)
+            => ParseNativeDynamic(exprString, CreateFunctions(funcs));
+
+        public static ParseResult<object> ParseNativeDynamic(string exprString, IFunctions<string> functions = null)
+        {
+            var parseResult = CSharpParser(functions).Parse(exprString);
+
+            return parseResult.Success
+                ? new ParseResult<object>(new CSharpDynamicMethodExpr(null, parseResult.Expression))
+                : new ParseResult<object>(parseResult.ParseErrors);
+        }
 
         public static ParseResult<object> ParseNative(string exprString, IFunctions<string> functions = null)
         {

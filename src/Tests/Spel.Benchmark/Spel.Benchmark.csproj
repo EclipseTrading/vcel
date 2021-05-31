@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationIcon />
-    <StartupObject>SpelBenchmark.Program</StartupObject>
+    <StartupObject>Spel.Benchmark.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
