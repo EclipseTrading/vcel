@@ -52,16 +52,19 @@ namespace VCEL.Test
             var parseResult = VCExpression.ParseMaybe(exprStr);
             if (!parseResult.Success)
             {
-                var errorString = string.Join("\n", parseResult.ParseErrors.Select(p => $"Error parsing at token '{p.Token}' in {p.GetExprError(exprStr)}"));
+                var errorString = string.Join("\n",
+                    parseResult.ParseErrors.Select(p =>
+                        $"Error parsing at token '{p.Token}' in {p.GetExprError(exprStr)}"));
                 Console.WriteLine(errorString);
             }
+
             Assert.That(parseResult.Success, Is.True);
 
             var expr = parseResult.Expression;
 
             var result = expr.Evaluate(new { });
             Assert.That(result.HasValue, Is.EqualTo(hasValue));
-            if(hasValue)
+            if (hasValue)
             {
                 Assert.That(result.Value, Is.EqualTo(expected));
             }
@@ -116,10 +119,11 @@ namespace VCEL.Test
             var pr = parser.Parse(exprString);
             var parseTime = sw.Elapsed;
             sw.Restart();
-            for(var i = 0; i < 50; i++)
+            for (var i = 0; i < 50; i++)
             {
                 result = pr.Expression.Evaluate(o);
             }
+
             var evalTime = sw.Elapsed;
             Assert.That(result.Value, Is.EqualTo(expected));
 
@@ -133,15 +137,26 @@ namespace VCEL.Test
         [TestCase(0.04, -1.0, 0.02)]
         public void Expr5Compare(double p, double o, double expected)
         {
-            var row = new { P = p, O = o };
-            var parsed = VCExpression.ParseDefault(Expressions.TestExpr5);
-            var result = parsed.Expression.Evaluate(row);
-            Assert.That(result, Is.EqualTo(expected).Within(0.00001));
+            var row = new {P = p, O = o};
+            foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.TestExpr5))
+            {
+                var result = parseResult.Expression.Evaluate(row);
+                Assert.That(result, Is.EqualTo(expected).Within(0.00001));
+            }
+        }
 
-            var parsedLetGuard = VCExpression.ParseDefault(Expressions.TestExpr5LetGuard);
-            var letGuardResult = parsedLetGuard.Expression.Evaluate(row);
-            Assert.That(letGuardResult, Is.EqualTo(expected).Within(0.000001));
+        [TestCase(1.0, 1.0, 0.01)]
+        [TestCase(0.02, 1.0, 0.02)]
+        [TestCase(0.02, -1.0, 0.01)]
+        [TestCase(0.04, -1.0, 0.02)]
+        public void Expr5LetGuardCompare(double p, double o, double expected)
+        {
+            var row = new {P = p, O = o};
+            foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.TestExpr5LetGuard))
+            {
+                var letGuardResult = parseResult.Expression.Evaluate(row);
+                Assert.That(letGuardResult, Is.EqualTo(expected).Within(0.000001));
+            }
         }
     }
 }
-

@@ -7,8 +7,8 @@ namespace VCEL.JS.Expression
 {
     internal class ToJsLetExpr : IExpression<string>
     {
-        private IReadOnlyList<(string, IExpression<string>)> bindings;
-        private IExpression<string> expr;
+        private readonly IReadOnlyList<(string, IExpression<string>)> bindings;
+        private readonly IExpression<string> expr;
 
         public ToJsLetExpr(IMonad<string> monad, IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
         {

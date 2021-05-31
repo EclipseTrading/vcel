@@ -1,15 +1,12 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using VCEL;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 using VCEL.Core.Lang;
-using VCEL.Core.Monad.List;
 using VCEL.Core.Monad.Tasks;
 using VCEL.Expression;
 using VCEL.Monad;
 using VCEL.Monad.Maybe;
 
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class MonadTests
     {

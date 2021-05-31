@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using VCEL.Core.Expression.Func;
-using VCEL.Core.Expression.Impl;
 using VCEL.Expression;
 using VCEL.JS.Expression;
 using VCEL.Monad;
@@ -18,8 +17,8 @@ namespace VCEL.JS
         {
         }
 
-        public override IExpression<string> Ternary(IExpression<string> conditional, IExpression<string> trueConditon, IExpression<string> falseCondition)
-            => new ToJsTernary(Monad, conditional, trueConditon, falseCondition);
+        public override IExpression<string> Ternary(IExpression<string> conditional, IExpression<string> trueCondition, IExpression<string> falseCondition)
+            => new ToJsTernary(Monad, conditional, trueCondition, falseCondition);
 
         public override IExpression<string> Let(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
             => new ToJsLetExpr(Monad, bindings, expr);

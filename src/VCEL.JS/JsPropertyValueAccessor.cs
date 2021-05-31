@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using VCEL.Core.Helper;
 using VCEL.Monad;
 
 namespace VCEL.JS
@@ -22,7 +23,6 @@ namespace VCEL.JS
         };
 
         private readonly string jsDateObjPattern = @"\(new Date\(([0-9]+|)\)\)";
-        private readonly string defaultVCELContextName = "vcelContext";
         private readonly IMonad<string> monad;
         private readonly string propName;
         private readonly IReadOnlyDictionary<string, Func<string>> overridePropertyFunc;
@@ -47,11 +47,11 @@ namespace VCEL.JS
                 finalPropOrMethod = jsDateMethod;
             }
 
-            if (context.Value.Contains(defaultVCELContextName))
-                return $"{defaultVCELContextName}.{finalPropOrMethod}";
+            if (context.Value.Contains(Constants.DefaultContext))
+                return $"{Constants.DefaultContext}.{finalPropOrMethod}";
 
             return monad.Lift(context.Value == "{ }"
-                ? $"{defaultVCELContextName}.{finalPropOrMethod}"
+                ? $"{Constants.DefaultContext}.{finalPropOrMethod}"
                 : $"{context.Value}.{finalPropOrMethod}");
         }
     }

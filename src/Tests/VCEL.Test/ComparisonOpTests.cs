@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using VCEL.Core.Lang;
+using VCEL.Test.Shared;
 
 namespace VCEL.Test
 {
@@ -10,18 +11,19 @@ namespace VCEL.Test
         [TestCase("Pos > 10 and FreeTextFilter matches '(?i)123'", true)]
         [TestCase("FreeTextFilter matches '(?i)123' and Pos > 10", true)]
         [TestCase("(FreeTextFilter matches '(?i)123') and Pos > 10", true)]
-        public void ComparsionMatchWithBooleanExpr(string exprStr, bool expected)
+        public void ComparisionMatchWithBooleanExpr(string exprStr, bool expected)
         {
-            var expr = VCExpression.ParseDefault(exprStr);
-
             var obj = new
             {
                 FreeTextFilter = "123",
                 Pos = 100
             };
 
-            var result = expr.Expression.Evaluate(obj);
-            Assert.AreEqual(expected, result);
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+            {
+                var result = parseResult.Expression.Evaluate(obj);
+                Assert.AreEqual(expected, result);
+            }
         }
 
         [TestCase("'ABC' == 'ABC'", true)]
@@ -78,7 +80,8 @@ namespace VCEL.Test
         [TestCase("DecimalValue == DoubleValue", true)]
         [TestCase("DecimalValue == DecimalValue", true)]
         public void MixedNumericPropertiesEq(string exprString, bool expected)
-            => Compare(exprString, expected, new {
+            => Compare(exprString, expected, new
+            {
                 IntValue = 1,
                 FloatValue = 1f,
                 LongValue = 1L,
@@ -146,7 +149,7 @@ namespace VCEL.Test
         [TestCase("X < Y")]
         [TestCase("null < null")]
         public void LessNone(string exprString)
-            => CompareMaybeNone(exprString, new { A = (double?)null, L = (double?)null });
+            => CompareMaybeNone(exprString, new {A = (double?) null, L = (double?) null});
 
         [TestCase("1 < 0", false)]
         [TestCase("0 < 1", true)]
@@ -203,8 +206,11 @@ namespace VCEL.Test
         [TestCase("'A' in 'A'")]
         public void InInvalid(string exprString)
         {
-            var parsed = VCExpression.ParseDefault(exprString);
-            Assert.False(parsed.Success);
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.False(parseResult.Success);
+            }
+
             var parsedMaybe = VCExpression.ParseMaybe(exprString);
             Assert.False(parsedMaybe.Success);
         }
@@ -213,6 +219,11 @@ namespace VCEL.Test
         [TestCase("null in { 1.1, null, 4.1 }")]
         public void InMaybe(string exprString)
         {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.True(parseResult.Success);
+            }
+
             var parsedMaybe = VCExpression.ParseMaybe(exprString);
             Assert.True(parsedMaybe.Success);
             var maybeResult = parsedMaybe.Expression.Evaluate(new { });
@@ -240,7 +251,7 @@ namespace VCEL.Test
         [TestCase("'ABC' matches A + 'BC'", true, "A")]
         [TestCase("(null + 'A') matches (A + null)", true, "A")]
         public void Matches(string exprString, bool expected, string value = null)
-            => CompareDefault(exprString, expected, new { A = value });
+            => CompareDefault(exprString, expected, new {A = value});
 
         [TestCase("'ABC' matches null")]
         [TestCase("'ABC' ~ null")]
@@ -268,35 +279,35 @@ namespace VCEL.Test
         [TestCase("A between {0, 100}", false, 120.0)]
         [TestCase("A between {0, 100}", false, -20.0)]
         public void BetweenWithDecimal(string exprString, bool expected, object a)
-            => CompareResult(exprString, expected, new { A = Convert.ToDecimal(a) });
+            => CompareResult(exprString, expected, new {A = Convert.ToDecimal(a)});
 
         [TestCase("A between {0, 100}", true, 10.1)]
         [TestCase("A between {0, 100}", false, 120.0)]
         [TestCase("A between {0, 100}", false, -20.0)]
         public void BetweenWithInt(string exprString, bool expected, object a)
-            => CompareResult(exprString, expected, new { A = Convert.ToInt32(a) });
+            => CompareResult(exprString, expected, new {A = Convert.ToInt32(a)});
 
         [TestCase("A between {0, 100}", true, 10.1)]
         [TestCase("A between {0, 100}", false, 120.0)]
         [TestCase("A between {0, 100}", false, -20.0)]
         public void BetweenWithDouble(string exprString, bool expected, object a)
-            => CompareResult(exprString, expected, new { A = Convert.ToDouble(a) });
+            => CompareResult(exprString, expected, new {A = Convert.ToDouble(a)});
 
         [TestCase("A between {0, 100}", true, 10.1)]
         [TestCase("A between {0, 100}", false, 120.0)]
         [TestCase("A between {0, 100}", false, -20.0)]
         public void BetweenWithLong(string exprString, bool expected, object a)
-            => CompareResult(exprString, expected, new { A = Convert.ToInt64(a) });
+            => CompareResult(exprString, expected, new {A = Convert.ToInt64(a)});
 
         [TestCase("A between {@2020-01-01, @2020-01-03}", false, 10.1)]
         [TestCase("A between {@2020-01-01, @2020-01-03}", false, 10.1)]
         public void BetweenWithWrongTypeInObject(string exprString, bool expected, object a)
-            => CompareResult(exprString, expected, new { A = Convert.ToDecimal(a) });
+            => CompareResult(exprString, expected, new {A = Convert.ToDecimal(a)});
 
         [TestCase("A between {0, 100}", false)]
         [TestCase("A between {0, 100}", false)]
         public void BetweenWithWrongTypeInExpression(string exprString, bool expected)
-            => CompareResult(exprString, expected, new { A = DateTime.Now });
+            => CompareResult(exprString, expected, new {A = DateTime.Now});
 
         [TestCase("1 between { null, null }")]
         [TestCase("1 between { null, 2 }")]
@@ -308,73 +319,74 @@ namespace VCEL.Test
         [TestCase(2.0, 1.0f, true)]
         [TestCase(2.0, 1L, true)]
         [TestCase(2.0, 1, true)]
-        [TestCase(2.0, (short)1, true)]
-        [TestCase(2.0, (byte)1, true)]
+        [TestCase(2.0, (short) 1, true)]
+        [TestCase(2.0, (byte) 1, true)]
         [TestCase(2.0f, 1.0d, true)]
         [TestCase(2.0f, 1L, true)]
         [TestCase(2.0f, 1, true)]
-        [TestCase(2.0f, (short)1, true)]
-        [TestCase(2.0f, (byte)1, true)]
+        [TestCase(2.0f, (short) 1, true)]
+        [TestCase(2.0f, (byte) 1, true)]
         [TestCase(2L, 1.0d, true)]
         [TestCase(2L, 1.0f, true)]
         [TestCase(2L, 1, true)]
-        [TestCase(2L, (short)1, true)]
-        [TestCase(2L, (byte)1, true)]
+        [TestCase(2L, (short) 1, true)]
+        [TestCase(2L, (byte) 1, true)]
         [TestCase(2, 1.0d, true)]
         [TestCase(2, 1L, true)]
         [TestCase(2, 1.0f, true)]
-        [TestCase(2, (short)1, true)]
-        [TestCase(2, (byte)1, true)]
-        [TestCase((short)2, 1.0d, true)]
-        [TestCase((short)2, 1L, true)]
-        [TestCase((short)2, 1, true)]
-        [TestCase((short)2, 1.0f, true)]
-        [TestCase((short)2, (byte)1, true)]
-        [TestCase((byte)2, 1.0d, true)]
-        [TestCase((byte)2, 1L, true)]
-        [TestCase((byte)2, 1, true)]
-        [TestCase((byte)2, 1.0f, true)]
-        [TestCase((byte)2, (short)1, true)]
+        [TestCase(2, (short) 1, true)]
+        [TestCase(2, (byte) 1, true)]
+        [TestCase((short) 2, 1.0d, true)]
+        [TestCase((short) 2, 1L, true)]
+        [TestCase((short) 2, 1, true)]
+        [TestCase((short) 2, 1.0f, true)]
+        [TestCase((short) 2, (byte) 1, true)]
+        [TestCase((byte) 2, 1.0d, true)]
+        [TestCase((byte) 2, 1L, true)]
+        [TestCase((byte) 2, 1, true)]
+        [TestCase((byte) 2, 1.0f, true)]
+        [TestCase((byte) 2, (short) 1, true)]
         public void CompareTypes(object l, object r, bool expected)
-            => Compare("A > B", expected, new { A = l, B = r });
+            => Compare("A > B", expected, new {A = l, B = r});
 
         [TestCase(2, 1.0, true)]
         [TestCase(2, 1.0f, true)]
         [TestCase(2, 1L, true)]
         [TestCase(2, 1, true)]
-        [TestCase(2, (short)1, true)]
-        [TestCase(2, (byte)1, true)]
+        [TestCase(2, (short) 1, true)]
+        [TestCase(2, (byte) 1, true)]
         [TestCase(2, 3.0, false)]
         [TestCase(2, 3.0f, false)]
         [TestCase(2, 3L, false)]
         [TestCase(2, 3, false)]
-        [TestCase(2, (short)3, false)]
-        [TestCase(2, (byte)3, false)]
+        [TestCase(2, (short) 3, false)]
+        [TestCase(2, (byte) 3, false)]
         public void CompareDecimalLeft(double a, object b, bool expected)
-            => Compare("A > B", expected, new { A = (decimal)a, B = b });
-
+            => Compare("A > B", expected, new {A = (decimal) a, B = b});
 
         [TestCase(2, 1.0, true)]
         [TestCase(2, 1.0f, true)]
         [TestCase(2, 1L, true)]
         [TestCase(2, 1, true)]
-        [TestCase(2, (short)1, true)]
-        [TestCase(2, (byte)1, true)]
+        [TestCase(2, (short) 1, true)]
+        [TestCase(2, (byte) 1, true)]
         [TestCase(2, 3.0, false)]
         [TestCase(2, 3.0f, false)]
         [TestCase(2, 3L, false)]
         [TestCase(2, 3, false)]
-        [TestCase(2, (short)3, false)]
-        [TestCase(2, (byte)3, false)]
+        [TestCase(2, (short) 3, false)]
+        [TestCase(2, (byte) 3, false)]
         public void CompareDecimalRight(double a, object b, bool expected)
-            => Compare("B < A", expected, new { A = (decimal)a, B = b });
+            => Compare("B < A", expected, new {A = (decimal) a, B = b});
 
         private void Compare(string exprString, bool expected, object o = null)
         {
-            var expr = VCExpression.ParseDefault(exprString);
-            Assert.True(expr.Success, "Default expression parse");
-            var result = expr.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.True(parseResult.Success, "Default expression parse");
+                var result = parseResult.Expression.Evaluate(o ?? new { });
+                Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
+            }
 
             var maybeExpr = VCExpression.ParseMaybe(exprString);
             Assert.True(maybeExpr.Success, "Maybe expression parse");
@@ -385,10 +397,12 @@ namespace VCEL.Test
 
         private void CompareDefault(string exprString, bool expected, object o = null)
         {
-            var expr = VCExpression.ParseDefault(exprString);
-            Assert.True(expr.Success);
-            var result = expr.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(0.0001));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.True(parseResult.Success);
+                var result = parseResult.Expression.Evaluate(o ?? new { });
+                Assert.That(result, Is.EqualTo(expected).Within(0.0001));
+            }
         }
 
         private void CompareMaybeNone(string exprString, object o = null)
@@ -400,18 +414,18 @@ namespace VCEL.Test
 
         private void CompareResult(string exprString, bool expected, object o)
         {
-            var expr = VCExpression.ParseDefault(exprString);
-            Assert.True(expr.Success);
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                Assert.True(parseResult.Success);
+                var result = parseResult.Expression.Evaluate(o ?? new { });
+                Assert.AreEqual(expected, result);
+            }
 
             var maybeExpr = VCExpression.ParseMaybe(exprString);
             Assert.True(maybeExpr.Success);
-
-            var result = expr.Expression.Evaluate(o ?? new { });
             var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
-
             Assert.True(maybeResult.HasValue);
             Assert.AreEqual(expected, maybeResult.Value);
-            Assert.AreEqual(expected, result);
         }
 
         [Test]

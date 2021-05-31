@@ -1,4 +1,6 @@
-﻿namespace VCEL.Core.Expression.Impl
+﻿using System;
+
+namespace VCEL.Core.Helper
 {
     public static class UpCastEx
     {
@@ -9,6 +11,8 @@
                 case double _:
                     switch(r)
                     {
+                        case double _:
+                            return true;
                         case int t:
                             r = (double)t;
                             return true;
@@ -32,6 +36,8 @@
                 case int i:
                     switch (r)
                     {
+                        case int _:
+                            return true;
                         case double _:
                             l = (double)i;
                             return true;
@@ -55,6 +61,8 @@
                 case long lo:
                     switch (r)
                     {
+                        case long _:
+                            return true;
                         case double t:
                             l = (double)lo;
                             return true;
@@ -78,6 +86,8 @@
                 case decimal d:
                     switch (r)
                     {
+                        case decimal _:
+                            return true;
                         case double _:
                             l = (double)d;
                             return true;
@@ -101,9 +111,11 @@
                 case float f:
                     switch(r)
                     {
+                        case float _:
+                            return true;
                         case double t:
                             l = (double)f;
-                            r = (double)t;
+                            r = t;
                             return true;
                         case int t:
                             r = (float)t;
@@ -125,6 +137,8 @@
                 case short i:
                     switch (r)
                     {
+                        case short _:
+                            return true;
                         case double _:
                             l = (double)i;
                             return true;
@@ -148,6 +162,8 @@
                 case byte i:
                     switch (r)
                     {
+                        case byte _:
+                            return true;
                         case double _:
                             l = (double)i;
                             return true;
@@ -170,6 +186,7 @@
                     return false;
             }
             return false;
-        }        
+        }
+
     }
 }

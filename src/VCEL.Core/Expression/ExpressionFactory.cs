@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
-using VCEL.Core.Monad.Tasks;
 using VCEL.Monad;
 
 namespace VCEL.Expression
@@ -22,9 +21,9 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Ternary(
             IExpression<T> conditional,
-            IExpression<T> trueConditon,
+            IExpression<T> trueCondition,
             IExpression<T> falseCondition)
-            => new Ternary<T>(Monad, conditional, trueConditon, falseCondition);
+            => new Ternary<T>(Monad, conditional, trueCondition, falseCondition);
 
         public virtual IExpression<T> Let(
             IReadOnlyList<(string, IExpression<T>)> bindings,
@@ -111,8 +110,14 @@ namespace VCEL.Expression
             => new NotEqExpr<T>(Monad, l, r);
 
         public virtual IExpression<T> Null() => new NullExpr<T>(Monad);
-        public IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
+
+        public virtual IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
             => new ObjectMember<T>(Monad, obj, memberExpr);
+
+        public virtual IExpression<T> Now() => Value(DateTime.Now);
+
+        public virtual IExpression<T> Today() => Value(DateTime.Today);
+
         public IExpression<T> This() => new ThisExpr<T>(Monad);
     }
 }

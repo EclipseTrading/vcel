@@ -6,7 +6,7 @@ using VCEL.Monad;
 using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
-namespace SpelBenchmark
+namespace Spel.Benchmark
 {
     [MemoryDiagnoser]
     [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
@@ -20,12 +20,25 @@ namespace SpelBenchmark
         private static readonly string traderExpr = Expressions.NestedTernary1;
 
         [Benchmark(Baseline = true)]
+        public void ParseAddExprWithSpel()
+        {
+            var exprString = Expressions.Add;
+            var expr = Expression.Parse(exprString);
+        }
+
+        [Benchmark]
+        public void ParseAddExprWithVcel()
+        {
+            var exprString = Expressions.Add;
+            var expr = vcelDefaultParser.Parse(exprString);
+        }
+
+        [Benchmark(Baseline = true)]
         public void ParseMaxWithSpel()
         {
             var exprString = "max('C', 'B', 'A')";
             var expr = Expression.Parse(exprString);
         }
-
 
         [Benchmark]
         public void ParseMaxWithVcel()

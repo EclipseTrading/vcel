@@ -1,10 +1,12 @@
-﻿using NUnit.Framework;
-using System;
-using VCEL;
+﻿using System;
+using NUnit.Framework;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Lang;
+using VCEL.CSharp;
+using VCEL.CSharp.Expression.Func;
+using VCEL.Test.Shared;
 
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class LegacyFunctionTests
     {
@@ -13,9 +15,17 @@ namespace VECL.Test
         {
             var funcs = new DefaultFunctions<object>();
             funcs.Register("GetValue", (a, b) => Convert.ToDouble(a[1]));
-            var expr = VCExpression.ParseDefault(exprString, funcs).Expression;
+            var parseResult = VCExpression.ParseDefault(exprString, funcs);
+            var expr = parseResult.Expression;
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expected));
+
+            var funcs2 = new DefaultCSharpFunctions();
+            funcs2.Register("GetValue", (a, b) => $"Convert.ToDouble({a[1]})");
+            var parseResult2 = CSharpExpression.ParseNativeDynamic(exprString, funcs2);
+            var expr2 = parseResult2.Expression;
+            var result2 = expr2.Evaluate(new { });
+            Assert.That(result2, Is.EqualTo(expected));
         }
 
         [TestCase("T(System.Math).Abs(-1)", 1)]
@@ -25,10 +35,12 @@ namespace VECL.Test
         [TestCase("-T(System.Math).Abs(-1) + -T(System.Math).Abs(-1)", -2)]
         public void EvalLegacyFunction(string exprString, object expected)
         {
-            var parseResult = VCExpression.ParseDefault(exprString);
-            var expr = parseResult.Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(expected));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
         }
 
         [TestCase("T(System.DateTime).Today")]
@@ -37,10 +49,12 @@ namespace VECL.Test
         [TestCase("(T(DateTime).Today)")]
         public void EvalLegacyToday(string exprString)
         {
-            var parseResult = VCExpression.ParseDefault(exprString);
-            var expr = parseResult.Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(DateTime.Today));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(DateTime.Today));
+            }
         }
 
         [TestCase("T(System.DateTime).Today.Day")]
@@ -49,19 +63,23 @@ namespace VECL.Test
         [TestCase("(T(DateTime).Today).Day")]
         public void EvalLegacyTodayDay(string exprString)
         {
-            var parseResult = VCExpression.ParseDefault(exprString);
-            var expr = parseResult.Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(DateTime.Today.Day));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(DateTime.Today.Day));
+            }
         }
 
         [TestCase("(@2020-10-10 - @2020-10-09).TotalDays")]
         public void EvalTotalDays(string exprString)
         {
-            var parseResult = VCExpression.ParseDefault(exprString);
-            var expr = parseResult.Expression;
-            var result = expr.Evaluate(new { });
-            Assert.That(result, Is.EqualTo(1));
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(1));
+            }
         }
     }
 }

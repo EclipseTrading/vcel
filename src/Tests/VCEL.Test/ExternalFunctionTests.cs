@@ -1,12 +1,10 @@
 ﻿using NUnit.Framework;
-using VCEL;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.Monad.Maybe;
 
-
-namespace VECL.Test
+namespace VCEL.Test
 {
     public class ExternalFunctionTests
     {

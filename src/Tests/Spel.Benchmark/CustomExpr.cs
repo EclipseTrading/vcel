@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpelBenchmark
+namespace Spel.Benchmark
 {
     public class CustomExpr
     {
@@ -148,7 +148,7 @@ namespace SpelBenchmark
                 if(d > 0.775)
                 { // > 5 <= 7
                     if(d > 0.9)
-                    {  // > 6 <= 7                        
+                    {  // > 6 <= 7
                         return 0.95;
                     }
                     // >5 <= 6

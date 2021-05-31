@@ -6,7 +6,7 @@ namespace VCEL.Expression
     public interface IExpressionFactory<T>
     {
         // Control
-        IExpression<T> Ternary(IExpression<T> conditional, IExpression<T> trueConditon, IExpression<T> falseCondition);
+        IExpression<T> Ternary(IExpression<T> conditional, IExpression<T> trueCondition, IExpression<T> falseCondition);
         IExpression<T> Let(IReadOnlyList<(string, IExpression<T>)> bindings, IExpression<T> expr);
         IExpression<T> Guard(
             IReadOnlyList<(IExpression<T>, IExpression<T>)> guardClauses,
@@ -60,5 +60,8 @@ namespace VCEL.Expression
         IExpression<T> NotEq(IExpression<T> l, IExpression<T> r);
         IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr);
         IExpression<T> This();
+
+        IExpression<T> Now();
+        IExpression<T> Today();
     }
 }

@@ -5,16 +5,16 @@ namespace VCEL.JS.Expression
 {
     internal class ToJsTernary : IExpression<string>
     {
-        private IExpression<string> conditional;
-        private IExpression<string> trueConditon;
-        private IExpression<string> falseCondition;
+        private readonly IExpression<string> condition;
+        private readonly IExpression<string> trueExpr;
+        private readonly IExpression<string> falseExpr;
 
-        public ToJsTernary(IMonad<string> monad, IExpression<string> conditional, IExpression<string> trueConditon, IExpression<string> falseCondition)
+        public ToJsTernary(IMonad<string> monad, IExpression<string> condition, IExpression<string> trueExpr, IExpression<string> falseExpr)
         {
             this.Monad = monad;
-            this.conditional = conditional;
-            this.trueConditon = trueConditon;
-            this.falseCondition = falseCondition;
+            this.condition = condition;
+            this.trueExpr = trueExpr;
+            this.falseExpr = falseExpr;
         }
 
         public IMonad<string> Monad { get; }
@@ -23,7 +23,7 @@ namespace VCEL.JS.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            return $"({conditional.Evaluate(context)} ? {trueConditon.Evaluate(context)} : {falseCondition.Evaluate(context)})";
+            return $"({condition.Evaluate(context)} ? {trueExpr.Evaluate(context)} : {falseExpr.Evaluate(context)})";
         }
     }
 }
