@@ -25,8 +25,11 @@ namespace VCEL.CSharp.CodeGen
 
         public object Evaluate(IContext<object> context)
         {
+            // converts context object into dynamic (expando) objects before invoking the mehod
+            // this is just for the convenience of unit testing
+            // This expression should not be used for performance testing since ToDynamic call is costly
+            // and we won't do this in actual production environment.
             return csharpMethod.Invoke(null, new[] {((ObjectContext<object>)context).Object.ToDynamic()});
-            // return csharpMethod.Invoke(null, new[] {((ObjectContext<object>)context).Object});
         }
     }
 }

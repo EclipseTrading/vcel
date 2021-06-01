@@ -22,7 +22,7 @@ namespace VCEL.Test
 
             var funcs2 = new DefaultCSharpFunctions();
             funcs2.Register("GetValue", (a, b) => $"Convert.ToDouble({a[1]})");
-            var parseResult2 = CSharpExpression.ParseNativeDynamic(exprString, funcs2);
+            var parseResult2 = CSharpExpression.ParseMethod(exprString, funcs2);
             var expr2 = parseResult2.Expression;
             var result2 = expr2.Evaluate(new { });
             Assert.That(result2, Is.EqualTo(expected));

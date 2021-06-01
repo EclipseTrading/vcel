@@ -4,12 +4,14 @@ using VCEL;
 using VCEL.Core.Helper;
 using VCEL.Core.Lang;
 using VCEL.CSharp;
+using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
 namespace Spel.Benchmark
 {
     using SpEx = IExpression;
     using VCEx = IExpression<object>;
+    using VCMaybeEx = IExpression<Maybe<object>>;
     using CSharpEx = IExpression<object>;
 
     [MemoryDiagnoser]
@@ -25,17 +27,20 @@ namespace Spel.Benchmark
         private static readonly SpEx SpelOrExpr = Expression.Parse(Expressions.Or);
         private static readonly SpEx SpelTernExpr = Expression.Parse(Expressions.Tern);
 
-        private static readonly IExpressionParser<object> vcelMonadParser = VCExpression.DefaultParser();
+        private static readonly VCEx VcelDefaultNotExpr = VCExpression.ParseDefault(Expressions.Not).Expression;
+        private static readonly VCEx VcelDefaultAndExpr = VCExpression.ParseDefault(Expressions.And).Expression;
+        private static readonly VCEx VcelDefaultOrExpr = VCExpression.ParseDefault(Expressions.Or).Expression;
+        private static readonly VCEx VcelDefaultTernExpr = VCExpression.ParseDefault(Expressions.Tern).Expression;
 
-        private static readonly VCEx VcelNotExpr = vcelMonadParser.Parse(Expressions.Not).Expression;
-        private static readonly VCEx VcelAndExpr = vcelMonadParser.Parse(Expressions.And).Expression;
-        private static readonly VCEx VcelOrExpr = vcelMonadParser.Parse(Expressions.Or).Expression;
-        private static readonly VCEx VcelTernExpr = vcelMonadParser.Parse(Expressions.Tern).Expression;
+        private static readonly VCMaybeEx VcelMaybeNotExpr = VCExpression.ParseMaybe(Expressions.Not).Expression;
+        private static readonly VCMaybeEx VcelMaybeAndExpr = VCExpression.ParseMaybe(Expressions.And).Expression;
+        private static readonly VCMaybeEx VcelMaybeOrExpr = VCExpression.ParseMaybe(Expressions.Or).Expression;
+        private static readonly VCMaybeEx VcelMaybeTernExpr = VCExpression.ParseMaybe(Expressions.Tern).Expression;
 
-        private static readonly CSharpEx CSharpNotExpr = CSharpExpression.ParseNative(Expressions.Not).Expression;
-        private static readonly CSharpEx CSharpAndExpr = CSharpExpression.ParseNative(Expressions.And).Expression;
-        private static readonly CSharpEx CSharpOrExpr = CSharpExpression.ParseNative(Expressions.Or).Expression;
-        private static readonly CSharpEx CSharpTernExpr = CSharpExpression.ParseNative(Expressions.Tern).Expression;
+        private static readonly CSharpEx CSharpNotExpr = CSharpExpression.ParseDelegate(Expressions.Not).Expression;
+        private static readonly CSharpEx CSharpAndExpr = CSharpExpression.ParseDelegate(Expressions.And).Expression;
+        private static readonly CSharpEx CSharpOrExpr = CSharpExpression.ParseDelegate(Expressions.Or).Expression;
+        private static readonly CSharpEx CSharpTernExpr = CSharpExpression.ParseDelegate(Expressions.Tern).Expression;
 
         [Benchmark]
         public void SpelNot() => EvalSpel(SpelNotExpr);
@@ -47,13 +52,22 @@ namespace Spel.Benchmark
         public void SpelTern() => EvalSpel(SpelTernExpr);
 
         [Benchmark]
-        public void VcelNot() => VcelNotExpr.Evaluate(Row);
+        public void VcelDefaultNot() => VcelDefaultNotExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelAnd() => VcelAndExpr.Evaluate(Row);
+        public void VcelDefaultAnd() => VcelDefaultAndExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelOr() => VcelOrExpr.Evaluate(Row);
+        public void VcelDefaultOr() => VcelDefaultOrExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelTern() => VcelTernExpr.Evaluate(Row);
+        public void VcelDefaultTern() => VcelDefaultTernExpr.Evaluate(Row);
+
+        [Benchmark]
+        public void VcelMaybeNot() => VcelMaybeNotExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeAnd() => VcelMaybeAndExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeOr() => VcelMaybeOrExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeTern() => VcelMaybeTernExpr.Evaluate(Row);
 
         [Benchmark]
         public void CSharpNot() => CSharpNotExpr.Evaluate(DynamicRow);

@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
+using VCEL;
 
 namespace Spel.Benchmark
 {
@@ -9,10 +10,10 @@ namespace Spel.Benchmark
             BenchmarkRunner.Run(new[]
             {
                 // BenchmarkConverter.TypeToBenchmarks(typeof(ParserBenchmarks)),
-                BenchmarkConverter.TypeToBenchmarks(typeof(ArithmeticEvaluatorBenchmarks)),
+                // BenchmarkConverter.TypeToBenchmarks(typeof(ArithmeticEvaluatorBenchmarks)),
                 // BenchmarkConverter.TypeToBenchmarks(typeof(LogicalEvaluatorBenchmarks)),
                 // BenchmarkConverter.TypeToBenchmarks(typeof(BasicEvaluatorBenchmarks)),
-                // BenchmarkConverter.TypeToBenchmarks(typeof(NestedTernaryEvaluatorBenchmarks))
+                BenchmarkConverter.TypeToBenchmarks(typeof(NestedTernaryEvaluatorBenchmarks))
             });
         }
     }

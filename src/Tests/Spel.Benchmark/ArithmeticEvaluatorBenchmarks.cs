@@ -4,12 +4,14 @@ using VCEL;
 using VCEL.Core.Helper;
 using VCEL.Core.Lang;
 using VCEL.CSharp;
+using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
 namespace Spel.Benchmark
 {
     using SpEx = IExpression;
     using VCEx = IExpression<object>;
+    using VCMaybeEx = IExpression<Maybe<object>>;
     using CSharpEx = IExpression<object>;
 
     [MemoryDiagnoser]
@@ -27,19 +29,24 @@ namespace Spel.Benchmark
         private static readonly SpEx SpelDivNullExpr = Expression.Parse(Expressions.DivNull);
         private static readonly SpEx SpelAbsExpr = Expression.Parse(Expressions.Abs);
 
-        private static readonly IExpressionParser<object> vcelMonadParser = VCExpression.DefaultParser();
+        private static readonly VCEx VcelDefaultAddExpr = VCExpression.ParseDefault(Expressions.Add).Expression;
+        private static readonly VCEx VcelDefaultSubExpr = VCExpression.ParseDefault(Expressions.Subtract).Expression;
+        private static readonly VCEx VcelDefaultDivExpr = VCExpression.ParseDefault(Expressions.Divide).Expression;
+        private static readonly VCEx VcelDefaultDiv0Expr = VCExpression.ParseDefault(Expressions.Div0).Expression;
+        private static readonly VCEx VcelDefaultDivNullExpr = VCExpression.ParseDefault(Expressions.DivNull).Expression;
+        private static readonly VCEx VcelDefaultAbsExpr = VCExpression.ParseDefault(Expressions.Abs).Expression;
 
-        private static readonly VCEx VcelAddExpr = vcelMonadParser.Parse(Expressions.Add).Expression;
-        private static readonly VCEx VcelSubExpr = vcelMonadParser.Parse(Expressions.Subtract).Expression;
-        private static readonly VCEx VcelDivExpr = vcelMonadParser.Parse(Expressions.Divide).Expression;
-        private static readonly VCEx VcelDiv0Expr = vcelMonadParser.Parse(Expressions.Div0).Expression;
-        private static readonly VCEx VcelDivNullExpr = vcelMonadParser.Parse(Expressions.DivNull).Expression;
-        private static readonly VCEx VcelAbsExpr = vcelMonadParser.Parse(Expressions.Abs).Expression;
+        private static readonly VCMaybeEx VcelMaybeAddExpr = VCExpression.ParseMaybe(Expressions.Add).Expression;
+        private static readonly VCMaybeEx VcelMaybeSubExpr = VCExpression.ParseMaybe(Expressions.Subtract).Expression;
+        private static readonly VCMaybeEx VcelMaybeDivExpr = VCExpression.ParseMaybe(Expressions.Divide).Expression;
+        private static readonly VCMaybeEx VcelMaybeDiv0Expr = VCExpression.ParseMaybe(Expressions.Div0).Expression;
+        private static readonly VCMaybeEx VcelMaybeDivNullExpr = VCExpression.ParseMaybe(Expressions.DivNull).Expression;
+        private static readonly VCMaybeEx VcelMaybeAbsExpr = VCExpression.ParseMaybe(Expressions.Abs).Expression;
 
-        private static readonly CSharpEx CSharpAddExpr = CSharpExpression.ParseNative(Expressions.Add).Expression;
-        private static readonly CSharpEx CSharpSubExpr = CSharpExpression.ParseNative(Expressions.Subtract).Expression;
-        private static readonly CSharpEx CSharpDivExpr = CSharpExpression.ParseNative(Expressions.Divide).Expression;
-        private static readonly CSharpEx CSharpAbsExpr = CSharpExpression.ParseNative(Expressions.Abs).Expression;
+        private static readonly CSharpEx CSharpAddExpr = CSharpExpression.ParseDelegate(Expressions.Add).Expression;
+        private static readonly CSharpEx CSharpSubExpr = CSharpExpression.ParseDelegate(Expressions.Subtract).Expression;
+        private static readonly CSharpEx CSharpDivExpr = CSharpExpression.ParseDelegate(Expressions.Divide).Expression;
+        private static readonly CSharpEx CSharpAbsExpr = CSharpExpression.ParseDelegate(Expressions.Abs).Expression;
 
         [Benchmark(Baseline = true)]
         public void SpelPlus() => EvalSpel(SpelAddExpr);
@@ -55,17 +62,30 @@ namespace Spel.Benchmark
         public void SpelAbs() => EvalSpel(SpelAbsExpr);
 
         [Benchmark]
-        public void VcelPlus() => VcelAddExpr.Evaluate(Row);
+        public void VcelDefaultPlus() => VcelDefaultAddExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelSubtract() => VcelSubExpr.Evaluate(Row);
+        public void VcelDefaultSubtract() => VcelDefaultSubExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelDivide() => VcelDivExpr.Evaluate(Row);
+        public void VcelDefaultDivide() => VcelDefaultDivExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelDiv0() => VcelDiv0Expr.Evaluate(Row);
+        public void VcelDefaultDiv0() => VcelDefaultDiv0Expr.Evaluate(Row);
         [Benchmark]
-        public void VcelDivNull() => VcelDivNullExpr.Evaluate(Row);
+        public void VcelDefaultDivNull() => VcelDefaultDivNullExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelAbs() => VcelAbsExpr.Evaluate(Row);
+        public void VcelDefaultAbs() => VcelDefaultAbsExpr.Evaluate(Row);
+
+        [Benchmark]
+        public void VcelMaybePlus() => VcelMaybeAddExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeSubtract() => VcelMaybeSubExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeDivide() => VcelMaybeDivExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeDiv0() => VcelMaybeDiv0Expr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeDivNull() => VcelMaybeDivNullExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelMaybeAbs() => VcelMaybeAbsExpr.Evaluate(Row);
 
         [Benchmark]
         public void CSharpPlus() => CSharpAddExpr.Evaluate(DynamicRow);
