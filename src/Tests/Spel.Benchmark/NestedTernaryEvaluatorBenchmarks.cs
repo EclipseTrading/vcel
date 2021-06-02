@@ -1,9 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Spring.Expressions;
 using VCEL;
+using VCEL.Core.Helper;
 using VCEL.Core.Lang;
 using VCEL.CSharp;
-using VCEL.Expression;
 using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
@@ -14,29 +14,34 @@ namespace Spel.Benchmark
     [RankColumn]
     public class NestedTernaryEvaluatorBenchmarks
     {
-        private static readonly ExpressionParser<Maybe<object>> vcelMonadParser =
-            new ExpressionParser<Maybe<object>>(new MaybeExpressionFactory(MaybeMonad.Instance));
         private static readonly IExpression SpelExpr = Expression.Parse(Expressions.NestedTernary1);
-        private static readonly IExpression<Maybe<object>> VcelExpr = vcelMonadParser.Parse(Expressions.NestedTernary1).Expression;
-        private static readonly IExpression<Maybe<object>> VcelExprLetGuard = vcelMonadParser.Parse(Expressions.LetGuard).Expression;
-        private static readonly IExpression<object> CSharpExprLetGuard = CSharpExpression.ParseNative(Expressions.LetGuard).Expression;
-        private static readonly CustomExpr customExpr = new CustomExpr();
+        private static readonly IExpression<Maybe<object>> VcelExpr = VCExpression.ParseMaybe(Expressions.NestedTernary1).Expression;
+        private static readonly IExpression<Maybe<object>> VcelExprLetGuard = VCExpression.ParseMaybe(Expressions.LetGuard).Expression;
+        private static readonly IExpression<object> CSharpExprLetGuard = CSharpExpression.ParseDelegate(Expressions.LetGuard).Expression;
+        private static readonly CustomExpr CustomExpr = new CustomExpr();
 
         // 1 Branch
         private static readonly TestRow Row1 = Row(1, false);
         private static readonly TestRow RowNeg1 = Row(1, true);
+        private static readonly object DynamicRow1 = Row(1, false).ToDynamic();
+        private static readonly object DynamicRowNeg1 = Row(1, true).ToDynamic();
         // 4 Branches
         private static readonly TestRow Row4 = Row(4, false);
         private static readonly TestRow RowNeg4 = Row(4, true);
+        private static readonly object DynamicRow4 = Row(4, false).ToDynamic();
+        private static readonly object DynamicRowNeg4 = Row(4, true).ToDynamic();
         // 8 Branches
         private static readonly TestRow Row8 = Row(8, false);
         private static readonly TestRow RowNeg8 = Row(8, true);
+        private static readonly object DynamicRow8 = Row(8, false).ToDynamic();
+        private static readonly object DynamicRowNeg8 = Row(8, true).ToDynamic();
         // Null
         private static readonly TestRow RowNull = new TestRow
         {
             P = null,
             O = null
         };
+        private static readonly object DynamicRowNull = Row(1, false).ToDynamic();
 
         [Benchmark(Baseline = true)]
         public void Spel1() => EvalSpel(Row1);
@@ -81,33 +86,33 @@ namespace Spel.Benchmark
         [Benchmark]
         public void VcelLetGuardNull() => VcelExprLetGuard.Evaluate(RowNull);
         [Benchmark]
-        public void Native1() => customExpr.Evaluate(Row1);
+        public void Native1() => CustomExpr.Evaluate(Row1);
         [Benchmark]
-        public void NativeNeg1() => customExpr.Evaluate(RowNeg1);
+        public void NativeNeg1() => CustomExpr.Evaluate(RowNeg1);
         [Benchmark]
-        public void Native4() => customExpr.Evaluate(Row4);
+        public void Native4() => CustomExpr.Evaluate(Row4);
         [Benchmark]
-        public void NativeNeg4() => customExpr.Evaluate(RowNeg4);
+        public void NativeNeg4() => CustomExpr.Evaluate(RowNeg4);
         [Benchmark]
-        public void Native8() => customExpr.Evaluate(Row8);
+        public void Native8() => CustomExpr.Evaluate(Row8);
         [Benchmark]
-        public void NativeNeg8() => customExpr.Evaluate(RowNeg8);
+        public void NativeNeg8() => CustomExpr.Evaluate(RowNeg8);
         [Benchmark]
-        public void NativeNull() => customExpr.Evaluate(RowNull);
+        public void NativeNull() => CustomExpr.Evaluate(RowNull);
         [Benchmark]
-        public void CSharpLetGuard1() => CSharpExprLetGuard.Evaluate(Row1);
+        public void CSharpLetGuard1() => CSharpExprLetGuard.Evaluate(DynamicRow1);
         [Benchmark]
-        public void CSharpLetGuardNeg1() => CSharpExprLetGuard.Evaluate(RowNeg1);
+        public void CSharpLetGuardNeg1() => CSharpExprLetGuard.Evaluate(DynamicRowNeg1);
         [Benchmark]
-        public void CSharpLetGuard4() => CSharpExprLetGuard.Evaluate(Row4);
+        public void CSharpLetGuard4() => CSharpExprLetGuard.Evaluate(DynamicRow4);
         [Benchmark]
-        public void CSharpLetGuardNeg4() => CSharpExprLetGuard.Evaluate(RowNeg4);
+        public void CSharpLetGuardNeg4() => CSharpExprLetGuard.Evaluate(DynamicRowNeg4);
         [Benchmark]
-        public void CSharpLetGuard8() => CSharpExprLetGuard.Evaluate(Row8);
+        public void CSharpLetGuard8() => CSharpExprLetGuard.Evaluate(DynamicRow8);
         [Benchmark]
-        public void CSharpLetGuardNeg8() => CSharpExprLetGuard.Evaluate(RowNeg8);
+        public void CSharpLetGuardNeg8() => CSharpExprLetGuard.Evaluate(DynamicRowNeg8);
         [Benchmark]
-        public void CSharpLetGuardNull() => CSharpExprLetGuard.Evaluate(RowNull);
+        public void CSharpLetGuardNull() => CSharpExprLetGuard.Evaluate(DynamicRowNull);
 
         private void EvalSpel(TestRow row)
         {
@@ -127,6 +132,5 @@ namespace Spel.Benchmark
                 O = 100.0
             };
         }
-
     }
 }

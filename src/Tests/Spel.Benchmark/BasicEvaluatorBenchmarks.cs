@@ -4,12 +4,14 @@ using VCEL;
 using VCEL.Core.Helper;
 using VCEL.Core.Lang;
 using VCEL.CSharp;
+using VCEL.Monad.Maybe;
 using VCEL.Test.Shared;
 
 namespace Spel.Benchmark
 {
     using SpEx = IExpression;
     using VCEx = IExpression<object>;
+    using VCMaybeEx = IExpression<Maybe<object>>;
     using CSharpEx = IExpression<object>;
 
     [MemoryDiagnoser]
@@ -29,25 +31,32 @@ namespace Spel.Benchmark
         private static readonly SpEx SpelExpr4 = Expression.Parse(Expressions.TestExpr4);
         private static readonly SpEx SpelExpr5 = Expression.Parse(Expressions.TestExpr5);
 
-        private static readonly IExpressionParser<object> vcelMonadParser = VCExpression.DefaultParser();
+        private static readonly VCEx VcelDefaultNowExpr = VCExpression.ParseDefault(Expressions.DateTime).Expression;
+        private static readonly VCEx VcelDefaultGetPropExpr = VCExpression.ParseDefault(Expressions.GetProp).Expression;
+        private static readonly VCEx VcelDefaultExpr0 = VCExpression.ParseDefault(Expressions.TestExpr0).Expression;
+        private static readonly VCEx VcelDefaultExpr1 = VCExpression.ParseDefault(Expressions.TestExpr1).Expression;
+        private static readonly VCEx VcelDefaultExpr2 = VCExpression.ParseDefault(Expressions.TestExpr2).Expression;
+        private static readonly VCEx VcelDefaultExpr3 = VCExpression.ParseDefault(Expressions.TestExpr3).Expression;
+        private static readonly VCEx VcelDefaultExpr4 = VCExpression.ParseDefault(Expressions.TestExpr4).Expression;
+        private static readonly VCEx VcelDefaultExpr5 = VCExpression.ParseDefault(Expressions.TestExpr5).Expression;
 
-        private static readonly VCEx VcelNowExpr = vcelMonadParser.Parse(Expressions.DateTime).Expression;
-        private static readonly VCEx VcelGetPropExpr = vcelMonadParser.Parse(Expressions.GetProp).Expression;
-        private static readonly VCEx VcelExpr0 = vcelMonadParser.Parse(Expressions.TestExpr0).Expression;
-        private static readonly VCEx VcelExpr1 = vcelMonadParser.Parse(Expressions.TestExpr1).Expression;
-        private static readonly VCEx VcelExpr2 = vcelMonadParser.Parse(Expressions.TestExpr2).Expression;
-        private static readonly VCEx VcelExpr3 = vcelMonadParser.Parse(Expressions.TestExpr3).Expression;
-        private static readonly VCEx VcelExpr4 = vcelMonadParser.Parse(Expressions.TestExpr4).Expression;
-        private static readonly VCEx VcelExpr5 = vcelMonadParser.Parse(Expressions.TestExpr5).Expression;
+        private static readonly VCMaybeEx VcelMaybeNowExpr = VCExpression.ParseMaybe(Expressions.DateTime).Expression;
+        private static readonly VCMaybeEx VcelMaybeGetPropExpr = VCExpression.ParseMaybe(Expressions.GetProp).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr0 = VCExpression.ParseMaybe(Expressions.TestExpr0).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr1 = VCExpression.ParseMaybe(Expressions.TestExpr1).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr2 = VCExpression.ParseMaybe(Expressions.TestExpr2).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr3 = VCExpression.ParseMaybe(Expressions.TestExpr3).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr4 = VCExpression.ParseMaybe(Expressions.TestExpr4).Expression;
+        private static readonly VCMaybeEx VcelMaybeExpr5 = VCExpression.ParseMaybe(Expressions.TestExpr5).Expression;
 
-        private static readonly CSharpEx CSharpNowExpr = CSharpExpression.ParseNative(Expressions.DateTime).Expression;
-        private static readonly CSharpEx CSharpGetPropExpr = CSharpExpression.ParseNative(Expressions.GetProp).Expression;
-        private static readonly CSharpEx CSharpExpr0 = CSharpExpression.ParseNative(Expressions.TestExpr0).Expression;
-        private static readonly CSharpEx CSharpExpr1 = CSharpExpression.ParseNative(Expressions.TestExpr1).Expression;
-        private static readonly CSharpEx CSharpExpr2 = CSharpExpression.ParseNative(Expressions.TestExpr2).Expression;
-        private static readonly CSharpEx CSharpExpr3 = CSharpExpression.ParseNative(Expressions.TestExpr3).Expression;
-        private static readonly CSharpEx CSharpExpr4 = CSharpExpression.ParseNative(Expressions.TestExpr4).Expression;
-        private static readonly CSharpEx CSharpExpr5 = CSharpExpression.ParseNative(Expressions.TestExpr5).Expression;
+        private static readonly CSharpEx CSharpNowExpr = CSharpExpression.ParseDelegate(Expressions.DateTime).Expression;
+        private static readonly CSharpEx CSharpGetPropExpr = CSharpExpression.ParseDelegate(Expressions.GetProp).Expression;
+        private static readonly CSharpEx CSharpExpr0 = CSharpExpression.ParseDelegate(Expressions.TestExpr0).Expression;
+        private static readonly CSharpEx CSharpExpr1 = CSharpExpression.ParseDelegate(Expressions.TestExpr1).Expression;
+        private static readonly CSharpEx CSharpExpr2 = CSharpExpression.ParseDelegate(Expressions.TestExpr2).Expression;
+        private static readonly CSharpEx CSharpExpr3 = CSharpExpression.ParseDelegate(Expressions.TestExpr3).Expression;
+        private static readonly CSharpEx CSharpExpr4 = CSharpExpression.ParseDelegate(Expressions.TestExpr4).Expression;
+        private static readonly CSharpEx CSharpExpr5 = CSharpExpression.ParseDelegate(Expressions.TestExpr5).Expression;
 
         [Benchmark]
         public void SpelNow() => EvalSpel(SpelNowExpr);
@@ -66,23 +75,41 @@ namespace Spel.Benchmark
         [Benchmark]
         public void SpelExp5() => EvalSpel(SpelExpr5);
 
+        [Benchmark]
+        public void VcelDefaultNow() => VcelDefaultNowExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultGetProp() => VcelDefaultGetPropExpr.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp0() => VcelDefaultExpr0.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp1() => VcelDefaultExpr1.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp2() => VcelDefaultExpr2.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp3() => VcelDefaultExpr3.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp4() => VcelDefaultExpr4.Evaluate(Row);
+        [Benchmark]
+        public void VcelDefaultExp5() => VcelDefaultExpr5.Evaluate(Row);
+
 
         [Benchmark]
-        public void VcelNow() => VcelNowExpr.Evaluate(Row);
+        public void VcelMaybeNow() => VcelMaybeNowExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelGetProp() => VcelGetPropExpr.Evaluate(Row);
+        public void VcelMaybeGetProp() => VcelMaybeGetPropExpr.Evaluate(Row);
         [Benchmark]
-        public void VcelExp0() => VcelExpr0.Evaluate(Row);
+        public void VcelMaybeExp0() => VcelMaybeExpr0.Evaluate(Row);
         [Benchmark]
-        public void VcelExp1() => VcelExpr1.Evaluate(Row);
+        public void VcelMaybeExp1() => VcelMaybeExpr1.Evaluate(Row);
         [Benchmark]
-        public void VcelExp2() => VcelExpr2.Evaluate(Row);
+        public void VcelMaybeExp2() => VcelMaybeExpr2.Evaluate(Row);
         [Benchmark]
-        public void VcelExp3() => VcelExpr3.Evaluate(Row);
+        public void VcelMaybeExp3() => VcelMaybeExpr3.Evaluate(Row);
         [Benchmark]
-        public void VcelExp4() => VcelExpr4.Evaluate(Row);
+        public void VcelMaybeExp4() => VcelMaybeExpr4.Evaluate(Row);
         [Benchmark]
-        public void VcelExp5() => VcelExpr5.Evaluate(Row);
+        public void VcelMaybeExp5() => VcelMaybeExpr5.Evaluate(Row);
+
 
         [Benchmark]
         public void CSharpNow() => CSharpNowExpr.Evaluate(DynamicRow);
