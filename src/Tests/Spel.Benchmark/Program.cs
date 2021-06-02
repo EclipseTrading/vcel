@@ -7,14 +7,7 @@ namespace Spel.Benchmark
     {
         public static void Main(string[] args)
         {
-            BenchmarkRunner.Run(new[]
-            {
-                // BenchmarkConverter.TypeToBenchmarks(typeof(ParserBenchmarks)),
-                // BenchmarkConverter.TypeToBenchmarks(typeof(ArithmeticEvaluatorBenchmarks)),
-                // BenchmarkConverter.TypeToBenchmarks(typeof(LogicalEvaluatorBenchmarks)),
-                // BenchmarkConverter.TypeToBenchmarks(typeof(BasicEvaluatorBenchmarks)),
-                BenchmarkConverter.TypeToBenchmarks(typeof(NestedTernaryEvaluatorBenchmarks))
-            });
+            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
         }
     }
 }
