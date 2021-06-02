@@ -52,7 +52,7 @@ jobs:
       run: dotnet nuget push VCEL.JS/bin/Release/VCEL.JS.${{ env.RELEASE_VERSION }}.nupkg --source "github"
     - name: Push GitHub Packages - VCEL.CSharp
       working-directory: src
-      run: dotnet nuget push VCEL.CSharp/bin/Release/VCEL.JS.${{ env.RELEASE_VERSION }}.nupkg --source "github"
+      run: dotnet nuget push VCEL.CSharp/bin/Release/VCEL.CSharp.${{ env.RELEASE_VERSION }}.nupkg --source "github"
     - name: Push GitHub Packages - VCEL.Cli
       working-directory: src
       run: dotnet nuget push VCEL.Cli/bin/Release/VCEL.Cli.${{ env.RELEASE_VERSION }}.nupkg --source "github"
