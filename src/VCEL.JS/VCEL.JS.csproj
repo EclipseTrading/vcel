@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Brian Flynn</Authors>
+    <Authors>Will Liu</Authors>
     <Company>Eclipse Trading</Company>
-    <Product>View Client Expression Language Extension</Product>
-    <Description>Extension package to VCEL</Description>
+    <Product>View Client Expression Language JavaScript Extension</Product>
+    <Description>An extention to VCEL that translates VCEL expressions into JavaScript code</Description>
     <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
@@ -14,12 +14,12 @@
   <ItemGroup>
     <ProjectReference Include="..\VCEL.Core\VCEL.Core.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>  
+  </ItemGroup>
 
 </Project>
