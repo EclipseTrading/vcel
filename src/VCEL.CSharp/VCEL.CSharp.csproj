@@ -3,6 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>7.3</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Jeff Weng</Authors>
+        <Company>Eclipse Trading</Company>
+        <Product>View Client Expression Language CSharp Extentsion</Product>
+        <Description>An extention to VCEL that translates VCEL expressions into CSharp code</Description>
+        <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +21,13 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0-3.final" />
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
       <PackageReference Include="System.CodeDom" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
     </ItemGroup>
 
 </Project>

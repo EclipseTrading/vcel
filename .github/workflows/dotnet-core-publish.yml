@@ -38,6 +38,9 @@ jobs:
     - name: Push NuGet - VCEL.JS
       working-directory: src
       run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.JS/bin/Release/VCEL.JS.${{ env.RELEASE_VERSION }}.nupkg
+    - name: Push NuGet - VCEL.CSharp
+      working-directory: src
+      run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.CSharp/bin/Release/VCEL.CSharp.${{ env.RELEASE_VERSION }}.nupkg
     - name: Push NuGet - VCEL.Cli
       working-directory: src
       run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.Cli/bin/Release/VCEL.Cli.${{ env.RELEASE_VERSION }}.nupkg
@@ -47,6 +50,9 @@ jobs:
     - name: Push GitHub Packages - VCEL.JS
       working-directory: src
       run: dotnet nuget push VCEL.JS/bin/Release/VCEL.JS.${{ env.RELEASE_VERSION }}.nupkg --source "github"
+    - name: Push GitHub Packages - VCEL.CSharp
+      working-directory: src
+      run: dotnet nuget push VCEL.CSharp/bin/Release/VCEL.CSharp.${{ env.RELEASE_VERSION }}.nupkg --source "github"
     - name: Push GitHub Packages - VCEL.Cli
       working-directory: src
       run: dotnet nuget push VCEL.Cli/bin/Release/VCEL.Cli.${{ env.RELEASE_VERSION }}.nupkg --source "github"

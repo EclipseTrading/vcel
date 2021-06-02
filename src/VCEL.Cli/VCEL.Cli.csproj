@@ -12,6 +12,13 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
+
+    <Authors>Aaron Bloom</Authors>
+    <Company>Eclipse Trading</Company>
+    <Product>View Client Expression Language CLI</Product>
+    <Description>A simple CLI tool is also included as a way to execute and test VCEL expressions easily from the command line.</Description>
+    <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +28,13 @@
   <ItemGroup>
     <ProjectReference Include="..\VCEL.Core\VCEL.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
 
 </Project>
