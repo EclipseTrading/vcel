@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CSharp.RuntimeBinder;
 using VCEL.Core.Expression.Impl;
@@ -15,7 +16,7 @@ namespace VCEL.CSharp.CodeGen
 {
     public static class CodeGenCSharpClass
     {
-        public static Type Generate(string name, string csharpExpr)
+        public static (Type, EmitResult) Generate(string name, string csharpExpr)
         {
             var src = GenerateFile(name, csharpExpr);
             return GenerateType(name, src);
@@ -51,7 +52,7 @@ namespace VCEL.CSharp.CodeGen
                     }}";
         }
 
-        private static Type GenerateType(string name, string src)
+        private static (Type, EmitResult) GenerateType(string name, string src)
         {
             var frameworkPath = Path.GetDirectoryName(typeof(Action).Assembly.Location);
             Debug.Assert(frameworkPath != null, nameof(frameworkPath) + " != null");
@@ -87,7 +88,7 @@ namespace VCEL.CSharp.CodeGen
                 var emitResult = compilation.Emit(ms);
                 if (!emitResult.Success)
                 {
-                    return null;
+                    return (null, emitResult);
                 }
 
                 image = ms.ToArray();
@@ -95,7 +96,7 @@ namespace VCEL.CSharp.CodeGen
 
             var assembly = Assembly.Load(image);
             var type = assembly.GetType($"VCEL.CSharp.CodeGen.{name}");
-            return type;
+            return (type, null);
         }
     }
 }
