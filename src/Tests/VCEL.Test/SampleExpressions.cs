@@ -61,7 +61,6 @@ namespace VCEL.Test
             Assert.That(parseResult.Success, Is.True);
 
             var expr = parseResult.Expression;
-
             var result = expr.Evaluate(new { });
             Assert.That(result.HasValue, Is.EqualTo(hasValue));
             if (hasValue)
@@ -156,6 +155,20 @@ namespace VCEL.Test
             {
                 var letGuardResult = parseResult.Expression.Evaluate(row);
                 Assert.That(letGuardResult, Is.EqualTo(expected).Within(0.000001));
+            }
+        }
+
+        [TestCase(null, null, 0)]
+        [TestCase(1.0, null, 1.0)]
+        [TestCase(null, 1.0, 1.0)]
+        [TestCase(1.0, 1.0, 2.0)]
+        public void NullCheckSum(double cpv, double ppv, double expected)
+        {
+            var row = new { cpv = cpv, ppv = ppv};
+            foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.NullCheckSum))
+            {
+                var result = parseResult.Expression.Evaluate(row);
+                Assert.That(result, Is.EqualTo(expected).Within(0.000001));
             }
         }
     }

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VCEL.Core\VCEL.Core.csproj" />
+    <ProjectReference Include="..\VCEL.CSharp\VCEL.CSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

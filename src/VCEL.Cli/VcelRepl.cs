@@ -1,8 +1,10 @@
 ﻿using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using VCEL.Core.Lang;
+using VCEL.CSharp;
 using VCEL.Monad.Maybe;
 
 namespace VCEL.Cli
@@ -153,6 +155,9 @@ namespace VCEL.Cli
                 case ".set":
                     AnsiConsole.MarkupLine($"{".set".FormatAsCommand()} command must define exactly one property name and optionally a history index");
                     break;
+                case ".parse" when inputParts.Length is 2:
+                    ParseCommand(inputParts[1]);
+                    break;
                 case ".list":
                     ListCommand();
                     break;
@@ -174,6 +179,7 @@ namespace VCEL.Cli
             AnsiConsole.MarkupLine(".exit".FormatAsHelpItem("Exits the application"));
             AnsiConsole.MarkupLine(".set".FormatAsHelpItem("Adds the most recent expression outcome as a named property", "NAME"));
             AnsiConsole.MarkupLine(".set".FormatAsHelpItem("Adds the expression outcome at the provided history index as a named property", "NAME", "INDEX"));
+            AnsiConsole.MarkupLine(".parse".FormatAsHelpItem("Parse expressions in the file into CSharp code. Display failed ones", "FILENAME"));
             AnsiConsole.MarkupLine(".list".FormatAsHelpItem("Shows a list of set properties; their names, values and types"));
             AnsiConsole.MarkupLine(".history".FormatAsHelpItem("Shows the history of evaluated expressions and their outcomes"));
             AnsiConsole.MarkupLine("\nInput is evaluated as an expression if not a command.");
@@ -189,6 +195,61 @@ namespace VCEL.Cli
             var value = history[history.Count - 1 - index];
             context[propertyName] = value.Outcome.Value;
             AnsiConsole.MarkupLine($"{propertyName.FormatAsOption()} = {value.Expression} = {value.Outcome.FormatAsValue()}");
+        }
+
+        private void ParseCommand(string filePath)
+        {
+            try
+            {
+                using (var file = new StreamReader(filePath))
+                {
+                    string? rawExpr;
+                    string processedExpr = "";
+                    while ((rawExpr = file.ReadLine()) != null)
+                    {
+                        try
+                        {
+                            processedExpr = rawExpr.Trim('\"');
+                            processedExpr = processedExpr.Replace(@"\r\n", string.Empty);
+                            processedExpr = string.IsNullOrWhiteSpace(processedExpr) ? "null" : processedExpr;
+
+                            var vcelResult = VCExpression.ParseMaybe(processedExpr);
+                            if (!vcelResult.Success)
+                            {
+                                AnsiConsole.MarkupLine("Failed to parse into VCEL expressions".FormatAsError());
+                                AnsiConsole.MarkupLine($"Raw Vcel expression:{$"{rawExpr}".FormatAsValue()}");
+                                AnsiConsole.MarkupLine($"Vcel expression:{$"{processedExpr}".FormatAsValue()}");
+                                foreach (var error in vcelResult.ParseErrors)
+                                    AnsiConsole.MarkupLine($"Error:{$"{error.Message}".FormatAsValue()}");
+                                AnsiConsole.MarkupLine("");
+                            }
+
+                            var csharpResult = CSharpExpression.ParseDelegate(processedExpr);
+                            if (!csharpResult.Success)
+                            {
+                                var csharpExpr = CSharpExpression.ParseCode(processedExpr).Expression.Evaluate(null);
+                                AnsiConsole.MarkupLine("Failed to compile CSharp code".FormatAsError());
+                                AnsiConsole.MarkupLine($"Raw Vcel expression:{$"{rawExpr}".FormatAsValue()}");
+                                AnsiConsole.MarkupLine($"Vcel expression:{$"{processedExpr}".FormatAsValue()}");
+                                AnsiConsole.MarkupLine($"CSharp expression:{$"{csharpExpr}".FormatAsValue()}");
+                                foreach (var error in csharpResult.ParseErrors)
+                                    AnsiConsole.MarkupLine($"Error:{$"{error.Message}".FormatAsValue()}");
+                                AnsiConsole.MarkupLine("");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            AnsiConsole.MarkupLine($"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                            AnsiConsole.WriteException(e);
+                            AnsiConsole.MarkupLine($"Vcel expression:{$"{processedExpr}".FormatAsValue()}");
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                AnsiConsole.MarkupLine( $"Failed to process {filePath}: {e.Message}");
+            }
         }
 
         private void ListCommand()

@@ -234,5 +234,7 @@ in match
 ";
         public const string VarFilter1 = "((BE != #BE and SE != #SE) and (fc == '2800' or fc == '2828'))";
 
+
+        public const string NullCheckSum = @"(cpv == null ? 0 : cpv ) + (ppv == null ? 0 : ppv)";
     }
 }

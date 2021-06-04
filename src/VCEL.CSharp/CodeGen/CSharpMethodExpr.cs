@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Reflection;
 using VCEL.Core.Helper;
-using VCEL.Expression;
 using VCEL.Monad;
 
 namespace VCEL.CSharp.CodeGen
 {
     public class CSharpMethodExpr : IExpression<object>
     {
-        private readonly MethodInfo csharpMethod;
+        private readonly MethodInfo method;
 
-        public CSharpMethodExpr(IMonad<object> monad, IExpression<string> expression)
+        public CSharpMethodExpr(IMonad<object> monad, MethodInfo method)
         {
             this.Monad = monad;
-            var csharpExpr = expression.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
-            var type = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr);
-            this.csharpMethod = type.GetMethod("Evaluate");
+            this.method = method;
         }
 
         public IMonad<object> Monad { get; }
@@ -29,7 +26,7 @@ namespace VCEL.CSharp.CodeGen
             // this is just for the convenience of unit testing
             // This expression should not be used for performance testing since ToDynamic call is costly
             // and we won't do this in actual production environment.
-            return csharpMethod.Invoke(null, new[] {((ObjectContext<object>)context).Object.ToDynamic()});
+            return method.Invoke(null, new[] {((ObjectContext<object>)context).Object.ToDynamic()});
         }
     }
 }
