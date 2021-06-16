@@ -1,12 +1,75 @@
 ﻿using System;
 using NUnit.Framework;
-using VCEL.Core.Lang;
 using VCEL.Test.Shared;
 
 namespace VCEL.Test
 {
     public class FunctionTests
     {
+        [TestCase("abs(null)", null)]
+        [TestCase("acos(null)", null)]
+        [TestCase("asin(null)", null)]
+        [TestCase("atan(null)", null)]
+        [TestCase("atan2(null, null)", null)]
+        [TestCase("ceiling(null)", null)]
+        [TestCase("cos(null)", null)]
+        [TestCase("cosh(null)", null)]
+        [TestCase("exp(null)", null)]
+        [TestCase("floor(null)", null)]
+        [TestCase("log(null)", null)]
+        [TestCase("log10(null)", null)]
+        [TestCase("pow(null, null)", null)]
+        [TestCase("round(null)", null)]
+        [TestCase("round(null, null)", null)]
+        [TestCase("sign(null)", null)]
+        [TestCase("sin(null)", null)]
+        [TestCase("sinh(null)", null)]
+        [TestCase("sqrt(null)", null)]
+        [TestCase("tan(null)", null)]
+        [TestCase("tanh(null)", null)]
+        [TestCase("truncate(null)", null)]
+        public void EvalNullDefaultFunction(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("abs(A)", null)]
+        [TestCase("acos(A)", null)]
+        [TestCase("asin(A)", null)]
+        [TestCase("atan(A)", null)]
+        [TestCase("atan2(A, A)", null)]
+        [TestCase("ceiling(A)", null)]
+        [TestCase("cos(A)", null)]
+        [TestCase("cosh(A)", null)]
+        [TestCase("exp(A)", null)]
+        [TestCase("floor(A)", null)]
+        [TestCase("log(A)", null)]
+        [TestCase("log10(A)", null)]
+        [TestCase("pow(A, A)", null)]
+        [TestCase("round(A)", null)]
+        [TestCase("round(A, A)", null)]
+        [TestCase("sign(A)", null)]
+        [TestCase("sin(A)", null)]
+        [TestCase("sinh(A)", null)]
+        [TestCase("sqrt(A)", null)]
+        [TestCase("tan(A)", null)]
+        [TestCase("tanh(A)", null)]
+        [TestCase("truncate(A)", null)]
+        public void EvalNullDependencyDefaultFunction(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { A = (object)null });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
         [TestCase("abs(1)", 1)]
         [TestCase("abs(-1)", 1)]
         [TestCase("abs(1.1)", 1.1)]
