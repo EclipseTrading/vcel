@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.JS;
@@ -7,7 +8,7 @@ namespace VCEL.Test
 {
     public class ToJsCodeTests
     {
-        private ExpressionParser<string> parser;
+        private readonly ExpressionParser<string> parser;
 
         public ToJsCodeTests()
         {
@@ -16,18 +17,22 @@ namespace VCEL.Test
         }
 
         [TestCase("fd.startsWith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
-        [TestCase("t == 'C'", "(vcelContext.t === 'C')")]
+        [TestCase("t == 'C'", "((vcelContext.t === null || vcelContext.t === void 0 ? void 0 : vcelContext.t.valueOf()) === 'C')")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
         [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp(/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm).test(vcelContext.code)")]
-        [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K === 'C') || (vcelContext.K === 'AC'))")]
+        [TestCase("(K == 'C' or K == 'AC')", "(((vcelContext.K === null || vcelContext.K === void 0 ? void 0 : vcelContext.K.valueOf()) === 'C') || ((vcelContext.K === null || vcelContext.K === void 0 ? void 0 : vcelContext.K.valueOf()) === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
-        [TestCase("s == 'ACTIVE'", "(vcelContext.s === 'ACTIVE')")]
+        [TestCase("s == 'ACTIVE'", "((vcelContext.s === null || vcelContext.s === void 0 ? void 0 : vcelContext.s.valueOf()) === 'ACTIVE')")]
         public void TestJsParser_ProdRulesExamples(string expr, string expected)
         {
+            
+            
             var result = parser.Parse(expr);
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
+            
+            Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
         }
 
@@ -88,8 +93,10 @@ namespace VCEL.Test
         [TestCase("a - b", "(vcelContext.a - vcelContext.b)")]
         [TestCase("a / b", "(vcelContext.a / vcelContext.b)")]
         [TestCase("a * b", "(vcelContext.a * vcelContext.b)")]
-        [TestCase("a == b", "(vcelContext.a === vcelContext.b)")]
-        [TestCase("a != b", "(vcelContext.a !== vcelContext.b)")]
+        // [TestCase("a == b", "(vcelContext.a === vcelContext.b)")]
+        // [TestCase("a != b", "(vcelContext.a !== vcelContext.b)")]
+        [TestCase("a == b", "((vcelContext.a === null || vcelContext.a === void 0 ? void 0 : vcelContext.a.valueOf()) === vcelContext.b)")]
+        [TestCase("a != b", "((vcelContext.a === null || vcelContext.a === void 0 ? void 0 : vcelContext.a.valueOf()) !== vcelContext.b)")]
         [TestCase("a ^ b", "(Math.pow(vcelContext.a, vcelContext.b))")]
         [TestCase("a and b", "(vcelContext.a && vcelContext.b)")]
         [TestCase("a or b", "(vcelContext.a || vcelContext.b)")]
@@ -101,7 +108,6 @@ namespace VCEL.Test
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
         }
-
 
         [TestCase("a ? b : c", "(vcelContext.a ? vcelContext.b : vcelContext.c)")]
         [TestCase("(a + b - c > 10) ? d : f", "((((vcelContext.a + vcelContext.b) - vcelContext.c) > 10) ? vcelContext.d : vcelContext.f)")]
@@ -185,6 +191,5 @@ namespace VCEL.Test
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
         }
-
     }
 }
