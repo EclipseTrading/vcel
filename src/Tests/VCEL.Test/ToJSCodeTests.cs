@@ -17,14 +17,14 @@ namespace VCEL.Test
         }
 
         [TestCase("fd.startsWith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
-        [TestCase("t == 'C'", "((vcelContext.t === null || vcelContext.t === void 0 ? void 0 : vcelContext.t.valueOf()) === 'C')")]
-        [TestCase("t == s", "((vcelContext.t === null || vcelContext.t === void 0 ? void 0 : vcelContext.t.valueOf()) === (vcelContext.s === null || vcelContext.s === void 0 ? void 0 : vcelContext.s.valueOf()))")]
-        [TestCase("t !== s", "((vcelContext.t === null || vcelContext.t === void 0 ? void 0 : vcelContext.t.valueOf()) !== (vcelContext.s === null || vcelContext.s === void 0 ? void 0 : vcelContext.s.valueOf()))")]
+        [TestCase("t == 'C'", "(vcelContext.t?.valueOf() === 'C')")]
+        [TestCase("t == s", "(vcelContext.t?.valueOf() === vcelContext.s?.valueOf())")]
+        [TestCase("t !== s", "(vcelContext.t?.valueOf() !== vcelContext.s?.valueOf())")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
         [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp(/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm).test(vcelContext.code)")]
-        [TestCase("(K == 'C' or K == 'AC')", "(((vcelContext.K === null || vcelContext.K === void 0 ? void 0 : vcelContext.K.valueOf()) === 'C') || ((vcelContext.K === null || vcelContext.K === void 0 ? void 0 : vcelContext.K.valueOf()) === 'AC'))")]
+        [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K?.valueOf() === 'C') || (vcelContext.K?.valueOf() === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
-        [TestCase("s == 'ACTIVE'", "((vcelContext.s === null || vcelContext.s === void 0 ? void 0 : vcelContext.s.valueOf()) === 'ACTIVE')")]
+        [TestCase("s == 'ACTIVE'", "(vcelContext.s?.valueOf() === 'ACTIVE')")]
         public void TestJsParser_ProdRulesExamples(string expr, string expected)
         {
             var result = parser.Parse(expr);
@@ -93,8 +93,8 @@ namespace VCEL.Test
         [TestCase("a - b", "(vcelContext.a - vcelContext.b)")]
         [TestCase("a / b", "(vcelContext.a / vcelContext.b)")]
         [TestCase("a * b", "(vcelContext.a * vcelContext.b)")]
-        [TestCase("a == b", "((vcelContext.a === null || vcelContext.a === void 0 ? void 0 : vcelContext.a.valueOf()) === (vcelContext.b === null || vcelContext.b === void 0 ? void 0 : vcelContext.b.valueOf()))")]
-        [TestCase("a != b", "((vcelContext.a === null || vcelContext.a === void 0 ? void 0 : vcelContext.a.valueOf()) !== (vcelContext.b === null || vcelContext.b === void 0 ? void 0 : vcelContext.b.valueOf()))")]
+        [TestCase("a == b", "(vcelContext.a?.valueOf() === vcelContext.b?.valueOf())")]
+        [TestCase("a != b", "(vcelContext.a?.valueOf() !== vcelContext.b?.valueOf())")]
         [TestCase("a ^ b", "(Math.pow(vcelContext.a, vcelContext.b))")]
         [TestCase("a and b", "(vcelContext.a && vcelContext.b)")]
         [TestCase("a or b", "(vcelContext.a || vcelContext.b)")]

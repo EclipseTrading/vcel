@@ -23,13 +23,13 @@ namespace VCEL.JS.Expression
         public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
 
         public string Evaluate(IContext<string> context) => 
-             $"({WrapValueOf(left, context)} {opName} {WrapValueOf(right, context)})";
+            $"({WrapValueOf(left, context)} {opName} {WrapValueOf(right, context)})";
 
         private static string WrapValueOf(IExpression<string> expression, IContext<string> context)
         {
             var value = expression.Evaluate(context);
             return expression is ToJsPropertyOp 
-                ? $"({value} === null || {value} === void 0 ? void 0 : {value}.valueOf())" 
+                ? $"{value}?.valueOf()" 
                 : value;
         }
     }
