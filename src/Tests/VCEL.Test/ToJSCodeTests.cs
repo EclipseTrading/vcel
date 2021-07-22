@@ -21,6 +21,13 @@ namespace VCEL.Test
         [TestCase("t == s", "(vcelContext.t?.valueOf() === vcelContext.s?.valueOf())")]
         [TestCase("t !== s", "(vcelContext.t?.valueOf() !== vcelContext.s?.valueOf())")]
         [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
+        [TestCase("(D > 123456789)", "(vcelContext.D > 123456789)")]
+        [TestCase("(D > 1234567890)", "(vcelContext.D > 1234567890)")]
+        [TestCase("(D > 12345678901)", "(vcelContext.D > 12345678901)")]
+        [TestCase("(D > 133148940000)", "(vcelContext.D > 133148940000)")]
+        [TestCase("(D > 133148940000000)", "(vcelContext.D > 133148940000000)")]
+        [TestCase("(D > 12345F)", "(vcelContext.D > 12345)")]
+        [TestCase("(D > 12345.67F)", "(vcelContext.D > 12345.67)")]
         [TestCase("code matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp(/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm).test(vcelContext.code)")]
         [TestCase("(K == 'C' or K == 'AC')", "((vcelContext.K?.valueOf() === 'C') || (vcelContext.K?.valueOf() === 'AC'))")]
         [TestCase("(a < t and a > 0)", "((vcelContext.a < vcelContext.t) && (vcelContext.a > 0))")]
@@ -29,9 +36,8 @@ namespace VCEL.Test
         {
             var result = parser.Parse(expr);
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
-
-            Assert.AreEqual(result.Success, true);
             
+            Assert.AreEqual(result.Success, true);
             Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
         }

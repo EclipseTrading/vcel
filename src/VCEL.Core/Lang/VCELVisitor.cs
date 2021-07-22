@@ -48,9 +48,19 @@ namespace VCEL.Core.Lang
                 : new ValueParseResult<T>(new ParseError($"Unable to parse '{f} as float", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
 
         public override ParseResult<T> VisitIntegerLiteral([NotNull] VCELParser.IntegerLiteralContext context)
-          => int.TryParse(context.GetText(), out var i)
-                ? new ValueParseResult<T>(exprFactory.Int(i), i)
-                : new ValueParseResult<T>(new ParseError($"Unable to parse {i} as int", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+        {
+            if (int.TryParse(context.GetText(), out var i))
+            {
+                return new ValueParseResult<T>(exprFactory.Int(i), i);
+            }
+
+            if (long.TryParse(context.GetText(), out var l))
+            {
+                return new ValueParseResult<T>(exprFactory.Long(l), l);
+            }
+
+            return new ValueParseResult<T>(new ParseError($"Unable to parse {i} as int", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
+        }
 
         public override ParseResult<T> VisitLongLiteral([NotNull] VCELParser.LongLiteralContext context)
             => long.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var l)
