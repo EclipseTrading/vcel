@@ -29,7 +29,7 @@ namespace VCEL.JS.Expression
         {
             var value = expression.Evaluate(context);
             return expression is ToJsPropertyOp 
-                ? $"{value}?.valueOf()" 
+                ? $"({value} === null ? null : {value}.valueOf())" 
                 : value;
         }
     }
