@@ -36,9 +36,9 @@ namespace VCEL.Test
         [TestCase(Expressions.ArithExpr16)]
         [TestCase(Expressions.ArithExpr17)]
         [TestCase(Expressions.ArithExpr18, true, 0)]
-        [TestCase(Expressions.ArithExpr19)]
-        [TestCase(Expressions.ArithExpr20)]
-        [TestCase(Expressions.ArithExpr21)]
+        [TestCase(Expressions.ArithExpr19, true, null)]
+        [TestCase(Expressions.ArithExpr20, true, null)]
+        [TestCase(Expressions.ArithExpr21, true, null)]
         [TestCase(Expressions.ArithExpr22)]
         [TestCase(Expressions.ArithExpr23)]
         [TestCase(Expressions.ArithExpr24)]
@@ -136,7 +136,7 @@ namespace VCEL.Test
         [TestCase(0.04, -1.0, 0.02)]
         public void Expr5Compare(double p, double o, double expected)
         {
-            var row = new {P = p, O = o};
+            var row = new { P = p, O = o };
             foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.TestExpr5))
             {
                 var result = parseResult.Expression.Evaluate(row);
@@ -150,7 +150,7 @@ namespace VCEL.Test
         [TestCase(0.04, -1.0, 0.02)]
         public void Expr5LetGuardCompare(double p, double o, double expected)
         {
-            var row = new {P = p, O = o};
+            var row = new { P = p, O = o };
             foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.TestExpr5LetGuard))
             {
                 var letGuardResult = parseResult.Expression.Evaluate(row);
@@ -164,7 +164,7 @@ namespace VCEL.Test
         [TestCase(1.0, 1.0, 2.0)]
         public void NullCheckSum(double cpv, double ppv, double expected)
         {
-            var row = new { cpv = cpv, ppv = ppv};
+            var row = new { cpv = cpv, ppv = ppv };
             foreach (var parseResult in CompositeExpression.ParseMultiple(Expressions.NullCheckSum))
             {
                 var result = parseResult.Expression.Evaluate(row);
