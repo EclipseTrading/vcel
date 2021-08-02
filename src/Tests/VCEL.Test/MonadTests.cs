@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Threading.Tasks;
+using VCEL.Core.Expression.Func;
 using VCEL.Core.Lang;
 using VCEL.Core.Monad.Tasks;
 using VCEL.Expression;
@@ -85,6 +86,27 @@ namespace VCEL.Test
             var expr = VCExpression.ParseMaybe("A / B / C * 100");
             var res = expr.Expression.Evaluate(new { A = 1.0, B = 1.0, C = double.NaN });
             Assert.That(res.Value, Is.EqualTo(double.NaN));
+        }
+
+        [Test]
+        public void FunctionWithNullArgumentTest()
+        {
+            var expr = VCExpression.ParseMaybe("max(1,2,3,null)");
+            var res = expr.Expression.Evaluate(new { });
+            Assert.That(res.Value, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void CustomFunctionWithNullArgumentsTest()
+        {
+            var func = new DefaultFunctions<Maybe<object>>();
+            func.Register("GetValue", (args, context) =>
+            {
+                return args[0];
+            });
+            var expr = VCExpression.ParseMaybe("GetValue(1, null, 3, null)", func);
+            var res = expr.Expression.Evaluate(new { });
+            Assert.That(res.Value, Is.EqualTo(1));
         }
     }
 }
