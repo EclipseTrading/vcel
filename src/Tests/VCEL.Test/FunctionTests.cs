@@ -119,6 +119,9 @@ namespace VCEL.Test
         [TestCase("min(null, null, 7)", 7)]
         [TestCase("min(null)", null)]
         [TestCase("min(null, null, null)", null)]
+        [TestCase("min(a)", 1.0)]
+        [TestCase("min(b)", null)]
+        [TestCase("min(a, b, c)", 1.0)]
         [TestCase("max(4, 3, 7)", 7)]
         [TestCase("max(4.5, 3.0, 7.5)", 7.5)]
         [TestCase("max('C', 'B', 'A')", "C")]
@@ -126,12 +129,15 @@ namespace VCEL.Test
         [TestCase("max(null, null, 7)", 7)]
         [TestCase("max(null)", null)]
         [TestCase("max(null, null, null)", null)]
+        [TestCase("max(a)", 1.0)]
+        [TestCase("max(b)", null)]
+        [TestCase("max(a, b, c)", 3.0)]
         public void EvalMinMaxFunction(string exprString, object expected)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
                 var expr = parseResult.Expression;
-                var result = expr.Evaluate(new { });
+                var result = expr.Evaluate(new { a = 1.0, b = (double?)null, c = 3.0 });
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
