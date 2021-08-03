@@ -41,15 +41,9 @@ namespace VCEL.Core.Expression.Impl
                 : Math.Pow(Convert.ToDouble(arg1), Convert.ToDouble(arg2));
         }
 
-        public static T Min<T>(params T[] args)
-        {
-            return args == null ? default : args.Min();
-        }
+        public static object Min(params object[] args) => args?.Min();
 
-        public static T Max<T>(params T[] args)
-        {
-            return args == null ? default : args.Max();
-        }
+        public static object Max(params object[] args) => args?.Max();
 
         public static double? Round(object arg1, object arg2 = null)
         {

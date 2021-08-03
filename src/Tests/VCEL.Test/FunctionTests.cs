@@ -86,12 +86,6 @@ namespace VCEL.Test
         [TestCase("floor(-0.5)", -1)]
         [TestCase("log(0.5)", -0.69314718055994529)]
         [TestCase("log10(0.5)", -0.3010299956639812)]
-        [TestCase("min(4, 3, 7)", 3)]
-        [TestCase("min(4.5, 3.1, 7.5)", 3.1)]
-        [TestCase("min('C', 'B', 'A')", "A")]
-        [TestCase("max(4, 3, 7)", 7)]
-        [TestCase("max(4.5, 3.1, 7.5)", 7.5)]
-        [TestCase("max('C', 'B', 'A')", "C")]
         [TestCase("pow(0.5, 2)", 0.25)]
         [TestCase("round(0.5)", 0)]
         [TestCase("round(0.6)", 1)]
@@ -108,12 +102,42 @@ namespace VCEL.Test
         [TestCase("truncate(0.5)", 0)]
         [TestCase("truncate(0.9)", 0)]
         [TestCase("truncate(-1.9)", -1)]
-        public void EvalDefaultFunction(string exprString, object expected)
+        public void EvalMathematicsFunction(string exprString, object expected)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
                 var expr = parseResult.Expression;
                 var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("min(4, 3, 7)", 3)]
+        [TestCase("min(4.5, 3.1, 7.5)", 3.1)]
+        [TestCase("min('C', 'B', 'A')", "A")]
+        [TestCase("min(4, null, 7)", 4)]
+        [TestCase("min(null, null, 7)", 7)]
+        [TestCase("min(null)", null)]
+        [TestCase("min(null, null, null)", null)]
+        [TestCase("min(a)", 1.0)]
+        [TestCase("min(b)", null)]
+        [TestCase("min(a, b, c)", 1.0)]
+        [TestCase("max(4, 3, 7)", 7)]
+        [TestCase("max(4.5, 3.0, 7.5)", 7.5)]
+        [TestCase("max('C', 'B', 'A')", "C")]
+        [TestCase("max(4, null, 7)", 7)]
+        [TestCase("max(null, null, 7)", 7)]
+        [TestCase("max(null)", null)]
+        [TestCase("max(null, null, null)", null)]
+        [TestCase("max(a)", 1.0)]
+        [TestCase("max(b)", null)]
+        [TestCase("max(a, b, c)", 3.0)]
+        public void EvalMinMaxFunction(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { a = 1.0, b = (double?)null, c = 3.0 });
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
