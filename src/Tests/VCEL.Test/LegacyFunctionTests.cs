@@ -33,7 +33,7 @@ namespace VCEL.Test
         [TestCase("-1 + -T(System.Math).Abs(-1)", -2)]
         [TestCase("-T(System.Math).Abs(-1) + -1", -2)]
         [TestCase("-T(System.Math).Abs(-1) + -T(System.Math).Abs(-1)", -2)]
-        public void EvalLegacyFunction(string exprString, object expected)
+        public void EvalLegacyAbsFunction(string exprString, object expected)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
@@ -42,6 +42,25 @@ namespace VCEL.Test
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
+
+        [TestCase("T(System.Math).Max(-1, 1)", 1)]
+        [TestCase("T(System.Math).Max(null, 1)", 1)]
+        [TestCase("T(System.Math).Max(1, null)", 1)]
+        [TestCase("T(System.Math).Max(1.0, null, 3.0)", 3.0)]
+        [TestCase("T(System.Math).Min(-1, 1)", -1)]
+        [TestCase("T(System.Math).Min(null, 1)", 1)]
+        [TestCase("T(System.Math).Min(1, null)", 1)]
+        [TestCase("T(System.Math).Min(1.0, null, 3.0)", 1.0)]
+        public void EvalLegacyMinMaxFunction(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
 
         [TestCase("T(System.DateTime).Today")]
         [TestCase("(T(System.DateTime).Today)")]
