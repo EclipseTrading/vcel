@@ -35,7 +35,7 @@ namespace VCEL.Expression
         IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset);
         IExpression<T> TimeSpan(TimeSpan timeSpan);
         IExpression<T> Set(ISet<object> set);
-        IExpression<T> Value(object o);
+        IExpression<T> Value(object? o);
 
         // Collections
         IExpression<T> List(IReadOnlyList<IExpression<T>> l);

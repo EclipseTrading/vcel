@@ -6,32 +6,32 @@ namespace VCEL.Core.Expression.Impl
 {
     public class ObjectMember<TMonad> : IExpression<TMonad>
     {
-        private readonly IExpression<TMonad> obj;
-        private readonly IExpression<TMonad> member;
+        public IExpression<TMonad> Obj { get; }
+        public IExpression<TMonad> Member { get; }
 
         public ObjectMember(IMonad<TMonad> monad, 
             IExpression<TMonad> obj, 
             IExpression<TMonad> member) 
         {
-            this.Monad = monad;
-            this.obj = obj;
-            this.member = member;
+            Monad = monad;
+            Obj = obj;
+            Member = member;
         }
 
         public IMonad<TMonad> Monad { get; }
 
         public IEnumerable<IDependency> Dependencies 
-            => obj.Dependencies.Union(member.Dependencies).Distinct();
+            => Obj.Dependencies.Union(Member.Dependencies).Distinct();
 
         public TMonad Evaluate(IContext<TMonad> context) 
         {
-            var mo = this.obj.Evaluate(context);
+            var mo = this.Obj.Evaluate(context);
             return Monad.Bind(mo, BindMember);
 
             TMonad BindMember(object o)
             {
                 return context.TryGetContext(o, out var c)
-                    ? member.Evaluate(c)
+                    ? Member.Evaluate(c)
                     : Monad.Unit;
             }
         }

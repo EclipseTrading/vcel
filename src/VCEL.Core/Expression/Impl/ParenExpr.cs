@@ -5,21 +5,21 @@ namespace VCEL.Core.Expression.Impl
 {
     public class ParenExpr<TMonad> : IExpression<TMonad>
     {
-        private readonly IExpression<TMonad> expr;
+        public IExpression<TMonad> Expr { get; }
 
         public ParenExpr(IMonad<TMonad> monad, IExpression<TMonad> expr)
         {
             Monad = monad;
-            this.expr = expr;
+            Expr = expr;
         }
 
         public IMonad<TMonad> Monad { get; }
 
-        public IEnumerable<IDependency> Dependencies => expr.Dependencies;
+        public IEnumerable<IDependency> Dependencies => Expr.Dependencies;
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            return expr.Evaluate(context);
+            return Expr.Evaluate(context);
         }
     }
 }

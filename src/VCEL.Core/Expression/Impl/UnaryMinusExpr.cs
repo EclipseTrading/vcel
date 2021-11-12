@@ -5,22 +5,23 @@ namespace VCEL.Core.Expression.Impl
 {
     public class UnaryMinusExpr<TMonad> : IExpression<TMonad>
     {
-        private readonly IExpression<TMonad> expr;
+        public IExpression<TMonad> Expr { get; }
+
         public UnaryMinusExpr(
            IMonad<TMonad> monad,
            IExpression<TMonad> expr)
         {
             Monad = monad;
-            this.expr = expr;
+            Expr = expr;
         }
 
         public IMonad<TMonad> Monad { get; }
 
-        public IEnumerable<IDependency> Dependencies => expr.Dependencies;
+        public IEnumerable<IDependency> Dependencies => Expr.Dependencies;
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            var result = expr.Evaluate(context);
+            var result = Expr.Evaluate(context);
             return Monad.Bind(result, Bind);
             TMonad Bind(object o)
                 => TryNegate(o, out var r) ? Monad.Lift(r) : Monad.Unit;

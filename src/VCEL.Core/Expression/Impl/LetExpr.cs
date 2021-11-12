@@ -7,26 +7,26 @@ namespace VCEL.Core.Expression.Impl
     public class LetExpr<TMonad> : IExpression<TMonad>
     {
         private readonly HashSet<string> bindingNames;
-        private readonly IReadOnlyList<(string, IExpression<TMonad>)> bindings;
-        private readonly IExpression<TMonad> expr;
+        public IReadOnlyList<(string, IExpression<TMonad>)> Bindings { get; }
+        public IExpression<TMonad> Expr { get; }
 
         public LetExpr(
             IMonad<TMonad> monad,
             IReadOnlyList<(string, IExpression<TMonad>)> bindings,
             IExpression<TMonad> expr)
         {
-            this.Monad = monad;
-            this.bindings = bindings;
-            this.expr = expr;
-            this.bindingNames = new HashSet<string>(bindings.Select(b => b.Item1));
+            Monad = monad;
+            Bindings = bindings;
+            Expr = expr;
+            bindingNames = new HashSet<string>(bindings.Select(b => b.Item1));
         }
 
         public IMonad<TMonad> Monad { get; }
 
         public IEnumerable<IDependency> Dependencies
-            => bindings
+            => Bindings
                 .SelectMany(b => b.Item2.Dependencies)
-                .Union(expr
+                .Union(Expr
                     .Dependencies
                     .Where(d => !(d is PropDependency p && bindingNames.Contains(p.Name))))
                 .Distinct();
@@ -34,12 +34,12 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var ctx = context;
-            foreach (var (name, exp) in bindings)
+            foreach (var (name, exp) in Bindings)
             {
                 var br = exp.Evaluate(ctx);
                 ctx = ctx.OverrideName(name, br);
             }
-            return expr.Evaluate(ctx);
+            return Expr.Evaluate(ctx);
         }
     }
 }
