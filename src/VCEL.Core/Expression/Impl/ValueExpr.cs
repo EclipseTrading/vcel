@@ -6,12 +6,12 @@ namespace VCEL.Core.Expression.Impl
 {
     public class ValueExpr<TMonad> : IExpression<TMonad>
     {
-        private readonly TMonad value;
+        public TMonad Value { get; }
 
         public ValueExpr(IMonad<TMonad> monad, object value)
         {
             Monad = monad;
-            this.value = Monad.Lift(value);
+            Value = Monad.Lift(value);
         }
 
         public IMonad<TMonad> Monad { get; }
@@ -20,7 +20,7 @@ namespace VCEL.Core.Expression.Impl
 
         public TMonad Evaluate(IContext<TMonad> _)
         {
-            return value;
+            return Value;
         }
     }
 }

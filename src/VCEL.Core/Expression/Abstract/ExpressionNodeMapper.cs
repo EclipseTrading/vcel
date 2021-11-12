@@ -84,7 +84,7 @@ namespace VCEL.Core.Expression.Abstract
                 ParenExpr<T> e => new Paren(ToExpressionNode(e.Expr)),
                 Property<T> e => new Property(e.Name),
                 FunctionExpr<T> e => new Function(e.Name, e.Args.Select(ToExpressionNode).ToArray()),
-                UnaryMinusExpr<T> e => new UnaryMinus(ToExpressionNode(e.Expression)),
+                UnaryMinusExpr<T> e => new UnaryMinus(ToExpressionNode(e.Expr)),
                 NullExpr<T> _ => new Null(),
                 EqExpr<T> e => new Eq(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 NotEqExpr<T> e => new NotEq(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
