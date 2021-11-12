@@ -32,7 +32,7 @@ namespace VCEL.Core.Expression.Impl
             return Monad.Bind(lv, values, EvaluateBetween);
         }
 
-        private T EvaluateBetween(object l, object v)
+        private T EvaluateBetween(object? l, object v)
         {
             if (l is IComparable left && v is IList list && list.Count == 2)
             {
@@ -40,7 +40,7 @@ namespace VCEL.Core.Expression.Impl
                 {
                     return Monad.Bind(f, s, EvaluateBetweenItems);
 
-                    T EvaluateBetweenItems(object first, object second)
+                    T EvaluateBetweenItems(object? first, object? second)
                     {
                         int frCmp = -1;
                         int toCmp = 1;

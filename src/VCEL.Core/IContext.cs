@@ -1,4 +1,5 @@
-﻿using VCEL.Monad;
+﻿using System.Diagnostics.CodeAnalysis;
+using VCEL.Monad;
 
 namespace VCEL
 {
@@ -7,7 +8,7 @@ namespace VCEL
         bool TryGetAccessor(string propName, out IValueAccessor<T> accessor);
         IContext<T> OverrideName(string name, T br);
         IMonad<T> Monad { get; }
-        bool TryGetContext(object o, out IContext<T> context);
+        bool TryGetContext(object? o, [NotNullWhen(true)] out IContext<T>? context);
         T Value { get; }
     }
 }

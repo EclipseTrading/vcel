@@ -51,7 +51,7 @@ namespace VCEL.Core.Expression.Func
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
         }
 
-        public Function<T> GetFunction(string name)
+        public Function<T>? GetFunction(string name)
         {
             return functions.TryGetValue(name.ToLower(), out var f) ? f : null;
         }
@@ -61,33 +61,33 @@ namespace VCEL.Core.Expression.Func
             return functions.ContainsKey(name.ToLower());
         }
 
-        public void Register(string name, Func<object[], IContext<T>, object> func)
+        public void Register(string name, Func<object?[], IContext<T>, object?> func)
         {
             Register(name, func, new FuncDependency(name));
         }
 
-        public void Register(string name, Func<object[], object> func)
+        public void Register(string name, Func<object?[], object?> func)
         {
             Register(name, (args, _) => func(args), new FuncDependency(name));
         }
 
-        public void RegisterEnsureOneArg(string name, Func<object, object> func)
+        public void RegisterEnsureOneArg(string name, Func<object?, object?> func)
         {
-            Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+            Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args?[0]), new FuncDependency(name));
         }
 
-        public void RegisterEnsureTwoArgs(string name, Func<object, object, object> func)
+        public void RegisterEnsureTwoArgs(string name, Func<object?, object?, object?> func)
         {
             Register(name, (args, _) => args.Length != 2 || (args[0] == null || args[1] == null) ? null : func(args[0], args[1]),
                 new FuncDependency(name));
         }
 
-        protected void Register(string name, Func<object[], IContext<T>, object> func, params IDependency[] deps)
+        protected void Register(string name, Func<object?[], IContext<T>, object?> func, params IDependency[] deps)
         {
             functions[name.ToLower()] = new Function<T>(func, deps);
         }
 
-        protected void Register(string name, Func<object[], object> func, params IDependency[] deps)
+        protected void Register(string name, Func<object?[], object?> func, params IDependency[] deps)
         {
             functions[name.ToLower()] = new Function<T>((args, _) => func(args), deps);
         }

@@ -7,12 +7,12 @@ namespace VCEL.Core.Expression.Impl
     public class GuardExpr<TMonad> : IExpression<TMonad>
     {
         public IReadOnlyList<(IExpression<TMonad> Cond, IExpression<TMonad> Res)> Clauses { get; }
-        public IExpression<TMonad> Otherwise { get; }
+        public IExpression<TMonad>? Otherwise { get; }
 
         public GuardExpr(
             IMonad<TMonad> monad,
             IReadOnlyList<(IExpression<TMonad>, IExpression<TMonad>)> clauses,
-            IExpression<TMonad> otherwise)
+            IExpression<TMonad>? otherwise)
         {
             Monad = monad;
             Clauses = clauses;

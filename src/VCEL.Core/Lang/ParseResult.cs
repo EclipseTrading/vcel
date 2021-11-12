@@ -22,7 +22,7 @@ namespace VCEL.Core.Lang
             : this((IReadOnlyList<ParseError>)errors) { }
 
         public bool Success { get; protected set; }
-        public IExpression<T> Expression { get; protected set; }
+        public IExpression<T>? Expression { get; protected set; }
         public IReadOnlyList<ParseError> ParseErrors { get; protected set; }
 
     }

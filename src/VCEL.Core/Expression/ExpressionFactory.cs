@@ -10,7 +10,7 @@ namespace VCEL.Expression
     {
         public ExpressionFactory(
             IMonad<T> monad,
-            IFunctions<T> functions = null)
+            IFunctions<T>? functions = null)
         {
             Monad = monad;
             Functions = functions ?? new DefaultFunctions<T>();
@@ -32,7 +32,7 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Guard(
             IReadOnlyList<(IExpression<T>, IExpression<T>)> guardClauses,
-            IExpression<T> otherwise = null)
+            IExpression<T>? otherwise = null)
             => new GuardExpr<T>(Monad, guardClauses, otherwise);
 
         public virtual IExpression<T> LessThan(IExpression<T> l, IExpression<T> r)
@@ -62,7 +62,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan)
             => Value(timeSpan);
         public virtual IExpression<T> Set(ISet<object> s) => Value(s);
-        public virtual IExpression<T> Value(object o)
+        public virtual IExpression<T> Value(object? o)
             => new ValueExpr<T>(Monad, o);
 
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)

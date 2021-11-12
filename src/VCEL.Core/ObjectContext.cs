@@ -7,9 +7,9 @@ namespace VCEL
     {
         public IMonad<TMonad> Monad { get; }
 
-        public object Object { get; }
+        public object? Object { get; }
 
-        public ObjectContext(IMonad<TMonad> monad, object obj)
+        public ObjectContext(IMonad<TMonad> monad, object? obj)
         {
             Monad = monad;
             Object = obj;
@@ -25,7 +25,7 @@ namespace VCEL
             accessor = new PropertyValueAccessor<TMonad>(Monad, propName);
             return true;
         }
-        public virtual bool TryGetContext(object o, out IContext<TMonad> context)
+        public virtual bool TryGetContext(object? o, out IContext<TMonad> context)
         {
             context = new ObjectContext<TMonad>(Monad, o);
             return true;

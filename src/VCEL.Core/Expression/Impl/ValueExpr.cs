@@ -8,7 +8,7 @@ namespace VCEL.Core.Expression.Impl
     {
         public TMonad Value { get; }
 
-        public ValueExpr(IMonad<TMonad> monad, object value)
+        public ValueExpr(IMonad<TMonad> monad, object? value)
         {
             Monad = monad;
             Value = Monad.Lift(value);

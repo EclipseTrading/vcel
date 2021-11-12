@@ -6,7 +6,7 @@ namespace VCEL
     public class PropertyValueAccessor<TMonad> : IValueAccessor<TMonad>
     {
         private bool propSet = false;
-        private PropertyInfo prop;
+        private PropertyInfo? prop;
         private readonly IMonad<TMonad> monad;
         private readonly string propName;
 
@@ -19,7 +19,7 @@ namespace VCEL
         public TMonad GetValue(IContext<TMonad> context)
         {
             var oc = context as ObjectContext<TMonad>;
-            var type = oc.Object?.GetType();
+            var type = oc?.Object?.GetType();
             if (!propSet || prop?.DeclaringType != type)
             {
                 prop = type?.GetProperty(propName);
@@ -27,7 +27,7 @@ namespace VCEL
             }
             return prop == null
                 ? monad.Unit
-                : monad.Lift(prop?.GetValue(oc.Object));
+                : monad.Lift(prop?.GetValue(oc?.Object));
         }
     }
 }

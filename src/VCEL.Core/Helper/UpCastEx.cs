@@ -4,7 +4,7 @@ namespace VCEL.Core.Helper
 {
     public static class UpCastEx
     {
-        public static bool UpCast(ref object l, ref object r)
+        public static bool UpCast(ref object? l, ref object? r)
         {
             switch(l)
             {

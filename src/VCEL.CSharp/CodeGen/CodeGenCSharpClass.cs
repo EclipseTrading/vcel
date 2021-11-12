@@ -16,7 +16,7 @@ namespace VCEL.CSharp.CodeGen
 {
     public static class CodeGenCSharpClass
     {
-        public static (Type, EmitResult) Generate(string name, string csharpExpr)
+        public static (Type?, EmitResult) Generate(string name, string csharpExpr)
         {
             var src = GenerateFile(name, csharpExpr);
             return GenerateType(name, src);

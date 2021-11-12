@@ -9,14 +9,14 @@ namespace VCEL.CSharp.Expression
     internal class ToCSharpFunction : IExpression<string>
     {
         private readonly string name;
-        private readonly IReadOnlyList<IExpression<string>> args;
+        private readonly IReadOnlyList<IExpression<string>>? args;
         private readonly IFunctions<string> functions;
 
         public ToCSharpFunction(
             IMonad<string> monad,
             string name,
-            IReadOnlyList<IExpression<string>> args,
-            IFunctions<string> functions)
+            IReadOnlyList<IExpression<string>>? args,
+            IFunctions<string>? functions)
         {
             this.Monad = monad;
             this.name = name;
@@ -33,7 +33,7 @@ namespace VCEL.CSharp.Expression
             if (functions.HasFunction(name.ToLower()))
             {
                 var function = functions.GetFunction(name.ToLower());
-                return function.Func.Invoke(args?.Select(s => (object)s.Evaluate(context))?.ToArray(), context).ToString();
+                return function.Func.Invoke(args?.Select(s => (object?)s.Evaluate(context))?.ToArray(), context).ToString();
             }
 
             // TODO should return missing function

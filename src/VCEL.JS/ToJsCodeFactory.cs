@@ -12,7 +12,7 @@ namespace VCEL.JS
     {
         public ToJsCodeFactory(
             IMonad<string> monad,
-            IFunctions<string> functions = null)
+            IFunctions<string>? functions = null)
             : base(monad, functions)
         {
         }
@@ -23,7 +23,7 @@ namespace VCEL.JS
         public override IExpression<string> Let(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
             => new ToJsLetExpr(Monad, bindings, expr);
 
-        public override IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string> otherwise = null)
+        public override IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string>? otherwise = null)
             => new ToJsGuardExpr(Monad, guardClauses, otherwise);
 
         public override IExpression<string> In(IExpression<string> l, ISet<object> set)

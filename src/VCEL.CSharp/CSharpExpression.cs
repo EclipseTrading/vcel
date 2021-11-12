@@ -13,7 +13,7 @@ namespace VCEL.CSharp
     public static class CSharpExpression
     {
         // For functional testing
-        public static ParseResult<string> ParseCode(string exprString, IFunctions<string> functions = null)
+        public static ParseResult<string> ParseCode(string exprString, IFunctions<string>? functions = null)
         {
             var parseResult = CSharpParser(functions).Parse(exprString);
             if (!parseResult.Success)
@@ -69,7 +69,7 @@ namespace VCEL.CSharp
             return new ParseResult<object>(new CSharpDelegateExpr(null, func));
         }
 
-        private static IExpressionParser<string> CSharpParser(IFunctions<string> functions = null)
+        private static IExpressionParser<string> CSharpParser(IFunctions<string>? functions = null)
             => new ExpressionParser<string>(
                 new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
     }
