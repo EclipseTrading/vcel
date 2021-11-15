@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.JS;
@@ -16,6 +16,9 @@ namespace VCEL.Test
             parser = new ExpressionParser<string>(jsParserfactory);
         }
 
+        [TestCase("_row.day / 365 + Increment", "((vcelContext._row.day / 365) + vcelContext.Increment)")]
+        [TestCase("let x = (3.0 * (_row.A > 0 ? _row.A: 1) / 100) in (Get('B', 'C') * (1- 2.718^(-x)))/x * D",
+            "(() => {let x = ((3 * ((vcelContext._row.A > 0) ? vcelContext._row.A : 1)) / 100); return ((((Get('B','C')) * (1 - (Math.pow(2.718, -x)))) / x) * vcelContext.D);})()")]
         [TestCase("fd.startsWith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
         [TestCase("t == 'C'", "((vcelContext.t?.valueOf() ?? null) === 'C')")]
         [TestCase("t == s", "((vcelContext.t?.valueOf() ?? null) === (vcelContext.s?.valueOf() ?? null))")]
@@ -38,7 +41,7 @@ namespace VCEL.Test
         {
             var result = parser.Parse(expr);
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
-            
+
             Assert.AreEqual(result.Success, true);
             Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
@@ -63,6 +66,21 @@ namespace VCEL.Test
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
+            Assert.AreEqual(expected, parsedExpr);
+        }
+
+        [TestCase("!value.a.b.c", "!vcelContext.value.a.b.c")]
+        [TestCase("-value.a.b.c", "-vcelContext.value.a.b.c")]
+        [TestCase("value.a.b.c", "vcelContext.value.a.b.c")]
+        [TestCase("value.a.b.c > 100", "(vcelContext.value.a.b.c > 100)")]
+        [TestCase("value.a.b.c.startsWith('AAA')", "(vcelContext.value.a.b.c ? vcelContext.value.a.b.c.startsWith('AAA') : false)")]
+        public void TestJsPropertyAccess(string expr, string expected)
+        {
+            var result = parser.Parse(expr);
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+
+            Assert.AreEqual(result.Success, true);
+            Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
         }
 

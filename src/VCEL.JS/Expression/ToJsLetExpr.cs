@@ -28,7 +28,8 @@ namespace VCEL.JS.Expression
                 .Distinct()
                 .ToDictionary(p => p, p => new Func<string>(() => p));
 
-            var jsContext = new JsObjectContext(Monad, context.Value, propFuncs);
+            var originalContext = context as JsObjectContext;
+            var jsContext = new JsObjectContext(Monad, originalContext?.Object ?? context.Value, propFuncs);
 
             var letCauses = this.bindings.Select(b => $"let {b.Item1} = {b.Item2.Evaluate(jsContext)}");
             var returnCause = this.expr.Evaluate(jsContext);

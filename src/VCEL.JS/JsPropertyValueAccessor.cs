@@ -47,12 +47,10 @@ namespace VCEL.JS
                 finalPropOrMethod = jsDateMethod;
             }
 
-            if (context.Value.Contains(Constants.DefaultContext))
-                return $"{Constants.DefaultContext}.{finalPropOrMethod}";
-
-            return monad.Lift(context.Value == "{ }"
-                ? $"{Constants.DefaultContext}.{finalPropOrMethod}"
-                : $"{context.Value}.{finalPropOrMethod}");
+            var jsObjContext = context as JsObjectContext;
+            return monad.Lift(jsObjContext?.Object is string
+                ? $"{context.Value}.{finalPropOrMethod}"
+                : $"{Constants.DefaultContext}.{finalPropOrMethod}");
         }
     }
 }
