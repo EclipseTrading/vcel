@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Threading.Tasks;
+using VCEL.Core.Expression;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Lang;
 using VCEL.Core.Monad.Tasks;
@@ -58,16 +59,55 @@ namespace VCEL.Test
             Assert.That(result, Is.EqualTo(1.5).Within(0.000000001));
         }
 
-        [Test]
-        public void ToStringM()
+        [TestCase("A + 0.5 + 0.5")]
+        [TestCase("1 + 1 == 2")]
+        [TestCase("(1 + 1) == 2")]
+        [TestCase("2 == 2")]
+        [TestCase("true == true")]
+        [TestCase("1 + 1")]
+        [TestCase("'hello' + 'world'")]
+        [TestCase("-(1)")]
+        [TestCase("column1 between { 1, 42 }")]
+        [TestCase("column1 between { 1, 42 } ? 'a' : 'b'")]
+        [TestCase("one == 1 ? 'a' : 'b'")]
+        [TestCase("column1 in { 1, 2, 3, 4 }")]
+        [TestCase("true and true")]
+        [TestCase("@2020-01-01T09:00:00.123+08:00")]
+        [TestCase("@2020-01-01T09:00:00.123+00:00")]
+        [TestCase("09:00:00.123")]
+        [TestCase("42.09:00:00.123")]
+        [TestCase("1.00:00:00.000")]
+        [TestCase("func(1, 2, 'hello')")]
+        [TestCase(@"match
+| value < 1 = 0
+| value < 10 = 5
+| value < 100 = 50
+| otherwise value / 2")]
+        [TestCase(@"let
+    ud = PosSwimDelta / OptionEquivalentSplitPosition,
+    d = (ud < 0 ? abs(ud) : 1 - abs(ud))
+in match
+| d <= 0.03 = 0.01
+| d <= 0.1 = 0.05
+| d <= 0.225 = 0.15
+| d <= 0.4 = 0.3
+| d <= 0.6 = 0.5
+| d <= 0.775 = 0.7
+| d <= 0.9 = 0.85
+| d <= 0.97 = 0.95
+| otherwise 0.99")]
+        public void ToStringM(string expression)
         {
-            var exprFactory = new ToStringExpressionFactory<object>(ConcatStringMonad.Instance);
+            var exprFactory = new ToStringExpressionFactory(ConcatStringMonad.Instance);
 
             var parser = new ExpressionParser<string>(exprFactory);
-            var expr = parser.Parse("A + 0.5 + 0.5").Expression;
+            var parsed = parser.Parse(expression);
+            Assert.That(parsed.Success, string.Join('\n', parsed.ParseErrors), Is.True);
+
+            var expr = parsed.Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
-            Assert.That(result, Is.EqualTo("A + 0.5 + 0.5"));
+            Assert.That(result, Is.EqualTo(expression));
         }
 
         [Test]
