@@ -12,6 +12,7 @@ namespace VCEL.Core.Expression
     public class ToStringExpressionFactory : IExpressionFactory<string>
     {
         private readonly IMonad<string> monad;
+        private const string Indent = "    ";
 
         public ToStringExpressionFactory(IMonad<string> monad)
         {
@@ -49,8 +50,8 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)>(
                 monad, (bindings, expr), (value, context) =>
                 {
-                    var bindingsString = string.Join(",\r\n    ", bindings.Select(b => $"{b.Item1} = {b.Item2.Evaluate(context)}"));
-                    return $"{P.TokenName(P.LET)}\r\n    {bindingsString}\r\n{P.TokenName(P.IN)} {expr.Evaluate(context)}";
+                    var bindingsString = string.Join($",\r\n{Indent}", bindings.Select(b => $"{b.Item1} = {b.Item2.Evaluate(context)}"));
+                    return $"{P.TokenName(P.LET)}\r\n{Indent}{bindingsString}\r\n{P.TokenName(P.IN)} {expr.Evaluate(context)}";
                 });
 
         public IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses,
