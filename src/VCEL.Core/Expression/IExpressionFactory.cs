@@ -59,9 +59,5 @@ namespace VCEL.Expression
         IExpression<T> Eq(IExpression<T> l, IExpression<T> r);
         IExpression<T> NotEq(IExpression<T> l, IExpression<T> r);
         IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr);
-        IExpression<T> This();
-
-        IExpression<T> Now();
-        IExpression<T> Today();
     }
 }

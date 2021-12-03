@@ -113,11 +113,5 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
             => new ObjectMember<T>(Monad, obj, memberExpr);
-
-        public virtual IExpression<T> Now() => Value(DateTime.Now);
-
-        public virtual IExpression<T> Today() => Value(DateTime.Today);
-
-        public IExpression<T> This() => new ThisExpr<T>(Monad);
     }
 }

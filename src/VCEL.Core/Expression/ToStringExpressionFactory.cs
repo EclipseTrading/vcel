@@ -162,14 +162,5 @@ namespace VCEL.Core.Expression
         public IExpression<string> Member(IExpression<string> obj, IExpression<string> memberExpr)
             => new ToStringValueExpr<(IExpression<string> obj, IExpression<string> memberExpr)>(monad, (obj, memberExpr),
                 (value, context) => $"{value.obj.Evaluate(context)}{P.TokenName(P.DOT)}{value.memberExpr.Evaluate(context)}");
-
-        public IExpression<string> This()
-            => throw new NotImplementedException("This");
-
-        public IExpression<string> Now()
-            => throw new NotImplementedException("Now");
-
-        public IExpression<string> Today()
-            => throw new NotImplementedException("Today");
     }
 }

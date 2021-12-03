@@ -113,11 +113,5 @@ namespace VCEL.CSharp
         // This makes sure double value doesn't get down casted implicitly to integer.
         public override IExpression<string> Double(double d)
             => new ToCSharpStringOp((context) => $"{d:0.0#######################}", Monad);
-
-        public override IExpression<string> Now()
-            => new ToCSharpFunction(Monad, "now", null, null);
-
-        public override IExpression<string> Today()
-            => new ToCSharpFunction(Monad, "today", null, null);
     }
 }
