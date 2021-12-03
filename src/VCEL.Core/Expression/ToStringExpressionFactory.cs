@@ -50,8 +50,8 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)>(
                 monad, (bindings, expr), (value, context) =>
                 {
-                    var bindingsString = string.Join($",\r\n{Indent}", bindings.Select(b => $"{b.Item1} = {b.Item2.Evaluate(context)}"));
-                    return $"{P.TokenName(P.LET)}\r\n{Indent}{bindingsString}\r\n{P.TokenName(P.IN)} {expr.Evaluate(context)}";
+                    var bindingsString = string.Join($",{Environment.NewLine}{Indent}", bindings.Select(b => $"{b.Item1} = {b.Item2.Evaluate(context)}"));
+                    return $"{P.TokenName(P.LET)}{Environment.NewLine}{Indent}{bindingsString}{Environment.NewLine}{P.TokenName(P.IN)} {expr.Evaluate(context)}";
                 });
 
         public IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses,
@@ -59,12 +59,12 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<(IReadOnlyList<(IExpression<string>, IExpression<string>)>, IExpression<string>? otherwise)>(monad,
                 (guardClauses, otherwise), (value, context) =>
                 {
-                    var matchClauses = string.Join("\r\n", guardClauses.Select(c =>
+                    var matchClauses = string.Join(Environment.NewLine, guardClauses.Select(c =>
                         $"{P.TokenName(P.BAR)} {c.Item1.Evaluate(context)} {P.TokenName(P.ASSIGN)} {c.Item2.Evaluate(context)}"));
                     var otherwiseClause = otherwise == null
                         ? string.Empty
                         : $"{P.TokenName(P.BAR)} {P.TokenName(P.OTHERWISE)} {otherwise.Evaluate(context)}";
-                    return $"{P.TokenName(P.MATCH)}\r\n{matchClauses}\r\n{otherwiseClause}";
+                    return $"{P.TokenName(P.MATCH)}{Environment.NewLine}{matchClauses}{Environment.NewLine}{otherwiseClause}";
                 });
 
         public IExpression<string> LessThan(IExpression<string> l, IExpression<string> r)

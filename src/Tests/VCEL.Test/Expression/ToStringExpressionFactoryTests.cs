@@ -89,15 +89,15 @@ namespace VCEL.Test.Expression
         {
             var outcome = factory.Let(new []{ ( "foo", factory.Property("bar") ) }, factory.Property("baz"));
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("let\r\n    foo = bar\r\nin baz"));
-        }
+            Assert.That(evaluated, Is.EqualTo($"let{Environment.NewLine}    foo = bar{Environment.NewLine}in baz"));
+       }
 
         [Test]
         public void ShouldCreateGuardExpression()
         {
             var outcome = factory.Guard(new []{(factory.Property("foo"), factory.Property("bar"))}, factory.Property("baz"));
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("match\r\n| foo = bar\r\n| otherwise baz"));
+            Assert.That(evaluated, Is.EqualTo($"match{Environment.NewLine}| foo = bar{Environment.NewLine}| otherwise baz"));
         }
 
         [Test]
