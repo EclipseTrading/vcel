@@ -49,7 +49,6 @@ namespace VCEL.Core.Expression.Abstract
                 Eq n => factory.Eq(ToExpression(n.Left), ToExpression(n.Right)),
                 NotEq n => factory.NotEq(ToExpression(n.Left), ToExpression(n.Right)),
                 ObjectMember n => factory.Member(ToExpression(n.Object), ToExpression(n.Member)),
-                This _ => factory.This(),
                 _ => throw new Exception($"Expression node type not handled '{node?.Type}'"),
             };
         }
@@ -89,7 +88,6 @@ namespace VCEL.Core.Expression.Abstract
                 EqExpr<T> e => new Eq(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 NotEqExpr<T> e => new NotEq(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 ObjectMember<T> e => new ObjectMember(ToExpressionNode(e.Obj), ToExpressionNode(e.Member)),
-                ThisExpr<T> _ => new This(),
                 _ => throw new Exception($"Expression node type not handled '{node?.GetType()}'"),
             };
         }

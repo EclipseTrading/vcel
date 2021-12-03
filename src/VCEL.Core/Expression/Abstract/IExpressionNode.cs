@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace VCEL.Core.Expression.Abstract
+﻿namespace VCEL.Core.Expression.Abstract
 {
     public enum NodeType
     {
@@ -32,10 +30,8 @@ namespace VCEL.Core.Expression.Abstract
         Eq,
         NotEq,
         ObjectMember,
-        This,
     }
 
-    // [JsonConverter(typeof(ConcreteTypeConverter<object>))]
     public interface IExpressionNode
     {
         NodeType Type { get; }

@@ -44,8 +44,7 @@ namespace VCEL.Core.Expression.Abstract
                     NodeType.Eq => jObject.ToObject<Eq>(serializer),
                     NodeType.NotEq => jObject.ToObject<NotEq>(serializer),
                     NodeType.ObjectMember => jObject.ToObject<ObjectMember>(serializer),
-                    NodeType.This => jObject.ToObject<This>(serializer),
-                    _ => throw new ArgumentOutOfRangeException($"Node type not handled '{nodeType}'")
+                    _ => throw new ArgumentOutOfRangeException($"Node type not handled '{nodeType}'"),
                 };
             }
 

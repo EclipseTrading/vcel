@@ -230,13 +230,6 @@ namespace VCEL.Test.Expression.Abstract
             Assert.That(objectMemberExpr, Is.TypeOf<ObjectMember>());
         }
 
-        [Test]
-        public void ShouldMapToExpressionThis()
-        {
-            var thisExpr = ToExpressionNode(new ThisExpr<object>(ExprMonad.Instance));
-            Assert.That(thisExpr, Is.TypeOf<This>());
-        }
-
         private static IExpressionNode ToExpressionNode(IExpression<object> expression)
         {
             var expressionFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultFunctions<object>());
