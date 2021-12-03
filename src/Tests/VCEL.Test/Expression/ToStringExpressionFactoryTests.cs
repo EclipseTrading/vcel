@@ -207,9 +207,9 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateDateTimeOffsetExpression()
         {
-            var outcome = factory.DateTimeOffset(new DateTimeOffset(new DateTime(2012, 1, 1)));
+            var outcome = factory.DateTimeOffset(new DateTimeOffset(new DateTime(2012, 1, 1), TimeSpan.Zero));
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("@2012-01-01T12:00:00.000+08:00"));
+            Assert.That(evaluated, Is.EqualTo("@2012-01-01T12:00:00.000+00:00"));
         }
 
         [Test]
