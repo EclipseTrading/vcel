@@ -112,7 +112,7 @@ namespace VCEL.Core.Expression.Func
 
         public void RegisterEnsureOneArg(string name, Func<object, object> func)
         {
-            Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+            Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));
         }
 
         public void RegisterEnsureTwoArgs(string name, Func<object, object, object> func)

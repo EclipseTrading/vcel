@@ -84,7 +84,7 @@ namespace VCEL.CSharp.Expression.Func
             => functions[name.ToLower()] = new Function<string>(func, deps);
 
         public void RegisterEnsureOneArg(string name, Func<object, string> func)
-            => Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+            => Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));
 
         public void RegisterEnsureTwoArgs(string name, Func<object, object, string> func)
             => Register(name, (args, _) => args.Length != 2 || (args[0] == null || args[1] == null) ? null : func(args[0], args[1]),
