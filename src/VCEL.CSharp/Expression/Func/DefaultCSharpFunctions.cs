@@ -37,6 +37,35 @@ namespace VCEL.CSharp.Expression.Func
 
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");
+
+            RegisterEnsureOneArg("tolower", arg => $"{arg}.ToLower()");
+            RegisterEnsureOneArg("toupper", arg => $"{arg}.ToUpper()");
+
+            Register("substring", args => Substring(args));
+            RegisterEnsureTwoArgs("split", (arg1, arg2) => $"{arg1}.Split('{ToCSharpStringLiteralOp.UnWarpStringLiteral(arg2.ToString())}')");
+            RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => $"{arg1}.Replace({arg2}, {arg3})");
+        }
+
+        private string Substring(object[] args)
+        {
+            switch (args.Length)
+            {
+                case 2:
+                    {
+                        var sourStr = args[0].ToString();
+                        var startIndex = int.Parse(args[1].ToString());
+                        return $"{sourStr}.Substring({startIndex})";
+                    }
+                case 3:
+                    {
+                        var sourStr = args[0].ToString();
+                        var startIndex = int.Parse(args[1].ToString());
+                        var strLength = int.Parse(args[2].ToString());
+                        return $"{sourStr}.Substring({startIndex}, {strLength})";
+                    }
+            }
+
+            return null;
         }
 
         public Function<string> GetFunction(string name)
@@ -54,7 +83,18 @@ namespace VCEL.CSharp.Expression.Func
         private void Register(string name, Func<object[], IContext<string>, string> func, params IDependency[] deps)
             => functions[name.ToLower()] = new Function<string>(func, deps);
 
+        public void RegisterEnsureOneArg(string name, Func<object, string> func)
+            => Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+
+        public void RegisterEnsureTwoArgs(string name, Func<object, object, string> func)
+            => Register(name, (args, _) => args.Length != 2 || (args[0] == null || args[1] == null) ? null : func(args[0], args[1]),
+                new FuncDependency(name));
+
+        public void RegisterEnsureThreeArgs(string name, Func<object, object, object, string> func)
+            => Register(name, (args, _) => args.Length != 3 || (args[0] == null || args[1] == null || args[2] == null) ? null : func(args[0], args[1], args[2]),
+                new FuncDependency(name));
+
         private static string Join(object[] args)
-            => string.Join(",", args.Select(s => (string) s));
+            => string.Join(",", args.Select(s => (string)s));
     }
 }

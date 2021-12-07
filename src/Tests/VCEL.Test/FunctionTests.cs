@@ -1,5 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using VCEL.Test.Shared;
 
 namespace VCEL.Test
@@ -178,6 +179,41 @@ namespace VCEL.Test
                 var expr = parseResult.Expression;
                 var value = expr.Evaluate(new { });
                 Assert.That(value, Is.EqualTo(DateTime.Today));
+            }
+        }
+
+        [TestCase("tolower('ABCD')", "abcd")]
+        [TestCase("toupper('abcd')", "ABCD")]
+        [TestCase("substring('test_substring', 5)", "substring")]
+        [TestCase("substring('test_substring', 0, 4)", "test")]
+        [TestCase("split('test_split', '_')", new string[] { "test", "split" })]
+        [TestCase("replace('test_replace', '_replace', '')", "test")]
+        [TestCase("replace('test_replace', '_replace', '_test')", "test_test")]
+        public void EvalStringFunctions(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("tolower(A)", "ABCD", "abcd")]
+        [TestCase("toupper(A)", "abcd", "ABCD")]
+        [TestCase("substring(A, 5)", "test_substring", "substring")]
+        [TestCase("substring(A, 0, 4)", "test_substring", "test")]
+        [TestCase("split(A, '_')", "test_split", new string[] { "test", "split" })]
+        [TestCase("replace(A, '_replace', '')", "test_replace", "test")]
+        [TestCase("replace(A, '_replace', '_test')", "test_replace", "test_test")]
+        public void EvalStringFunctions_Property(string exprString, string source, object expected)
+        {
+            var vcelContext = new { A = source };
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(vcelContext);
+                Assert.That(result, Is.EqualTo(expected));
             }
         }
     }
