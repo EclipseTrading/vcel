@@ -49,6 +49,45 @@ namespace VCEL.Core.Expression.Func
 
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
+
+            RegisterEnsureOneArg("tolower", arg => arg.ToString().ToLower());
+            RegisterEnsureOneArg("toupper", arg => arg.ToString().ToUpper());
+
+            Register("substring", args => Substring(args));
+            RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1.ToString(), arg2.ToString()));
+            RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => Replace(arg1.ToString(), arg2.ToString(), arg3.ToString()));
+        }
+
+        private string Substring(object[] args)
+        {
+            switch (args.Length)
+            {
+                case 2:
+                    {
+                        var sourStr = args[0].ToString();
+                        var startIndex = int.Parse(args[1].ToString());
+                        return sourStr.Substring(startIndex);
+                    }
+                case 3:
+                    {
+                        var sourStr = args[0].ToString();
+                        var startIndex = int.Parse(args[1].ToString());
+                        var strLength = int.Parse(args[2].ToString());
+                        return sourStr.Substring(startIndex, strLength);
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        private string[] Split(string str, string separator)
+        {
+            return str.Split(separator[0]);
+        }
+
+        private string Replace(string source, string target, string replaceWith)
+        {
+            return source.Replace(target, replaceWith);
         }
 
         public Function<T> GetFunction(string name)
@@ -73,12 +112,18 @@ namespace VCEL.Core.Expression.Func
 
         public void RegisterEnsureOneArg(string name, Func<object, object> func)
         {
-            Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+            Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));
         }
 
         public void RegisterEnsureTwoArgs(string name, Func<object, object, object> func)
         {
             Register(name, (args, _) => args.Length != 2 || (args[0] == null || args[1] == null) ? null : func(args[0], args[1]),
+                new FuncDependency(name));
+        }
+
+        public void RegisterEnsureThreeArgs(string name, Func<object, object, object, object> func)
+        {
+            Register(name, (args, _) => args.Length != 3 || (args[0] == null || args[1] == null || args[2] == null) ? null : func(args[0], args[1], args[2]),
                 new FuncDependency(name));
         }
 

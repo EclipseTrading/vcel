@@ -36,5 +36,10 @@ namespace VCEL.CSharp.Expression
                 }
             }
         }
+
+        public static string UnWarpStringLiteral(string str)
+        {
+            return str.TrimStart('@').Trim('\"');
+        }
     }
 }
