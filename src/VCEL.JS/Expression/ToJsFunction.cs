@@ -68,7 +68,7 @@ namespace VCEL.JS.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            if (JSFunctionMap.TryGetValue(name.ToLower(), out var jsFunc))
+            if (JSFunctionMap.TryGetValue(name, out var jsFunc))
             {
                 return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"

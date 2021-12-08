@@ -289,7 +289,7 @@ namespace VCEL.Core.Lang
                     return new ParseResult<T>(exprFactory.Function("now", Array.Empty<IExpression<T>>()));
                 case "System.Math":
                 case "Math":
-                    return Visit(context.GetChild(2));
+                    return new ParseResult<T>(new ParseError("Legacy Math function no longer supported", "", 0, 0, legacyNodeText.Length));
             }
             return new ParseResult<T>(exprFactory.Null());
         }

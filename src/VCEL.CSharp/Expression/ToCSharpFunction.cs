@@ -30,9 +30,9 @@ namespace VCEL.CSharp.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            if (functions.HasFunction(name.ToLower()))
+            if (functions.HasFunction(name))
             {
-                var function = functions.GetFunction(name.ToLower());
+                var function = functions.GetFunction(name);
                 return function.Func.Invoke(args?.Select(s => (object)s.Evaluate(context))?.ToArray(), context).ToString();
             }
 
