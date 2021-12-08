@@ -71,7 +71,7 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateBetweenExpression()
         {
-            var outcome = factory.Between(factory.Property("foo"), factory.Set(new [] { "bar", "baz" }.ToHashSet<object>()));
+            var outcome = factory.Between(factory.Property("foo"), factory.Set(new[] { "bar", "baz" }.ToHashSet<object>()));
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("foo between { bar, baz }"));
         }
@@ -87,15 +87,15 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateLetExpression()
         {
-            var outcome = factory.Let(new []{ ( "foo", factory.Property("bar") ) }, factory.Property("baz"));
+            var outcome = factory.Let(new[] { ("foo", factory.Property("bar")) }, factory.Property("baz"));
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo($"let{Environment.NewLine}    foo = bar{Environment.NewLine}in baz"));
-       }
+        }
 
         [Test]
         public void ShouldCreateGuardExpression()
         {
-            var outcome = factory.Guard(new []{(factory.Property("foo"), factory.Property("bar"))}, factory.Property("baz"));
+            var outcome = factory.Guard(new[] { (factory.Property("foo"), factory.Property("bar")) }, factory.Property("baz"));
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo($"match{Environment.NewLine}| foo = bar{Environment.NewLine}| otherwise baz"));
         }
@@ -135,7 +135,7 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateInExpression()
         {
-            var outcome = factory.In(factory.Property("foo"), new [] { "bar", "baz" }.ToHashSet<object>());
+            var outcome = factory.In(factory.Property("foo"), new[] { "bar", "baz" }.ToHashSet<object>());
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("foo in { bar, baz }"));
         }
@@ -223,7 +223,7 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateSetExpression()
         {
-            var outcome = factory.Set(new [] { "foo", "bar" }.ToHashSet<object>());
+            var outcome = factory.Set(new[] { "foo", "bar" }.ToHashSet<object>());
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("{ foo, bar }"));
         }
@@ -234,6 +234,14 @@ namespace VCEL.Test.Expression
             var outcome = factory.Value("foo");
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("foo"));
+        }
+
+        [Test]
+        public void ShouldCreateBoolExpression()
+        {
+            var outcome = factory.Bool(true);
+            var evaluated = outcome.Evaluate(context);
+            Assert.That(evaluated, Is.EqualTo("true"));
         }
 
         [Test]

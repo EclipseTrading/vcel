@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using VCEL.Core.Expression.Impl;
 using VCEL.Expression;
 using VCEL.Monad;
 using P = VCEL.Core.Lang.VCELParser;
@@ -20,7 +19,7 @@ namespace VCEL.Core.Expression
         }
 
         public IExpression<string> Property(string name)
-            => new ValueExpr<string>(monad, name);
+            => new ToStringValueExpr<string>(monad, name, (value, _) => value);
 
         public IExpression<string> Add(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.PLUS, l, r);

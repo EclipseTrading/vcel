@@ -52,18 +52,15 @@ namespace VCEL.Expression
         public virtual IExpression<T> Matches(IExpression<T> l, IExpression<T> r)
             => new MatchesExpr<T>(Monad, l, r);
 
-        public virtual IExpression<T> Bool(bool b) => Value(b);
-        public virtual IExpression<T> Double(double d) => Value(d);
-        public virtual IExpression<T> Int(int i) => Value(i);
-        public virtual IExpression<T> Long(long l) => Value(l);
-        public virtual IExpression<T> String(string s) => Value(s);
-        public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset)
-            => Value(dateTimeOffset);
-        public virtual IExpression<T> TimeSpan(TimeSpan timeSpan)
-            => Value(timeSpan);
-        public virtual IExpression<T> Set(ISet<object> s) => Value(s);
-        public virtual IExpression<T> Value(object o)
-            => new ValueExpr<T>(Monad, o);
+        public virtual IExpression<T> Bool(bool b) => new BoolExpr<T>(Monad, b);
+        public virtual IExpression<T> Double(double d) => new DoubleExpr<T>(Monad, d);
+        public virtual IExpression<T> Int(int i) => new IntExpr<T>(Monad, i);
+        public virtual IExpression<T> Long(long l) => new LongExpr<T>(Monad, l);
+        public virtual IExpression<T> String(string s) => new StringExpr<T>(Monad, s);
+        public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset) => new DateTimeOffsetExpr<T>(Monad, dateTimeOffset);
+        public virtual IExpression<T> TimeSpan(TimeSpan timeSpan) => new TimeSpanExpr<T>(Monad, timeSpan);
+        public virtual IExpression<T> Set(ISet<object> s) => new SetExpr<T>(Monad, s);
+        public virtual IExpression<T> Value(object o) => new ValueExpr<T, object>(Monad, o);
 
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
