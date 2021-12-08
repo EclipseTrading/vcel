@@ -50,8 +50,8 @@ namespace VCEL.Core.Expression.Func
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
 
-            RegisterEnsureOneArg("tolower", arg => arg.ToString().ToLower());
-            RegisterEnsureOneArg("toupper", arg => arg.ToString().ToUpper());
+            RegisterEnsureOneArg("lowercase", arg => arg.ToString().ToLower());
+            RegisterEnsureOneArg("uppercase", arg => arg.ToString().ToUpper());
 
             Register("substring", args => Substring(args));
             RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1.ToString(), arg2.ToString()));
@@ -92,12 +92,12 @@ namespace VCEL.Core.Expression.Func
 
         public Function<T> GetFunction(string name)
         {
-            return functions.TryGetValue(name.ToLower(), out var f) ? f : null;
+            return functions.TryGetValue(name, out var f) ? f : null;
         }
 
         public bool HasFunction(string name)
         {
-            return functions.ContainsKey(name.ToLower());
+            return functions.ContainsKey(name);
         }
 
         public void Register(string name, Func<object[], IContext<T>, object> func)
@@ -129,12 +129,12 @@ namespace VCEL.Core.Expression.Func
 
         protected void Register(string name, Func<object[], IContext<T>, object> func, params IDependency[] deps)
         {
-            functions[name.ToLower()] = new Function<T>(func, deps);
+            functions[name] = new Function<T>(func, deps);
         }
 
         protected void Register(string name, Func<object[], object> func, params IDependency[] deps)
         {
-            functions[name.ToLower()] = new Function<T>((args, _) => func(args), deps);
+            functions[name] = new Function<T>((args, _) => func(args), deps);
         }
     }
 }

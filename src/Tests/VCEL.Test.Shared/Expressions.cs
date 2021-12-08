@@ -8,7 +8,7 @@
             return (string)prop.GetValue(null);
         }
 
-        public const string Abs = @"T(System.Math).Abs(-1.0)";
+        public const string Abs = @"abs(-1.0)";
         public const string GetProp = @"P";
         public const string Add = @"0.1 + 0.2";
         public const string Subtract = @"0.1 - 0.2";
@@ -29,10 +29,10 @@
         public const string TestExpr0 = "1 - P / O";
         public const string TestExpr1 = "1 - (P / O)";
         public const string TestExpr2 = "(P / O) < 0";
-        public const string TestExpr3 = "((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> -0.01";
-        public const string TestExpr4 = "(P / O) < 0 ? T(System.Math).Abs(P / O) : 1 - (P / O) > -0.01";
-        public const string TestExpr5 = @"(((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> -0.01) and 
-(((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O)) <= 0.03)
+        public const string TestExpr3 = "((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01";
+        public const string TestExpr4 = "(P / O) < 0 ? abs(P / O) : 1 - (P / O) > -0.01";
+        public const string TestExpr5 = @"(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and 
+(((P / O) < 0 ? abs((P / O)) : 1 - (P / O)) <= 0.03)
     ? 0.01
     : 0.02";
         public const string TestExpr6 = "counterpartyName != null and " +
@@ -76,55 +76,55 @@ in match
         public const string TernaryArith3 = "(aOs ==null ?0:aOs )+ mO";
 
         public const string NestedTernary1 = @"
-(((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> -0.01) and 
-(((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.03) 
+(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and 
+(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.03) 
     ? 0.01 
-    : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.03) and 
-      (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.10) 
+    : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.03) and 
+      (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.10) 
        ? 0.05 
-       : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.1) and 
-         (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.225) 
+       : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.1) and 
+         (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.225) 
          ? 0.15 
-         : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.225) and 
-           (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.4) 
+         : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.225) and 
+           (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.4) 
            ? 0.3 
-           : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.4) and 
-             (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.6) 
+           : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.4) and 
+             (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.6) 
              ? 0.5 
-             : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.6) and 
-               (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.775) 
+             : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.6) and 
+               (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.775) 
                ? 0.7 
-               : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.775) and 
-                 (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.9) 
+               : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.775) and 
+                 (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.9) 
                  ? 0.85 
-                 : (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))> 0.9) and 
-                   (((P / O) < 0 ? T(System.Math).Abs((P / O)) : 1 - (P / O))<=0.97) 
+                 : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.9) and 
+                   (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.97) 
                    ? 0.95 
                    : 0.99";
         public const string NestedTernary2 = @"
-((D < 0 ? T(System.Math).Abs(D) : 1 - D) > -0.01) and 
-((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.03) 
+((D < 0 ? abs(D) : 1 - D) > -0.01) and 
+((D < 0 ? abs(D) : 1 - D)<=0.03) 
     ? 0.01 
-    : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.03) and 
-      ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.10) 
+    : ((D < 0 ? abs(D) : 1 - D)> 0.03) and 
+      ((D < 0 ? abs(D) : 1 - D)<=0.10) 
         ? 0.05 
-        : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.1) and 
-          ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.225) 
+        : ((D < 0 ? abs(D) : 1 - D)> 0.1) and 
+          ((D < 0 ? abs(D) : 1 - D)<=0.225) 
             ? 0.15 
-            : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.225) and 
-              ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.4) 
+            : ((D < 0 ? abs(D) : 1 - D)> 0.225) and 
+              ((D < 0 ? abs(D) : 1 - D)<=0.4) 
                 ? 0.3 
-                : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.4) and 
-                  ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.6) 
+                : ((D < 0 ? abs(D) : 1 - D)> 0.4) and 
+                  ((D < 0 ? abs(D) : 1 - D)<=0.6) 
                     ? 0.5 
-                    : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.6) and 
-                      ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.775) 
+                    : ((D < 0 ? abs(D) : 1 - D)> 0.6) and 
+                      ((D < 0 ? abs(D) : 1 - D)<=0.775) 
                         ? 0.7 
-                        : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.775) and 
-                          ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.9) 
+                        : ((D < 0 ? abs(D) : 1 - D)> 0.775) and 
+                          ((D < 0 ? abs(D) : 1 - D)<=0.9) 
                             ? 0.85 
-                            : ((D < 0 ? T(System.Math).Abs(D) : 1 - D)> 0.9) and 
-                              ((D < 0 ? T(System.Math).Abs(D) : 1 - D)<=0.97) 
+                            : ((D < 0 ? abs(D) : 1 - D)> 0.9) and 
+                              ((D < 0 ? abs(D) : 1 - D)<=0.97) 
                                 ? 0.95 
                                 : 0.99";
 
@@ -157,7 +157,7 @@ in match
         public const string ArithExpr6 = "(a - (tA+tB)*0.5)*aQ*-1";
         public const string ArithExpr7 = "_5BVO- iVA";
         public const string ArithExpr8 = "(iAP/V) + SV";
-        public const string ArithExpr9 = "(BTS * 365 / (D - T(System.DateTime).Now).TotalDays)/T(System.Math).Abs(SD)";
+        public const string ArithExpr9 = "(BTS * 365 / (D - T(System.DateTime).Now).TotalDays)/abs(SD)";
         public const string ArithExpr10 = "(tv+(bO+aO)/2-a)/((-bO+aO)/2)";
         public const string ArithExpr11 = "(AO - BO)/C";
         public const string ArithExpr12 = "(SG/100)/-VT";
@@ -165,11 +165,11 @@ in match
         public const string ArithExpr14 = "1/1";
         public const string ArithExpr15 = "1/M";
         public const string ArithExpr16 = "2*Vg";
-        public const string ArithExpr17 = "T(System.Math).Abs(C - B)/C";
-        public const string ArithExpr18 = "T(System.Math).Max( (pA==null?0:pA) , (pB==null?0:pB) )";
-        public const string ArithExpr19 = "T(System.Math).Min(T(System.Math).Min(N, bQ), 3000.0*S)";
-        public const string ArithExpr20 = "T(System.Math).Round(B/1000,1)";
-        public const string ArithExpr21 = "T(System.Math).Sqrt(T(System.Math).Abs(VT)*200/T(System.Math).Abs(SG))";
+        public const string ArithExpr17 = "abs(C - B)/C";
+        public const string ArithExpr18 = "max( (pA==null?0:pA) , (pB==null?0:pB) )";
+        public const string ArithExpr19 = "min(min(N, bQ), 3000.0*S)";
+        public const string ArithExpr20 = "round(B/1000,1)";
+        public const string ArithExpr21 = "sqrt(abs(VT)*200/abs(SG))";
         public const string ArithExpr22 = "BTS * 365 / (D - T(System.DateTime).Now).TotalDays";
         public const string ArithExpr23 = "CallCurve";
         public const string ArithExpr24 = "(LV - PC) * 100 / PC";
@@ -226,7 +226,7 @@ in match
 (   
     (BDP and SDP) and 
     (hB and hA) and (qB and qA) and 
-    (T(System.Math).Abs(tO - tO1) <= 0.001))
+    (abs(tO - tO1) <= 0.001))
         ? ((mO > 0 and vO > 0)
             ? true 
             : false) 

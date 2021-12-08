@@ -62,7 +62,7 @@ namespace VCEL.JS
         public override IExpression<string> Multiply(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeBinaryOp("*", Monad, l, r);
 
-        public override IExpression<string> Eq(IExpression<string> l, IExpression<string> r) 
+        public override IExpression<string> Eq(IExpression<string> l, IExpression<string> r)
             => new ToJsValueOfOp("===", Monad, l, r);
 
         public override IExpression<string> NotEq(IExpression<string> l, IExpression<string> r)
@@ -100,5 +100,8 @@ namespace VCEL.JS
 
         public override IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
             => new ToJsDateTimeOffSet(Monad, dateTimeOffset);
+
+        public override IExpression<string> Between(IExpression<string> l, IExpression<string> r)
+            => new ToJsBetweenExpr(Monad, l, r);
     }
 }

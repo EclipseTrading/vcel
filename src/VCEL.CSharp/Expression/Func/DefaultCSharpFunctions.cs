@@ -38,8 +38,8 @@ namespace VCEL.CSharp.Expression.Func
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");
 
-            RegisterEnsureOneArg("tolower", arg => $"{arg}.ToLower()");
-            RegisterEnsureOneArg("toupper", arg => $"{arg}.ToUpper()");
+            RegisterEnsureOneArg("lowercase", arg => $"{arg}.ToLower()");
+            RegisterEnsureOneArg("uppercase", arg => $"{arg}.ToUpper()");
 
             Register("substring", args => Substring(args));
             RegisterEnsureTwoArgs("split", (arg1, arg2) => $"{arg1}.Split('{ToCSharpStringLiteralOp.UnWarpStringLiteral(arg2.ToString())}')");
@@ -69,10 +69,10 @@ namespace VCEL.CSharp.Expression.Func
         }
 
         public Function<string> GetFunction(string name)
-            => functions.TryGetValue(name.ToLower(), out var f) ? f : null;
+            => functions.TryGetValue(name, out var f) ? f : null;
 
         public bool HasFunction(string name)
-            => functions.ContainsKey(name.ToLower());
+            => functions.ContainsKey(name);
 
         public void Register(string name, Func<object[], IContext<string>, string> func)
             => this.Register(name, func, new FuncDependency(name));
@@ -81,7 +81,7 @@ namespace VCEL.CSharp.Expression.Func
             => this.Register(name, (args, _) => func(args), new FuncDependency(name));
 
         private void Register(string name, Func<object[], IContext<string>, string> func, params IDependency[] deps)
-            => functions[name.ToLower()] = new Function<string>(func, deps);
+            => functions[name] = new Function<string>(func, deps);
 
         public void RegisterEnsureOneArg(string name, Func<object, string> func)
             => Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));
