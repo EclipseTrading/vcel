@@ -59,7 +59,7 @@ namespace VCEL.Test.Expression.Abstract
 
             Assert.That(expression, Is.TypeOf<AddExpr<object>>());
             Assert.That(((AddExpr<object>)expression).Left, Is.TypeOf<UnaryMinusExpr<object>>());
-            Assert.That(((AddExpr<object>)expression).Right, Is.TypeOf<ValueExpr<object, object>>());
+            Assert.That(((AddExpr<object>)expression).Right, Is.TypeOf<DoubleExpr<object>>());
         }
     }
 }
