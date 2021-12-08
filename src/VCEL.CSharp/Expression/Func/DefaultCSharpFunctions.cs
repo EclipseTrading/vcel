@@ -38,8 +38,8 @@ namespace VCEL.CSharp.Expression.Func
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");
 
-            RegisterEnsureOneArg("tolower", arg => $"{arg}.ToLower()");
-            RegisterEnsureOneArg("toupper", arg => $"{arg}.ToUpper()");
+            RegisterEnsureOneArg("lowercase", arg => $"{arg}.ToLower()");
+            RegisterEnsureOneArg("uppercase", arg => $"{arg}.ToUpper()");
 
             Register("substring", args => Substring(args));
             RegisterEnsureTwoArgs("split", (arg1, arg2) => $"{arg1}.Split('{ToCSharpStringLiteralOp.UnWarpStringLiteral(arg2.ToString())}')");

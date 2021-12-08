@@ -40,8 +40,8 @@ namespace VCEL.JS.Expression
                  { "startswith", "startsWith" },
                  { "substring", "substring" },
                  { "replace", "replace" },
-                 { "tolower", "toLowerCase" },
-                 { "toupper", "toUpperCase" }
+                 { "lowercase", "toLowerCase" },
+                 { "uppercase", "toUpperCase" }
              };
 
         private static Dictionary<string, string> JSFunctionDefaultResultMap

@@ -121,8 +121,8 @@ namespace VCEL.Test
         [TestCase("tan(x)", "(Math.tan(vcelContext.x))")]
         [TestCase("tanh(x)", "(Math.tanh(vcelContext.x))")]
         [TestCase("truncate(x)", "(Math.trunc(vcelContext.x))")]
-        [TestCase("abc.toupper()", "(vcelContext.abc ? vcelContext.abc.toUpperCase() : '')")]
-        [TestCase("abc.tolower()", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
+        [TestCase("abc.uppercase()", "(vcelContext.abc ? vcelContext.abc.toUpperCase() : '')")]
+        [TestCase("abc.lowercase()", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
         [TestCase("abc.startswith('c')", "(vcelContext.abc ? vcelContext.abc.startsWith('c') : false)")]
         [TestCase("(abs(UnderlyingPrice - Barrier))", "(Math.abs((vcelContext.UnderlyingPrice - vcelContext.Barrier)))")]
         public void TestJsParser_Functions(string expr, string expected)

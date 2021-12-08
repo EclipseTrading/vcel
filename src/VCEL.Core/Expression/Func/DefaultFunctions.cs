@@ -50,8 +50,8 @@ namespace VCEL.Core.Expression.Func
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
 
-            RegisterEnsureOneArg("tolower", arg => arg.ToString().ToLower());
-            RegisterEnsureOneArg("toupper", arg => arg.ToString().ToUpper());
+            RegisterEnsureOneArg("lowercase", arg => arg.ToString().ToLower());
+            RegisterEnsureOneArg("uppercase", arg => arg.ToString().ToUpper());
 
             Register("substring", args => Substring(args));
             RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1.ToString(), arg2.ToString()));

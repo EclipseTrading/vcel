@@ -182,8 +182,8 @@ namespace VCEL.Test
             }
         }
 
-        [TestCase("tolower('ABCD')", "abcd")]
-        [TestCase("toupper('abcd')", "ABCD")]
+        [TestCase("lowercase('ABCD')", "abcd")]
+        [TestCase("uppercase('abcd')", "ABCD")]
         [TestCase("substring('test_substring', 5)", "substring")]
         [TestCase("substring('test_substring', 0, 4)", "test")]
         [TestCase("split('test_split', '_')", new string[] { "test", "split" })]
@@ -199,8 +199,8 @@ namespace VCEL.Test
             }
         }
 
-        [TestCase("tolower(A)", "ABCD", "abcd")]
-        [TestCase("toupper(A)", "abcd", "ABCD")]
+        [TestCase("lowercase(A)", "ABCD", "abcd")]
+        [TestCase("uppercase(A)", "abcd", "ABCD")]
         [TestCase("substring(A, 5)", "test_substring", "substring")]
         [TestCase("substring(A, 0, 4)", "test_substring", "test")]
         [TestCase("split(A, '_')", "test_split", new string[] { "test", "split" })]
