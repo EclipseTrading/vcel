@@ -14,7 +14,7 @@ namespace VCEL.Test.Expression.Abstract
     public class JsonSerializerTests
     {
         private const string NumericAdditionJson =
-            "{\"$type\":\"Add\",\"left\":{\"$type\":\"UnaryMinus\",\"expression\":{\"$type\":\"Value\",\"value\":1}},\"right\":{\"$type\":\"Value\",\"value\":1}}";
+            "{\"$type\":\"Add\",\"left\":{\"$type\":\"UnaryMinus\",\"expression\":{\"$type\":\"Int\",\"value\":1}},\"right\":{\"$type\":\"Double\",\"value\":1.1}}";
 
         [Test]
         public void ShouldWrite()
@@ -23,7 +23,7 @@ namespace VCEL.Test.Expression.Abstract
 
             var parser = new ExpressionParser<object>(expressionFactory);
 
-            var expression = parser.Parse("-1 + 1");
+            var expression = parser.Parse("-1 + 1.1");
 
             var nodeMapper = new ExpressionNodeMapper<object>(expressionFactory);
 
@@ -59,7 +59,7 @@ namespace VCEL.Test.Expression.Abstract
 
             Assert.That(expression, Is.TypeOf<AddExpr<object>>());
             Assert.That(((AddExpr<object>)expression).Left, Is.TypeOf<UnaryMinusExpr<object>>());
-            Assert.That(((AddExpr<object>)expression).Right, Is.TypeOf<ValueExpr<object>>());
+            Assert.That(((AddExpr<object>)expression).Right, Is.TypeOf<DoubleExpr<object>>());
         }
     }
 }

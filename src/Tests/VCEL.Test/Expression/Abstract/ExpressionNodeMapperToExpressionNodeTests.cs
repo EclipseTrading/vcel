@@ -27,8 +27,8 @@ namespace VCEL.Test.Expression.Abstract
         [Test]
         public void ShouldMapToExpressionTernaryWithValues()
         {
-            var ternaryExpr = ToExpressionNode(new Ternary<object>(ExprMonad.Instance, new ValueExpr<object>(ExprMonad.Instance, true),
-                new ValueExpr<object>(ExprMonad.Instance, 11), new ValueExpr<object>(ExprMonad.Instance, 12)));
+            var ternaryExpr = ToExpressionNode(new Ternary<object>(ExprMonad.Instance, new ValueExpr<object, object>(ExprMonad.Instance, true),
+                new ValueExpr<object, object>(ExprMonad.Instance, 11), new ValueExpr<object, object>(ExprMonad.Instance, 12)));
             Assert.That(ternaryExpr, Is.TypeOf<Ternary>());
             Assert.That(((Ternary)ternaryExpr).Condition, Is.TypeOf<Value>());
             Assert.That(((Value)((Ternary)ternaryExpr).Condition).ValueProperty, Is.EqualTo(true));
@@ -127,7 +127,7 @@ namespace VCEL.Test.Expression.Abstract
         [Test]
         public void ShouldMapToExpressionValue()
         {
-            var valueExpr = ToExpressionNode(new ValueExpr<object>(ExprMonad.Instance, 42));
+            var valueExpr = ToExpressionNode(new ValueExpr<object, object>(ExprMonad.Instance, 42));
             Assert.That(valueExpr, Is.TypeOf<Value>());
         }
 

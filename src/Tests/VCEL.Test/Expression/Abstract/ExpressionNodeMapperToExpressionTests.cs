@@ -27,12 +27,12 @@ namespace VCEL.Test.Expression.Abstract
         {
             var ternaryExpr = ToExpression(new Ternary(new Value(true), new Value(11), new Value(12)));
             Assert.That(ternaryExpr, Is.TypeOf<Ternary<object>>());
-            Assert.That(((Ternary<object>)ternaryExpr).ConditionExpr, Is.TypeOf<ValueExpr<object>>());
-            Assert.That(((ValueExpr<object>)((Ternary<object>)ternaryExpr).ConditionExpr).Value, Is.EqualTo(true));
-            Assert.That(((Ternary<object>)ternaryExpr).TrueExpr, Is.TypeOf<ValueExpr<object>>());
-            Assert.That(((ValueExpr<object>)((Ternary<object>)ternaryExpr).TrueExpr).Value, Is.EqualTo(11));
-            Assert.That(((Ternary<object>)ternaryExpr).FalseExpr, Is.TypeOf<ValueExpr<object>>());
-            Assert.That(((ValueExpr<object>)((Ternary<object>)ternaryExpr).FalseExpr).Value, Is.EqualTo(12));
+            Assert.That(((Ternary<object>)ternaryExpr).ConditionExpr, Is.TypeOf<ValueExpr<object, object>>());
+            Assert.That(((ValueExpr<object, object>)((Ternary<object>)ternaryExpr).ConditionExpr).Value, Is.EqualTo(true));
+            Assert.That(((Ternary<object>)ternaryExpr).TrueExpr, Is.TypeOf<ValueExpr<object, object>>());
+            Assert.That(((ValueExpr<object, object>)((Ternary<object>)ternaryExpr).TrueExpr).Value, Is.EqualTo(11));
+            Assert.That(((Ternary<object>)ternaryExpr).FalseExpr, Is.TypeOf<ValueExpr<object, object>>());
+            Assert.That(((ValueExpr<object, object>)((Ternary<object>)ternaryExpr).FalseExpr).Value, Is.EqualTo(12));
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace VCEL.Test.Expression.Abstract
         public void ShouldMapToExpressionValue()
         {
             var valueExpr = ToExpression(new Value(42));
-            Assert.That(valueExpr, Is.TypeOf<ValueExpr<object>>());
+            Assert.That(valueExpr, Is.TypeOf<ValueExpr<object, object>>());
         }
 
         [Test]

@@ -44,6 +44,14 @@ namespace VCEL.Core.Expression.Abstract
                     NodeType.Eq => jObject.ToObject<Eq>(serializer),
                     NodeType.NotEq => jObject.ToObject<NotEq>(serializer),
                     NodeType.ObjectMember => jObject.ToObject<ObjectMember>(serializer),
+                    NodeType.Bool => jObject.ToObject<Bool>(serializer),
+                    NodeType.DateTimeOffset => jObject.ToObject<DateTimeOffset>(serializer),
+                    NodeType.Double => jObject.ToObject<Double>(serializer),
+                    NodeType.Int => jObject.ToObject<Int>(serializer),
+                    NodeType.Long => jObject.ToObject<Long>(serializer),
+                    NodeType.Set => jObject.ToObject<Set>(serializer),
+                    NodeType.String => jObject.ToObject<String>(serializer),
+                    NodeType.TimeSpan => jObject.ToObject<TimeSpan>(serializer),
                     _ => throw new ArgumentOutOfRangeException($"Node type not handled '{nodeType}'"),
                 };
             }

@@ -30,6 +30,14 @@
         Eq,
         NotEq,
         ObjectMember,
+        Bool,
+        DateTimeOffset,
+        Double,
+        Int,
+        Long,
+        Set,
+        String,
+        TimeSpan,
     }
 
     public interface IExpressionNode
