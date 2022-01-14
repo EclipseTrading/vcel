@@ -15,7 +15,7 @@ namespace VCEL.CSharp.Expression
 
         public override string Evaluate(object lv, object rv)
         {
-            return $"{rv}.Contains({lv})";
+            return $@"CSharpHelper.IsNumber({lv}) ? {rv}.Any(elem => CSharpHelper.IsNumber(elem) ? Convert.ToDouble(elem) == Convert.ToDouble({lv}) : false) : {rv}.Contains(({lv}))";
         }
     }
 }
