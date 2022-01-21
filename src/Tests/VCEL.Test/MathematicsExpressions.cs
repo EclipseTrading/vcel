@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
 using VCEL.Core.Lang;
 using VCEL.Test.Shared;
-using VCEL.CSharp;
 
 
 namespace VCEL.Test
@@ -107,6 +105,14 @@ namespace VCEL.Test
                 var result = expr.Evaluate(o1);
                 Assert.IsNull(result);
             }
+
+            var parseResult2 = VCExpression.ParseMaybe(exprStr);
+            Assert.That(parseResult2.Success, Is.True, "Is successful");
+
+            var expr2 = parseResult2.Expression;
+
+            var result2 = expr2.Evaluate(new { });
+            Assert.IsFalse(result2.HasValue);
         }
     }
 }
