@@ -21,7 +21,7 @@ namespace VCEL.CSharp.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            return $"(Math.Pow({l.Evaluate(context)}, {r.Evaluate(context)}))";
+            return $"(VcelMath.Pow({l.Evaluate(context)}, {r.Evaluate(context)}))";
         }
     }
 }
