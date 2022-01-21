@@ -20,6 +20,10 @@ namespace VCEL.Core.Lang
 
         public override ParseResult<T> VisitExpression([NotNull] VCELParser.ExpressionContext context)
         {
+            if (context.ChildCount == 0)
+            {
+                return new ParseResult<T>(exprFactory.Null());
+            }
             return Compose(context,
                 a => a[0],
                 Enumerable.Range(0, context.ChildCount - 1).ToArray());
