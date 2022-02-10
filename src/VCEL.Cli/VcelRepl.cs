@@ -18,6 +18,14 @@ namespace VCEL.Cli
         private readonly Dictionary<string, object> context;
         private readonly List<(string Expression, ParseResult<Maybe<object>> Parsed, Maybe<object> Outcome)> history;
 
+        private enum Mode
+        {
+            EXPR,
+            CSHARP
+        }
+        private Mode mode = Mode.EXPR;
+
+
         public VcelRepl(string verion, Dictionary<string, object> context)
         {
             this.version = verion;
@@ -58,7 +66,15 @@ namespace VCEL.Cli
                 return;
             }
 
-            EvaluateExpression(input);
+            switch(this.mode)
+            {
+                case Mode.EXPR:
+                    EvaluateExpression(input);
+                    break;
+                case Mode.CSHARP:
+                    ToCSharpCode(input);
+                    break;
+            }
         }
 
         private void EvaluateExpression(string input)
@@ -124,6 +140,44 @@ namespace VCEL.Cli
             }
         }
 
+        private void ToCSharpCode(string input)
+        {
+            ParseResult<string>? parsed = null;
+            try
+            {
+                parsed = CSharpExpression.ParseCode(input);
+            }
+            catch (Exception exception)
+            {
+                AnsiConsole.MarkupLine($"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                AnsiConsole.WriteException(exception);
+            }
+            if (parsed == null)
+            {
+                return;
+            }
+
+            if (!parsed.Success)
+            {
+                AnsiConsole.WriteLine($"{parsed.ParseErrors.Count} parse errors");
+
+                foreach (var parseError in parsed.ParseErrors)
+                {
+                    AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]").Insert(parseError.Start, "[red underline]"));
+                    AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
+                        parseError.Message.FormatAsError(),
+                        parseError.Line,
+                        parseError.Start,
+                        parseError.Stop,
+                        parseError.Token.EscapeMarkup());
+                }
+                return;
+            }
+
+            string outcome = parsed.Expression.Evaluate(new {});
+            AnsiConsole.MarkupLine(outcome.FormatAsValue());
+        }
+
         private void EvaluateCommand(string input)
         {
             var inputParts = input.Split(' ');
@@ -164,6 +218,9 @@ namespace VCEL.Cli
                 case ".history":
                     HistoryCommand();
                     break;
+                case ".toggle":
+                    ToggleCommand(inputParts);
+                    break;
                 default:
                     AnsiConsole.MarkupLine($"{firstPart.FormatAsCommand()} command is not recognised. Run {".help".FormatAsCommand()} for help");
                     break;
@@ -182,6 +239,7 @@ namespace VCEL.Cli
             AnsiConsole.MarkupLine(".parse".FormatAsHelpItem("Parse expressions in the file into CSharp code. Display failed ones", "FILENAME"));
             AnsiConsole.MarkupLine(".list".FormatAsHelpItem("Shows a list of set properties; their names, values and types"));
             AnsiConsole.MarkupLine(".history".FormatAsHelpItem("Shows the history of evaluated expressions and their outcomes"));
+            AnsiConsole.MarkupLine(".toggle".FormatAsHelpItem("Change the mode of the parser, accepts {EXPR, CSHARP, JS}", "MODE"));
             AnsiConsole.MarkupLine("\nInput is evaluated as an expression if not a command.");
         }
 
@@ -285,6 +343,24 @@ namespace VCEL.Cli
                 historyTable.AddRow(historyIndex, expression, outcome.FormatAsValue(), outcome.FormatAsType(), dependencies);
             }
             AnsiConsole.Render(historyTable);
+        }
+
+        private void ToggleCommand(string[] inputParts)
+        {
+            if (inputParts.Length is 2)
+            {
+                var choice = inputParts[1].ToUpper();
+                switch (choice)
+                {
+                    case "EXPR":
+                        this.mode = Mode.EXPR;
+                        break;
+                    case "CSHARP":
+                        this.mode = Mode.CSHARP;
+                        break;
+                }
+            }
+            AnsiConsole.MarkupLine($"Current mode is {$"{this.mode.ToString()}".FormatAsValue()}.");
         }
     }
 }
