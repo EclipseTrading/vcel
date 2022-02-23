@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
 using VCEL.Core.Lang;
 using VCEL.Test.Shared;
 
@@ -198,6 +199,20 @@ namespace VCEL.Test
         public void In(string exprString, bool expected)
             => Compare(exprString, expected);
 
+
+        [TestCase("a in {1, 2, 3}", true)]
+        [TestCase("b in {1, 2, 3}", false)]
+        [TestCase("c in {1, 2, 3}", false)]
+        [TestCase("a in {}", false)]
+        [TestCase("a in {1, '2', null}", true)]
+        [TestCase("a in {null, null, null}", false)]
+        [TestCase("a in {'1', '2', '3'}", false)]
+        [TestCase("b in {'1', '2', '3'}", true)]
+        [TestCase("c in {'1.1', '2.2', '3.5'}", false)]
+        [TestCase("c in {'1.1', 2.2, 3.5}", true)]
+        public void InWithContext(string exprString, bool expected)
+            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
+
         [TestCase("null in null")]
         [TestCase("4.1 in null")]
         [TestCase("'A' in {'A', 'B', Value }")]
@@ -383,7 +398,7 @@ namespace VCEL.Test
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
-                Assert.True(parseResult.Success, "Default expression parse");
+                Assert.True(parseResult.Success, $"Default expression parse failed: {String.Join(", ", parseResult.ParseErrors.Select(err => err.Message))}");
                 var result = parseResult.Expression.Evaluate(o ?? new { });
                 Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
             }
