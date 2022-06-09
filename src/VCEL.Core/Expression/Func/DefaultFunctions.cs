@@ -49,6 +49,7 @@ namespace VCEL.Core.Expression.Func
 
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
+            FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.ShiftDay(args), Register,2, allowNullArgument:false);
 
             RegisterEnsureOneArg("lowercase", arg => arg.ToString().ToLower());
             RegisterEnsureOneArg("uppercase", arg => arg.ToString().ToUpper());
