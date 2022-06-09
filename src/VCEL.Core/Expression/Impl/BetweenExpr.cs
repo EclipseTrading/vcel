@@ -36,28 +36,23 @@ namespace VCEL.Core.Expression.Impl
         {
             if (l is IComparable left && v is IList list && list.Count == 2)
             {
-                if (list[0] is T f && list[1] is T s)
+                var first = list[0];
+                var second = list[1];
+
+                int frCmp = -1;
+                int toCmp = 1;
+
+                if (first?.GetType() == l?.GetType() || UpCastEx.UpCast(ref first, ref l))
                 {
-                    return Monad.Bind(f, s, EvaluateBetweenItems);
-
-                    T EvaluateBetweenItems(object first, object second)
-                    {
-                        int frCmp = -1;
-                        int toCmp = 1;
-
-                        if (first?.GetType() == l?.GetType() || UpCastEx.UpCast(ref first, ref l))
-                        {
-                            frCmp = left.CompareTo(first);
-                        }
-
-                        if (second?.GetType() == l?.GetType() || UpCastEx.UpCast(ref second, ref l))
-                        {
-                            toCmp = left.CompareTo(second);
-                        }
-
-                        return Monad.Lift(frCmp >= 0 && toCmp <= 0);
-                    }
+                    frCmp = left.CompareTo(first);
                 }
+
+                if (second?.GetType() == l?.GetType() || UpCastEx.UpCast(ref second, ref l))
+                {
+                    toCmp = left.CompareTo(second);
+                }
+
+                return Monad.Lift(frCmp >= 0 && toCmp <= 0);
             }
             return Monad.Lift(false);
         }

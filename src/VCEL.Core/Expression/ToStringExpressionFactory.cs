@@ -53,8 +53,10 @@ namespace VCEL.Core.Expression
                     return $"{P.TokenName(P.LET)}{Environment.NewLine}{Indent}{bindingsString}{Environment.NewLine}{P.TokenName(P.IN)} {expr.Evaluate(context)}";
                 });
 
-        public IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses,
-            IExpression<string> otherwise = null)
+        public IExpression<string> Guard(
+            IReadOnlyList<(IExpression<string>, 
+            IExpression<string>)> guardClauses,
+            IExpression<string>? otherwise = null)
             => new ToStringValueExpr<(IReadOnlyList<(IExpression<string>, IExpression<string>)>, IExpression<string>? otherwise)>(monad,
                 (guardClauses, otherwise), (value, context) =>
                 {
@@ -78,8 +80,16 @@ namespace VCEL.Core.Expression
         public IExpression<string> GreaterOrEqual(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.GTE, l, r);
 
-        public IExpression<string> In(IExpression<string> l, ISet<object> set)
+        public IExpression<string> InSet(IExpression<string> l, ISet<object> set)
             => new ToStringBinaryOp(monad, P.IN, l, Set(set));
+        public IExpression<string> In(IExpression<string> l, IExpression<string> r)
+            => new ToStringBinaryOp(monad, P.IN, l, r);
+
+        public IExpression<string> Spread(IExpression<string> expr) 
+            => new ToStringValueExpr<IExpression<string>>(
+                monad, 
+                expr, 
+                (value, context) => $"{P.TokenName(P.SPREAD)}{value.Evaluate(context)}");
 
         public IExpression<string> Matches(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, "~", l, r);
@@ -119,7 +129,7 @@ namespace VCEL.Core.Expression
         public IExpression<string> Set(ISet<object> set)
             => new ToStringValueExpr<ISet<object>>(monad, set, (value, context) =>
             {
-                var items = string.Join($"{P.TokenName(P.COMMA)} ", value.Select(item => item.ToString()));
+                var items = string.Join($"{P.TokenName(P.COMMA)} ", value.Select(item => item is string s ? $"'{s}'" : item.ToString()));
                 return $"{P.TokenName(P.OPEN_BRACE)} {items} {P.TokenName(P.CLOSE_BRACE)}";
             });
 

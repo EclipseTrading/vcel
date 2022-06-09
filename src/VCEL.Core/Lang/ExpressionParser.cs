@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System.Threading.Tasks;
+using Antlr4.Runtime;
 using VCEL.Expression;
 
 namespace VCEL.Core.Lang
@@ -20,8 +21,8 @@ namespace VCEL.Core.Lang
 
             var parser = new VCELParser(commonTokenStream);
             var expr = parser.expression();
-            var visitor = new VCELVisitor<T>(expressionFactory);
-            return visitor.Visit(expr);
+            var visitors = new VCELVisitors<T>(expressionFactory);            
+            return visitors.Visit<ParseResult<T>>(expr);
         }
     }
 }

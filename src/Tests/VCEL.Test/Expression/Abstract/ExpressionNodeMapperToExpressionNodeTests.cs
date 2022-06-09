@@ -90,10 +90,24 @@ namespace VCEL.Test.Expression.Abstract
         }
 
         [Test]
-        public void ShouldMapToExpressionIn()
+        public void ShouldMapToExpressionInSet()
         {
-            var inExpr = ToExpressionNode(new InExpr<object>(ExprMonad.Instance, nullExpr, new HashSet<object>()));
+            var inExpr = ToExpressionNode(new InSetExpr<object>(ExprMonad.Instance, nullExpr, new HashSet<object>()));
+            Assert.That(inExpr, Is.TypeOf<InSet>());
+        }
+
+        [Test]
+        public void ShouldMapToExpressionIn() 
+        {
+            var inExpr = ToExpressionNode(new InExpr<object>(ExprMonad.Instance, nullExpr, nullExpr));
             Assert.That(inExpr, Is.TypeOf<In>());
+        }
+
+        [Test]
+        public void ShouldMapToExpressionSpread() 
+        {
+            var spreadExpr = ToExpressionNode(new SpreadExpr<object>(ExprMonad.Instance, nullExpr));
+            Assert.That(spreadExpr, Is.TypeOf<Spread>());
         }
 
         [Test]

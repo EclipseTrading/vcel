@@ -6,9 +6,9 @@ namespace VCEL.JS
 {
     public class JsObjectContext : ObjectContext<string>
     {
-        private readonly IReadOnlyDictionary<string, Func<string>> overridePropertyFunc;
+        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
 
-        public JsObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>> overridePropertyFunc = null)
+        public JsObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
             : base(monad, obj)
         {
             this.overridePropertyFunc = overridePropertyFunc;
@@ -16,6 +16,7 @@ namespace VCEL.JS
 
         public override bool TryGetAccessor(string propName, out IValueAccessor<string> accessor)
         {
+            accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
             accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
             return true;
         }

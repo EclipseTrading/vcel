@@ -19,6 +19,26 @@ namespace VCEL.Core.Expression.Impl
         public IEnumerable<IDependency> Dependencies => List.SelectMany(i => i.Dependencies).Distinct();
 
         public TMonad Evaluate(IContext<TMonad> context)
-            => Monad.Lift(List.Select(e => e.Evaluate(context)).ToList());
+        {
+            var result = List.Aggregate(
+                Monad.Lift(new List<object>()),
+                (c, n) => Monad.Bind(
+                    c,
+                    n.Evaluate(context),
+                    (list, value) =>
+                    {
+                        var l = (List<object>)list;
+                        if (n is SpreadExpr<TMonad> && value is IEnumerable<object> en)
+                        {
+                            l.AddRange(en);
+                        }
+                        else
+                        {
+                            l.Add(value);
+                        }
+                        return Monad.Lift(l);
+                    }));
+            return result;
+        }
     }
 }

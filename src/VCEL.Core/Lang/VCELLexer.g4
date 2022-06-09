@@ -32,6 +32,8 @@ MULTIPLY: '*';
 DIVIDE: '/';
 POW: '^';
 
+SPREAD: '...';
+
 DOT: '.';
 
 TRUE: 'true';

@@ -6,9 +6,9 @@ namespace VCEL.CSharp
 {
     public class CSharpObjectContext : ObjectContext<string>
     {
-        private readonly IReadOnlyDictionary<string, Func<string>> overridePropertyFunc;
+        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
 
-        public CSharpObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>> overridePropertyFunc = null)
+        public CSharpObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
             : base(monad, obj)
         {
             this.overridePropertyFunc = overridePropertyFunc;

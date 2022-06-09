@@ -16,7 +16,7 @@ namespace VCEL.CSharp.CodeGen
 {
     public static class CodeGenCSharpClass
     {
-        public static (Type, EmitResult) Generate(string name, string csharpExpr)
+        public static (Type?, EmitResult?) Generate(string name, string csharpExpr)
         {
             var src = GenerateFile(name, csharpExpr);
             return GenerateType(name, src);
@@ -52,7 +52,7 @@ namespace VCEL.CSharp.CodeGen
                     }}";
         }
 
-        private static (Type, EmitResult) GenerateType(string name, string src)
+        private static (Type?, EmitResult?) GenerateType(string? name, string src)
         {
             var frameworkPath = Path.GetDirectoryName(typeof(Action).Assembly.Location);
             Debug.Assert(frameworkPath != null, nameof(frameworkPath) + " != null");
@@ -82,7 +82,7 @@ namespace VCEL.CSharp.CodeGen
                     outputKind:OutputKind.DynamicallyLinkedLibrary,
                     optimizationLevel: OptimizationLevel.Release)
             );
-            byte[] image = null;
+            byte[]? image = null;
             using (var ms = new MemoryStream())
             {
                 var emitResult = compilation.Emit(ms);

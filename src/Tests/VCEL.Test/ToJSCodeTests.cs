@@ -259,5 +259,15 @@ namespace VCEL.Test
             Assert.AreEqual(result.Success, true);
             Assert.AreEqual(expected, parsedExpr);
         }
+
+        [TestCase("2 in { ...a, b, 'c' }", "[ ...vcelContext.a, vcelContext.b, 'c' ].has(2)")]
+        public void TestJsList(string expr, string expected)
+        {
+            var result = parser.Parse(expr);
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+
+            Assert.AreEqual(result.Success, true);
+            Assert.AreEqual(expected, parsedExpr);
+        }
     }
 }

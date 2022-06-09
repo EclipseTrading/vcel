@@ -21,19 +21,19 @@ namespace VCEL.CSharp
         public static bool IsNumber(object value)
         {
             return value is sbyte
-                   || value is byte
-                   || value is short
-                   || value is ushort
-                   || value is int
-                   || value is uint
-                   || value is long
-                   || value is ulong
-                   || value is float
-                   || value is double
-                   || value is decimal;
+                || value is byte
+                || value is short
+                || value is ushort
+                || value is int
+                || value is uint
+                || value is long
+                || value is ulong
+                || value is float
+                || value is double
+                || value is decimal;
         }
 
-        public static bool UpCastCompare(object l, object r, string opName)
+        public static bool UpCastCompare(object? l, object? r, string opName)
         {
             if (!(l is IComparable) || !(r is IComparable))
                 return false;

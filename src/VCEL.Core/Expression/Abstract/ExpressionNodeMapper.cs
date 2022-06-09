@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using VCEL.Core.Expression.Impl;
 using VCEL.Expression;
 
@@ -29,7 +30,9 @@ namespace VCEL.Core.Expression.Abstract
                 LessOrEqual n => factory.LessOrEqual(ToExpression(n.Left), ToExpression(n.Right)),
                 GreaterOrEqual n => factory.GreaterOrEqual(ToExpression(n.Left), ToExpression(n.Right)),
                 Between n => factory.Between(ToExpression(n.Left), ToExpression(n.Right)),
-                In n => factory.In(ToExpression(n.Left), n.Set),
+                InSet n => factory.InSet(ToExpression(n.Left), n.Set),
+                In n => factory.In(ToExpression(n.Left), ToExpression(n.List)),
+                Spread n => factory.Spread(ToExpression(n.List)),
                 Matches n => factory.Matches(ToExpression(n.Left), ToExpression(n.Right)),
                 And n => factory.And(ToExpression(n.Left), ToExpression(n.Right)),
                 Or n => factory.Or(ToExpression(n.Left), ToExpression(n.Right)),
@@ -76,7 +79,9 @@ namespace VCEL.Core.Expression.Abstract
                 LessOrEqual<T> e => new LessOrEqual(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 GreaterOrEqual<T> e => new GreaterOrEqual(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 BetweenExpr<T> e => new Between(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
-                InExpr<T> e => new In(ToExpressionNode(e.Left), e.Set),
+                InSetExpr<T> e => new InSet(ToExpressionNode(e.Left), e.Set),
+                InExpr<T> e => new In(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
+                SpreadExpr<T> e => new Spread(ToExpressionNode(e.List)),
                 MatchesExpr<T> e => new Matches(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 AndExpr<T> e => new And(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 OrExpr<T> e => new Or(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
@@ -103,7 +108,7 @@ namespace VCEL.Core.Expression.Abstract
                 DateTimeOffsetExpr<T> e => new DateTimeOffset(e.Value),
                 TimeSpanExpr<T> e => new TimeSpan(e.Value),
                 SetExpr<T> e => new Set(e.Value),
-                ValueExpr<T, object> e => new Value(e.Value),
+                ValueExpr<T, object> e => new Value(e.Value),                
                 _ => throw new Exception($"Expression node type not handled '{node?.GetType()}'"),
             };
         }

@@ -15,7 +15,7 @@ namespace VCEL.CSharp.Expression
 
         public override string Evaluate(object lv, object rv)
         {
-            return $@"{rv}.Any(elem => TypeOperation.EqualsChecked({lv}, elem))";
+            return Equals(rv, "null") ? "null" : $@"{rv}.Any(elem => TypeOperation.EqualsChecked({lv}, elem))";
         }
     }
 }

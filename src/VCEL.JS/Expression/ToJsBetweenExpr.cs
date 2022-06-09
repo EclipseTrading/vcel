@@ -27,6 +27,13 @@ namespace VCEL.JS.Expression
         public string Evaluate(IContext<string> context)
         {
             var l = leftExpr.Evaluate(context);
+            if(rightExpr == null) 
+            {
+                // Preserve the expression form to help 
+                // with debugging
+                return $"{l} >= undefined && {l} <= undefined";
+            }
+
             var rStart = rightExpr.List[0].Evaluate(context);
             var rEnd = rightExpr.List[1].Evaluate(context);
 
