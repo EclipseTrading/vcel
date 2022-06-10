@@ -37,16 +37,17 @@ namespace VCEL.CSharp.Expression.Func
 
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");
+            FunctionHelper.RegisterEnsureArgs<string, string>("workday", args => $"VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(new object[]{{{Join(args)}}}))", Register, 2, allowNullArgument:false);
 
             RegisterEnsureOneArg("lowercase", arg => $"{arg}.ToLower()");
             RegisterEnsureOneArg("uppercase", arg => $"{arg}.ToUpper()");
 
-            Register("substring", args => Substring(args));
+            Register("substring", Substring);
             RegisterEnsureTwoArgs("split", (arg1, arg2) => $"{arg1}.Split('{ToCSharpStringLiteralOp.UnWarpStringLiteral(arg2?.ToString() ?? "")}')");
             RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => $"{arg1}.Replace({arg2}, {arg3})");
         }
 
-        private string? Substring(object?[] args)
+        private static string? Substring(object?[] args)
         {
             switch (args.Length)
             {
