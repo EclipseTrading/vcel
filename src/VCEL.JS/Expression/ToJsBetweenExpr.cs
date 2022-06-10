@@ -7,16 +7,19 @@ namespace VCEL.JS.Expression
     internal class ToJsBetweenExpr : IExpression<string>
     {
         private readonly IExpression<string> leftExpr;
-        private readonly ListExpr<string>? rightExpr;
+        private readonly IExpression<string> lower;
+        private readonly IExpression<string> upper;
 
         public ToJsBetweenExpr(
             IMonad<string> monad,
             IExpression<string> left,
-            IExpression<string> right)
+            IExpression<string> lower,
+            IExpression<string> upper)
         {
             Monad = monad;
             leftExpr = left;
-            rightExpr = right as ListExpr<string>;
+            this.lower = lower;
+            this.upper = upper;
         }
 
         public IMonad<string> Monad { get; }
@@ -27,15 +30,9 @@ namespace VCEL.JS.Expression
         public string Evaluate(IContext<string> context)
         {
             var l = leftExpr.Evaluate(context);
-            if(rightExpr == null) 
-            {
-                // Preserve the expression form to help 
-                // with debugging
-                return $"{l} >= undefined && {l} <= undefined";
-            }
 
-            var rStart = rightExpr.List[0].Evaluate(context);
-            var rEnd = rightExpr.List[1].Evaluate(context);
+            var rStart = lower.Evaluate(context);
+            var rEnd = upper.Evaluate(context);
 
             return $"{l} >= {rStart} && {l} <= {rEnd}";
         }

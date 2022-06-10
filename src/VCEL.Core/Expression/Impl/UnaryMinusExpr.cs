@@ -8,8 +8,8 @@ namespace VCEL.Core.Expression.Impl
         public IExpression<TMonad> Expr { get; }
 
         public UnaryMinusExpr(
-           IMonad<TMonad> monad,
-           IExpression<TMonad> expr)
+            IMonad<TMonad> monad,
+            IExpression<TMonad> expr)
         {
             Monad = monad;
             Expr = expr;
@@ -23,10 +23,10 @@ namespace VCEL.Core.Expression.Impl
         {
             var result = Expr.Evaluate(context);
             return Monad.Bind(result, Bind);
-            TMonad Bind(object o)
+            TMonad Bind(object? o)
                 => TryNegate(o, out var r) ? Monad.Lift(r) : Monad.Unit;
 
-            bool TryNegate(object o, out object r)
+            bool TryNegate(object? o, out object? r)
             {
                 switch(o)
                 {

@@ -13,7 +13,7 @@ namespace VCEL.Core.Helper
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType()))
                 expando.Add(property.Name, property.GetValue(value));
 
-            return expando as ExpandoObject;
+            return (expando as ExpandoObject)!;
         }
     }
 }

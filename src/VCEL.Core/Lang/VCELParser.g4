@@ -54,7 +54,7 @@ booleanOpExpr
 	: left=booleanOpExpr IN right=arithExpr #InOp
 	| booleanOpExpr MATCHES stringLiteral #Matches
 	| booleanOpExpr MATCHES arithExpr #Matches
-	| booleanOpExpr BETWEEN betweenArgs #Between
+	| left=booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
 	;
 
@@ -81,7 +81,7 @@ listItem
 	;
 
 betweenArgs
-	: (OPEN_BRACE arithExpr COMMA arithExpr CLOSE_BRACE)
+	: (OPEN_BRACE lower=arithExpr COMMA upper=arithExpr CLOSE_BRACE)
 	;
 
 objExpr
@@ -111,7 +111,7 @@ variable: HASH ID;
 
 setLiteral: (OPEN_BRACE literal? (COMMA literal)* CLOSE_BRACE);
 
-list: (OPEN_BRACE listItem? (COMMA listItem)* CLOSE_BRACE);
+list: (OPEN_SQ listItem? (COMMA listItem)* CLOSE_SQ);
 
 
 dateLiteral

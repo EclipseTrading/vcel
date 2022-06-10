@@ -12,7 +12,7 @@ namespace VCEL.Core.Expression.Impl
             IMonad<Maybe<object>> monad,
             string name,
             IReadOnlyList<IExpression<Maybe<object>>> args,
-            Function<Maybe<object>> function)
+            Function<Maybe<object>>? function)
             : base(monad, name, args, function)
         {
         }
@@ -22,7 +22,7 @@ namespace VCEL.Core.Expression.Impl
             var parsedArgs = Args
                 .Select(arg => arg.Evaluate(context).Value);
 
-            return Monad.Lift(function.Func(parsedArgs.ToArray(), context));
+            return Monad.Lift(function?.Func(parsedArgs.ToArray(), context));
         }
     }
 }

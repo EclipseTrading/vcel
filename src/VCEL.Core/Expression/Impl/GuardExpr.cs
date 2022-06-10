@@ -39,7 +39,7 @@ namespace VCEL.Core.Expression.Impl
                 return Monad.Bind(
                     result,
                     BindNext);
-                TMonad BindNext(object r)
+                TMonad BindNext(object? r)
                     => r is bool b
                         ? (b ? ce.Current.Res.Evaluate(context) : Next(ce))
                         : Monad.Unit;

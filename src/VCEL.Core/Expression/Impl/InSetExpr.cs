@@ -25,7 +25,7 @@ namespace VCEL.Core.Expression.Impl
             var l = Left.Evaluate(context);
             return Monad.Bind(l, Contains);
 
-            T Contains(object lv) => Monad.Lift(Set.Contains(lv));
+            T Contains(object? lv) => Monad.Lift(Set.Contains(lv!));
         }
     }
 }

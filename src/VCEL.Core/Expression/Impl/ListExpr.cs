@@ -21,23 +21,25 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var result = List.Aggregate(
-                Monad.Lift(new List<object>()),
-                (c, n) => Monad.Bind(
-                    c,
-                    n.Evaluate(context),
-                    (list, value) =>
-                    {
-                        var l = (List<object>)list;
-                        if (n is SpreadExpr<TMonad> && value is IEnumerable<object> en)
+                Monad.Lift(new List<object?>()),
+                (c, n) =>  Monad.Bind(
+                        c,
+                        n is NullExpr<TMonad> 
+                            ? Monad.Lift(null!) // We want to support lists with nulls even in a maybe context
+                            : n.Evaluate(context),
+                        (list, value) =>
                         {
-                            l.AddRange(en);
-                        }
-                        else
-                        {
-                            l.Add(value);
-                        }
-                        return Monad.Lift(l);
-                    }));
+                            var l = (List<object?>)list!;
+                            if (n is SpreadExpr<TMonad> && value is IEnumerable<object> en)
+                            {
+                                l.AddRange(en);
+                            }
+                            else
+                            {
+                                l.Add(value);
+                            }
+                            return Monad.Lift(l);
+                        }));
             return result;
         }
     }

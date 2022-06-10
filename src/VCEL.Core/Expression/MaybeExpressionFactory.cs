@@ -10,7 +10,7 @@ namespace VCEL.Expression
     {
         public MaybeExpressionFactory(
             IMonad<Maybe<object>> monad,
-            IFunctions<Maybe<object>> functions = null)
+            IFunctions<Maybe<object>>? functions = null)
             : base(monad, functions ?? new DefaultFunctions<Maybe<object>>())
         {
         }

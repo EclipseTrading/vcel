@@ -214,14 +214,13 @@ namespace VCEL.Test
             "(() => {let x = 1; let y = (2 + x); return ((x + y) + vcelContext.position);})()")]
 
         [TestCase(@"
-            let 
-               p = a / l
+            let p = a / l
             in (match
-               | p < 0.5  = 'Low'
-               | p < 0.75 = 'Normal'
-               | p < 1.0  = 'Near Breach'
-               | p < 1.25 = 'Breach'
-               | otherwise 'Critical')
+                | p < 0.5  = 'Low'
+                | p < 0.75 = 'Normal'
+                | p < 1.0  = 'Near Breach'
+                | p < 1.25 = 'Breach'
+                | otherwise 'Critical')
             ",
             "(() => {let p = (vcelContext.a / vcelContext.l); return (() => { " +
             "switch(true) {" +
@@ -260,7 +259,7 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("2 in { ...a, b, 'c' }", "[ ...vcelContext.a, vcelContext.b, 'c' ].has(2)")]
+        [TestCase("2 in [ ...a, b, 'c' ]", "[ ...vcelContext.a, vcelContext.b, 'c' ].has(2)")]
         public void TestJsList(string expr, string expected)
         {
             var result = parser.Parse(expr);

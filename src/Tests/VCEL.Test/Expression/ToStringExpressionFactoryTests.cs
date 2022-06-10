@@ -71,7 +71,7 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateBetweenExpression()
         {
-            var outcome = factory.Between(factory.Property("foo"), factory.Set(new[] { "bar", "baz" }.ToHashSet<object>()));
+            var outcome = factory.Between(factory.Property("foo"), factory.String("bar"), factory.String("baz"));
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("foo between { 'bar', 'baz' }"));
         }
@@ -156,7 +156,7 @@ namespace VCEL.Test.Expression
                 factory.List(new[] { factory.Property("bar"), factory.String("baz") })
             );
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("foo in { bar, 'baz' }"));
+            Assert.That(evaluated, Is.EqualTo("foo in [ bar, 'baz' ]"));
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace VCEL.Test.Expression
                 factory.List(new [] { factory.String("bar"), factory.Spread(factory.Property("baz")) })
             );
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("foo in { 'bar', ...baz }"));
+            Assert.That(evaluated, Is.EqualTo("foo in [ 'bar', ...baz ]"));
         }
 
         [Test]
@@ -279,7 +279,7 @@ namespace VCEL.Test.Expression
         {
             var outcome = factory.List(new[] { factory.Property("foo"), factory.Property("bar") });
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("{ foo, bar }"));
+            Assert.That(evaluated, Is.EqualTo("[ foo, bar ]"));
         }
 
         [Test]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using VCEL.Core.Helper;
 
 namespace VCEL.CSharp
@@ -8,13 +7,8 @@ namespace VCEL.CSharp
     // They are used in code-gen csharp code so won't show up in normal 'usage' list in your IDE
     public static class CSharpHelper
     {
-        public static bool IsBetween<T>(T item, List<T> range)
+        public static bool IsBetween<T>(T item, T start, T end)
         {
-            if (range.Count != 2)
-                return false;
-
-            var start = range[0];
-            var end = range[1];
             return UpCastCompare(item, start, ">=") && UpCastCompare(item, end, "<=");
         }
 

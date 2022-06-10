@@ -14,7 +14,7 @@ namespace VCEL.Core.Lang
         public VCELVisitors(IExpressionFactory<T> expressionFactory) 
         {
             providers[typeof(ParseResult<T>)] = new VCELVisitor<T>(expressionFactory, this);
-            providers[typeof(Result<(IExpression<T>, IExpression<T>)>)] = new GuardClauseVisitor<T>(this);
+            providers[typeof(Result<(IExpression<T>, IExpression<T>)>)] = new ExpressionPairVisitor<T>(this);
         }        
 
         public VCELParserBaseVisitor<TType> GetVisitor<TType>()

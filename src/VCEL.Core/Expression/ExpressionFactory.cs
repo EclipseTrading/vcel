@@ -50,8 +50,8 @@ namespace VCEL.Expression
             => new InExpr<T>(Monad, l, r);
         public virtual IExpression<T> Spread(IExpression<T> expr)
             => new SpreadExpr<T>(Monad, expr);
-        public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> r)
-            => new BetweenExpr<T>(Monad, l, r);
+        public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> lower, IExpression<T> upper)
+            => new BetweenExpr<T>(Monad, l, lower, upper);
         public virtual IExpression<T> Matches(IExpression<T> l, IExpression<T> r)
             => new MatchesExpr<T>(Monad, l, r);
         public virtual IExpression<T> Bool(bool b) => new BoolExpr<T>(Monad, b);

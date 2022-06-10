@@ -28,7 +28,7 @@ namespace VCEL.Core.Expression.Impl
             return Monad.Bind(l, r, Evaluate);
         }
 
-        public abstract T Evaluate(object lv, object rv);
+        public abstract T Evaluate(object? lv, object? rv);
 
     }
 }

@@ -43,9 +43,9 @@ namespace VCEL.CSharp
             string GetItems(IContext<string> context) 
             {
                 var lists = exprs.Select(e => e is ToCSharpSpreadOp spread 
-                    ? "(IEnumerable<object>)(object)" + e.Evaluate(context)
-                    : $"new [] {{ {e.Evaluate(context)} }}");
-                return $@"(new List<object>((new [] {{ {string.Join(", ", lists)} }}).SelectMany(e => e)))";
+                    ? $"(IEnumerable<object>)(object){e.Evaluate(context)}"
+                    : $"new object [] {{ {e.Evaluate(context)} }}");
+                return $@"(new IEnumerable<object>[] {{ {string.Join(", ", lists)} }}.SelectMany(e => e)).ToList()";
             }
 
             return new ToCSharpStringOp(GetItems, Monad);
@@ -120,8 +120,8 @@ namespace VCEL.CSharp
         public override IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
             => new ToCSharpDateTimeOffSet(Monad, dateTimeOffset);
 
-        public override IExpression<string> Between(IExpression<string> l, IExpression<string> r)
-            => new ToCSharpBetweenOp(Monad, l, r);
+        public override IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
+            => new ToCSharpBetweenOp(Monad, l, lower, upper);
 
         public override IExpression<string> Member(IExpression<string> l, IExpression<string> r)
             => new ToCSharpMemberOp(Monad, l, r);

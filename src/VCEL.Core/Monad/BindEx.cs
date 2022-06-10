@@ -3,15 +3,15 @@ namespace VCEL.Monad
 {
     public static class BindEx
     {
-        public static TMonad Bind<TMonad>(TMonad a, TMonad b, Func<object, object, TMonad> f, IMonad<TMonad> m)
+        public static TMonad Bind<TMonad>(TMonad a, TMonad b, Func<object?, object?, TMonad> f, IMonad<TMonad> m)
         {
             return m.Bind(a, Bind);
 
-            TMonad Bind(object av)
+            TMonad Bind(object? av)
             {
                 return m.Bind(b, Bind2);
 
-                TMonad Bind2(object bv)
+                TMonad Bind2(object? bv)
                 {
                     return f(av, bv);
                 }

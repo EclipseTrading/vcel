@@ -15,7 +15,7 @@ namespace VCEL.Core.Expression.Impl
         public IMonad<TMonad> Monad { get;}
         public IExpression<TMonad> List { get; }
 
-        public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+        public IEnumerable<IDependency> Dependencies => List.Dependencies;
 
         public TMonad Evaluate(IContext<TMonad> context)
         {

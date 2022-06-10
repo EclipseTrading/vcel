@@ -81,7 +81,7 @@ namespace VCEL.Test.Expression.Abstract
         [Test]
         public void ShouldMapToExpressionBetween()
         {
-            var betweenExpr = ToExpression(new Between(new Null(), new Null()));
+            var betweenExpr = ToExpression(new Between(new Null(), new Null(), new Null()));
             Assert.That(betweenExpr, Is.TypeOf<BetweenExpr<object>>());
         }
 

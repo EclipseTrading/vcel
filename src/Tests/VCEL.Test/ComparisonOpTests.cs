@@ -201,34 +201,49 @@ namespace VCEL.Test
             => Compare(exprString, expected);
 
 
-        [TestCase("1 in { a, b, c }", true)]
+        [TestCase("1 in [ a, b, c ]", true)]
         [TestCase("null in null", null)]
         [TestCase("4.1 in null", null)]
         public void In(string exprString, bool? expected)
             => Compare(exprString, expected, new { a = 3, b = 2, c = 1  });
 
 
-        [TestCase("'x' in { ...a, 'b' }", true)]        
-        [TestCase("'z' in { ...a, 'b' }", false)]
+        [TestCase("'x' in [ ...a, 'b' ]", true)]        
+        [TestCase("'z' in [ ...a, 'b' ]", false)]
         public void InSpread(string exprString, bool expected)
             => Compare(exprString, expected, new { a = new [] { "x", "y" } });
 
-
-        [TestCase("a in {1, 2, 3}", true)]
-        [TestCase("b in {1, 2, 3}", false)]
-        [TestCase("c in {1, 2, 3}", false)]
+        [TestCase("a in { 1, 2, 3 }", true)]
+        [TestCase("b in { 1, 2, 3 }", false)]
+        [TestCase("c in { 1, 2, 3 }", false)]
         [TestCase("a in {}", false)]
-        [TestCase("a in {1, '2', null}", true)]
-        [TestCase("a in {null, null, null}", false)]
-        [TestCase("a in {'1', '2', '3'}", false)]
-        [TestCase("b in {'1', '2', '3'}", true)]
-        [TestCase("c in {'1.1', '2.2', '3.5'}", false)]
-        [TestCase("c in {'1.1', 2.2, 3.5}", true)]
+        [TestCase("a in { 1, '2', null }", true)]
+        [TestCase("a in { null, null, null }", false)]
+        [TestCase("a in { '1', '2', '3' }", false)]
+        [TestCase("b in { '1', '2', '3' }", true)]
+        [TestCase("c in { '1.1', '2.2', '3.5' }", false)]
+        [TestCase("c in { '1.1', 2.2, 3.5 }", true)]
         public void InSetWithContext(string exprString, bool expected)
             => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
 
-        [TestCase("null in {1.1, 2.1, 4.1 }")]
-        [TestCase("null in { 1.1, null, 4.1 }")]
+
+        [TestCase("a in [1, 2, 3]", true)]
+        [TestCase("b in [1, 2, 3]", false)]
+        [TestCase("c in [1, 2, 3]", false)]
+        [TestCase("a in []", false)]
+        [TestCase("a in [1, '2', null]", true)]
+        [TestCase("a in [null, null, null]", false)]
+        [TestCase("a in ['1', '2', '3']", false)]
+        [TestCase("b in ['1', '2', '3']", true)]
+        [TestCase("c in ['1.1', '2.2', '3.5']", false)]
+        [TestCase("c in ['1.1', 2.2, 3.5]", true)]
+        [TestCase("@2022-06-10 in [@2022-06-09, @2022-06-10, @2022-06-11]", true)]
+        [TestCase("@2022-06-07 in [@2022-06-09, @2022-06-10, @2022-06-11]", false)]
+        public void InLiteralWithContext(string exprString, bool expected)
+            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
+
+        [TestCase("null in [ 1.1, 2.1, 4.1 ]")]
+        [TestCase("null in [ 1.1, null, 4.1 ]")]
         public void InMaybe(string exprString)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))

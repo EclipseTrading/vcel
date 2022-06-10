@@ -116,7 +116,7 @@ namespace VCEL.JS
         public override IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
             => new ToJsDateTimeOffSet(Monad, dateTimeOffset);
 
-        public override IExpression<string> Between(IExpression<string> l, IExpression<string> r)
-            => new ToJsBetweenExpr(Monad, l, r);
+        public override IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
+            => new ToJsBetweenExpr(Monad, l, lower, upper);
     }
 }

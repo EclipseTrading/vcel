@@ -36,8 +36,12 @@ namespace VCEL.Core.Expression
         public IExpression<string> Multiply(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.MULTIPLY, l, r);
 
-        public IExpression<string> Between(IExpression<string> l, IExpression<string> r)
-            => new ToStringBinaryOp(monad, P.BETWEEN, l, r);
+        public IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
+            => new ToStringBinaryOp(monad, P.BETWEEN, l, 
+                new ToStringValueExpr<(IExpression<string> lower, IExpression<string> upper)>(monad, (lower , upper), (value, context) =>
+                {
+                    return $"{P.TokenName(P.OPEN_BRACE)} {value.lower.Evaluate(context)}, {value.upper.Evaluate(context)} {P.TokenName(P.CLOSE_BRACE)}";
+                }));
 
         public IExpression<string> Ternary(IExpression<string> conditional, IExpression<string> trueCond,
             IExpression<string> falseCond)
@@ -140,7 +144,7 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<IReadOnlyList<IExpression<string>>>(monad, l, (value, context) =>
             {
                 var items = string.Join($"{P.TokenName(P.COMMA)} ", value.Select(item => item.Evaluate(context)));
-                return $"{P.TokenName(P.OPEN_BRACE)} {items} {P.TokenName(P.CLOSE_BRACE)}";
+                return $"{P.TokenName(P.OPEN_SQ)} {items} {P.TokenName(P.CLOSE_SQ)}";
             });
 
         public IExpression<string> Paren(IExpression<string> expr)

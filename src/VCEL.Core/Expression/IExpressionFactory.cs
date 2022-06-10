@@ -17,7 +17,7 @@ namespace VCEL.Expression
         IExpression<T> GreaterThan(IExpression<T> l, IExpression<T> r);
         IExpression<T> LessOrEqual(IExpression<T> l, IExpression<T> r);
         IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r);
-        IExpression<T> Between(IExpression<T> l, IExpression<T> r);
+        IExpression<T> Between(IExpression<T> l, IExpression<T> lower,  IExpression<T> upper);
         IExpression<T> InSet(IExpression<T> l, ISet<object> set);
         IExpression<T> In(IExpression<T> l, IExpression<T> r);
         IExpression<T> Spread(IExpression<T> list);

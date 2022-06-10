@@ -21,7 +21,7 @@ namespace VCEL.Core.Expression.Impl
 
             return Monad.Bind(l, r, Eval);
 
-            Maybe<object> Eval(object lv, object rv)
+            Maybe<object> Eval(object? lv, object? rv)
             {
                 return IsZeroOrNonNumeric(rv)
                     ? Maybe<object>.None
@@ -29,7 +29,7 @@ namespace VCEL.Core.Expression.Impl
             }
         }
 
-        private bool IsZeroOrNonNumeric(object rv)
+        private bool IsZeroOrNonNumeric(object? rv)
         {
             return !(rv is IConvertible)
                 || rv is double d && d == 0.0
