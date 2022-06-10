@@ -8,11 +8,15 @@ namespace VCEL.Core.Expression.Impl
     {
         public static DateTime Workday(IReadOnlyList<object> args)
         {
-            var date = DateTime.Parse(args[0].ToString());
-            var noOfDays = int.Parse(args[1].ToString());
+            var date = ParseDateTime(args[0]);
+            if (!(args[1] is int noOfDays))
+            {
+                noOfDays = int.Parse(args[1].ToString());
+            }
+
             var absNoOfDays = Math.Abs(noOfDays);
             var addDay = noOfDays > 0 ? 1 : -1;
-            var skipDates = args.Skip(2).Select(arg => arg.ToString()).Select(DateTime.Parse).ToHashSet();
+            var skipDates = args.Count <= 2 ? Enumerable.Empty<DateTime>() : ParseDateTimes(args[2]);
             
             while (absNoOfDays > 0)
             {
@@ -33,6 +37,26 @@ namespace VCEL.Core.Expression.Impl
             }
             
             return date;
+        }
+
+        private static IEnumerable<DateTime> ParseDateTimes(object value)
+        {
+            if (value is IEnumerable<object> enumerable)
+            {
+                return enumerable.Select(val => ParseDateTime(val)).ToHashSet();
+            }
+
+            return Enumerable.Empty<DateTime>();
+        }
+
+        private static DateTime ParseDateTime(object value)
+        {
+            return value switch
+            {
+                DateTime date => date,
+                DateTimeOffset dto => dto.DateTime,
+                _ => DateTime.Parse(value.ToString())
+            };
         }
     }
 }
