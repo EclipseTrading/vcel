@@ -6,15 +6,17 @@ namespace VCEL.Core.Expression.Impl
 {
     public static class VcelDateTime
     {
-        public static DateTime ShiftDay(IReadOnlyList<object> args)
+        public static DateTime Workday(IReadOnlyList<object> args)
         {
             var date = DateTime.Parse(args[0].ToString());
             var noOfDays = int.Parse(args[1].ToString());
+            var absNoOfDays = Math.Abs(noOfDays);
+            var addDay = noOfDays > 0 ? 1 : -1;
             var skipDates = args.Skip(2).Select(arg => arg.ToString()).Select(DateTime.Parse).ToHashSet();
             
-            while (noOfDays > 0)
+            while (absNoOfDays > 0)
             {
-                date = date.AddDays(1);
+                date = date.AddDays(addDay);
 
                 switch (date.DayOfWeek)
                 {
@@ -24,7 +26,7 @@ namespace VCEL.Core.Expression.Impl
                     default:
                         if (!skipDates.Contains(date))
                         {
-                            noOfDays--;
+                            absNoOfDays--;
                         }
                         continue;
                 }

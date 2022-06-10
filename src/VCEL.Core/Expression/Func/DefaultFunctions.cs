@@ -49,17 +49,17 @@ namespace VCEL.Core.Expression.Func
 
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
-            FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.ShiftDay(args), Register,2, allowNullArgument:false);
+            FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.Workday(args), Register,2, allowNullArgument:false);
 
             RegisterEnsureOneArg("lowercase", arg => arg.ToString().ToLower());
             RegisterEnsureOneArg("uppercase", arg => arg.ToString().ToUpper());
 
-            Register("substring", args => Substring(args));
+            Register("substring", Substring);
             RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1.ToString(), arg2.ToString()));
             RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => Replace(arg1.ToString(), arg2.ToString(), arg3.ToString()));
         }
 
-        private string Substring(object[] args)
+        private static string Substring(object[] args)
         {
             switch (args.Length)
             {

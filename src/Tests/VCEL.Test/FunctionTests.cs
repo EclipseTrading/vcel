@@ -220,6 +220,7 @@ namespace VCEL.Test
         [TestCase("workday(@2022-11-04, 1)", "2022-11-7")]
         [TestCase("workday(@2022-11-04, 2)", "2022-11-8")]
         [TestCase("workday(@2022-11-04, 7)", "2022-11-15")]
+        [TestCase("workday(@2022-11-04, -1)", "2022-11-3")]
         [TestCase("workday(@2022-11-04, 7, @2022-11-09)", "2022-11-16")]
         [TestCase("workday(@2022-11-04, 7, @2022-11-09, @2022-11-16)", "2022-11-17")]
         [TestCase("workday(@2022-11-04, 7, @2022-11-09, @2022-11-16, @2022-11-22)", "2022-11-17")]
@@ -233,6 +234,7 @@ namespace VCEL.Test
         [TestCase("workday(startDay1, 7, holiday1, holiday2)", "2022-11-17")]
         [TestCase("workday(startDay1, 7, holiday1, holiday2, @2022-11-22)", "2022-11-17")]
         [TestCase("workday(startDay1, 7, holiday1, @2022-11-10, @2022-11-11, holiday2, @2022-11-22)", "2022-11-21")]
+        [TestCase("workday(startDay1, 7, { holiday1, @2022-11-10, @2022-11-11, holiday2, @2022-11-22 })", "2022-11-21")]
         [TestCase("workday(startDay2, 0", "2022-11-05")]
         public void EvalWorkdaysFunction(string exprString, string expected)
         {
