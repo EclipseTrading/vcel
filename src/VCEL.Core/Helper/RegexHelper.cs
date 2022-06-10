@@ -18,7 +18,7 @@ namespace VCEL.Core.Helper
             }
         }
 
-        public static Regex CreateRegexPattern(string pattern)
+        public static Regex? CreateRegexPattern(string pattern)
         {
             if (IsValid(pattern))
             {

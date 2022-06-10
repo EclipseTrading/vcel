@@ -7,12 +7,12 @@ namespace VCEL.CSharp.Expression
     internal class ToCSharpGuardExpr : IExpression<string>
     {
         private readonly IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses;
-        private readonly IExpression<string> otherwise;
+        private readonly IExpression<string>? otherwise;
 
         public ToCSharpGuardExpr(
             IMonad<string> monad,
             IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses,
-            IExpression<string> otherwise)
+            IExpression<string>? otherwise)
         {
             this.Monad = monad;
             this.guardClauses = guardClauses;

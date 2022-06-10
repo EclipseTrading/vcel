@@ -36,7 +36,7 @@ namespace VCEL.Core.Expression.Impl
             var c = ConditionExpr.Evaluate(context);
             return Monad.Bind(c, BindC);
 
-            TMonad BindC(object res)
+            TMonad BindC(object? res)
             {
                 return res is bool b
                     ? (b ? TrueExpr.Evaluate(context) : FalseExpr.Evaluate(context))

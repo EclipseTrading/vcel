@@ -12,7 +12,7 @@ namespace VCEL.JS
     {
         public ToJsCodeFactory(
             IMonad<string> monad,
-            IFunctions<string> functions = null)
+            IFunctions<string>? functions = null)
             : base(monad, functions)
         {
         }
@@ -23,11 +23,26 @@ namespace VCEL.JS
         public override IExpression<string> Let(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
             => new ToJsLetExpr(Monad, bindings, expr);
 
-        public override IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string> otherwise = null)
+        public override IExpression<string> Guard(
+            IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses,
+            IExpression<string>? otherwise = null)
             => new ToJsGuardExpr(Monad, guardClauses, otherwise);
 
-        public override IExpression<string> In(IExpression<string> l, ISet<object> set)
+        public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
             => new ToJsCodeInOp(Monad, l, Set(set));
+
+        public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
+            => new ToJsCodeInOp(Monad, l, r);
+
+        public override IExpression<string> Spread(IExpression<string> expr)
+            => new ToJsStringOp((c) => $"...{expr.Evaluate(c)}", Monad);
+
+        public override IExpression<string> List(IReadOnlyList<IExpression<string>> exprs)
+            => new ToJsStringOp((context) =>
+            {
+                var items = exprs.Select(e => e.Evaluate(context));
+                return $"[ {string.Join(", ", items)} ]";
+            }, Monad);
 
         public override IExpression<string> Set(ISet<object> s)
             => new ToJsStringOp((context) => $"(new Set([{string.Join(",", s.Select(str => $"'{str}'"))}]))", Monad);
@@ -101,7 +116,7 @@ namespace VCEL.JS
         public override IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
             => new ToJsDateTimeOffSet(Monad, dateTimeOffset);
 
-        public override IExpression<string> Between(IExpression<string> l, IExpression<string> r)
-            => new ToJsBetweenExpr(Monad, l, r);
+        public override IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
+            => new ToJsBetweenExpr(Monad, l, lower, upper);
     }
 }

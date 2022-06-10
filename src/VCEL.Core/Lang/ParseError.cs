@@ -19,7 +19,7 @@ namespace VCEL.Core.Lang
         public int Start { get; }
         public int Stop { get; }
 
-        public string GetExprError(string exprString)
+        public string? GetExprError(string exprString)
         {
             if (exprString == null)
                 return null;

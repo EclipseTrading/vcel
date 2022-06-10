@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace VCEL.Core.Expression.Abstract
 {
     public class In : IExpressionNode
     {
-        public In(IExpressionNode left, ISet<object> set)
+        public In(IExpressionNode left, IExpressionNode list) 
         {
             Left = left;
-            Set = set;
+            List = list;
         }
-
+        
         [JsonProperty("$type")]
-        public NodeType Type => NodeType.In;
+        public NodeType Type => NodeType.InExpression;
 
         public IExpressionNode Left { get; }
-        public ISet<object> Set { get; }
+        public IExpressionNode List { get; }
     }
 }

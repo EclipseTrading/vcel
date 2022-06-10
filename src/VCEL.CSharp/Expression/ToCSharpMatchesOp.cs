@@ -13,12 +13,12 @@ namespace VCEL.CSharp.Expression
         {
         }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
         {
-            if ((string) rv == "null" || (string) lv == "null")
+            if (Equals(rv, "null") || Equals(lv, "null"))
                 return "false";
 
-            var pattern = $"{rv.ToString().Trim('\'')}";
+            var pattern = $"{rv?.ToString().Trim('\'')}";
             return $"(new Regex({pattern}).Match({lv}).Success)";
         }
     }

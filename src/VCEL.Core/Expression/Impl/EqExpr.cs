@@ -12,7 +12,7 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        public override T Evaluate(object lv, object rv)
+        public override T Evaluate(object? lv, object? rv)
         {
             return Monad.Lift(TypeOperation.EqualsChecked(lv, rv));
         }

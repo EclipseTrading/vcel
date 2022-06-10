@@ -32,8 +32,9 @@ namespace VCEL.CSharp.Expression
         {
             if (functions.HasFunction(name))
             {
-                var function = functions.GetFunction(name);
-                return function.Func.Invoke(args?.Select(s => (object)s.Evaluate(context))?.ToArray(), context).ToString();
+                var function = functions.GetFunction(name)!;
+                var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
+                return function.Func.Invoke(argValues, context)?.ToString() ?? "";
             }
 
             // TODO should return missing function

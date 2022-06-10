@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using VCEL.Monad;
 
 namespace VCEL
@@ -24,13 +25,13 @@ namespace VCEL
                 Overrides.SetItem(name, br));
         }
 
-        public bool TryGetAccessor(string propName, out IValueAccessor<TMonad> accessor)
+        public bool TryGetAccessor(string propName, [NotNullWhen(true)] out IValueAccessor<TMonad>? accessor)
         {
             accessor = new OverrideAccessor<TMonad>(propName);
             return true;
         }
 
-        public bool TryGetContext(object o, out IContext<TMonad> context)
+        public bool TryGetContext(object o, [NotNullWhen(true)] out IContext<TMonad>? context)
         {
             context = this.context.TryGetContext(o, out var c)
                 ? new OverrideContext<TMonad>(c, this.Overrides)

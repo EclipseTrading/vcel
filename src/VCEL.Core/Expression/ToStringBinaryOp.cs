@@ -28,7 +28,7 @@ namespace VCEL.Core.Expression
             opName = VCELParser.TokenName(tokenType);
         }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
             =>  $"{lv} {opName} {rv}";
     }
 }
