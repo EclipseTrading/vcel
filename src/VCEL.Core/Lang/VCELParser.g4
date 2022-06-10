@@ -23,10 +23,12 @@ expr
 	| booleanExpr #BoolExpr
 	;
 
+guardClause: BAR test=booleanExpr ASSIGN assign=arithExpr;
+
 guardExpr
-	: MATCH (matcher=ID)? (varName=ID)?
-		(BAR booleanExpr ASSIGN arithExpr)+
-		(BAR otherwiseExpr arithExpr)?
+	: MATCH (matcher=ID)? (varName=ID)? 
+		guardClause+
+		(BAR otherwiseExpr otherwise=arithExpr)?
 	;
 
 otherwiseExpr: OTHERWISE;
@@ -49,10 +51,10 @@ equalityExpr
 	;
 
 booleanOpExpr
-	: booleanOpExpr IN setLiteral #InOp
+	: left=booleanOpExpr IN right=arithExpr #InOp
 	| booleanOpExpr MATCHES stringLiteral #Matches
 	| booleanOpExpr MATCHES arithExpr #Matches
-	| booleanOpExpr BETWEEN betweenArgs #Between
+	| left=booleanOpExpr BETWEEN betweenArgs #Between
 	| arithExpr #Arith
 	;
 
@@ -67,12 +69,19 @@ arithExpr
 	| arithExpr op=(PLUS | MINUS) arithExpr # PlusMinus
 	| functionExpr # FuncExpr
 	| term #ExprListTerm
+	| setLiteral #ExprSetLiteral
+	| list #ExprList
 	| legacyNode DOT var #LegacyNodeExpr
 	| legacyNode DOT functionExpr #LegacyNodeExpr
 	;
 
+listItem
+	: arithExpr      
+	| SPREAD arithExpr
+	;
+
 betweenArgs
-	: (OPEN_BRACE arithExpr COMMA arithExpr CLOSE_BRACE)
+	: (OPEN_BRACE lower=arithExpr COMMA upper=arithExpr CLOSE_BRACE)
 	;
 
 objExpr
@@ -101,6 +110,9 @@ property: ID;
 variable: HASH ID;
 
 setLiteral: (OPEN_BRACE literal? (COMMA literal)* CLOSE_BRACE);
+
+list: (OPEN_SQ listItem? (COMMA listItem)* CLOSE_SQ);
+
 
 dateLiteral
 	: timeLiteral

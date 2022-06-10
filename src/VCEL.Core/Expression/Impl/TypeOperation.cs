@@ -2,7 +2,7 @@
 {
     public static class TypeOperation
     {
-        public static bool EqualsChecked(object left, object right)
+        public static bool EqualsChecked(object? left, object? right)
         {
             if (left == null || right == null)
             {
@@ -15,7 +15,7 @@
             return EqualsMixedType(left, right);
         }
 
-        private static bool EqualsMixedType(object left, object right)
+        private static bool EqualsMixedType(object? left, object? right)
         {
             switch (left)
             {

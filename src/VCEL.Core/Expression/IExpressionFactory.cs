@@ -10,15 +10,18 @@ namespace VCEL.Expression
         IExpression<T> Let(IReadOnlyList<(string, IExpression<T>)> bindings, IExpression<T> expr);
         IExpression<T> Guard(
             IReadOnlyList<(IExpression<T>, IExpression<T>)> guardClauses,
-            IExpression<T> otherwise = null);
+            IExpression<T>? otherwise = null);
 
         // Equality
         IExpression<T> LessThan(IExpression<T> l, IExpression<T> r);
         IExpression<T> GreaterThan(IExpression<T> l, IExpression<T> r);
         IExpression<T> LessOrEqual(IExpression<T> l, IExpression<T> r);
         IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r);
-        IExpression<T> Between(IExpression<T> l, IExpression<T> r);
-        IExpression<T> In(IExpression<T> l, ISet<object> set);
+        IExpression<T> Between(IExpression<T> l, IExpression<T> lower,  IExpression<T> upper);
+        IExpression<T> InSet(IExpression<T> l, ISet<object> set);
+        IExpression<T> In(IExpression<T> l, IExpression<T> r);
+        IExpression<T> Spread(IExpression<T> list);
+
         IExpression<T> Matches(IExpression<T> l, IExpression<T> r);
 
         // Boolean

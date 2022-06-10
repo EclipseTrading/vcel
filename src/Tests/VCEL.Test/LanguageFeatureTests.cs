@@ -47,7 +47,8 @@ match
     | A < 0.97  = 0.95
     | otherwise 0.99";
 
-            var expr = VCExpression.ParseMaybe(exprStr).Expression;
+            var res = VCExpression.ParseMaybe(exprStr);
+            var expr = res.Expression;
             var result = expr.Evaluate(new { A = a });
             Assert.That(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(expected));

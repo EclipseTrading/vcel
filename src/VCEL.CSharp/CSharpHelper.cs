@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using VCEL.Core.Helper;
 
 namespace VCEL.CSharp
@@ -8,32 +7,27 @@ namespace VCEL.CSharp
     // They are used in code-gen csharp code so won't show up in normal 'usage' list in your IDE
     public static class CSharpHelper
     {
-        public static bool IsBetween<T>(T item, List<T> range)
+        public static bool IsBetween<T>(T item, T start, T end)
         {
-            if (range.Count != 2)
-                return false;
-
-            var start = range[0];
-            var end = range[1];
             return UpCastCompare(item, start, ">=") && UpCastCompare(item, end, "<=");
         }
 
         public static bool IsNumber(object value)
         {
             return value is sbyte
-                   || value is byte
-                   || value is short
-                   || value is ushort
-                   || value is int
-                   || value is uint
-                   || value is long
-                   || value is ulong
-                   || value is float
-                   || value is double
-                   || value is decimal;
+                || value is byte
+                || value is short
+                || value is ushort
+                || value is int
+                || value is uint
+                || value is long
+                || value is ulong
+                || value is float
+                || value is double
+                || value is decimal;
         }
 
-        public static bool UpCastCompare(object l, object r, string opName)
+        public static bool UpCastCompare(object? l, object? r, string opName)
         {
             if (!(l is IComparable) || !(r is IComparable))
                 return false;

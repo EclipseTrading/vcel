@@ -6,13 +6,10 @@ namespace VCEL.Test.Shared
 {
     public static class CompositeExpression
     {
-        public static List<ParseResult<object>> ParseMultiple(string exprString)
+        public static IEnumerable<ParseResult<object>> ParseMultiple(string exprString)
         {
-            return new List<ParseResult<object>>
-            {
-                VCExpression.ParseDefault(exprString),
-                CSharpExpression.ParseMethod(exprString)
-            };
+            yield return VCExpression.ParseDefault(exprString);
+            yield return CSharpExpression.ParseMethod(exprString);
         }
     }
 }

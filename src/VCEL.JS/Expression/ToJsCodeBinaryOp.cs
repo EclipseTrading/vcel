@@ -17,7 +17,7 @@ namespace VCEL.JS.Expression
             this.opName = opName;
         }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
             => $"({lv} {opName} {rv})";
     }
 }

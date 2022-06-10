@@ -3,7 +3,7 @@
     internal class OverrideAccessor<TMonad> : IValueAccessor<TMonad>
     {
         private readonly string propName;
-        private IValueAccessor<TMonad> baseAccessor;
+        private IValueAccessor<TMonad>? baseAccessor;
 
         public OverrideAccessor(string propName)
         {
@@ -13,15 +13,17 @@
         public TMonad GetValue(IContext<TMonad> ctx)
         {
             var overrideContext = ctx as OverrideContext<TMonad>;
-            if(overrideContext.Overrides.TryGetValue(propName, out var v))
+            TMonad v = default;
+            if (overrideContext?.Overrides.TryGetValue(propName, out v) ?? false)
             {
                 return v;
             }
-            if(baseAccessor == null && overrideContext.BaseContext.TryGetAccessor(propName, out var accessor))
+            IValueAccessor<TMonad>? accessor = default;
+            if (baseAccessor == null && (overrideContext?.BaseContext.TryGetAccessor(propName, out accessor) ?? false))
             {
                 baseAccessor = accessor;
             }
-            return baseAccessor == null
+            return baseAccessor == null || overrideContext == null
                 ? ctx.Monad.Unit
                 : baseAccessor.GetValue(overrideContext.BaseContext);
         }

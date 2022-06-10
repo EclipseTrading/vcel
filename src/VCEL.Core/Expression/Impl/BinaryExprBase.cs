@@ -7,9 +7,9 @@ namespace VCEL.Core.Expression.Impl
     public abstract class BinaryExprBase<T> : IExpression<T>
     {
         public BinaryExprBase(
-          IMonad<T> monad,
-          IExpression<T> left,
-          IExpression<T> right)
+            IMonad<T> monad,
+            IExpression<T> left,
+            IExpression<T> right)
         {
             Monad = monad;
             Left = left;
@@ -28,7 +28,7 @@ namespace VCEL.Core.Expression.Impl
             return Monad.Bind(l, r, Evaluate);
         }
 
-        public abstract T Evaluate(object lv, object rv);
+        public abstract T Evaluate(object? lv, object? rv);
 
     }
 }

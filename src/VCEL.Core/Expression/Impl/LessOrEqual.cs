@@ -13,7 +13,7 @@ namespace VCEL.Core.Expression.Impl
             : base(monad, left, right)
         {
         }
-        public override T Evaluate(object l, object r)
+        public override T Evaluate(object? l, object? r)
         {
             if (l is IComparable cl && r?.GetType() == l?.GetType())
             {

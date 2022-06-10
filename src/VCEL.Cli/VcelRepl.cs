@@ -285,7 +285,7 @@ namespace VCEL.Cli
                             var csharpResult = CSharpExpression.ParseDelegate(processedExpr);
                             if (!csharpResult.Success)
                             {
-                                var csharpExpr = CSharpExpression.ParseCode(processedExpr).Expression.Evaluate(null);
+                                var csharpExpr = CSharpExpression.ParseCode(processedExpr).Expression.Evaluate(null!);
                                 AnsiConsole.MarkupLine("Failed to compile CSharp code".FormatAsError());
                                 AnsiConsole.MarkupLine($"Raw Vcel expression:{$"{rawExpr}".FormatAsValue()}");
                                 AnsiConsole.MarkupLine($"Vcel expression:{$"{processedExpr}".FormatAsValue()}");

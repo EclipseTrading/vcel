@@ -71,9 +71,9 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateBetweenExpression()
         {
-            var outcome = factory.Between(factory.Property("foo"), factory.Set(new[] { "bar", "baz" }.ToHashSet<object>()));
+            var outcome = factory.Between(factory.Property("foo"), factory.String("bar"), factory.String("baz"));
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("foo between { bar, baz }"));
+            Assert.That(evaluated, Is.EqualTo("foo between { 'bar', 'baz' }"));
         }
 
         [Test]
@@ -133,11 +133,41 @@ namespace VCEL.Test.Expression
         }
 
         [Test]
-        public void ShouldCreateInExpression()
+        public void ShouldCreateInSetExpression()
         {
-            var outcome = factory.In(factory.Property("foo"), new[] { "bar", "baz" }.ToHashSet<object>());
+            var outcome = factory.InSet(factory.Property("foo"), new[] { "bar", "baz" }.ToHashSet<object>());
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("foo in { bar, baz }"));
+            Assert.That(evaluated, Is.EqualTo("foo in { 'bar', 'baz' }"));
+        }
+
+        [Test]
+        public void ShouldCreateInVariableExpression()
+        {
+            var outcome = factory.In(factory.Property("foo"), factory.Property("bar"));
+            var evaluated = outcome.Evaluate(context);
+            Assert.That(evaluated, Is.EqualTo("foo in bar"));
+        }
+
+        [Test]
+        public void ShouldCreateInListExpression()
+        {
+            var outcome = factory.In(
+                factory.Property("foo"),
+                factory.List(new[] { factory.Property("bar"), factory.String("baz") })
+            );
+            var evaluated = outcome.Evaluate(context);
+            Assert.That(evaluated, Is.EqualTo("foo in [ bar, 'baz' ]"));
+        }
+
+        [Test]
+        public void ShouldCreateListSpreadExpression()
+        {
+            var outcome = factory.In(
+                factory.Property("foo"),
+                factory.List(new [] { factory.String("bar"), factory.Spread(factory.Property("baz")) })
+            );
+            var evaluated = outcome.Evaluate(context);
+            Assert.That(evaluated, Is.EqualTo("foo in [ 'bar', ...baz ]"));
         }
 
         [Test]
@@ -225,7 +255,7 @@ namespace VCEL.Test.Expression
         {
             var outcome = factory.Set(new[] { "foo", "bar" }.ToHashSet<object>());
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("{ foo, bar }"));
+            Assert.That(evaluated, Is.EqualTo("{ 'foo', 'bar' }"));
         }
 
         [Test]
@@ -249,7 +279,7 @@ namespace VCEL.Test.Expression
         {
             var outcome = factory.List(new[] { factory.Property("foo"), factory.Property("bar") });
             var evaluated = outcome.Evaluate(context);
-            Assert.That(evaluated, Is.EqualTo("{ foo, bar }"));
+            Assert.That(evaluated, Is.EqualTo("[ foo, bar ]"));
         }
 
         [Test]

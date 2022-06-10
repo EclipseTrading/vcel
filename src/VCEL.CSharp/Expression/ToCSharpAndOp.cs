@@ -13,7 +13,7 @@ namespace VCEL.CSharp.Expression
         {
         }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
         {
             return Equals(lv, "null")
                 ? "null"

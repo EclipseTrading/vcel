@@ -28,9 +28,9 @@ namespace VCEL.Core.Expression.Impl
             var mo = this.Obj.Evaluate(context);
             return Monad.Bind(mo, BindMember);
 
-            TMonad BindMember(object o)
+            TMonad BindMember(object? o)
             {
-                return context.TryGetContext(o, out var c)
+                return o != null && context.TryGetContext(o, out var c)
                     ? Member.Evaluate(c)
                     : Monad.Unit;
             }

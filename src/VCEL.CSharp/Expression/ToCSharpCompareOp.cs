@@ -17,7 +17,7 @@ namespace VCEL.CSharp.Expression
             this.opName = opName;
         }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
         {
             return $@"(CSharpHelper.UpCastCompare({lv}, {rv}, ""{opName}""))";
         }

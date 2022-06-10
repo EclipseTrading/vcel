@@ -29,7 +29,7 @@ namespace VCEL.Core.Expression.Impl
             var l = Left.Evaluate(context);
             return Monad.Bind(l, Bind);
 
-            TMonad Bind(object lv)
+            TMonad Bind(object? lv)
             {
                 if(lv is bool lb)
                 {
@@ -41,7 +41,7 @@ namespace VCEL.Core.Expression.Impl
                 }
                 return Monad.Unit;
 
-                TMonad BindR(object rv)
+                TMonad BindR(object? rv)
                 {
                     return rv is bool rb 
                         ? Monad.Lift(Evaluate(lb, rb)) 

@@ -11,6 +11,7 @@
         GreaterOrEqual,
         Between,
         In,
+        InExpression,
         Matches,
         And,
         Or,
@@ -38,6 +39,7 @@
         Set,
         String,
         TimeSpan,
+        Spread,
     }
 
     public interface IExpressionNode
