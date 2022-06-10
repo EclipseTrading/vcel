@@ -13,11 +13,13 @@
         public TMonad GetValue(IContext<TMonad> ctx)
         {
             var overrideContext = ctx as OverrideContext<TMonad>;
-            if (overrideContext?.Overrides.TryGetValue(propName, out var v) ?? false)
+            TMonad v = default;
+            if (overrideContext?.Overrides.TryGetValue(propName, out v) ?? false)
             {
                 return v;
             }
-            if (baseAccessor == null && (overrideContext?.BaseContext.TryGetAccessor(propName, out var accessor) ?? false))
+            IValueAccessor<TMonad>? accessor = default;
+            if (baseAccessor == null && (overrideContext?.BaseContext.TryGetAccessor(propName, out accessor) ?? false))
             {
                 baseAccessor = accessor;
             }
