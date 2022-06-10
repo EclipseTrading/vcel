@@ -6,17 +6,26 @@ namespace VCEL.Core.Expression.Impl
 {
     public static class VcelDateTime
     {
-        public static DateTime Workday(IReadOnlyList<object> args)
+        public static WorkdayParams ParseWorkdayParams(IReadOnlyList<object> args)
         {
-            var date = ParseDateTime(args[0]);
+            var startDay = ParseDateTime(args[0]);
             if (!(args[1] is int noOfDays))
             {
                 noOfDays = int.Parse(args[1].ToString());
             }
+            var skippedDates = args.Count <= 2 ? Enumerable.Empty<DateTime>() : ParseDateTimes(args[2]);
+            return new WorkdayParams(startDay, noOfDays, skippedDates);
+        }
 
+        public static DateTime Workday(WorkdayParams workdayParams)
+        {
+            return Workday(workdayParams.StartDay, workdayParams.NoOfDays, workdayParams.SkippedDates);
+        }
+        public static DateTime Workday(DateTime startDay, int noOfDays, IEnumerable<DateTime> skippedDates)
+        {
+            var date = startDay;
             var absNoOfDays = Math.Abs(noOfDays);
             var addDay = noOfDays > 0 ? 1 : -1;
-            var skipDates = args.Count <= 2 ? Enumerable.Empty<DateTime>() : ParseDateTimes(args[2]);
             
             while (absNoOfDays > 0)
             {
@@ -28,7 +37,7 @@ namespace VCEL.Core.Expression.Impl
                     case DayOfWeek.Sunday:
                         continue;
                     default:
-                        if (!skipDates.Contains(date))
+                        if (!skippedDates.Contains(date))
                         {
                             absNoOfDays--;
                         }
