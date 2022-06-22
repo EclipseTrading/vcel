@@ -60,7 +60,7 @@ namespace VCEL.CSharp
             => new ToCSharpBinaryOp("-", Monad, l, r);
 
         public override IExpression<string> Divide(IExpression<string> l, IExpression<string> r)
-            => new ToCSharpBinaryOp("/", Monad, l, r);
+            => new ToCSharpDivideOp(Monad, l, r);
 
         public override IExpression<string> Multiply(IExpression<string> l, IExpression<string> r)
             => new ToCSharpBinaryOp("*", Monad, l, r);
