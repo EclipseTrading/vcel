@@ -5,8 +5,6 @@ namespace VCEL.CSharp.Expression
 {
     internal class ToCSharpDivideOp : BinaryExprBase<string>
     {
-        private readonly string opName;
-
         public ToCSharpDivideOp(
             IMonad<string> monad,
             IExpression<string> left,
