@@ -35,7 +35,7 @@ namespace VCEL.Test
         [TestCase("6 / 3", 2)]
         [TestCase("6 / 3 + 1", 3)]
         [TestCase("6 / 3 - 1", 1)]
-        [TestCase("6 / 3 -1", 1)]
+        [TestCase("6 / 3 - 1", 1)]
         [TestCase("8 / (3 + 1)", 2)]
         [TestCase("6 / (3 - 1)", 3)]
         [TestCase("12.0 / 4.0 * 100", 300)]
@@ -61,6 +61,14 @@ namespace VCEL.Test
         [TestCase("3^2/2^2", 2.25)]
         [TestCase("3^(2*2)^2", 43046721)]
         [TestCase("3^(2/2)^2", 3)]
+        [TestCase("5 * 2", 10.0)]
+        [TestCase("5 / 2", 2.5)]
+        [TestCase("5.0 / 2", 2.5)]
+        [TestCase("5.0 / 2.0", 2.5)]
+        [TestCase("2 / 2147483648", 9.313225746154785e-10)]
+        [TestCase("4147483648 / 2", 2073741824.0d)]
+        [TestCase("4147483648 / 2147483648", 1.9313225746154785d)]
+        [TestCase("4147483648.0 / 2147483648", 1.9313225746154785d)]
         public void ShouldEvaluate(string exprStr, object expected)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
@@ -75,9 +83,7 @@ namespace VCEL.Test
 
             var parseResult2 = VCExpression.ParseMaybe(exprStr);
             Assert.That(parseResult2.Success, Is.True, "Is successful");
-
             var expr2 = parseResult2.Expression;
-
             var result2 = expr2.Evaluate(new { });
             Assert.That(result2.HasValue, Is.True, "Have value");
             Assert.That(result2.Value, Is.EqualTo(expected));

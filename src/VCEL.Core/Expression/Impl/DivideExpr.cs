@@ -26,17 +26,17 @@ namespace VCEL.Core.Expression.Impl
                 case double d:
                     return Monad.Lift(d / (double)r!);
                 case int i:
-                    return Monad.Lift(i / (int)r!);
+                    return Monad.Lift(i / (double)(int)r!);
                 case long lo:
-                    return Monad.Lift(lo / (long)r!);
+                    return Monad.Lift(lo / (double)(long)r!);
                 case decimal de:
                     return Monad.Lift(de / (decimal)r!);
                 case float de:
                     return Monad.Lift(de / (float)r!);
                 case short de:
-                    return Monad.Lift(de / (short)r!);
+                    return Monad.Lift(de / (double)(short)r!);
                 case byte de:
-                    return Monad.Lift(de / (byte)r!);
+                    return Monad.Lift(de / (double)(byte)r!);
             }
             return Monad.Unit;
         }

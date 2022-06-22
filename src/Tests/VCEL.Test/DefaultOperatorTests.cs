@@ -49,7 +49,7 @@ namespace VCEL.Test
         }
 
         [TestCase(6, 2, 3)]
-        [TestCase(5, 2, 2)]
+        [TestCase(5, 2, 2.5)]
         [TestCase(10L, 5, 2L)]
         [TestCase(0x0A, 0x02, 0x05)]
         [TestCase(10L, 2d, 5d)]
