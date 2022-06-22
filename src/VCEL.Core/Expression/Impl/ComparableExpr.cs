@@ -13,7 +13,7 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        public override T Evaluate(object lv, object rv)
+        public override T Evaluate(object? lv, object? rv)
         {
             if(lv?.GetType() != rv?.GetType()
                 && !TryUpCast(lv, rv, out lv, out rv))
@@ -30,18 +30,18 @@ namespace VCEL.Core.Expression.Impl
         protected abstract T Evaluate(IComparable l, IComparable r);
 
         protected bool TryUpCast(
-            object l,
-            object r,
-            out object ol,
-            out object or)
+            object? l,
+            object? r,
+            out object? ol,
+            out object? or)
             => TryUpCastOneSide(l, r, out ol, out or)
                 || TryUpCastOneSide(r, l, out or, out ol);
 
         private bool TryUpCastOneSide(
-            object l,
-            object r,
-            out object ol,
-            out object or)
+            object? l,
+            object? r,
+            out object? ol,
+            out object? or)
         {
             ol = l;
             or = r;

@@ -10,7 +10,7 @@ namespace VCEL.Expression
     {
         public ExpressionFactory(
             IMonad<T> monad,
-            IFunctions<T> functions = null)
+            IFunctions<T>? functions = null)
         {
             Monad = monad;
             Functions = functions ?? new DefaultFunctions<T>();
@@ -32,7 +32,7 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Guard(
             IReadOnlyList<(IExpression<T>, IExpression<T>)> guardClauses,
-            IExpression<T> otherwise = null)
+            IExpression<T>? otherwise = null)
             => new GuardExpr<T>(Monad, guardClauses, otherwise);
 
         public virtual IExpression<T> LessThan(IExpression<T> l, IExpression<T> r)
@@ -44,27 +44,25 @@ namespace VCEL.Expression
             => new GreaterThan<T>(Monad, l, r);
         public virtual IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r)
             => new GreaterOrEqual<T>(Monad, l, r);
-
-        public virtual IExpression<T> In(IExpression<T> l, ISet<object> set)
-            => new InExpr<T>(Monad, l, set);
-        public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> r)
-            => new BetweenExpr<T>(Monad, l, r);
+        public virtual IExpression<T> InSet(IExpression<T> l, ISet<object> set)
+            => new InSetExpr<T>(Monad, l, set);
+        public virtual IExpression<T> In(IExpression<T> l, IExpression<T> r)
+            => new InExpr<T>(Monad, l, r);
+        public virtual IExpression<T> Spread(IExpression<T> expr)
+            => new SpreadExpr<T>(Monad, expr);
+        public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> lower, IExpression<T> upper)
+            => new BetweenExpr<T>(Monad, l, lower, upper);
         public virtual IExpression<T> Matches(IExpression<T> l, IExpression<T> r)
             => new MatchesExpr<T>(Monad, l, r);
-
-        public virtual IExpression<T> Bool(bool b) => Value(b);
-        public virtual IExpression<T> Double(double d) => Value(d);
-        public virtual IExpression<T> Int(int i) => Value(i);
-        public virtual IExpression<T> Long(long l) => Value(l);
-        public virtual IExpression<T> String(string s) => Value(s);
-        public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset)
-            => Value(dateTimeOffset);
-        public virtual IExpression<T> TimeSpan(TimeSpan timeSpan)
-            => Value(timeSpan);
-        public virtual IExpression<T> Set(ISet<object> s) => Value(s);
-        public virtual IExpression<T> Value(object o)
-            => new ValueExpr<T>(Monad, o);
-
+        public virtual IExpression<T> Bool(bool b) => new BoolExpr<T>(Monad, b);
+        public virtual IExpression<T> Double(double d) => new DoubleExpr<T>(Monad, d);
+        public virtual IExpression<T> Int(int i) => new IntExpr<T>(Monad, i);
+        public virtual IExpression<T> Long(long l) => new LongExpr<T>(Monad, l);
+        public virtual IExpression<T> String(string s) => new StringExpr<T>(Monad, s);
+        public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset) => new DateTimeOffsetExpr<T>(Monad, dateTimeOffset);
+        public virtual IExpression<T> TimeSpan(TimeSpan timeSpan) => new TimeSpanExpr<T>(Monad, timeSpan);
+        public virtual IExpression<T> Set(ISet<object> s) => new SetExpr<T>(Monad, s);
+        public virtual IExpression<T> Value(object? o) => o == null ? Null() : new ValueExpr<T, object>(Monad, o);
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
         public virtual IExpression<T> Add(IExpression<T> l, IExpression<T> r)
@@ -113,11 +111,5 @@ namespace VCEL.Expression
 
         public virtual IExpression<T> Member(IExpression<T> obj, IExpression<T> memberExpr)
             => new ObjectMember<T>(Monad, obj, memberExpr);
-
-        public virtual IExpression<T> Now() => Value(DateTime.Now);
-
-        public virtual IExpression<T> Today() => Value(DateTime.Today);
-
-        public IExpression<T> This() => new ThisExpr<T>(Monad);
     }
 }

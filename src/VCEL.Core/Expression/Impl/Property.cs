@@ -7,8 +7,8 @@ namespace VCEL.Core.Expression.Impl
     public class Property<TMonad> : IExpression<TMonad>
     {
         private readonly IDictionary<Type, IValueAccessor<TMonad>> accessors = new Dictionary<Type, IValueAccessor<TMonad>>();
-        private Type lastType;
-        private IValueAccessor<TMonad> lastAccessor;
+        private Type? lastType;
+        private IValueAccessor<TMonad>? lastAccessor;
 
         public Property(IMonad<TMonad> monad, string propName)
         {
@@ -28,7 +28,7 @@ namespace VCEL.Core.Expression.Impl
             var cType = context.GetType();
             if(cType == lastType)
             {
-                return lastAccessor.GetValue(context);
+                return lastAccessor!.GetValue(context);
             }
 
             if(!accessors.TryGetValue(cType, out var accessor))

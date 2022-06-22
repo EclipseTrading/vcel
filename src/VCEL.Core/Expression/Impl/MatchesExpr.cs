@@ -7,8 +7,8 @@ namespace VCEL.Core.Expression.Impl
 {
     public class MatchesExpr<T> : BinaryExprBase<T>
     {
-        private readonly Dictionary<string, Regex> cache
-            = new Dictionary<string, Regex>();
+        private readonly Dictionary<string, Regex?> cache
+            = new Dictionary<string, Regex?>();
 
         public MatchesExpr(
             IMonad<T> monad,
@@ -18,7 +18,7 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        public override T Evaluate(object lv, object rv)
+        public override T Evaluate(object? lv, object? rv)
         {
             if (lv is string ls && rv is string rs)
             {

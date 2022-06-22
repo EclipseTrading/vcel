@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.JS;
@@ -16,7 +16,10 @@ namespace VCEL.Test
             parser = new ExpressionParser<string>(jsParserfactory);
         }
 
-        [TestCase("fd.startsWith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
+        [TestCase("_row.day / 365 + Increment", "((vcelContext._row.day / 365) + vcelContext.Increment)")]
+        [TestCase("let x = (3.0 * (_row.A > 0 ? _row.A: 1) / 100) in (Get('B', 'C') * (1- 2.718^(-x)))/x * D",
+            "(() => {let x = ((3 * ((vcelContext._row.A > 0) ? vcelContext._row.A : 1)) / 100); return ((((Get('B','C')) * (1 - (Math.pow(2.718, -x)))) / x) * vcelContext.D);})()")]
+        [TestCase("fd.startswith('AAA')==false and P < Prev(P)", "(((vcelContext.fd ? vcelContext.fd.startsWith('AAA') : false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
         [TestCase("t == 'C'", "((vcelContext.t?.valueOf() ?? null) === 'C')")]
         [TestCase("t == s", "((vcelContext.t?.valueOf() ?? null) === (vcelContext.s?.valueOf() ?? null))")]
         [TestCase("t != s", "((vcelContext.t?.valueOf() ?? null) !== (vcelContext.s?.valueOf() ?? null))")]
@@ -38,7 +41,7 @@ namespace VCEL.Test
         {
             var result = parser.Parse(expr);
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
-            
+
             Assert.AreEqual(result.Success, true);
             Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
@@ -63,6 +66,21 @@ namespace VCEL.Test
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
             Assert.AreEqual(result.Success, true);
+            Assert.AreEqual(expected, parsedExpr);
+        }
+
+        [TestCase("!value.a.b.c", "!vcelContext.value.a.b.c")]
+        [TestCase("-value.a.b.c", "-vcelContext.value.a.b.c")]
+        [TestCase("value.a.b.c", "vcelContext.value.a.b.c")]
+        [TestCase("value.a.b.c > 100", "(vcelContext.value.a.b.c > 100)")]
+        [TestCase("value.a.b.c.startswith('AAA')", "(vcelContext.value.a.b.c ? vcelContext.value.a.b.c.startsWith('AAA') : false)")]
+        public void TestJsPropertyAccess(string expr, string expected)
+        {
+            var result = parser.Parse(expr);
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+
+            Assert.AreEqual(result.Success, true);
+            Console.WriteLine(parsedExpr);
             Assert.AreEqual(expected, parsedExpr);
         }
 
@@ -103,10 +121,10 @@ namespace VCEL.Test
         [TestCase("tan(x)", "(Math.tan(vcelContext.x))")]
         [TestCase("tanh(x)", "(Math.tanh(vcelContext.x))")]
         [TestCase("truncate(x)", "(Math.trunc(vcelContext.x))")]
-        [TestCase("abc.ToUpper()", "(vcelContext.abc ? vcelContext.abc.toUpperCase() : '')")]
-        [TestCase("abc.ToLower()", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
-        [TestCase("abc.StartsWith('c')", "(vcelContext.abc ? vcelContext.abc.startsWith('c') : false)")]
-        [TestCase("(T(System.Math).Abs(UnderlyingPrice - Barrier))", "(Math.abs((vcelContext.UnderlyingPrice - vcelContext.Barrier)))")]
+        [TestCase("abc.uppercase()", "(vcelContext.abc ? vcelContext.abc.toUpperCase() : '')")]
+        [TestCase("abc.lowercase()", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
+        [TestCase("abc.startswith('c')", "(vcelContext.abc ? vcelContext.abc.startsWith('c') : false)")]
+        [TestCase("(abs(UnderlyingPrice - Barrier))", "(Math.abs((vcelContext.UnderlyingPrice - vcelContext.Barrier)))")]
         public void TestJsParser_Functions(string expr, string expected)
         {
             var result = parser.Parse(expr);
@@ -196,14 +214,13 @@ namespace VCEL.Test
             "(() => {let x = 1; let y = (2 + x); return ((x + y) + vcelContext.position);})()")]
 
         [TestCase(@"
-            let 
-               p = a / l
+            let p = a / l
             in (match
-               | p < 0.5  = 'Low'
-               | p < 0.75 = 'Normal'
-               | p < 1.0  = 'Near Breach'
-               | p < 1.25 = 'Breach'
-               | otherwise 'Critical')
+                | p < 0.5  = 'Low'
+                | p < 0.75 = 'Normal'
+                | p < 1.0  = 'Near Breach'
+                | p < 1.25 = 'Breach'
+                | otherwise 'Critical')
             ",
             "(() => {let p = (vcelContext.a / vcelContext.l); return (() => { " +
             "switch(true) {" +
@@ -213,6 +230,37 @@ namespace VCEL.Test
             "case (p < 1.25): return 'Breach'; " +
             "default: return 'Critical'}})();})()")]
         public void TesJSParser_Let(string expr, string expected)
+        {
+            var result = parser.Parse(expr);
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+
+            Assert.AreEqual(result.Success, true);
+            Assert.AreEqual(expected, parsedExpr);
+        }
+
+        [TestCase("2 between {1, 3}", "2 >= 1 && 2 <= 3")]
+        [TestCase("1 between {1, 3}", "1 >= 1 && 1 <= 3")]
+        [TestCase("3 between {1, 3}", "3 >= 1 && 3 <= 3")]
+        [TestCase("0 between {1, 3}", "0 >= 1 && 0 <= 3")]
+        [TestCase("4 between {1, 3}", "4 >= 1 && 4 <= 3")]
+        [TestCase("2.0 between {1.1, 3.3}", "2 >= 1.1 && 2 <= 3.3")]
+        [TestCase("1.1 between {1.1, 3.3}", "1.1 >= 1.1 && 1.1 <= 3.3")]
+        [TestCase("4.4 between {1.1, 3.3}", "4.4 >= 1.1 && 4.4 <= 3.3")]
+        [TestCase("@2020-01-02T00:00:00+08:00 between {@2020-01-01T00:00:00+08:00, @2020-01-03T00:00:00+08:00}", 
+            "(new Date(1577894400000)) >= (new Date(1577808000000)) && (new Date(1577894400000)) <= (new Date(1577980800000))")]
+        [TestCase("@2020-01-04T00:00:00+08:00 between {@2020-01-01T00:00:00+08:00, @2020-01-03T00:00:00+08:00}", 
+            "(new Date(1578067200000)) >= (new Date(1577808000000)) && (new Date(1578067200000)) <= (new Date(1577980800000))")]
+        public void TestJsBetween(string expr, string expected)
+        {
+            var result = parser.Parse(expr);
+            var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+
+            Assert.AreEqual(result.Success, true);
+            Assert.AreEqual(expected, parsedExpr);
+        }
+
+        [TestCase("2 in [ ...a, b, 'c' ]", "[ ...vcelContext.a, vcelContext.b, 'c' ].has(2)")]
+        public void TestJsList(string expr, string expected)
         {
             var result = parser.Parse(expr);
             var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));

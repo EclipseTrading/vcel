@@ -30,10 +30,11 @@ namespace VCEL.CSharp.Expression
 
         public string Evaluate(IContext<string> context)
         {
-            if (functions.HasFunction(name.ToLower()))
+            if (functions.HasFunction(name))
             {
-                var function = functions.GetFunction(name.ToLower());
-                return function.Func.Invoke(args?.Select(s => (object)s.Evaluate(context))?.ToArray(), context).ToString();
+                var function = functions.GetFunction(name)!;
+                var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
+                return function.Func.Invoke(argValues, context)?.ToString() ?? "";
             }
 
             // TODO should return missing function

@@ -5,18 +5,16 @@ namespace VCEL.Core.Lang
     public class ValueParseResult<T> : ParseResult<T>
     {
         public ValueParseResult(IExpression<T> expression, object value)
+            : base(expression)
         {
             this.Value = value;
-            this.Expression = expression;
-            this.ParseErrors = new ParseError[0];
-            this.Success = true;
         }
 
         public ValueParseResult(IReadOnlyList<ParseError> errors)
+            : base(errors)
         {
             this.ParseErrors = errors;
-            this.Value = null;
-            this.Success = false;
+            this.Value = null!;
         }
 
         public ValueParseResult(params ParseError[] errors)

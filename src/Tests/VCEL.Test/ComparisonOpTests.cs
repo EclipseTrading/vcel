@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
+using VCEL.Core.Expression.Impl;
 using VCEL.Core.Lang;
 using VCEL.Test.Shared;
 
@@ -195,28 +197,53 @@ namespace VCEL.Test
         [TestCase("4.1 in { 1, 2, 4.1, null }", true)]
         [TestCase("4.1 in { 1, 2, null, 4.1 }", true)]
         [TestCase("4.1 in { 1, 2, null }", false)]
-        public void In(string exprString, bool expected)
+        public void InSet(string exprString, bool expected)
             => Compare(exprString, expected);
 
-        [TestCase("null in null")]
-        [TestCase("4.1 in null")]
-        [TestCase("'A' in {'A', 'B', Value }")]
-        [TestCase("'A' in Value")]
-        [TestCase("'A' in 1")]
-        [TestCase("'A' in 'A'")]
-        public void InInvalid(string exprString)
-        {
-            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
-            {
-                Assert.False(parseResult.Success);
-            }
 
-            var parsedMaybe = VCExpression.ParseMaybe(exprString);
-            Assert.False(parsedMaybe.Success);
-        }
+        [TestCase("1 in [ a, b, c ]", true)]
+        [TestCase("null in null", null)]
+        [TestCase("4.1 in null", null)]
+        public void In(string exprString, bool? expected)
+            => Compare(exprString, expected, new { a = 3, b = 2, c = 1  });
 
-        [TestCase("null in {1.1, 2.1, 4.1 }")]
-        [TestCase("null in { 1.1, null, 4.1 }")]
+
+        [TestCase("'x' in [ ...a, 'b' ]", true)]        
+        [TestCase("'z' in [ ...a, 'b' ]", false)]
+        public void InSpread(string exprString, bool expected)
+            => Compare(exprString, expected, new { a = new [] { "x", "y" } });
+
+        [TestCase("a in { 1, 2, 3 }", true)]
+        [TestCase("b in { 1, 2, 3 }", false)]
+        [TestCase("c in { 1, 2, 3 }", false)]
+        [TestCase("a in {}", false)]
+        [TestCase("a in { 1, '2', null }", true)]
+        [TestCase("a in { null, null, null }", false)]
+        [TestCase("a in { '1', '2', '3' }", false)]
+        [TestCase("b in { '1', '2', '3' }", true)]
+        [TestCase("c in { '1.1', '2.2', '3.5' }", false)]
+        [TestCase("c in { '1.1', 2.2, 3.5 }", true)]
+        public void InSetWithContext(string exprString, bool expected)
+            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
+
+
+        [TestCase("a in [1, 2, 3]", true)]
+        [TestCase("b in [1, 2, 3]", false)]
+        [TestCase("c in [1, 2, 3]", false)]
+        [TestCase("a in []", false)]
+        [TestCase("a in [1, '2', null]", true)]
+        [TestCase("a in [null, null, null]", false)]
+        [TestCase("a in ['1', '2', '3']", false)]
+        [TestCase("b in ['1', '2', '3']", true)]
+        [TestCase("c in ['1.1', '2.2', '3.5']", false)]
+        [TestCase("c in ['1.1', 2.2, 3.5]", true)]
+        [TestCase("@2022-06-10 in [@2022-06-09, @2022-06-10, @2022-06-11]", true)]
+        [TestCase("@2022-06-07 in [@2022-06-09, @2022-06-10, @2022-06-11]", false)]
+        public void InLiteralWithContext(string exprString, bool expected)
+            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
+
+        [TestCase("null in [ 1.1, 2.1, 4.1 ]")]
+        [TestCase("null in [ 1.1, null, 4.1 ]")]
         public void InMaybe(string exprString)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -379,11 +406,11 @@ namespace VCEL.Test
         public void CompareDecimalRight(double a, object b, bool expected)
             => Compare("B < A", expected, new {A = (decimal) a, B = b});
 
-        private void Compare(string exprString, bool expected, object o = null)
+        private void Compare(string exprString, bool? expected, object o = null)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
-                Assert.True(parseResult.Success, "Default expression parse");
+                Assert.True(parseResult.Success, $"Default expression parse failed: {String.Join(", ", parseResult.ParseErrors.Select(err => err.Message))}");
                 var result = parseResult.Expression.Evaluate(o ?? new { });
                 Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
             }
@@ -391,7 +418,7 @@ namespace VCEL.Test
             var maybeExpr = VCExpression.ParseMaybe(exprString);
             Assert.True(maybeExpr.Success, "Maybe expression parse");
             var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
-            Assert.True(maybeResult.HasValue, "Maybe expression evaluate has value");
+            Assert.That(maybeResult.HasValue, Is.EqualTo(expected != null), "Maybe expression evaluate has value");
             Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001), "Maybe expression evaluated");
         }
 

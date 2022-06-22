@@ -8,6 +8,8 @@ OPEN_BRACE: '{';
 CLOSE_BRACE: '}';
 LPAREN: '(';
 RPAREN: ')';
+OPEN_SQ: '[';
+CLOSE_SQ: ']';
 COMMA: ',';
 QUEST: '?';
 COLON: ':';
@@ -31,6 +33,8 @@ MINUS: '-';
 MULTIPLY: '*';
 DIVIDE: '/';
 POW: '^';
+
+SPREAD: '...';
 
 DOT: '.';
 

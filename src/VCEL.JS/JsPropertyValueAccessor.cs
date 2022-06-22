@@ -25,9 +25,9 @@ namespace VCEL.JS
         private readonly string jsDateObjPattern = @"\(new Date\(([0-9]+|)\)\)";
         private readonly IMonad<string> monad;
         private readonly string propName;
-        private readonly IReadOnlyDictionary<string, Func<string>> overridePropertyFunc;
+        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
 
-        public JsPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>> overridePropertyFunc = null)
+        public JsPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
         {
             this.monad = monad;
             this.propName = propName;
@@ -47,12 +47,10 @@ namespace VCEL.JS
                 finalPropOrMethod = jsDateMethod;
             }
 
-            if (context.Value.Contains(Constants.DefaultContext))
-                return $"{Constants.DefaultContext}.{finalPropOrMethod}";
-
-            return monad.Lift(context.Value == "{ }"
-                ? $"{Constants.DefaultContext}.{finalPropOrMethod}"
-                : $"{context.Value}.{finalPropOrMethod}");
+            var jsObjContext = context as JsObjectContext;
+            return monad.Lift(jsObjContext?.Object is string
+                ? $"{context.Value}.{finalPropOrMethod}"
+                : $"{Constants.DefaultContext}.{finalPropOrMethod}");
         }
     }
 }

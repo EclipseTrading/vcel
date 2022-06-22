@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VCEL.Core.Expression.Func;
 using VCEL.Monad;
@@ -7,12 +8,12 @@ namespace VCEL.Core.Expression.Impl
 {
     public class FunctionExpr<TMonad> : IExpression<TMonad>
     {
-        protected readonly Function<TMonad> function;
+        protected readonly Function<TMonad>? function;
         public FunctionExpr(
             IMonad<TMonad> monad,
             string name,
             IReadOnlyList<IExpression<TMonad>> args,
-            Function<TMonad> function)
+            Function<TMonad>? function)
         {
             Monad = monad;
             Name = name;
@@ -24,7 +25,7 @@ namespace VCEL.Core.Expression.Impl
         public string Name { get; }
         public IReadOnlyList<IExpression<TMonad>> Args { get; }
         public IEnumerable<IDependency> Dependencies
-            => function.Dependencies.Union(Args.SelectMany(a => a.Dependencies)).Distinct();
+            => function?.Dependencies.Union(Args.SelectMany(a => a.Dependencies)).Distinct() ?? Array.Empty<IDependency>();
 
         public virtual TMonad Evaluate(IContext<TMonad> context)
         {
@@ -32,7 +33,7 @@ namespace VCEL.Core.Expression.Impl
 
             TMonad Eval(IReadOnlyList<TMonad> args)
             {
-                var resolved = new object[args.Count];
+                var resolved = new object?[args.Count];
                 return EvalInner(0);
 
                 TMonad EvalInner(int i)
@@ -44,7 +45,7 @@ namespace VCEL.Core.Expression.Impl
                                 resolved[i] = o;
                                 return EvalInner(i + 1);
                             })
-                        : Monad.Lift(function.Func(resolved.ToArray(), context));
+                        : Monad.Lift(function?.Func(resolved.ToArray(), context));
             }
         }
 

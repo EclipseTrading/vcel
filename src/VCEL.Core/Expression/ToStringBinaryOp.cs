@@ -1,7 +1,8 @@
 ﻿using VCEL.Core.Expression.Impl;
+using VCEL.Core.Lang;
 using VCEL.Monad;
 
-namespace VCEL.Expression
+namespace VCEL.Core.Expression
 {
     internal class ToStringBinaryOp : BinaryExprBase<string>
     {
@@ -16,8 +17,18 @@ namespace VCEL.Expression
         {
             this.opName = opName;
         }
+        
+        public ToStringBinaryOp(
+            IMonad<string> monad, 
+            int tokenType,
+            IExpression<string> left, 
+            IExpression<string> right)
+            : base(monad, left, right)
+        {
+            opName = VCELParser.TokenName(tokenType);
+        }
 
-        public override string Evaluate(object lv, object rv)
+        public override string Evaluate(object? lv, object? rv)
             =>  $"{lv} {opName} {rv}";
     }
 }

@@ -49,47 +49,93 @@ namespace VCEL.Core.Expression.Func
 
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);
+            FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(args)), Register,2, 3, allowNullArgument:false);
+
+            RegisterEnsureOneArg("lowercase", arg => arg?.ToString().ToLower());
+            RegisterEnsureOneArg("uppercase", arg => arg?.ToString().ToUpper());
+
+            Register("substring", Substring);
+            RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1?.ToString() ?? string.Empty, arg2?.ToString() ?? string.Empty));
+            RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => Replace(arg1?.ToString() ?? string.Empty, arg2?.ToString() ?? string.Empty, arg3?.ToString() ?? string.Empty));
         }
 
-        public Function<T> GetFunction(string name)
+        private static string? Substring(object?[] args)
         {
-            return functions.TryGetValue(name.ToLower(), out var f) ? f : null;
+            switch (args.Length)
+            {
+                case 2:
+                    {
+                        var sourStr = args[0]?.ToString();
+                        var startIndex = int.Parse(args[1]?.ToString());
+                        return sourStr?.Substring(startIndex);
+                    }
+                case 3:
+                    {
+                        var sourStr = args[0]?.ToString();
+                        var startIndex = int.Parse(args[1]?.ToString());
+                        var strLength = int.Parse(args[2]?.ToString());
+                        return sourStr?.Substring(startIndex, strLength);
+                    }
+                default:
+                    return null;
+            }
+        }
+
+        private string[] Split(string str, string separator)
+        {
+            return str.Split(separator[0]);
+        }
+
+        private string Replace(string source, string target, string replaceWith)
+        {
+            return source.Replace(target, replaceWith);
+        }
+
+        public Function<T>? GetFunction(string name)
+        {
+            return functions.TryGetValue(name, out var f) ? f : null;
         }
 
         public bool HasFunction(string name)
         {
-            return functions.ContainsKey(name.ToLower());
+            return functions.ContainsKey(name);
         }
 
-        public void Register(string name, Func<object[], IContext<T>, object> func)
+        public void Register(string name, Func<object?[], IContext<T>, object?> func)
         {
             Register(name, func, new FuncDependency(name));
         }
 
-        public void Register(string name, Func<object[], object> func)
+        public void Register(string name, Func<object?[], object?> func)
         {
             Register(name, (args, _) => func(args), new FuncDependency(name));
         }
 
-        public void RegisterEnsureOneArg(string name, Func<object, object> func)
+        public void RegisterEnsureOneArg(string name, Func<object?, object?> func)
         {
-            Register(name, (args, _) => args?.Length == 1 && args[0] == null ? null : func(args[0]), new FuncDependency(name));
+            Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));
         }
 
-        public void RegisterEnsureTwoArgs(string name, Func<object, object, object> func)
+        public void RegisterEnsureTwoArgs(string name, Func<object?, object?, object?> func)
         {
             Register(name, (args, _) => args.Length != 2 || (args[0] == null || args[1] == null) ? null : func(args[0], args[1]),
                 new FuncDependency(name));
         }
 
-        protected void Register(string name, Func<object[], IContext<T>, object> func, params IDependency[] deps)
+        public void RegisterEnsureThreeArgs(string name, Func<object?, object?, object?, object?> func)
         {
-            functions[name.ToLower()] = new Function<T>(func, deps);
+            Register(name, (args, _) => args.Length != 3 || (args[0] == null || args[1] == null || args[2] == null) ? null : func(args[0], args[1], args[2]),
+                new FuncDependency(name));
         }
 
-        protected void Register(string name, Func<object[], object> func, params IDependency[] deps)
+        protected void Register(string name, Func<object?[], IContext<T>, object?> func, params IDependency[] deps)
         {
-            functions[name.ToLower()] = new Function<T>((args, _) => func(args), deps);
+            functions[name] = new Function<T>(func, deps);
+        }
+
+        protected void Register(string name, Func<object?[], object?> func, params IDependency[] deps)
+        {
+            functions[name] = new Function<T>((args, _) => func(args), deps);
         }
     }
 }

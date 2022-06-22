@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Will Liu</Authors>
     <Company>Eclipse Trading</Company>
@@ -9,6 +9,8 @@
     <Description>An extention to VCEL that translates VCEL expressions into JavaScript code</Description>
     <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

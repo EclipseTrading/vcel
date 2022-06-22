@@ -9,33 +9,34 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        public override T Evaluate(object lv, object rv)
+        public override T Evaluate(object? lv, object? rv)
         {
             var l = lv;
             var r = rv;
 
             if (lv?.GetType() != rv?.GetType()
-                && !UpCastEx.UpCast(ref l, ref r))
+                && !UpCastEx.UpCast(ref l!, ref r!))
             {
                 return Monad.Unit;
             }
 
+
             switch (l)
             {
                 case double d:
-                    return Monad.Lift(d / (double)r);
+                    return Monad.Lift(d / (double)r!);
                 case int i:
-                    return Monad.Lift(i / (double)(int)r);
+                    return Monad.Lift(i / (double)(int)r!);
                 case long lo:
-                    return Monad.Lift(lo / (double)(long)r);
+                    return Monad.Lift(lo / (double)(long)r!);
                 case decimal de:
-                    return Monad.Lift(de / (decimal)r);
+                    return Monad.Lift(de / (decimal)r!);
                 case float de:
-                    return Monad.Lift(de / (float)r);
+                    return Monad.Lift(de / (float)r!);
                 case short de:
-                    return Monad.Lift(de / (double)(short)r);
+                    return Monad.Lift(de / (double)(short)r!);
                 case byte de:
-                    return Monad.Lift(de / (double)(byte)r);
+                    return Monad.Lift(de / (double)(byte)r!);
             }
             return Monad.Unit;
         }

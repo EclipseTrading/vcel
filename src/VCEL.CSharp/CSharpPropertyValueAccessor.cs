@@ -8,12 +8,12 @@ namespace VCEL.CSharp
     {
         private readonly IMonad<string> monad;
         private readonly string propName;
-        private readonly IReadOnlyDictionary<string, Func<string>> overridePropFunc;
+        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropFunc;
 
         public CSharpPropertyValueAccessor(
             IMonad<string> monad,
             string propName,
-            IReadOnlyDictionary<string, Func<string>> overridePropFunc = null)
+            IReadOnlyDictionary<string, Func<string>>? overridePropFunc = null)
         {
             this.monad = monad;
             this.propName = propName;
@@ -29,8 +29,8 @@ namespace VCEL.CSharp
 
             var finalPropOrMethod = $"({context.Value}.{propName})";
             return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
-                              $"? ((double)({finalPropOrMethod})) " +
-                              $": ({finalPropOrMethod}))");
+                            $"? ((double)({finalPropOrMethod})) " +
+                            $": ({finalPropOrMethod}))");
         }
     }
 }

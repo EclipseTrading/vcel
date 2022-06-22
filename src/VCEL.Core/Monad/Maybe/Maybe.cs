@@ -8,7 +8,10 @@
             HasValue = true;
         }
 
-        internal Maybe() { }
+        internal Maybe() 
+        { 
+            Value = default!;
+        }
 
         public bool HasValue { get; }
         public T Value { get; }

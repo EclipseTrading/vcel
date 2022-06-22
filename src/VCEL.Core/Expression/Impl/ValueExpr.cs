@@ -4,23 +4,26 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression.Impl
 {
-    public class ValueExpr<TMonad> : IExpression<TMonad>
+    public class ValueExpr<TMonad, TValue> : IExpression<TMonad>
     {
-        private readonly TMonad value;
+        private readonly TMonad liftedValue;
 
-        public ValueExpr(IMonad<TMonad> monad, object value)
+        public TValue Value { get; }
+
+        public ValueExpr(IMonad<TMonad> monad, TValue value)
         {
             Monad = monad;
-            this.value = Monad.Lift(value);
+            Value = value;
+            liftedValue = Monad.Lift(value);
         }
 
         public IMonad<TMonad> Monad { get; }
 
-        public IEnumerable<IDependency> Dependencies => Enumerable.Empty<IDependency>();        
+        public IEnumerable<IDependency> Dependencies => Enumerable.Empty<IDependency>();
 
         public TMonad Evaluate(IContext<TMonad> _)
         {
-            return value;
+            return liftedValue;
         }
     }
 }

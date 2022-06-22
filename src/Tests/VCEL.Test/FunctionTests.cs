@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using VCEL.Test.Shared;
 
 namespace VCEL.Test
@@ -178,6 +178,78 @@ namespace VCEL.Test
                 var expr = parseResult.Expression;
                 var value = expr.Evaluate(new { });
                 Assert.That(value, Is.EqualTo(DateTime.Today));
+            }
+        }
+
+        [TestCase("lowercase('ABCD')", "abcd")]
+        [TestCase("uppercase('abcd')", "ABCD")]
+        [TestCase("substring('test_substring', 5)", "substring")]
+        [TestCase("substring('test_substring', 0, 4)", "test")]
+        [TestCase("split('test_split', '_')", new string[] { "test", "split" })]
+        [TestCase("replace('test_replace', '_replace', '')", "test")]
+        [TestCase("replace('test_replace', '_replace', '_test')", "test_test")]
+        public void EvalStringFunctions(string exprString, object expected)
+        {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("lowercase(A)", "ABCD", "abcd")]
+        [TestCase("uppercase(A)", "abcd", "ABCD")]
+        [TestCase("substring(A, 5)", "test_substring", "substring")]
+        [TestCase("substring(A, 0, 4)", "test_substring", "test")]
+        [TestCase("split(A, '_')", "test_split", new string[] { "test", "split" })]
+        [TestCase("replace(A, '_replace', '')", "test_replace", "test")]
+        [TestCase("replace(A, '_replace', '_test')", "test_replace", "test_test")]
+        public void EvalStringFunctions_Property(string exprString, string source, object expected)
+        {
+            var vcelContext = new { A = source };
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(vcelContext);
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+        
+        [TestCase("workday(@2022-11-04, 0)", "2022-11-4")]
+        [TestCase("workday(@2022-11-04, 1)", "2022-11-7")]
+        [TestCase("workday(@2022-11-04, 2)", "2022-11-8")]
+        [TestCase("workday(@2022-11-04, 7)", "2022-11-15")]
+        [TestCase("workday(@2022-11-04, -1)", "2022-11-3")]
+        [TestCase("workday(@2022-11-04, 7, [ @2022-11-09 ])", "2022-11-16")]
+        [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-16 ])", "2022-11-17")]
+        [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-16, @2022-11-22 ])", "2022-11-17")]
+        [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-10, @2022-11-11, @2022-11-16, @2022-11-22 ])", "2022-11-21")]
+        [TestCase("workday(@2022-11-05, 0", "2022-11-05")]
+        [TestCase("workday(startDay1, 0)", "2022-11-4")]
+        [TestCase("workday(startDay1, 1)", "2022-11-7")]
+        [TestCase("workday(startDay1, 2)", "2022-11-8")]
+        [TestCase("workday(startDay1, 7)", "2022-11-15")]
+        [TestCase("workday(startDay1, 7, [ holiday1 ])", "2022-11-16")]
+        [TestCase("workday(startDay1, 7, [ holiday1, holiday2 ])", "2022-11-17")]
+        [TestCase("workday(startDay1, 7, [ holiday1, holiday2, @2022-11-22 ])", "2022-11-17")]
+        [TestCase("workday(startDay1, 7, [ holiday1, @2022-11-10, @2022-11-11, holiday2, @2022-11-22 ])", "2022-11-21")]
+        [TestCase("workday(startDay2, 0)", "2022-11-05")]
+        public void EvalWorkdayFunction(string exprString, string expected)
+        {
+            var expDate = DateTime.Parse(expected);
+            var context = new
+            {
+                startDay1 = new DateTime(2022, 11, 4),
+                startDay2 = new DateTime(2022, 11, 5),
+                holiday1 = new DateTime(2022, 11, 9),
+                holiday2 = new DateTime(2022, 11, 16),
+            };
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(context);
+                Assert.That(result, Is.EqualTo(expDate));
             }
         }
     }

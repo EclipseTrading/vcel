@@ -6,7 +6,7 @@ namespace VCEL.Monad.Maybe
     {
         public Maybe<object> Unit => Maybe<object>.None;
 
-        public Maybe<object> Lift(object value) => Maybe<object>.Some(value);
+        public Maybe<object> Lift(object? value) => Maybe<object>.Some(value!);
 
         public Maybe<object> Bind(Maybe<object> a, Func<object, Maybe<object>> f)
         {

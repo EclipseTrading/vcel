@@ -6,7 +6,7 @@ namespace VCEL.Core.Expression.Impl
 {
     public class ListProperty<TContext> : IExpression<List<object>>
     {
-        private IValueAccessor<List<object>> valueAccessor;
+        private IValueAccessor<List<object>>? valueAccessor;
         private readonly string propName;
 
         public ListProperty(string propName)
@@ -30,4 +30,5 @@ namespace VCEL.Core.Expression.Impl
 
         public IEnumerable<IDependency> Dependencies { get; }
     }
+
 }

@@ -8,7 +8,7 @@ namespace VCEL.Expression
     {
         public string Unit => "";
         public string Bind(string m, Func<object, string> f) => f(m);
-        public string Lift(object value) => value.ToString();
+        public string Lift(object? value) => value?.ToString() ?? string.Empty;
 
         public static ConcatStringMonad Instance { get; } = new ConcatStringMonad();
 

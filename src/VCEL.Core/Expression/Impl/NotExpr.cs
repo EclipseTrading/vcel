@@ -5,27 +5,27 @@ namespace VCEL.Core.Expression.Impl
 {
     public class NotExpr<TMonad> : IExpression<TMonad>
     {
-        private readonly IExpression<TMonad> expr;
+        public IExpression<TMonad> Expr { get; }
 
         public NotExpr(
             IMonad<TMonad> monad,
             IExpression<TMonad> expr)
         {
             Monad = monad;
-            this.expr = expr;
+            this.Expr = expr;
         }
 
         public IMonad<TMonad> Monad { get; }
 
-        public IEnumerable<IDependency> Dependencies => expr.Dependencies;
+        public IEnumerable<IDependency> Dependencies => Expr.Dependencies;
 
         public TMonad Evaluate(IContext<TMonad> context)
         {
-            var result = expr.Evaluate(context);
+            var result = Expr.Evaluate(context);
             return Monad.Bind(result,
                 o => Monad.Lift(o is bool b ? !b : (bool?)null));
         }
 
-        public override string ToString() => $"!{expr}";
+        public override string ToString() => $"!{Expr}";
     }
 }
