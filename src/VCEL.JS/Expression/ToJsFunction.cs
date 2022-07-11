@@ -35,14 +35,17 @@ namespace VCEL.JS.Expression
 
                  { "now", "new Date" },
                  { "today", "new Date" },
-
-                 // methods
-                 { "startswith", "startsWith" },
-                 { "substring", "substring" },
-                 { "replace", "replace" },
-                 { "lowercase", "toLowerCase" },
-                 { "uppercase", "toUpperCase" }
              };
+
+        private static Dictionary<string, string> JSMethodMap
+            = new Dictionary<string, string>()
+            {
+                { "startswith", "startsWith" },
+                { "substring", "substring" },
+                { "replace", "replace" },
+                { "lowercase", "toLowerCase" },
+                { "uppercase", "toUpperCase" }
+            };
 
         private static Dictionary<string, string> JSFunctionDefaultResultMap
             = new Dictionary<string, string>()
@@ -50,7 +53,8 @@ namespace VCEL.JS.Expression
                 { "startsWith", "false" },
                 { "substring", "''" },
                 { "toLowerCase", "''" },
-                { "toUpperCase", "''" }
+                { "toUpperCase", "''" },
+                { "replace", "''" }
              };
         private string name;
         private IReadOnlyList<IExpression<string>> args;
@@ -68,22 +72,38 @@ namespace VCEL.JS.Expression
 
         public string Evaluate(IContext<string> context)
         {
+            if (JSMethodMap.TryGetValue(name, out var jsMethod))
+            {
+                if (IsContextEmpty(context) && args.Count == 0) return GetDefaultVal(jsMethod);
+                return IsContextEmpty(context)
+                    ? WarpVariableForNullChecking(args[0].Evaluate(context), jsMethod, string.Join(",", args.Skip(1).Select(s => s.Evaluate(context))))
+                    : WarpVariableForNullChecking(context.Value, jsMethod, string.Join(",", args.Select(s => s.Evaluate(context))));
+            }
             if (JSFunctionMap.TryGetValue(name, out var jsFunc))
             {
-                return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
+                return IsContextEmpty(context)
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"
                     : WarpVariableForNullChecking(context.Value, jsFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
             }
             return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
         }
 
+        private bool IsContextEmpty(IContext<string> context)
+        {
+            return string.IsNullOrEmpty(context.Value) || context.Value == "{ }";
+        }
+
         private string WarpVariableForNullChecking(string variable, string func, string args)
         {
-            var defaultReturnVal = JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
+            var defaultReturnVal = GetDefaultVal(func);
+            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
+        }
+
+        private string GetDefaultVal(string func)
+        {
+            return JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
                 ? defaultVal
                 : "false";
-
-            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
         }
     }
 }
