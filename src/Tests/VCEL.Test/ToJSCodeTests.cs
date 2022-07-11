@@ -140,6 +140,7 @@ namespace VCEL.Test
         [TestCase("substring('test', 2)", "('test' ? 'test'.substring(2) : '')")]
         [TestCase("replace('abc', 'a', 'b')", "('abc' ? 'abc'.replace('a','b') : '')")]
         [TestCase("replace(abc, 'a', 'b')", "(vcelContext.abc ? vcelContext.abc.replace('a','b') : '')")]
+        [TestCase("startswith(abc, 'c')", "(vcelContext.abc ? vcelContext.abc.startsWith('c') : false)")]
         public void TestJsParser_Functions(string expr, string expected)
         {
             var result = parser.Parse(expr);

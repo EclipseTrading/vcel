@@ -74,26 +74,36 @@ namespace VCEL.JS.Expression
         {
             if (JSMethodMap.TryGetValue(name, out var jsMethod))
             {
-                return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
+                if (IsContextEmpty(context) && args.Count == 0) return GetDefaultVal(jsMethod);
+                return IsContextEmpty(context)
                     ? WarpVariableForNullChecking(args[0].Evaluate(context), jsMethod, string.Join(",", args.Skip(1).Select(s => s.Evaluate(context))))
                     : WarpVariableForNullChecking(context.Value, jsMethod, string.Join(",", args.Select(s => s.Evaluate(context))));
             }
             if (JSFunctionMap.TryGetValue(name, out var jsFunc))
             {
-                return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
+                return IsContextEmpty(context)
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"
                     : WarpVariableForNullChecking(context.Value, jsFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
             }
             return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
         }
 
+        private bool IsContextEmpty(IContext<string> context)
+        {
+            return string.IsNullOrEmpty(context.Value) || context.Value == "{ }";
+        }
+
         private string WarpVariableForNullChecking(string variable, string func, string args)
         {
-            var defaultReturnVal = JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
+            var defaultReturnVal = GetDefaultVal(func);
+            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
+        }
+
+        private string GetDefaultVal(string func)
+        {
+            return JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
                 ? defaultVal
                 : "false";
-
-            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
         }
     }
 }
