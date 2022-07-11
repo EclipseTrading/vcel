@@ -125,6 +125,21 @@ namespace VCEL.Test
         [TestCase("abc.lowercase()", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
         [TestCase("abc.startswith('c')", "(vcelContext.abc ? vcelContext.abc.startsWith('c') : false)")]
         [TestCase("(abs(UnderlyingPrice - Barrier))", "(Math.abs((vcelContext.UnderlyingPrice - vcelContext.Barrier)))")]
+        // below are supported to align the behavior with C# runtime
+        [TestCase("uppercase(abc)", "(vcelContext.abc ? vcelContext.abc.toUpperCase() : '')")]
+        [TestCase("lowercase(abc)", "(vcelContext.abc ? vcelContext.abc.toLowerCase() : '')")]
+        [TestCase("uppercase('abc')", "('abc' ? 'abc'.toUpperCase() : '')")]
+        [TestCase("lowercase('abc')", "('abc' ? 'abc'.toLowerCase() : '')")]
+        [TestCase("substring(abc, 1, 2)", "(vcelContext.abc ? vcelContext.abc.substring(1,2) : '')")]
+        [TestCase("substring(abc, 2)", "(vcelContext.abc ? vcelContext.abc.substring(2) : '')")]
+        [TestCase("substring('test', 1, 2)", "('test' ? 'test'.substring(1,2) : '')")]
+        [TestCase("substring('test', 2)", "('test' ? 'test'.substring(2) : '')")]
+        [TestCase("substring(abc, 1, 2)", "(vcelContext.abc ? vcelContext.abc.substring(1,2) : '')")]
+        [TestCase("substring(abc, 2)", "(vcelContext.abc ? vcelContext.abc.substring(2) : '')")]
+        [TestCase("substring('test', 1, 2)", "('test' ? 'test'.substring(1,2) : '')")]
+        [TestCase("substring('test', 2)", "('test' ? 'test'.substring(2) : '')")]
+        [TestCase("replace('abc', 'a', 'b')", "('abc' ? 'abc'.replace('a','b') : '')")]
+        [TestCase("replace(abc, 'a', 'b')", "(vcelContext.abc ? vcelContext.abc.replace('a','b') : '')")]
         public void TestJsParser_Functions(string expr, string expected)
         {
             var result = parser.Parse(expr);

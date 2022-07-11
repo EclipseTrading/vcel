@@ -35,14 +35,17 @@ namespace VCEL.JS.Expression
 
                  { "now", "new Date" },
                  { "today", "new Date" },
-
-                 // methods
-                 { "startswith", "startsWith" },
-                 { "substring", "substring" },
-                 { "replace", "replace" },
-                 { "lowercase", "toLowerCase" },
-                 { "uppercase", "toUpperCase" }
              };
+
+        private static Dictionary<string, string> JSMethodMap
+            = new Dictionary<string, string>()
+            {
+                { "startswith", "startsWith" },
+                { "substring", "substring" },
+                { "replace", "replace" },
+                { "lowercase", "toLowerCase" },
+                { "uppercase", "toUpperCase" }
+            };
 
         private static Dictionary<string, string> JSFunctionDefaultResultMap
             = new Dictionary<string, string>()
@@ -50,7 +53,8 @@ namespace VCEL.JS.Expression
                 { "startsWith", "false" },
                 { "substring", "''" },
                 { "toLowerCase", "''" },
-                { "toUpperCase", "''" }
+                { "toUpperCase", "''" },
+                { "replace", "''" }
              };
         private string name;
         private IReadOnlyList<IExpression<string>> args;
@@ -68,6 +72,12 @@ namespace VCEL.JS.Expression
 
         public string Evaluate(IContext<string> context)
         {
+            if (JSMethodMap.TryGetValue(name, out var jsMethod))
+            {
+                return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
+                    ? WarpVariableForNullChecking(args[0].Evaluate(context), jsMethod, string.Join(",", args.Skip(1).Select(s => s.Evaluate(context))))
+                    : WarpVariableForNullChecking(context.Value, jsMethod, string.Join(",", args.Select(s => s.Evaluate(context))));
+            }
             if (JSFunctionMap.TryGetValue(name, out var jsFunc))
             {
                 return string.IsNullOrEmpty(context.Value) || context.Value == "{ }"
