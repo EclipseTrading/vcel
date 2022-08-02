@@ -41,6 +41,8 @@ namespace VCEL.CSharp.Expression.Func
 
             RegisterEnsureOneArg("lowercase", arg => $"{arg}.ToLower()");
             RegisterEnsureOneArg("uppercase", arg => $"{arg}.ToUpper()");
+            RegisterEnsureOneArg("datetime", arg => $"VcelDateTime.ToDateTime({arg})");
+            RegisterEnsureOneArg("date", arg => $"VcelDateTime.ToDate({arg})");
 
             Register("substring", Substring);
             RegisterEnsureTwoArgs("split", (arg1, arg2) => $"{arg1}.Split('{ToCSharpStringLiteralOp.UnWarpStringLiteral(arg2?.ToString() ?? "")}')");
