@@ -46,6 +46,8 @@ namespace VCEL.Core.Expression.Func
             RegisterEnsureOneArg("tan", arg => VcelMath.Tan(arg));
             RegisterEnsureOneArg("tanh", arg => VcelMath.Tanh(arg));
             RegisterEnsureOneArg("truncate", arg => VcelMath.Truncate(arg));
+            RegisterEnsureOneArg("datetime", arg => VcelDateTime.ToDateTime(arg));
+            RegisterEnsureOneArg("date", arg => VcelDateTime.ToDate(arg));
 
             Register("now", _ => DateTime.Now, TemporalDependency.Now);
             Register("today", _ => DateTime.Today, TemporalDependency.Today);

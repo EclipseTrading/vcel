@@ -67,5 +67,25 @@ namespace VCEL.Core.Expression.Impl
                 _ => DateTime.Parse(value.ToString())
             };
         }
+
+        public static DateTime? ToDateTime(object? arg) => arg switch
+        {
+            long msTimestamp => DateTimeOffset.FromUnixTimeMilliseconds(msTimestamp).DateTime,
+            double msTimestamp when msTimestamp > 0 && msTimestamp <= Int64.MaxValue =>
+                DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(msTimestamp)).DateTime,
+            DateTime dt => dt,
+            DateTimeOffset dto => dto.DateTime,
+            _ => default(DateTime?)
+        };
+
+        public static DateTime? ToDate(object? arg) => arg switch
+        {
+            long msTimestamp => DateTimeOffset.FromUnixTimeMilliseconds(msTimestamp).Date,
+            double msTimestamp when msTimestamp > 0 && msTimestamp <= Int64.MaxValue =>
+                DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(msTimestamp)).Date,
+            DateTime dt => dt.Date,
+            DateTimeOffset dto => dto.Date,
+            _ => default(DateTime?)
+        };
     }
 }

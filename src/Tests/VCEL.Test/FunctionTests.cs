@@ -252,5 +252,35 @@ namespace VCEL.Test
                 Assert.That(result, Is.EqualTo(expDate));
             }
         }
+
+        [TestCase("date(1659409442000)", "2022-08-02")]
+        [TestCase("datetime(1659409442000)", "2022-08-02 03:04:02")]
+        [TestCase("date(l)", "2022-08-02")]
+        [TestCase("datetime(l)", "2022-08-02 03:04:02")]
+        [TestCase("date(dMin)", "")]
+        [TestCase("date(dMax)", "")]
+        [TestCase("datetime(dMin)", "")]
+        [TestCase("datetime(dMax)", "")]
+        [TestCase("date(date)", "2022-11-05")]
+        [TestCase("date(datetime)", "2022-11-09")]
+        [TestCase("datetime(datetime)", "2022-11-09 11:10:00")]
+        public void EvalToDateTimeFunctions(string exprString, string dateTime)
+        {
+            DateTime? expected = dateTime == "" ? null : DateTime.Parse(dateTime);
+            var context = new
+            {
+                dMin = double.MinValue,
+                dMax = double.MaxValue,
+                l = 1659409442000,
+                date = new DateTime(2022, 11, 5),
+                datetime = new DateTime(2022, 11, 9, 11, 10, 0)
+            };
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(context);
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
     }
 }
