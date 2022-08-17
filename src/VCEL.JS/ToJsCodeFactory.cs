@@ -86,6 +86,9 @@ namespace VCEL.JS
         public override IExpression<string> Pow(IExpression<string> l, IExpression<string> r)
             => new ToJsPowOp(Monad, l, r);
 
+        public override IExpression<string> Mod(IExpression<string> l, IExpression<string> r)
+            => new ToJsModOp(Monad, l, r);
+        
         public override IExpression<string> Bool(bool b)
             => new ToJsStringOp((context) => b ? "true" : "false", Monad);
 

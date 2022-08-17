@@ -90,6 +90,9 @@ namespace VCEL.CSharp
         public override IExpression<string> Pow(IExpression<string> l, IExpression<string> r)
             => new ToCSharpPowOp(Monad, l, r);
 
+        public override IExpression<string> Mod(IExpression<string> l, IExpression<string> r)
+            => new ToCSharpModOp(Monad, l, r);
+        
         public override IExpression<string> Bool(bool b)
             => new ToCSharpStringOp((context) => b ? "true" : "false", Monad);
 

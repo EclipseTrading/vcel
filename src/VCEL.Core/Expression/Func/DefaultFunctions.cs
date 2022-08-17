@@ -27,6 +27,7 @@ namespace VCEL.Core.Expression.Func
             Register("max", Enumerable.Max);
             Register("min", Enumerable.Min);
             RegisterEnsureTwoArgs("pow", (arg1, arg2) => VcelMath.Pow(arg1, arg2));
+            RegisterEnsureTwoArgs("mod", (arg1, arg2) => VcelMath.Mod(arg1, arg2));
             Register("round", args =>
             {
                 switch (args.Length)

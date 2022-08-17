@@ -113,6 +113,7 @@ namespace VCEL.Test
         [TestCase("max(x)", "(Math.max(vcelContext.x))")]
         [TestCase("min(x)", "(Math.min(vcelContext.x))")]
         [TestCase("pow(x, 2)", "(Math.pow(vcelContext.x,2))")]
+        [TestCase("mod(x, 2)", "(mod(vcelContext.x,2))")]
         [TestCase("round(x)", "(Math.round(vcelContext.x))")]
         [TestCase("sign(x)", "(Math.sign(vcelContext.x))")]
         [TestCase("sin(x)", "(Math.sin(vcelContext.x))")]

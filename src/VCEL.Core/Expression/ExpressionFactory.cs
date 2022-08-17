@@ -77,6 +77,8 @@ namespace VCEL.Expression
         public virtual IExpression<T> Pow(IExpression<T> l, IExpression<T> r)
             => new PowExpr<T>(Monad, l, r);
 
+        public virtual IExpression<T> Mod(IExpression<T> l, IExpression<T> r)
+            => new ModExpr<T>(Monad, l, r);
         public virtual IExpression<T> And(IExpression<T> l, IExpression<T> r)
             => new AndExpr<T>(Monad, l, r);
         public virtual IExpression<T> Or(IExpression<T> l, IExpression<T> r)
