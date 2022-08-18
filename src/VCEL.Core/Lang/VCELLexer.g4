@@ -58,6 +58,7 @@ fragment TIME: TDG ':' TDG ':' TDG (DOT TDG DIGIT)?;
 
 HASH: '#';
 BAR: '|';
+DOLLAR: '$';
 
 fragment APOS: '\'' '\'';
 fragment LONG_SUFFIX: ( 'L' | 'l');
@@ -65,7 +66,7 @@ fragment HEX_DIGIT: [0-9A-Fa-f];
 
 fragment DIGIT: [0-9];
 NUMBER: DIGIT+ ([.] DIGIT+)? | '.' DIGIT+;
-ID: ('a' ..'z' | 'A' ..'Z' | '_') (
+ID: ('a' ..'z' | 'A' ..'Z' | '_' ) (
 		'a' ..'z'
 		| 'A' ..'Z'
 		| '_'
