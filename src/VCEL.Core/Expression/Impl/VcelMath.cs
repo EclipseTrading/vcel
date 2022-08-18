@@ -41,6 +41,13 @@ namespace VCEL.Core.Expression.Impl
                 : Math.Pow(Convert.ToDouble(arg1), Convert.ToDouble(arg2));
         }
 
+        public static double? Mod(object? arg1, object? arg2)
+        {
+            return arg1 == null || arg2 == null
+                ? default(double?)
+                : (Convert.ToDouble(arg1) % Convert.ToDouble(arg2));
+        }
+        
         public static object? Min(params object[] args) => args?.Min();
 
         public static object? Max(params object[] args) => args?.Max();

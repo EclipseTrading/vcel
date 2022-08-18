@@ -26,6 +26,7 @@ namespace VCEL.CSharp.Expression.Func
             Register("max", args => $"VcelMath.Max({Join(args)})");
             Register("min", args => $"VcelMath.Min({Join(args)})");
             Register("pow", args => $"VcelMath.Pow({Join(args)})");
+            Register("mod", args => $"VcelMath.Mod({Join(args)})");
             Register("round", args => $"VcelMath.Round({Join(args)})");
             Register("sign", args => $"VcelMath.Sign({Join(args)})");
             Register("sin", args => $"VcelMath.Sin({Join(args)})");
