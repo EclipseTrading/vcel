@@ -29,10 +29,10 @@ namespace VCEL.JS
             => new ToJsGuardExpr(Monad, guardClauses, otherwise);
 
         public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-            => new ToJsCodeInOp(Monad, l, Set(set));
+            => new ToJsCodeInOp(Monad, l, Set(set), "has");
 
         public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
-            => new ToJsCodeInOp(Monad, l, r);
+            => new ToJsCodeInOp(Monad, l, r, "includes");
 
         public override IExpression<string> Spread(IExpression<string> expr)
             => new ToJsStringOp((c) => $"...{expr.Evaluate(c)}", Monad);
