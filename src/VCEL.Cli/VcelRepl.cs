@@ -339,7 +339,7 @@ namespace VCEL.Cli
             {
                 (var expression, var parsed, var outcome) = history[i];
                 var historyIndex = (history.Count - 1 - i).ToString();
-                var dependencies = string.Join(',', parsed.Expression.Dependencies.Select(dep => dep.Name));
+                var dependencies = string.Join(", ", parsed.Expression.Dependencies.Select(dep => $"{dep.Name}({dep.GetType().Name})"));
                 historyTable.AddRow(historyIndex, expression, outcome.FormatAsValue(), outcome.FormatAsType(), dependencies);
             }
             AnsiConsole.Render(historyTable);
