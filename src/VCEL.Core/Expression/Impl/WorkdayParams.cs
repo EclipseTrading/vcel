@@ -5,7 +5,7 @@ namespace VCEL.Core.Expression.Impl
 {
     public class WorkdayParams
     {
-        public WorkdayParams(DateTime startDay, int noOfDays, IEnumerable<DateTime> skippedDates)
+        public WorkdayParams(DateTime startDay, int noOfDays, IReadOnlyList<DateTime> skippedDates)
         {
             StartDay = startDay;
             NoOfDays = noOfDays;
@@ -13,6 +13,6 @@ namespace VCEL.Core.Expression.Impl
         }
         public DateTime StartDay { get; }
         public int NoOfDays { get; }
-        public IEnumerable<DateTime> SkippedDates { get; }
+        public IReadOnlyList<DateTime> SkippedDates { get; }
     }
 }
