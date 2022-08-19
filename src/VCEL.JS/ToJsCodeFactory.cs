@@ -41,11 +41,11 @@ namespace VCEL.JS
             => new ToJsStringOp((context) =>
             {
                 var items = exprs.Select(e => e.Evaluate(context));
-                return $"[ {string.Join(", ", items)} ]";
+                return $"[{string.Join(",", items)}]";
             }, Monad);
 
         public override IExpression<string> Set(ISet<object> s)
-            => new ToJsStringOp((context) => $"(new Set([{string.Join(",", s.Select(str => $"'{str}'"))}]))", Monad);
+            => new ToJsStringOp((context) => $"[{string.Join(",", s.Select(str => $"'{str}'"))}]", Monad);
 
         public override IExpression<string> And(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeBinaryOp("&&", Monad, l, r);

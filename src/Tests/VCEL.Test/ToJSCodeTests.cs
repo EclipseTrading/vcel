@@ -184,7 +184,8 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("buyerParticipants in {'MOR', 'BBY', 'CAM'}", "(new Set(['MOR','BBY','CAM'])).has(vcelContext.buyerParticipants)")]
+        [TestCase("buyerParticipants in {'MOR', 'BBY', 'CAM'}", "['MOR','BBY','CAM'].includes(vcelContext.buyerParticipants)")]
+        [TestCase("buyerParticipants in ['MOR', 'BBY', 'CAM']", "['MOR','BBY','CAM'].includes(vcelContext.buyerParticipants)")]
         public void TestJsParser_In(string expr, string expected)
         {
             var result = parser.Parse(expr);
@@ -276,7 +277,7 @@ namespace VCEL.Test
             Assert.AreEqual(expected, parsedExpr);
         }
 
-        [TestCase("2 in [ ...a, b, 'c' ]", "[ ...vcelContext.a, vcelContext.b, 'c' ].has(2)")]
+        [TestCase("2 in [ ...a, b, 'c' ]", "[...vcelContext.a,vcelContext.b,'c'].includes(2)")]
         public void TestJsList(string expr, string expected)
         {
             var result = parser.Parse(expr);
