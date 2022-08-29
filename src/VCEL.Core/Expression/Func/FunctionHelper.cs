@@ -7,13 +7,13 @@ namespace VCEL.Core.Expression.Func
     public static class FunctionHelper
     {
         public static void RegisterEnsureArgs<TContext, TOut>(string name, 
-            Func<object[], TOut> func,
-            Action<string, Func<object[], IContext<TContext>, TOut>, IDependency[]> register,
+            Func<object?[], TOut> func,
+            Action<string, Func<object?[], IContext<TContext>, TOut?>, IDependency[]> register,
             int? minArgumentCount = null, 
             int? maxArgumentCount = null, 
-            bool allowNullArgument = false)
+            bool allowNullArgument = false) where TOut : class
         {
-            bool IsArgumentsValid(IReadOnlyCollection<object> args)
+            bool IsArgumentsValid(IReadOnlyCollection<object?> args)
             {
                 if (minArgumentCount != null && args.Count < minArgumentCount)
                 {

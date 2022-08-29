@@ -45,7 +45,9 @@ namespace VCEL.CSharp.Expression.Func
 
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");
-            FunctionHelper.RegisterEnsureArgs<string, string>("workday", args => $"VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(new object[]{{{Join(args)}}}))", Register, 2, allowNullArgument:false);
+            FunctionHelper.RegisterEnsureArgs<string, string>("workday",
+                args => $"VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(new object[]{{{Join(args)}}}))",
+                Register, 2, allowNullArgument: false);
 
             RegisterEnsureOneArg("lowercase", arg => $"{arg}.ToLower()");
             RegisterEnsureOneArg("uppercase", arg => $"{arg}.ToUpper()");

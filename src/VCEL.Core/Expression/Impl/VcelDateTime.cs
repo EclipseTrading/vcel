@@ -6,22 +6,26 @@ namespace VCEL.Core.Expression.Impl
 {
     public static class VcelDateTime
     {
-        public static WorkdayParams ParseWorkdayParams(IReadOnlyList<object> args)
+        public static WorkdayParams ParseWorkdayParams(IReadOnlyList<object?> args)
         {
-            var startDay = ParseDateTime(args[0]);
-            if (!(args[1] is int noOfDays))
+            var firstArg = args[0];
+            var secondArg = args[1];
+
+            var startDay = ParseDateTime(firstArg);
+            if (!(secondArg is int noOfDays))
             {
-                noOfDays = int.Parse(args[1].ToString());
+                noOfDays = int.TryParse(secondArg?.ToString(), out var parsed) ? parsed : 0;
             }
             var skippedDates = args.Count <= 2 ? Enumerable.Empty<DateTime>() : ParseDateTimes(args[2]);
-            return new WorkdayParams(startDay, noOfDays, skippedDates);
+            return new WorkdayParams(startDay, noOfDays, skippedDates.ToList());
         }
 
         public static DateTime Workday(WorkdayParams workdayParams)
         {
             return Workday(workdayParams.StartDay, workdayParams.NoOfDays, workdayParams.SkippedDates);
         }
-        public static DateTime Workday(DateTime startDay, int noOfDays, IEnumerable<DateTime> skippedDates)
+
+        public static DateTime Workday(DateTime startDay, int noOfDays, IReadOnlyList<DateTime> skippedDates)
         {
             var date = startDay;
             var absNoOfDays = Math.Abs(noOfDays);
@@ -48,7 +52,7 @@ namespace VCEL.Core.Expression.Impl
             return date;
         }
 
-        private static IEnumerable<DateTime> ParseDateTimes(object value)
+        private static IEnumerable<DateTime> ParseDateTimes(object? value)
         {
             if (value is IEnumerable<object> enumerable)
             {
@@ -58,13 +62,14 @@ namespace VCEL.Core.Expression.Impl
             return Enumerable.Empty<DateTime>();
         }
 
-        private static DateTime ParseDateTime(object value)
+        private static DateTime ParseDateTime(object? value)
         {
             return value switch
             {
                 DateTime date => date,
                 DateTimeOffset dto => dto.DateTime,
-                _ => DateTime.Parse(value.ToString())
+                _ when DateTime.TryParse(value?.ToString(), out var date) => date,
+                _ => throw new ArgumentException($"{value} is not a valid date time"),
             };
         }
 

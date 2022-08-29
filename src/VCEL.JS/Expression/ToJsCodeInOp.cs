@@ -15,7 +15,7 @@ namespace VCEL.JS.Expression
 
         public override string Evaluate(object? lv, object? rv)
         {
-            return $"{rv}.has({lv})";
+            return $"{rv}.includes({lv})";
         }
     }
 }

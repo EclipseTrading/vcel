@@ -3,11 +3,7 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using VCEL.Core.Expression.Impl;
 using VCEL.Core.Helper;
 using VCEL.Expression;
 
@@ -43,6 +39,9 @@ namespace VCEL.Core.Lang
             => Compose(context, r => exprFactory.Paren(r), 1);
 
         public override ParseResult<T> VisitProperty([NotNull] VCELParser.PropertyContext context)
+            => new ParseResult<T>(exprFactory.Property(context.GetText()));
+
+        public override ParseResult<T> VisitDollar(VCELParser.DollarContext context)
             => new ParseResult<T>(exprFactory.Property(context.GetText()));
 
         public override ParseResult<T> VisitDoubleLiteral([NotNull] VCELParser.DoubleLiteralContext context)
