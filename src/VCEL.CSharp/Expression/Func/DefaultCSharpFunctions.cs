@@ -39,7 +39,6 @@ namespace VCEL.CSharp.Expression.Func
             Register("long", args => $"VcelType.Long({Join(args)})");
             Register("double", args => $"VcelType.Double({Join(args)})");
             Register("decimal", args => $"VcelType.Decimal({Join(args)})");
-            Register("str", args => $"VcelType.String({Join(args)})");
             Register("string", args => $"VcelType.String({Join(args)})");
             Register("bool", args => $"VcelType.Boolean({Join(args)})");
 

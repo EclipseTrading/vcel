@@ -24,7 +24,15 @@ namespace VCEL.Core.Expression.Impl {
 
         public static decimal? Decimal<T>(T arg) => arg == null ? default(decimal?) : Convert.ToDecimal(arg);
 
-        public static string? String<T>(T arg) => arg == null ? default(string?) : Convert.ToString(arg);
+        public static string? String<T>(T arg, object? format = null) { 
+            if (arg == null) {
+                return default(string?);	
+            } 
+            if (format != null) {
+                return Convert.ToDateTime(arg).ToString(Convert.ToString(format));
+            }
+            return Convert.ToString(arg);
+        }
 
         public static bool? Boolean<T>(T arg) => arg == null ? default(bool?) : Convert.ToBoolean(arg);
     }

@@ -32,8 +32,18 @@ namespace VCEL.Core.Expression.Func
             RegisterEnsureOneArg("long", arg => VcelType.Long(arg));
             RegisterEnsureOneArg("double", arg => VcelType.Double(arg));
             RegisterEnsureOneArg("decimal", arg => VcelType.Decimal(arg));
-            RegisterEnsureOneArg("str", arg => VcelType.String(arg));
-            RegisterEnsureOneArg("string", arg => VcelType.String(arg));
+            Register("string", args => 
+            {
+                switch(args.Length)
+                {
+                    case 1:
+                        return VcelType.String(args[0]);
+                    case 2:
+                        return VcelType.String(args[0], args[1]);
+                    default:
+                        return null;
+                }
+            });
             RegisterEnsureOneArg("bool", arg => VcelType.Boolean(arg));
             Register("round", args =>
             {
