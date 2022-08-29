@@ -287,5 +287,57 @@ namespace VCEL.Test
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
+
+        [TestCase("int(3)", 3)]
+        [TestCase("int(3.4)", 3)]
+        [TestCase("int(2.6)", 3)]
+        [TestCase("int('3')", 3)]
+        [TestCase("int('3.1')", 3)]
+        [TestCase("long(3)", 3L)]
+        [TestCase("long(3.4)", 3L)]
+        [TestCase("long(2.6)", 3L)]
+        [TestCase("long('3')", 3L)]
+        [TestCase("long('3.1')", 3L)]
+        [TestCase("double(3)", 3.0)]
+        [TestCase("double(3.4)", 3.4)]
+        [TestCase("double(2.6)", 2.6)]
+        [TestCase("double('3')", 3.0)]
+        [TestCase("double('3.1')", 3.1)]
+        [TestCase("str(3)", "3")]
+        [TestCase("str(3.1)", "3.1")]
+        [TestCase("str('hello world')", "hello world")]
+        [TestCase("string(3)", "3")]
+        [TestCase("string(3.1)", "3.1")]
+        [TestCase("string('hello world')", "hello world")]
+        [TestCase("bool(1)", true)]
+        [TestCase("bool(0)", false)]
+        [TestCase("bool('true')", true)]
+        [TestCase("bool('false')", false)]
+        [TestCase("bool('True')", true)]
+        [TestCase("bool('False')", false)]
+        public void EvalTypeConversionFunctions(string exprString, object expected) {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("decimal(3)", "3.0")]
+        [TestCase("decimal(3.4)", "3.4")]
+        [TestCase("decimal(2.6)", "2.6")]
+        [TestCase("decimal('3')", "3.0")]
+        [TestCase("decimal('3.1')", "3.1")]
+        public void EvalDecimalTypeConversionFunction(string exprString, object expected) {
+            Decimal expct = Convert.ToDecimal(expected);
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expct));
+            } 
+        }
+        
     }
 }

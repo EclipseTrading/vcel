@@ -35,6 +35,13 @@ namespace VCEL.CSharp.Expression.Func
             Register("tan", args => $"VcelMath.Tan({Join(args)})");
             Register("tanh", args => $"VcelMath.Tanh({Join(args)})");
             Register("truncate", args => $"VcelMath.Truncate({Join(args)})");
+            Register("int", args => $"VcelType.Integer({Join(args)})");
+            Register("long", args => $"VcelType.Long({Join(args)})");
+            Register("double", args => $"VcelType.Double({Join(args)})");
+            Register("decimal", args => $"VcelType.Decimal({Join(args)})");
+            Register("str", args => $"VcelType.String({Join(args)})");
+            Register("string", args => $"VcelType.String({Join(args)})");
+            Register("bool", args => $"VcelType.Boolean({Join(args)})");
 
             Register("now", args => $"DateTime.Now");
             Register("today", args => $"DateTime.Today");

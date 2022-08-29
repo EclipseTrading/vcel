@@ -28,6 +28,13 @@ namespace VCEL.Core.Expression.Func
             Register("min", Enumerable.Min);
             RegisterEnsureTwoArgs("pow", (arg1, arg2) => VcelMath.Pow(arg1, arg2));
             RegisterEnsureTwoArgs("mod", (arg1, arg2) => VcelMath.Mod(arg1, arg2));
+            RegisterEnsureOneArg("int", arg => VcelType.Integer(arg));
+            RegisterEnsureOneArg("long", arg => VcelType.Long(arg));
+            RegisterEnsureOneArg("double", arg => VcelType.Double(arg));
+            RegisterEnsureOneArg("decimal", arg => VcelType.Decimal(arg));
+            RegisterEnsureOneArg("str", arg => VcelType.String(arg));
+            RegisterEnsureOneArg("string", arg => VcelType.String(arg));
+            RegisterEnsureOneArg("bool", arg => VcelType.Boolean(arg));
             Register("round", args =>
             {
                 switch (args.Length)
