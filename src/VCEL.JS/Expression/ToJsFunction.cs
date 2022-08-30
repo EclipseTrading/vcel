@@ -32,9 +32,16 @@ namespace VCEL.JS.Expression
                  { "tan" , "Math.tan" },
                  { "tanh" , "Math.tanh" },
                  { "truncate" , "Math.trunc" },
+                 { "int", "Number" },
+                 { "long", "Number" },
+                 { "double", "Number" },
+                 { "decimal", "Number" },
+                 { "string", "String" },
 
                  { "now", "new Date" },
                  { "today", "new Date" },
+                 { "datetime", "new Date" },
+                 { "date", "new Date" }
              };
 
         private static Dictionary<string, string> JSMethodMap
