@@ -5,19 +5,15 @@ namespace VCEL.Core.Expression.Impl {
         public static int? Integer<T>(T arg) {
             if (arg == null) {
                 return default(int?);	
-            } else if (typeof(T) == typeof(string)) {
-                return Convert.ToInt32(Convert.ToDouble(arg));	
             }
-            return Convert.ToInt32(arg);
+            return Convert.ToInt32(Convert.ToDouble(arg));	
         }
         
         public static long? Long<T>(T arg) {
             if (arg == null) {
                 return default(long?);	
-            } else if (typeof(T) == typeof(string)) {
-                return Convert.ToInt64(Convert.ToDouble(arg));	
-            }
-            return Convert.ToInt64(arg);
+            } 
+            return Convert.ToInt64(Convert.ToDouble(arg));	
         }
 
         public static double? Double<T>(T arg) => arg == null ? default(double?) : Convert.ToDouble(arg);
