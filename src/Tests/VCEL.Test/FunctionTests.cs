@@ -269,6 +269,7 @@ namespace VCEL.Test
         [TestCase("date(date)", "2022-11-05")]
         [TestCase("date(datetime)", "2022-11-09")]
         [TestCase("datetime(datetime)", "2022-11-09 11:10:00")]
+        
         public void EvalToDateTimeFunctions(string exprString, string dateTime)
         {
             DateTime? expected = dateTime == "" ? null : DateTime.Parse(dateTime);
@@ -287,5 +288,95 @@ namespace VCEL.Test
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
+
+        [TestCase("int(3)", 3)]
+        [TestCase("int(3.4)", 3)]
+        [TestCase("int(2.6)", 3)]
+        [TestCase("int('3')", 3)]
+        [TestCase("int('3.1')", 3)]
+        [TestCase("long(3)", 3L)]
+        [TestCase("long(3.4)", 3L)]
+        [TestCase("long(2.6)", 3L)]
+        [TestCase("long('3')", 3L)]
+        [TestCase("long('3.1')", 3L)]
+        [TestCase("double(3)", 3.0)]
+        [TestCase("double(3.4)", 3.4)]
+        [TestCase("double(2.6)", 2.6)]
+        [TestCase("double('3')", 3.0)]
+        [TestCase("double('3.1')", 3.1)]
+        [TestCase("double('3.1234567891011121314151617181920212223242526')", 3.123456789101112)]
+        [TestCase("string(3)", "3")]
+        [TestCase("string(3.1)", "3.1")]
+        [TestCase("string('False')", "False")]
+        [TestCase("string('3.1234567891011121314151617181920212223242526')", "3.1234567891011121314151617181920212223242526")]
+        [TestCase("string('hello world')", "hello world")]
+        [TestCase("bool(1)", true)]
+        [TestCase("bool(0)", false)]
+        [TestCase("bool('true')", true)]
+        [TestCase("bool('false')", false)]
+        [TestCase("bool('True')", true)]
+        [TestCase("bool('False')", false)]
+        public void EvalTypeConversionFunctions(string exprString, object expected) {
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("string(datetime, 'yyyy-MM-dd')", "2022-11-09")]
+        [TestCase("string(datetime, 'dd-MM-yyyy')", "09-11-2022")]
+        [TestCase("string(datetime, 'MM-dd-yyyy')", "11-09-2022")]
+        [TestCase("string(datetime, 'MMMM dd')", "November 09")]
+        [TestCase("string(datetime, 'dd MMM')", "09 Nov")]
+        [TestCase("string(datetime, 'dd/MM/yyyy')", "09/11/2022")]
+        [TestCase("string(datetime, 'dd-MM-yyyy HH:mm:ss')", "09-11-2022 11:10:00")]
+        [TestCase("string(datetime, 'dd-MM-yyyy HH:mm')", "09-11-2022 11:10")]
+        [TestCase("string(datetime, 'h:mm tt')", "11:10 AM")]
+        [TestCase("string(datetime, 'dd/MM/yyyy h:mm tt')", "09/11/2022 11:10 AM")]
+        [TestCase("string(datetime, 'dd-MM-yyyy h:mm tt')", "09-11-2022 11:10 AM")]
+        [TestCase("string(datetimeoffset, 'yyyy-MM-dd')", "2022-11-09")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy')", "09-11-2022")]
+        [TestCase("string(datetimeoffset, 'MM-dd-yyyy')", "11-09-2022")]
+        [TestCase("string(datetimeoffset, 'MMMM dd')", "November 09")]
+        [TestCase("string(datetimeoffset, 'dd MMM')", "09 Nov")]
+        [TestCase("string(datetimeoffset, 'dd/MM/yyyy')", "09/11/2022")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy HH:mm:ss')", "09-11-2022 11:10:00")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy HH:mm')", "09-11-2022 11:10")]
+        [TestCase("string(datetimeoffset, 'h:mm tt')", "11:10 AM")]
+        [TestCase("string(datetimeoffset, 'dd/MM/yyyy h:mm tt')", "09/11/2022 11:10 AM")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy h:mm tt')", "09-11-2022 11:10 AM")]
+        public void EvalStringToDateTimeFunction(string exprString, string expected)
+        {
+            var context = new
+            {
+                datetime = new DateTime(2022, 11, 9, 11, 10, 0),
+                datetimeoffset = new DateTimeOffset(new DateTime(2022, 11, 9, 11, 10, 0))
+            };
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(context);
+                Assert.That(result, Is.EqualTo(expected));
+            }
+        }
+
+        [TestCase("decimal(3)", "3.0")]
+        [TestCase("decimal(3.4)", "3.4")]
+        [TestCase("decimal(2.6)", "2.6")]
+        [TestCase("decimal('3')", "3.0")]
+        [TestCase("decimal('3.1')", "3.1")]
+        [TestCase("decimal('3.1234567891011121314151617181920212223242526')", "3.1234567891011121314151617182")]
+        public void EvalDecimalTypeConversionFunction(string exprString, object expected) {
+            Decimal expct = Convert.ToDecimal(expected);
+            foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
+            {
+                var expr = parseResult.Expression;
+                var result = expr.Evaluate(new { });
+                Assert.That(result, Is.EqualTo(expct));
+            } 
+        }
+        
     }
 }

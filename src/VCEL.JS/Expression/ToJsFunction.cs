@@ -32,10 +32,22 @@ namespace VCEL.JS.Expression
                  { "tan" , "Math.tan" },
                  { "tanh" , "Math.tanh" },
                  { "truncate" , "Math.trunc" },
+                 { "double", "Number" },
+                 { "decimal", "Number" },
+                 { "string", "String" },
 
                  { "now", "new Date" },
                  { "today", "new Date" },
+                 { "datetime", "new Date" },
+                 { "date", "new Date" }
              };
+
+        private static Dictionary<string, string> JSDoubleFunctionMap 
+            = new Dictionary<string, string> () 
+            {
+                { "int", "Math.floor(Number" },
+                { "long", "Math.floor(Number" },
+            };
 
         private static Dictionary<string, string> JSMethodMap
             = new Dictionary<string, string>()
@@ -85,6 +97,12 @@ namespace VCEL.JS.Expression
                     ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"
                     : WarpVariableForNullChecking(context.Value, jsFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
             }
+            if (JSDoubleFunctionMap.TryGetValue(name, out var jsDoubleFunc))
+            {
+                return IsContextEmpty(context)
+                    ? $"({jsDoubleFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))})))"
+                    : WarpVariableForNullCheckingDoubleFunc(context.Value, jsDoubleFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
+            }
             return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
         }
 
@@ -97,6 +115,12 @@ namespace VCEL.JS.Expression
         {
             var defaultReturnVal = GetDefaultVal(func);
             return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
+        }
+
+        private string WarpVariableForNullCheckingDoubleFunc(string variable, string func, string args)
+        {
+            var defaultReturnVal = GetDefaultVal(func);
+            return $"({variable} ? {variable}.{func}({args})) : {defaultReturnVal})";
         }
 
         private string GetDefaultVal(string func)
