@@ -336,11 +336,23 @@ namespace VCEL.Test
         [TestCase("string(datetime, 'h:mm tt')", "11:10 AM")]
         [TestCase("string(datetime, 'dd/MM/yyyy h:mm tt')", "09/11/2022 11:10 AM")]
         [TestCase("string(datetime, 'dd-MM-yyyy h:mm tt')", "09-11-2022 11:10 AM")]
+        [TestCase("string(datetimeoffset, 'yyyy-MM-dd')", "2022-11-09")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy')", "09-11-2022")]
+        [TestCase("string(datetimeoffset, 'MM-dd-yyyy')", "11-09-2022")]
+        [TestCase("string(datetimeoffset, 'MMMM dd')", "November 09")]
+        [TestCase("string(datetimeoffset, 'dd MMM')", "09 Nov")]
+        [TestCase("string(datetimeoffset, 'dd/MM/yyyy')", "09/11/2022")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy HH:mm:ss')", "09-11-2022 11:10:00")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy HH:mm')", "09-11-2022 11:10")]
+        [TestCase("string(datetimeoffset, 'h:mm tt')", "11:10 AM")]
+        [TestCase("string(datetimeoffset, 'dd/MM/yyyy h:mm tt')", "09/11/2022 11:10 AM")]
+        [TestCase("string(datetimeoffset, 'dd-MM-yyyy h:mm tt')", "09-11-2022 11:10 AM")]
         public void EvalStringToDateTimeFunction(string exprString, string expected)
         {
             var context = new
             {
-                datetime = new DateTime(2022, 11, 9, 11, 10, 0)
+                datetime = new DateTime(2022, 11, 9, 11, 10, 0),
+                datetimeoffset = new DateTimeOffset(new DateTime(2022, 11, 9, 11, 10, 0))
             };
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {

@@ -28,8 +28,10 @@ namespace VCEL.Core.Expression.Impl {
             if (arg == null) {
                 return default(string?);	
             } 
-            if (format != null) {
-                return Convert.ToDateTime(arg).ToString(Convert.ToString(format));
+            if (arg is DateTime dt && format != null) {
+                return dt.ToString((string)format);
+            } else if (arg is DateTimeOffset dto && format != null) {
+                return dto.ToString((string)format);	
             }
             return Convert.ToString(arg);
         }
