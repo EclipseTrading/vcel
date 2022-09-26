@@ -80,7 +80,8 @@ namespace VCEL.Core.Expression.Impl
                 DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(msTimestamp)).DateTime,
             DateTime dt => dt,
             DateTimeOffset dto => dto.DateTime,
-            _ => default(DateTime?)
+            string str when DateTime.TryParse(str, out var dt) => dt,
+            _ => default(DateTime?),
         };
 
         public static DateTime? ToDate(object? arg) => arg switch
@@ -90,7 +91,8 @@ namespace VCEL.Core.Expression.Impl
                 DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(msTimestamp)).Date,
             DateTime dt => dt.Date,
             DateTimeOffset dto => dto.Date,
-            _ => default(DateTime?)
+            string str when DateTime.TryParse(str, out var dt) => dt.Date,
+            _ => default(DateTime?),
         };
     }
 }
