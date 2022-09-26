@@ -260,7 +260,9 @@ namespace VCEL.Test
 
         [TestCase("date(1659409442000)", "2022-08-02")]
         [TestCase("datetime(1659409442000)", "2022-08-02 03:04:02")]
+        [TestCase("date('2022-08-02')", "2022-08-02")]
         [TestCase("date(l)", "2022-08-02")]
+        [TestCase("datetime('2022-08-02 03:04:02')", "2022-08-02 03:04:02")]
         [TestCase("datetime(l)", "2022-08-02 03:04:02")]
         [TestCase("date(dMin)", "")]
         [TestCase("date(dMax)", "")]
