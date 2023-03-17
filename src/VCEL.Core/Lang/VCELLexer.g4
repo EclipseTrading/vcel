@@ -58,7 +58,6 @@ fragment TIME: TDG ':' TDG ':' TDG (DOT TDG DIGIT)?;
 
 HASH: '#';
 BAR: '|';
-DOLLAR: '$';
 
 fragment APOS: '\'' '\'';
 fragment LONG_SUFFIX: ( 'L' | 'l');
@@ -67,6 +66,14 @@ fragment HEX_DIGIT: [0-9A-Fa-f];
 fragment DIGIT: [0-9];
 NUMBER: DIGIT+ ([.] DIGIT+)? | '.' DIGIT+;
 ID: ('a' ..'z' | 'A' ..'Z' | '_' ) (
+		'a' ..'z'
+		| 'A' ..'Z'
+		| '_'
+		| '0' ..'9'
+	)*;
+// introduced DOLLARID to represent tokens that start with a dollar sign
+// we've intentionally added this new type of tokens instead of updating ID beacause ID is also used for function name
+DOLLARID: ( '$' ) (
 		'a' ..'z'
 		| 'A' ..'Z'
 		| '_'

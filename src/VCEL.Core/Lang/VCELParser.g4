@@ -104,12 +104,10 @@ term
 
 var
 	: property
-	| variable
-	| dollar;
+	| variable;
 
-property: ID;
+property: DOLLARID | ID;
 variable: HASH ID;
-dollar: DOLLAR;
 
 setLiteral: (OPEN_BRACE literal? (COMMA literal)* CLOSE_BRACE);
 

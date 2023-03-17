@@ -41,9 +41,6 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitProperty([NotNull] VCELParser.PropertyContext context)
             => new ParseResult<T>(exprFactory.Property(context.GetText()));
 
-        public override ParseResult<T> VisitDollar(VCELParser.DollarContext context)
-            => new ParseResult<T>(exprFactory.Property(context.GetText()));
-
         public override ParseResult<T> VisitDoubleLiteral([NotNull] VCELParser.DoubleLiteralContext context)
             => double.TryParse(context.GetText(), out var d)
                 ? new ValueParseResult<T>(exprFactory.Double(d), d)

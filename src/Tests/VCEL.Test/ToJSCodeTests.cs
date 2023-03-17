@@ -37,6 +37,7 @@ namespace VCEL.Test
         [TestCase("s == null", "((vcelContext.s?.valueOf() ?? null) === null)")]
         [TestCase("s != null", "((vcelContext.s?.valueOf() ?? null) !== null)")]
         [TestCase("s != null and s == 'ACTIVE'", "(((vcelContext.s?.valueOf() ?? null) !== null) && ((vcelContext.s?.valueOf() ?? null) === 'ACTIVE'))")]
+        [TestCase("$test != 1", "((vcelContext.$test?.valueOf() ?? null) !== 1)")]
         public void TestJsParser_ProdRulesExamples(string expr, string expected)
         {
             var result = parser.Parse(expr);
