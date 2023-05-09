@@ -48,6 +48,14 @@ namespace VCEL.Test
         [TestCase("null == 4.2", false)]
         [TestCase("null == 'ABC'", false)]
         [TestCase("'ABC' == null", false)]
+        [TestCase("0 == 0", true)]
+        [TestCase("0 == 0.0", true)]
+        [TestCase("0.0 == 0", true)]
+        [TestCase("0.0 == 0.0", true)]
+        [TestCase("0 == 1", false)]
+        [TestCase("0 == 1.0", false)]
+        [TestCase("0.0 == 1", false)]
+        [TestCase("0.0 == 1.0", false)]
         public void Eq(string exprString, bool expected)
             => Compare(exprString, expected);
 
@@ -121,6 +129,14 @@ namespace VCEL.Test
         [TestCase("1 != null", true)]
         [TestCase("null != 'ABC'", true)]
         [TestCase("'ABC' != null", true)]
+        [TestCase("0 != 0", false)]
+        [TestCase("0 != 0.0", false)]
+        [TestCase("0.0 != 0", false)]
+        [TestCase("0.0 != 0.0", false)]
+        [TestCase("0 != 1", true)]
+        [TestCase("0 != 1.0", true)]
+        [TestCase("0.0 != 1", true)]
+        [TestCase("0.0 != 1.0", true)]
         public void NotEq(string exprString, bool expected)
             => Compare(exprString, expected);
 

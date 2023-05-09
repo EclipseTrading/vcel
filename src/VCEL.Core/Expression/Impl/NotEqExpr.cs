@@ -13,6 +13,6 @@ namespace VCEL.Core.Expression.Impl
         }
 
         public override T Evaluate(object? lv, object? rv)
-            => Monad.Lift(!Equals(lv, rv));
+            => Monad.Lift(!TypeOperation.EqualsChecked(lv, rv));
     }
 }
