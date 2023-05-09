@@ -95,30 +95,12 @@ namespace VCEL.Core.Lang
 
         public override ParseResult<T> VisitSetLiteral([NotNull] VCELParser.SetLiteralContext context)
         {
-            var valueParsedSetItems = new List<ValueParseResult<T>>();
-            var items = Visit<ParseResult<T>>(context.literal());
+            var items = Visit<ParseResult<T>>(context.setItem());
             if (items.Any(i => !i.Success))
             {
                 return new ParseResult<T>(items.SelectMany(i => i.ParseErrors).ToArray());
             }
-            foreach (var parsedItem in items)
-            {
-                if (parsedItem is ValueParseResult<T> valueParsedItem)
-                {
-                    valueParsedSetItems.Add(valueParsedItem);
-                }
-                else
-                {
-                    ParseError error = new ParseError($"Unable to parse as set literal",
-                        parsedItem.Expression.ToString(),
-                        context.Start.Line,
-                        context.Start.StartIndex,
-                        context.Stop.StopIndex);
-                    return new ParseResult<T>(error);
-                }
-            }
-            var set = new HashSet<object>(valueParsedSetItems.Select(item => item.Value));
-            return new ValueParseResult<T>(exprFactory.Set(set), set);
+            return new ParseResult<T>(exprFactory.Set(items.Select(i => i.Expression).ToHashSet()));
         }
 
         public override ParseResult<T> VisitNullLiteral([NotNull] VCELParser.NullLiteralContext context)
@@ -147,12 +129,7 @@ namespace VCEL.Core.Lang
         {
             var left = Visit(context.left);
             var right = Visit(context.right);
-            return Compose(left, right, (l, r) =>
-            {
-                return r is ValueParseResult<T> valueParsedSet && valueParsedSet.Value is ISet<object> setValue
-                    ? exprFactory.InSet(l, setValue)
-                    : exprFactory.In(l, r);
-            });
+            return Compose(left, right, (l, r) => exprFactory.In(l, r));
         }
 
         public override ParseResult<T> VisitListItem([NotNull] VCELParser.ListItemContext context)

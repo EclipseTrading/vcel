@@ -8,11 +8,11 @@ namespace VCEL.Core.Expression.Abstract
         [JsonProperty("$type")]
         public NodeType Type => NodeType.Set;
 
-        public Set(ISet<object> value)
+        public Set(ISet<IExpressionNode> value)
         {
             Value = value;
         }
 
-        public ISet<object> Value { get; }
+        public ISet<IExpressionNode> Value { get; }
     }
 }

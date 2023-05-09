@@ -109,7 +109,10 @@ var
 property: DOLLARID | ID;
 variable: HASH ID;
 
-setLiteral: (OPEN_BRACE literal? (COMMA literal)* CLOSE_BRACE);
+setLiteral: (OPEN_BRACE setItem? (COMMA setItem)* CLOSE_BRACE);
+setItem
+    : functionExpr
+    | literal;
 
 list: (OPEN_SQ listItem? (COMMA listItem)* CLOSE_SQ);
 

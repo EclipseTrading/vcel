@@ -28,9 +28,6 @@ namespace VCEL.JS
             IExpression<string>? otherwise = null)
             => new ToJsGuardExpr(Monad, guardClauses, otherwise);
 
-        public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-            => new ToJsCodeInOp(Monad, l, Set(set));
-
         public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeInOp(Monad, l, r);
 
@@ -44,8 +41,8 @@ namespace VCEL.JS
                 return $"[{string.Join(",", items)}]";
             }, Monad);
 
-        public override IExpression<string> Set(ISet<object> s)
-            => new ToJsStringOp((context) => $"[{string.Join(",", s.Select(str => $"'{str}'"))}]", Monad);
+        public override IExpression<string> Set(ISet<IExpression<string>> s)
+            => new ToJsStringOp((context) => $"[{string.Join(",", s.Select(e => e.Evaluate(context)))}]", Monad);
 
         public override IExpression<string> And(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeBinaryOp("&&", Monad, l, r);

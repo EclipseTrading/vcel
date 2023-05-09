@@ -135,7 +135,9 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateInSetExpression()
         {
-            var outcome = factory.InSet(factory.Property("foo"), new[] { "bar", "baz" }.ToHashSet<object>());
+            var outcome = factory.In(
+                factory.Property("foo"),
+                factory.Set(new[] { factory.String("bar"), factory.String("baz") }.ToHashSet()));
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("foo in { 'bar', 'baz' }"));
         }
@@ -253,7 +255,7 @@ namespace VCEL.Test.Expression
         [Test]
         public void ShouldCreateSetExpression()
         {
-            var outcome = factory.Set(new[] { "foo", "bar" }.ToHashSet<object>());
+            var outcome = factory.Set(new[] { factory.String("foo"), factory.String("bar") }.ToHashSet());
             var evaluated = outcome.Evaluate(context);
             Assert.That(evaluated, Is.EqualTo("{ 'foo', 'bar' }"));
         }

@@ -84,7 +84,7 @@ namespace VCEL.Core.Expression
         public IExpression<string> GreaterOrEqual(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.GTE, l, r);
 
-        public IExpression<string> InSet(IExpression<string> l, ISet<object> set)
+        public IExpression<string> InSet(IExpression<string> l, ISet<IExpression<string>> set)
             => new ToStringBinaryOp(monad, P.IN, l, Set(set));
         public IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.IN, l, r);
@@ -130,10 +130,10 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<TimeSpan>(monad, timeSpan,
                 (value, _) => value.ToString(value.Days >= 1 ? "d'.'hh':'mm':'ss'.'fff" : "hh':'mm':'ss'.'fff"));
 
-        public IExpression<string> Set(ISet<object> set)
-            => new ToStringValueExpr<ISet<object>>(monad, set, (value, context) =>
+        public IExpression<string> Set(ISet<IExpression<string>> set)
+            => new ToStringValueExpr<ISet<IExpression<string>>>(monad, set, (value, context) =>
             {
-                var items = string.Join($"{P.TokenName(P.COMMA)} ", value.Select(item => item is string s ? $"'{s}'" : item.ToString()));
+                var items = string.Join($"{P.TokenName(P.COMMA)} ", value.Select(item => item.Evaluate(context)));
                 return $"{P.TokenName(P.OPEN_BRACE)} {items} {P.TokenName(P.CLOSE_BRACE)}";
             });
 

@@ -226,7 +226,11 @@ src/Views.Client/Properties/launchSettings.json
 src/Views.ViewClientHost/postbuild.cmd
 src/Tests/**/*.feature.cs
 src/VCEL.Core/Lang/.antlr/
+src/gen
 
 # BenchmarkDotNet
 
 src/Tests/**/results/
+
+# JetBrains Rider/IntelliJ
+.idea

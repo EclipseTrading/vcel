@@ -86,13 +86,6 @@ namespace VCEL.Test.Expression.Abstract
         }
 
         [Test]
-        public void ShouldMapToExpressionInSet()
-        {
-            var inExpr = ToExpression(new InSet(new Null(), new HashSet<object>()));
-            Assert.That(inExpr, Is.TypeOf<InSetExpr<object>>());
-        }
-
-        [Test]
         public void ShouldMapToExpressionIn()
         {
             var inExpr = ToExpression(new In(new Null(), new Null()));

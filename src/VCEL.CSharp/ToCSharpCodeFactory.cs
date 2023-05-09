@@ -26,17 +26,14 @@ namespace VCEL.CSharp
         public override IExpression<string> Guard(IReadOnlyList<(IExpression<string>, IExpression<string>)> guardClauses, IExpression<string>? otherwise = null)
             => new ToCSharpGuardExpr(Monad, guardClauses, otherwise);
 
-        public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-            => new ToCSharpInOp(Monad, l, Set(set));    
-
         public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToCSharpInOp(Monad, l, r);
 
         public override IExpression<string> Spread(IExpression<string> expr)
             => new ToCSharpSpreadOp(Monad, expr);
 
-        public override IExpression<string> Set(ISet<object> s)
-            => new ToCSharpStringOp((context) => $"(new HashSet<object>{{{string.Join(",", s.Select(x => x is string ? $@"""{x}""" : x?.ToString() ?? "\"null\""))}}})", Monad);
+        public override IExpression<string> Set(ISet<IExpression<string>> s)
+            => new ToCSharpStringOp((context) => $"(new HashSet<object>{{{string.Join(",", s.Select(x => x.Evaluate(context)))}}})", Monad);
 
         public override IExpression<string> List(IReadOnlyList<IExpression<string>> exprs)
         {

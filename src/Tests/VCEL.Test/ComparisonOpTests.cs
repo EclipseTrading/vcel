@@ -197,6 +197,9 @@ namespace VCEL.Test
         [TestCase("4.1 in { 1, 2, 4.1, null }", true)]
         [TestCase("4.1 in { 1, 2, null, 4.1 }", true)]
         [TestCase("4.1 in { 1, 2, null }", false)]
+        [TestCase("date('2000-01-01') in { today() }", false)]
+        [TestCase("today() in { today() }", true)]
+        [TestCase("date('2023-01-02') in { date('2023-01-01'), date('2023-01-02'), date('2023-01-03') }", true)]
         public void InSet(string exprString, bool expected)
             => Compare(exprString, expected);
 
@@ -223,8 +226,10 @@ namespace VCEL.Test
         [TestCase("b in { '1', '2', '3' }", true)]
         [TestCase("c in { '1.1', '2.2', '3.5' }", false)]
         [TestCase("c in { '1.1', 2.2, 3.5 }", true)]
+        [TestCase("d in { date('2023-01-03'), date('2023-01-01') }", true)]
+        [TestCase("d in { date('2023-01-03'), date('2023-01-04') }", false)]
         public void InSetWithContext(string exprString, bool expected)
-            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5 });
+            => Compare(exprString, expected, new { a = 1, b = "2", c = 3.5, d = new DateTime(2023, 1, 1, 0, 0, 0) });
 
 
         [TestCase("a in [1, 2, 3]", true)]

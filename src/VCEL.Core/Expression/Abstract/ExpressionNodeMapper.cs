@@ -30,7 +30,6 @@ namespace VCEL.Core.Expression.Abstract
                 LessOrEqual n => factory.LessOrEqual(ToExpression(n.Left), ToExpression(n.Right)),
                 GreaterOrEqual n => factory.GreaterOrEqual(ToExpression(n.Left), ToExpression(n.Right)),
                 Between n => factory.Between(ToExpression(n.Left), ToExpression(n.Lower), ToExpression(n.Upper)),
-                InSet n => factory.InSet(ToExpression(n.Left), n.Set),
                 In n => factory.In(ToExpression(n.Left), ToExpression(n.List)),
                 Spread n => factory.Spread(ToExpression(n.List)),
                 Matches n => factory.Matches(ToExpression(n.Left), ToExpression(n.Right)),
@@ -58,7 +57,7 @@ namespace VCEL.Core.Expression.Abstract
                 String n => factory.String(n.Value),
                 DateTimeOffset n => factory.DateTimeOffset(n.Value),
                 TimeSpan n => factory.TimeSpan(n.Value),
-                Set n => factory.Set(n.Value),
+                Set n => factory.Set(n.Value.Select(ToExpression).ToHashSet()),
                 Value n => factory.Value(n.ValueProperty),
                 _ => throw new Exception($"Expression node type not handled '{node?.Type}'"),
             };
@@ -79,7 +78,6 @@ namespace VCEL.Core.Expression.Abstract
                 LessOrEqual<T> e => new LessOrEqual(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 GreaterOrEqual<T> e => new GreaterOrEqual(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 BetweenExpr<T> e => new Between(ToExpressionNode(e.Left), ToExpressionNode(e.Lower), ToExpressionNode(e.Upper)),
-                InSetExpr<T> e => new InSet(ToExpressionNode(e.Left), e.Set),
                 InExpr<T> e => new In(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
                 SpreadExpr<T> e => new Spread(ToExpressionNode(e.List)),
                 MatchesExpr<T> e => new Matches(ToExpressionNode(e.Left), ToExpressionNode(e.Right)),
@@ -107,7 +105,7 @@ namespace VCEL.Core.Expression.Abstract
                 StringExpr<T> e => new String(e.Value),
                 DateTimeOffsetExpr<T> e => new DateTimeOffset(e.Value),
                 TimeSpanExpr<T> e => new TimeSpan(e.Value),
-                SetExpr<T> e => new Set(e.Value),
+                SetExpr<T> e => new Set(e.Set.Select(ToExpressionNode).ToHashSet()),
                 ValueExpr<T, object> e => new Value(e.Value),                
                 _ => throw new Exception($"Expression node type not handled '{node?.GetType()}'"),
             };

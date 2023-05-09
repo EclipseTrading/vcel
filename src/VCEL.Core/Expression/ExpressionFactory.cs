@@ -44,8 +44,6 @@ namespace VCEL.Expression
             => new GreaterThan<T>(Monad, l, r);
         public virtual IExpression<T> GreaterOrEqual(IExpression<T> l, IExpression<T> r)
             => new GreaterOrEqual<T>(Monad, l, r);
-        public virtual IExpression<T> InSet(IExpression<T> l, ISet<object> set)
-            => new InSetExpr<T>(Monad, l, set);
         public virtual IExpression<T> In(IExpression<T> l, IExpression<T> r)
             => new InExpr<T>(Monad, l, r);
         public virtual IExpression<T> Spread(IExpression<T> expr)
@@ -61,7 +59,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> String(string s) => new StringExpr<T>(Monad, s);
         public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset) => new DateTimeOffsetExpr<T>(Monad, dateTimeOffset);
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan) => new TimeSpanExpr<T>(Monad, timeSpan);
-        public virtual IExpression<T> Set(ISet<object> s) => new SetExpr<T>(Monad, s);
+        public virtual IExpression<T> Set(ISet<IExpression<T>> s) => new SetExpr<T>(Monad, s);
         public virtual IExpression<T> Value(object? o) => o == null ? Null() : new ValueExpr<T, object>(Monad, o);
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
