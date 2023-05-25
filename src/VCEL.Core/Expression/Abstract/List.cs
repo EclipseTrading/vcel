@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class List : IExpressionNode
 {
-    public class List : IExpressionNode
+    public List(IReadOnlyList<IExpressionNode> items)
     {
-        public List(IReadOnlyList<IExpressionNode> items)
-        {
-            Items = items;
-        }
-
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.List;
-
-        public IReadOnlyList<IExpressionNode> Items { get; }
+        Items = items;
     }
+
+    [JsonProperty("$type")] public NodeType Type => NodeType.List;
+
+    public IReadOnlyList<IExpressionNode> Items { get; }
+
+    public IExpressionNode Accept(IExpressionNodeVisitor visitor) => visitor.Visit(this);
 }

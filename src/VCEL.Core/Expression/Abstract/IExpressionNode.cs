@@ -1,49 +1,11 @@
-﻿namespace VCEL.Core.Expression.Abstract
-{
-    public enum NodeType
-    {
-        Ternary,
-        Let,
-        Guard,
-        LessThan,
-        GreaterThan,
-        LessOrEqual,
-        GreaterOrEqual,
-        Between,
-        In,
-        InExpression,
-        Matches,
-        And,
-        Or,
-        Not,
-        Value,
-        List,
-        Add,
-        Multiply,
-        Subtract,
-        Divide,
-        Pow,
-        Paren,
-        Property,
-        Function,
-        UnaryMinus,
-        Null,
-        Eq,
-        NotEq,
-        ObjectMember,
-        Bool,
-        DateTimeOffset,
-        Double,
-        Int,
-        Long,
-        Set,
-        String,
-        TimeSpan,
-        Spread,
-    }
+﻿namespace VCEL.Core.Expression.Abstract;
 
-    public interface IExpressionNode
-    {
-        NodeType Type { get; }
-    }
+public interface IExpressionNode
+{
+    NodeType Type { get; }
+
+    /// <remarks>
+    /// Implements the visitor pattern, where the visited node may be transformed.
+    /// </remarks>
+    IExpressionNode Accept(IExpressionNodeVisitor visitor);
 }

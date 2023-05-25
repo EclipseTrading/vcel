@@ -1,19 +1,19 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class Add : IBinary, IExpressionNode
 {
-    public class Add : IBinary, IExpressionNode
+    public Add(IExpressionNode left, IExpressionNode right)
     {
-        public Add(IExpressionNode left, IExpressionNode right)
-        {
-            Left = left;
-            Right = right;
-        }
-
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.Add;
-
-        public IExpressionNode Left { get; }
-        public IExpressionNode Right { get; }
+        Left = left;
+        Right = right;
     }
+
+    [JsonProperty("$type")] public NodeType Type => NodeType.Add;
+
+    public IExpressionNode Left { get; }
+    public IExpressionNode Right { get; }
+
+    public IExpressionNode Accept(IExpressionNodeVisitor visitor) => visitor.Visit(this);
 }

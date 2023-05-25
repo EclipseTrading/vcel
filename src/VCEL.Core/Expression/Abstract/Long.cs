@@ -1,17 +1,17 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class Long : IExpressionNode
 {
-    public class Long : IExpressionNode
+    public Long(long value)
     {
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.Long;
-
-        public Long(long value)
-        {
-            Value = value;
-        }
-
-        public long Value { get; }
+        Value = value;
     }
+
+    [JsonProperty("$type")] public NodeType Type => NodeType.Long;
+
+    public long Value { get; }
+
+    public IExpressionNode Accept(IExpressionNodeVisitor visitor) => visitor.Visit(this);
 }

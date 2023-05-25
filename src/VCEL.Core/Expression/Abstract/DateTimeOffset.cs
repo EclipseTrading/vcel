@@ -1,17 +1,17 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class DateTimeOffset : IExpressionNode
 {
-    public class DateTimeOffset : IExpressionNode
+    public DateTimeOffset(System.DateTimeOffset value)
     {
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.DateTimeOffset;
-
-        public DateTimeOffset(System.DateTimeOffset value)
-        {
-            Value = value;
-        }
-
-        public System.DateTimeOffset Value { get; }
+        Value = value;
     }
+
+    [JsonProperty("$type")] public NodeType Type => NodeType.DateTimeOffset;
+
+    public System.DateTimeOffset Value { get; }
+
+    public IExpressionNode Accept(IExpressionNodeVisitor visitor) => visitor.Visit(this);
 }
