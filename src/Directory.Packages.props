@@ -20,9 +20,4 @@
     <PackageVersion Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <!-- Disable warnings for packages that use obsolete APIs, this is due to our dependency on Spring.Core -->
-    <NoWarn>$(NoWarn);NU1701</NoWarn>
-  </PropertyGroup>
-
 </Project>
