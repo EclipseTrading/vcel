@@ -10,9 +10,9 @@ using VCEL.Test.Shared;
 namespace Spel.Benchmark
 {
     using SpEx = IExpression;
-    using VCEx = IExpression<object>;
+    using VCEx = IExpression<object?>;
     using VCMaybeEx = IExpression<Maybe<object>>;
-    using CSharpEx = IExpression<object>;
+    using CSharpEx = IExpression<object?>;
 
     [MemoryDiagnoser]
     [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]

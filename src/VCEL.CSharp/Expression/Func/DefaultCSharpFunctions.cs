@@ -63,21 +63,27 @@ namespace VCEL.CSharp.Expression.Func
             switch (args.Length)
             {
                 case 2:
-                    {
-                        var sourStr = args[0]?.ToString();
-                        var startIndex = int.Parse(args[1]?.ToString());
-                        return $"{sourStr}.Substring({startIndex})";
-                    }
+                {
+                    var sourStr = args[0]?.ToString();
+                    var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
+                        ? start
+                        : throw new ArgumentException("Invalid start index");
+                    return $"{sourStr}.Substring({startIndex})";
+                }
                 case 3:
-                    {
-                        var sourStr = args[0]?.ToString();
-                        var startIndex = int.Parse(args[1]?.ToString());
-                        var strLength = int.Parse(args[2]?.ToString());
-                        return $"{sourStr}.Substring({startIndex}, {strLength})";
-                    }
+                {
+                    var sourStr = args[0]?.ToString();
+                    var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
+                        ? start
+                        : throw new ArgumentException("Invalid start index");
+                    var strLength = args[2]?.ToString() is { } lengthString && int.TryParse(lengthString, out var length)
+                        ? length
+                        : throw new ArgumentException("Invalid length");
+                    return $"{sourStr}.Substring({startIndex}, {strLength})";
+                }
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         public Function<string>? GetFunction(string name)

@@ -12,7 +12,7 @@ namespace VCEL.Benchmark
     public class JscodeParserBenchmarkTests
     {
         private readonly static IExpressionParser<string> jsCodeparser = new ExpressionParser<string>(new ToJsCodeFactory<string>(ConcatStringMonad.Instance));
-        private readonly static IExpressionParser<object> vcelParser = VCExpression.DefaultParser();
+        private readonly static IExpressionParser<object?> vcelParser = VCExpression.DefaultParser();
 
 
         [Benchmark(Baseline = true)]

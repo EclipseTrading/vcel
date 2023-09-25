@@ -232,10 +232,10 @@ namespace VCEL.Test.Expression.Abstract
             Assert.That(objectMemberExpr, Is.TypeOf<ObjectMember<object>>());
         }
 
-        private static IExpression<object> ToExpression(IExpressionNode expressionNode)
+        private static IExpression<object?> ToExpression(IExpressionNode expressionNode)
         {
-            var expressionFactory = new ExpressionFactory<object>(ExprMonad.Instance, new DefaultFunctions<object>());
-            var nodeMapper = new ExpressionNodeMapper<object>(expressionFactory);
+            var expressionFactory = new ExpressionFactory<object?>(ExprMonad.Instance, new DefaultFunctions<object?>());
+            var nodeMapper = new ExpressionNodeMapper<object?>(expressionFactory);
             return nodeMapper.ToExpression(expressionNode);
         }
     }

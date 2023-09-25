@@ -13,7 +13,7 @@
         public TMonad GetValue(IContext<TMonad> ctx)
         {
             var overrideContext = ctx as OverrideContext<TMonad>;
-            TMonad v = default;
+            TMonad? v = default;
             if (overrideContext?.Overrides.TryGetValue(propName, out v) ?? false)
             {
                 return v;

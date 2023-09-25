@@ -6,10 +6,10 @@ namespace VCEL.Test
 {
     public class DefaultOperatorTests
     {
-        private readonly BinaryExprBase<object> add = new AddExpr<object>(ExprMonad.Instance, null, null);
-        private readonly BinaryExprBase<object> subtract = new SubtractExpr<object>(ExprMonad.Instance, null, null);
-        private readonly BinaryExprBase<object> mult = new MultExpr<object>(ExprMonad.Instance, null, null);
-        private readonly BinaryExprBase<object> div = new DivideExpr<object>(ExprMonad.Instance, null, null);
+        private readonly BinaryExprBase<object?> add = new AddExpr<object?>(ExprMonad.Instance, null!, null!);
+        private readonly BinaryExprBase<object?> subtract = new SubtractExpr<object?>(ExprMonad.Instance, null!, null!);
+        private readonly BinaryExprBase<object?> mult = new MultExpr<object?>(ExprMonad.Instance, null!, null!);
+        private readonly BinaryExprBase<object?> div = new DivideExpr<object?>(ExprMonad.Instance, null!, null!);
 
         [TestCase(0, 0, 0)]
         [TestCase(1, 1, 2)]

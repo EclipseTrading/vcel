@@ -1,16 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>8</LangVersion>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Authors>Jeff Weng</Authors>
-        <Company>Eclipse Trading</Company>
         <Product>View Client Expression Language CSharp Extentsion</Product>
         <Description>An extention to VCEL that translates VCEL expressions into CSharp code</Description>
-        <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,18 +10,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
-      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-      <PackageReference Include="System.CodeDom" Version="4.5.0" />
-      <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="..\..\LICENSE">
-            <Pack>True</Pack>
-            <PackagePath></PackagePath>
-        </None>
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+      <PackageReference Include="Microsoft.CSharp" />
+      <PackageReference Include="System.CodeDom" />
+      <PackageReference Include="System.Collections.Immutable" />
     </ItemGroup>
 
 </Project>

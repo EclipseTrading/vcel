@@ -110,7 +110,7 @@ namespace VCEL.Core.Lang
                 else
                 {
                     ParseError error = new ParseError($"Unable to parse as set literal",
-                        parsedItem.Expression.ToString(),
+                        parsedItem.Expression.ToString() ?? "Unknown",
                         context.Start.Line,
                         context.Start.StartIndex,
                         context.Stop.StopIndex);

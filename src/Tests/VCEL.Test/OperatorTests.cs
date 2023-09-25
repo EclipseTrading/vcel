@@ -146,7 +146,7 @@ namespace VCEL.Test
                 DecimalValue = 2.5m,
             });
 
-        private void Evaluate(string exprString, object expected, object o = null, decimal precision = 0.0001m)
+        private void Evaluate(string exprString, object expected, object? o = null, decimal precision = 0.0001m)
         {
             foreach (var expr in CompositeExpression.ParseMultiple(exprString))
             {

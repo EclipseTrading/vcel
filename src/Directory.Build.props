@@ -1,7 +1,30 @@
 <Project>
 
   <PropertyGroup>
+    <ProductName>VCEL</ProductName>
+    <Company>Eclipse Trading</Company>
+    <Copyright>Copyright (c) Eclipse Trading</Copyright>
+    <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Authors>Brian Flynn,Jeff Weng,Aaron Bloom,Will Liu,Trevor Leung,Rex Mo</Authors>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+<!--    <Features>strict</Features>-->
+<!--    <EnableNETAnalyzers>true</EnableNETAnalyzers>-->
+<!--    <AnalysisMode>Recommended</AnalysisMode>-->
+<!--    <WarningLevel>5</WarningLevel>-->
+<!--    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>-->
+<!--    <EnableNETAnalyzers>true</EnableNETAnalyzers>-->
+<!--    <AnalysisLevel>preview</AnalysisLevel>-->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$([MSBuild]::GetPathOfFileAbove(Directory.Build.props, $(MSBuildThisFileDirectory)))/../../LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
 
 </Project>

@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Antlr4" Version="4.6.6" />
+    <PackageVersion Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageVersion Include="NUnit" Version="3.12.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageVersion Include="Spectre.Console" Version="0.39.0" />
+    <PackageVersion Include="Spring.Core" Version="2.0.1" />
+    <PackageVersion Include="System.CodeDom" Version="4.5.0" />
+    <PackageVersion Include="System.Collections.Immutable" Version="5.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Disable warnings for packages that use obsolete APIs, this is due to our dependency on Spring.Core -->
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+</Project>

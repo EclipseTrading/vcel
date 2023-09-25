@@ -32,9 +32,9 @@ namespace VCEL.Core.Expression.Func
             RegisterEnsureOneArg("long", arg => VcelType.Long(arg));
             RegisterEnsureOneArg("double", arg => VcelType.Double(arg));
             RegisterEnsureOneArg("decimal", arg => VcelType.Decimal(arg));
-            Register("string", args => 
+            Register("string", args =>
             {
-                switch(args.Length)
+                switch (args.Length)
                 {
                     case 1:
                         return VcelType.String(args[0]);
@@ -72,12 +72,14 @@ namespace VCEL.Core.Expression.Func
             FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(args)),
                 Register, 2, 3, allowNullArgument: false);
 
-            RegisterEnsureOneArg("lowercase", arg => arg?.ToString().ToLower());
-            RegisterEnsureOneArg("uppercase", arg => arg?.ToString().ToUpper());
+            RegisterEnsureOneArg("lowercase", arg => arg?.ToString()?.ToLower());
+            RegisterEnsureOneArg("uppercase", arg => arg?.ToString()?.ToUpper());
 
             Register("substring", Substring);
             RegisterEnsureTwoArgs("split", (arg1, arg2) => Split(arg1?.ToString() ?? string.Empty, arg2?.ToString() ?? string.Empty));
-            RegisterEnsureThreeArgs("replace", (arg1, arg2, arg3) => Replace(arg1?.ToString() ?? string.Empty, arg2?.ToString() ?? string.Empty, arg3?.ToString() ?? string.Empty));
+            RegisterEnsureThreeArgs("replace",
+                (arg1, arg2, arg3) => Replace(arg1?.ToString() ?? string.Empty, arg2?.ToString() ?? string.Empty,
+                    arg3?.ToString() ?? string.Empty));
         }
 
         private static string? Substring(object?[] args)
@@ -85,18 +87,24 @@ namespace VCEL.Core.Expression.Func
             switch (args.Length)
             {
                 case 2:
-                    {
-                        var sourStr = args[0]?.ToString();
-                        var startIndex = int.Parse(args[1]?.ToString());
-                        return sourStr?.Substring(startIndex);
-                    }
+                {
+                    var sourStr = args[0]?.ToString();
+                    var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
+                        ? start
+                        : throw new ArgumentException("Invalid start index");
+                    return sourStr?[startIndex..];
+                }
                 case 3:
-                    {
-                        var sourStr = args[0]?.ToString();
-                        var startIndex = int.Parse(args[1]?.ToString());
-                        var strLength = int.Parse(args[2]?.ToString());
-                        return sourStr?.Substring(startIndex, strLength);
-                    }
+                {
+                    var sourStr = args[0]?.ToString();
+                    var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
+                        ? start
+                        : throw new ArgumentException("Invalid start index");
+                    var strLength = args[2]?.ToString() is { } lengthString && int.TryParse(lengthString, out var length)
+                        ? length
+                        : throw new ArgumentException("Invalid length");
+                    return sourStr?.Substring(startIndex, strLength);
+                }
                 default:
                     return null;
             }
@@ -145,7 +153,10 @@ namespace VCEL.Core.Expression.Func
 
         public void RegisterEnsureThreeArgs(string name, Func<object?, object?, object?, object?> func)
         {
-            Register(name, (args, _) => args.Length != 3 || (args[0] == null || args[1] == null || args[2] == null) ? null : func(args[0], args[1], args[2]),
+            Register(name,
+                (args, _) => args.Length != 3 || (args[0] == null || args[1] == null || args[2] == null)
+                    ? null
+                    : func(args[0], args[1], args[2]),
                 new FuncDependency(name));
         }
 
