@@ -15,12 +15,12 @@ namespace VCEL.Test
         [Test]
         public void DefaultMonad()
         {
-            var exprFactory = new ExpressionFactory<object>(ExprMonad.Instance);
-            var parser = new ExpressionParser<object>(exprFactory);
+            var exprFactory = new ExpressionFactory<object?>(ExprMonad.Instance);
+            var parser = new ExpressionParser<object?>(exprFactory);
             var expr = parser.Parse("A + 0.5 + 0.5").Expression;
             var result = expr.Evaluate(new { A = 0.5d });
 
-            Assert.That((double)result, Is.EqualTo(1.5).Within(0.00000001));
+            Assert.That((double?)result, Is.EqualTo(1.5).Within(0.00000001));
         }
 
         [Test]
@@ -49,8 +49,8 @@ namespace VCEL.Test
         [Test]
         public async Task TaskM()
         {
-            var exprFactory = new ExpressionFactory<Task<object>>(TaskMonad.Instance);
-            var parser = new ExpressionParser<Task<object>>(exprFactory);
+            var exprFactory = new ExpressionFactory<Task<object?>>(TaskMonad.Instance);
+            var parser = new ExpressionParser<Task<object?>>(exprFactory);
             var expr = parser.Parse("A + 0.5 + 0.5").Expression;
 
             var resultTask = expr.Evaluate(

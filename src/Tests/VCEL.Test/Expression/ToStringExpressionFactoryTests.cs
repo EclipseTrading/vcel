@@ -10,8 +10,8 @@ namespace VCEL.Test.Expression
 {
     public class ToStringExpressionFactoryTests
     {
-        private IExpressionFactory<string> factory;
-        private IContext<string> context;
+        private IExpressionFactory<string> factory = null!;
+        private IContext<string> context = null!;
 
         [SetUp]
         public void Setup()

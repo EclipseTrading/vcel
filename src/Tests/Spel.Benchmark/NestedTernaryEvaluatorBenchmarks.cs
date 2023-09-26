@@ -17,7 +17,7 @@ namespace Spel.Benchmark
         private static readonly IExpression SpelExpr = Expression.Parse(Expressions.NestedTernary1);
         private static readonly IExpression<Maybe<object>> VcelExpr = VCExpression.ParseMaybe(Expressions.NestedTernary1).Expression;
         private static readonly IExpression<Maybe<object>> VcelExprLetGuard = VCExpression.ParseMaybe(Expressions.LetGuard).Expression;
-        private static readonly IExpression<object> CSharpExprLetGuard = CSharpExpression.ParseDelegate(Expressions.LetGuard).Expression;
+        private static readonly IExpression<object?> CSharpExprLetGuard = CSharpExpression.ParseDelegate(Expressions.LetGuard).Expression;
         private static readonly CustomExpr CustomExpr = new CustomExpr();
 
         // 1 Branch

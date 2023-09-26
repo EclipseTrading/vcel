@@ -4,11 +4,11 @@ using VCEL.Core.Expression.Impl;
 
 namespace VCEL.Benchmark
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
     public class TypeOperationBenchmarkTests
     {
-        (object Left, object Right) nulls = (null, null);
+        (object? Left, object? Right) nulls = (null, null);
         [Benchmark]
         public bool NullEquals() => TypeOperation.EqualsChecked(nulls.Left, nulls.Right);
         [Benchmark]

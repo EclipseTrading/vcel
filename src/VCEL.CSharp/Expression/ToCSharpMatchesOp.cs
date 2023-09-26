@@ -18,7 +18,7 @@ namespace VCEL.CSharp.Expression
             if (Equals(rv, "null") || Equals(lv, "null"))
                 return "false";
 
-            var pattern = $"{rv?.ToString().Trim('\'')}";
+            var pattern = $"{rv?.ToString()?.Trim('\'')}";
             return $"(new Regex({pattern}).Match({lv}).Success)";
         }
     }

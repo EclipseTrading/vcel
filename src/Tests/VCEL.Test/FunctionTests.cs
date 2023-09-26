@@ -67,7 +67,7 @@ namespace VCEL.Test
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
                 var expr = parseResult.Expression;
-                var result = expr.Evaluate(new { A = (object)null });
+                var result = expr.Evaluate(new { A = (object?)null });
                 Assert.That(result, Is.EqualTo(expected));
             }
         }
@@ -190,7 +190,7 @@ namespace VCEL.Test
         [TestCase("uppercase('abcd')", "ABCD")]
         [TestCase("substring('test_substring', 5)", "substring")]
         [TestCase("substring('test_substring', 0, 4)", "test")]
-        [TestCase("split('test_split', '_')", new string[] { "test", "split" })]
+        [TestCase("split('test_split', '_')", new[] { "test", "split" })]
         [TestCase("replace('test_replace', '_replace', '')", "test")]
         [TestCase("replace('test_replace', '_replace', '_test')", "test_test")]
         public void EvalStringFunctions(string exprString, object expected)

@@ -323,7 +323,7 @@ namespace VCEL.Cli
             {
                 list.AddRow(key.FormatAsOption(), value.FormatAsValue(), value.FormatAsType());
             }
-            AnsiConsole.Render(list);
+            AnsiConsole.Write(list);
         }
 
         private void HistoryCommand()
@@ -342,7 +342,7 @@ namespace VCEL.Cli
                 var dependencies = string.Join(", ", parsed.Expression.Dependencies.Select(dep => $"{dep.Name}({dep.GetType().Name})"));
                 historyTable.AddRow(historyIndex, expression, outcome.FormatAsValue(), outcome.FormatAsType(), dependencies);
             }
-            AnsiConsole.Render(historyTable);
+            AnsiConsole.Write(historyTable);
         }
 
         private void ToggleCommand(string[] inputParts)

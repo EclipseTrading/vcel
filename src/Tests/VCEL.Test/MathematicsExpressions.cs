@@ -101,7 +101,7 @@ namespace VCEL.Test
         [TestCase("10.4 ^ a")]
         public void CheckNullCase(string exprStr)
         {
-            var o1 = new {a = (object)null};
+            var o1 = new {a = (object?)null};
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
             {
                 Assert.That(parseResult.Success, Is.True, "Is successful");

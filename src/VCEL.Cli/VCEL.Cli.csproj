@@ -2,40 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Nullable>enable</Nullable>
-
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>vcel</ToolCommandName>
-
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>preview</AnalysisLevel>
-
-    <Authors>Aaron Bloom</Authors>
-    <Company>Eclipse Trading</Company>
     <Product>View Client Expression Language CLI</Product>
     <Description>A simple CLI tool is also included as a way to execute and test VCEL expressions easily from the command line.</Description>
-    <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.39.0" />
+    <PackageReference Include="Spectre.Console" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VCEL.Core\VCEL.Core.csproj" />
     <ProjectReference Include="..\VCEL.CSharp\VCEL.CSharp.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
 
 </Project>

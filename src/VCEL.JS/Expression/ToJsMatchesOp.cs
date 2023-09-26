@@ -15,7 +15,7 @@ namespace VCEL.JS.Expression
 
         public override string Evaluate(object? lv, object? rv)
         {
-            var escapedExp = $"/{rv?.ToString().Trim('\'')}/gm";
+            var escapedExp = $"/{rv?.ToString()?.Trim('\'')}/gm";
             return $"new RegExp({escapedExp}).test({lv})";
         }
     }

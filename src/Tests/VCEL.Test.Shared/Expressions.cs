@@ -2,12 +2,6 @@
 {
     public static class Expressions
     {
-        public static string GetExpression(string name)
-        {
-            var prop = typeof(Expressions).GetField(name);
-            return (string)prop.GetValue(null);
-        }
-
         public const string Abs = @"abs(-1.0)";
         public const string GetProp = @"P";
         public const string Add = @"0.1 + 0.2";

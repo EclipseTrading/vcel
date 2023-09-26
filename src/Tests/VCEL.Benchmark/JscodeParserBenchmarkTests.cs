@@ -7,12 +7,12 @@ using VCEL.Test.Shared;
 
 namespace VCEL.Benchmark
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
     public class JscodeParserBenchmarkTests
     {
         private readonly static IExpressionParser<string> jsCodeparser = new ExpressionParser<string>(new ToJsCodeFactory<string>(ConcatStringMonad.Instance));
-        private readonly static IExpressionParser<object> vcelParser = VCExpression.DefaultParser();
+        private readonly static IExpressionParser<object?> vcelParser = VCExpression.DefaultParser();
 
 
         [Benchmark(Baseline = true)]

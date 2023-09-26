@@ -19,13 +19,13 @@ namespace VCEL.Test.Expression.Abstract
         [Test]
         public void ShouldWrite()
         {
-            var expressionFactory = new ExpressionFactory<object>(ExprMonad.Instance);
+            var expressionFactory = new ExpressionFactory<object?>(ExprMonad.Instance);
 
-            var parser = new ExpressionParser<object>(expressionFactory);
+            var parser = new ExpressionParser<object?>(expressionFactory);
 
             var expression = parser.Parse("-1 + 1.1");
 
-            var nodeMapper = new ExpressionNodeMapper<object>(expressionFactory);
+            var nodeMapper = new ExpressionNodeMapper<object?>(expressionFactory);
 
             var node = nodeMapper.ToExpressionNode(expression.Expression);
 
@@ -53,13 +53,13 @@ namespace VCEL.Test.Expression.Abstract
 
             Assert.That(node, Is.TypeOf<Add>());
 
-            var nodeMapper = new ExpressionNodeMapper<object>(new ExpressionFactory<object>(ExprMonad.Instance));
+            var nodeMapper = new ExpressionNodeMapper<object?>(new ExpressionFactory<object?>(ExprMonad.Instance));
 
             var expression = nodeMapper.ToExpression(node);
 
-            Assert.That(expression, Is.TypeOf<AddExpr<object>>());
-            Assert.That(((AddExpr<object>)expression).Left, Is.TypeOf<UnaryMinusExpr<object>>());
-            Assert.That(((AddExpr<object>)expression).Right, Is.TypeOf<DoubleExpr<object>>());
+            Assert.That(expression, Is.TypeOf<AddExpr<object?>>());
+            Assert.That(((AddExpr<object?>)expression).Left, Is.TypeOf<UnaryMinusExpr<object?>>());
+            Assert.That(((AddExpr<object?>)expression).Right, Is.TypeOf<DoubleExpr<object?>>());
         }
     }
 }

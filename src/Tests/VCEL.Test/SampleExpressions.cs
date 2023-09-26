@@ -46,7 +46,7 @@ namespace VCEL.Test
         [TestCase(Expressions.ArithExpr26)]
         [TestCase(Expressions.ArithExpr27)]
         [TestCase(Expressions.ArithExpr28)]
-        public void Eval(string exprStr, bool hasValue = false, object expected = null)
+        public void Eval(string exprStr, bool hasValue = false, object? expected = null)
         {
             // Verifies that these expressions all return Maybe.Nothing when called with an empty expression
             var parseResult = VCExpression.ParseMaybe(exprStr);
@@ -112,7 +112,7 @@ namespace VCEL.Test
                 P = sD,
                 O = optionEquivSplitPos
             };
-            Maybe<object> result = null;
+            Maybe<object>? result = null;
             var parser = VCExpression.MaybeParser();
             var sw = Stopwatch.StartNew();
             var pr = parser.Parse(exprString);
@@ -124,7 +124,7 @@ namespace VCEL.Test
             }
 
             var evalTime = sw.Elapsed;
-            Assert.That(result.Value, Is.EqualTo(expected));
+            Assert.That(result?.Value, Is.EqualTo(expected));
 
             Console.WriteLine("Parse: " + parseTime.TotalMilliseconds + "ms");
             Console.WriteLine("Eval: " + evalTime.TotalMilliseconds * 20 + "µs");

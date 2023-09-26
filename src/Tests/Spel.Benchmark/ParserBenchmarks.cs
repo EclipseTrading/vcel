@@ -13,10 +13,8 @@ namespace Spel.Benchmark
     [RankColumn]
     public class ParserBenchmarks
     {
-        private static readonly ExpressionParser<object> vcelDefaultParser =
-            new ExpressionParser<object>(new ExpressionFactory<object>(ExprMonad.Instance));
-        private static readonly ExpressionParser<Maybe<object>> vcelMonadParser =
-            new ExpressionParser<Maybe<object>>(new MaybeExpressionFactory(MaybeMonad.Instance));
+        private static readonly ExpressionParser<object?> vcelDefaultParser = new(new ExpressionFactory<object?>(ExprMonad.Instance));
+        private static readonly ExpressionParser<Maybe<object>> vcelMonadParser = new(new MaybeExpressionFactory(MaybeMonad.Instance));
         private static readonly string traderExpr = Expressions.NestedTernary1;
 
         [Benchmark(Baseline = true)]

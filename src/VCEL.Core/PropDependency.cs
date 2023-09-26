@@ -11,7 +11,7 @@ namespace VCEL
 
         public string Name { get; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is PropDependency dependency &&
                    Name == dependency.Name;

@@ -293,7 +293,7 @@ namespace VCEL.Test
         [TestCase("'ABC' matches A", true, "ABC")]
         [TestCase("'ABC' matches A + 'BC'", true, "A")]
         [TestCase("(null + 'A') matches (A + null)", true, "A")]
-        public void Matches(string exprString, bool expected, string value = null)
+        public void Matches(string exprString, bool expected, string? value = null)
             => CompareDefault(exprString, expected, new {A = value});
 
         [TestCase("'ABC' matches null")]
@@ -422,7 +422,7 @@ namespace VCEL.Test
         public void CompareDecimalRight(double a, object b, bool expected)
             => Compare("B < A", expected, new {A = (decimal) a, B = b});
 
-        private void Compare(string exprString, bool? expected, object o = null)
+        private void Compare(string exprString, bool? expected, object? o = null)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
@@ -438,7 +438,7 @@ namespace VCEL.Test
             Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001), "Maybe expression evaluated");
         }
 
-        private void CompareDefault(string exprString, bool expected, object o = null)
+        private void CompareDefault(string exprString, bool expected, object? o = null)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
             {
@@ -448,7 +448,7 @@ namespace VCEL.Test
             }
         }
 
-        private void CompareMaybeNone(string exprString, object o = null)
+        private void CompareMaybeNone(string exprString, object? o = null)
         {
             var expr = VCExpression.ParseMaybe(exprString).Expression;
             var result = expr.Evaluate(o ?? new { });
