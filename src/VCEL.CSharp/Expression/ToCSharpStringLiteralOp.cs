@@ -10,6 +10,7 @@ namespace VCEL.CSharp.Expression
     internal class ToCSharpStringLiteralOp : IExpression<string>
     {
         private readonly string str;
+        private static readonly CodeGeneratorOptions CodeGeneratorOptions = new();
         public IMonad<string> Monad { get; }
 
         public ToCSharpStringLiteralOp(string str, IMonad<string> monad)
@@ -31,7 +32,7 @@ namespace VCEL.CSharp.Expression
             {
                 using (var provider = CodeDomProvider.CreateProvider("CSharp"))
                 {
-                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
+                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, CodeGeneratorOptions);
                     return writer.ToString();
                 }
             }
