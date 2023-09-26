@@ -88,22 +88,22 @@ namespace VCEL.Core.Expression.Func
             {
                 case 2:
                 {
-                    var sourStr = args[0]?.ToString();
+                    var sourceString = args[0]?.ToString();
                     var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
                         ? start
                         : throw new ArgumentException("Invalid start index");
-                    return sourStr?[startIndex..];
+                    return sourceString?[startIndex..];
                 }
                 case 3:
                 {
-                    var sourStr = args[0]?.ToString();
+                    var sourceString = args[0]?.ToString();
                     var startIndex = args[1]?.ToString() is { } startString && int.TryParse(startString, out var start)
                         ? start
                         : throw new ArgumentException("Invalid start index");
                     var strLength = args[2]?.ToString() is { } lengthString && int.TryParse(lengthString, out var length)
                         ? length
                         : throw new ArgumentException("Invalid length");
-                    return sourStr?.Substring(startIndex, strLength);
+                    return sourceString?.Substring(startIndex, strLength);
                 }
                 default:
                     return null;

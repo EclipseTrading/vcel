@@ -186,13 +186,13 @@ namespace VCEL.Test
             }
         }
 
-        // [TestCase("lowercase('ABCD')", "abcd")]
-        // [TestCase("uppercase('abcd')", "ABCD")]
+        [TestCase("lowercase('ABCD')", "abcd")]
+        [TestCase("uppercase('abcd')", "ABCD")]
         [TestCase("substring('test_substring', 5)", "substring")]
-        // [TestCase("substring('test_substring', 0, 4)", "test")]
-        // [TestCase("split('test_split', '_')", new string[] { "test", "split" })]
-        // [TestCase("replace('test_replace', '_replace', '')", "test")]
-        // [TestCase("replace('test_replace', '_replace', '_test')", "test_test")]
+        [TestCase("substring('test_substring', 0, 4)", "test")]
+        [TestCase("split('test_split', '_')", new[] { "test", "split" })]
+        [TestCase("replace('test_replace', '_replace', '')", "test")]
+        [TestCase("replace('test_replace', '_replace', '_test')", "test_test")]
         public void EvalStringFunctions(string exprString, object expected)
         {
             foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
