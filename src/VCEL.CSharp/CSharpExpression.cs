@@ -34,9 +34,9 @@ namespace VCEL.CSharp
             var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
             var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr);
             if (type == null)
-                return  new ParseResult<object?>(emitResult!.Diagnostics.Select(
+                return new ParseResult<object?>(emitResult!.Diagnostics.Select(
                     x => new ParseError(
-                        x.GetMessage(),
+                        $"{x.GetMessage()} ({csharpExpr})",
                         x.Id,
                         x.Location.GetLineSpan().StartLinePosition.Line,
                         x.Location.GetLineSpan().StartLinePosition.Line,
