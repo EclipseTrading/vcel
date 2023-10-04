@@ -129,8 +129,14 @@ namespace VCEL.Cli
             if (outcome?.HasValue == true)
             {
                 history.Add((input, parsed, outcome));
-                var formattedValue = outcome.Value.ToString().EscapeMarkup();
-                var formattedValueType = outcome.Value.GetType().Name.EscapeMarkup();
+                var formattedValue = (outcome.Value switch
+                {
+                    string s => s,
+                    IEnumerable<object> e => $"[{string.Join(", ", e)}]",
+                    null => "null",
+                    _ => outcome.Value.ToString(),
+                }).EscapeMarkup();
+                var formattedValueType = outcome.Value?.GetType().Name.EscapeMarkup() ?? "null";
                 var padding = new string(' ', Console.WindowWidth - (formattedValue.Length + formattedValueType.Length));
                 AnsiConsole.MarkupLine("[gold1]{0}[/]{1}[green3]{2}[/]", formattedValue, padding, formattedValueType);
             }
