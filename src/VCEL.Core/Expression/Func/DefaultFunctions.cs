@@ -63,7 +63,7 @@ public class DefaultFunctions<T> : IFunctions<T>
         RegisterEnsureOneArg("uppercase", arg => arg?.ToString()?.ToUpper());
 
         Register("substring", VcelString.Substring);
-        RegisterEnsureTwoArgsAllowNull<object?, object?, object?[]>("split", (arg1, arg2) => VcelString.Split(arg1?.ToString(), arg2?.ToString()));
+        RegisterEnsureTwoArgsAllowNull<object?, object?, object?[]?>("split", (arg1, arg2) => VcelString.Split(arg1?.ToString(), arg2?.ToString()));
         RegisterEnsureThreeArgsAllowNull("replace", (arg1, arg2, arg3) => VcelString.Replace(arg1?.ToString(), arg2?.ToString(), arg3?.ToString()));
         RegisterEnsureOneArg("trim", arg => VcelString.Trim(arg?.ToString()));
 

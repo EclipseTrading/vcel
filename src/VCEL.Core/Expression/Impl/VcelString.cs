@@ -43,9 +43,11 @@ public static class VcelString
         }
     }
 
-    public static string[] Split(string? str, string? separator) => separator is null
-        ? Array.Empty<string>()
-        : str?.Split(new[] { separator }, StringSplitOptions.None) ?? Array.Empty<string>();
+    public static string[]? Split(string? str, string? separator) => str is null
+        ? null
+        : separator is null
+            ? new[] { str }
+            : str.Split(new[] { separator }, StringSplitOptions.None);
 
     public static string? Replace(string? source, string? target, string? replaceWith) => target is null
         ? source

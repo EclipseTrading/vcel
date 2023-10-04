@@ -34,7 +34,7 @@ public static class VcelIndexable
 
     public static bool EndsWith(object? arg1, object? arg2) => arg1 switch
     {
-        string str => str.EndsWith(arg2?.ToString() ?? string.Empty),
+        string str => arg2?.ToString() is { } value && str.EndsWith(value),
         object?[] array => array.LastOrDefault()?.Equals(arg2) ?? false,
         List<object?> list => list.LastOrDefault()?.Equals(arg2) ?? false,
         _ => false,

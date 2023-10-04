@@ -1,133 +1,156 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VCEL.Monad;
 
-namespace VCEL.JS.Expression
+namespace VCEL.JS.Expression;
+
+internal class ToJsFunction : IExpression<string>
 {
-    internal class ToJsFunction : IExpression<string>
+    private static readonly Dictionary<string, Func<IContext<string>, IReadOnlyList<IExpression<string>>, string>> JsFunctions = new()
     {
-        private static Dictionary<string, string> JSFunctionMap
-             = new Dictionary<string, string>()
-             {
-                 { "abs" , "Math.abs" },
-                 { "acos" , "Math.acos" },
-                 { "asin" , "Math.asin" },
-                 { "atan" , "Math.atan" },
-                 { "atan2" , "Math.atan2" },
-                 { "ceiling" , "Math.ceil" },
-                 { "cos" , "Math.cos" },
-                 { "cosh" , "Math.cosh" },
-                 { "exp" , "Math.exp" },
-                 { "floor" , "Math.floor" },
-                 { "log" , "Math.log" },
-                 { "log10" , "Math.log10" },
-                 { "max" , "Math.max" },
-                 { "min" , "Math.min" },
-                 { "pow" , "Math.pow" },
-                 { "round" , "Math.round" },
-                 { "sign" , "Math.sign" },
-                 { "sin" , "Math.sin" },
-                 { "sinh" , "Math.sinh" },
-                 { "sqrt" , "Math.sqrt" },
-                 { "tan" , "Math.tan" },
-                 { "tanh" , "Math.tanh" },
-                 { "truncate" , "Math.trunc" },
-                 { "double", "Number" },
-                 { "decimal", "Number" },
-                 { "string", "String" },
+        { "abs", (context, args) => Func(context, args, "Math.abs") },
+        { "acos", (context, args) => Func(context, args, "Math.acos") },
+        { "asin", (context, args) => Func(context, args, "Math.asin") },
+        { "atan", (context, args) => Func(context, args, "Math.atan") },
+        { "atan2", (context, args) => Func(context, args, "Math.atan2") },
+        { "ceiling", (context, args) => Func(context, args, "Math.ceil") },
+        { "cos", (context, args) => Func(context, args, "Math.cos") },
+        { "cosh", (context, args) => Func(context, args, "Math.cosh") },
+        { "exp", (context, args) => Func(context, args, "Math.exp") },
+        { "floor", (context, args) => Func(context, args, "Math.floor") },
+        { "log", (context, args) => Func(context, args, "Math.log") },
+        { "log10", (context, args) => Func(context, args, "Math.log10") },
+        { "max", (context, args) => Func(context, args, "Math.max") },
+        { "min", (context, args) => Func(context, args, "Math.min") },
+        { "pow", (context, args) => Func(context, args, "Math.pow") },
+        { "round", (context, args) => Func(context, args, "Math.round") },
+        { "sign", (context, args) => Func(context, args, "Math.sign") },
+        { "sin", (context, args) => Func(context, args, "Math.sin") },
+        { "sinh", (context, args) => Func(context, args, "Math.sinh") },
+        { "sqrt", (context, args) => Func(context, args, "Math.sqrt") },
+        { "tan", (context, args) => Func(context, args, "Math.tan") },
+        { "tanh", (context, args) => Func(context, args, "Math.tanh") },
+        { "truncate", (context, args) => Func(context, args, "Math.trunc") },
+        { "double", (context, args) => Func(context, args, "Number") },
+        { "decimal", (context, args) => Func(context, args, "Number") },
+        { "string", (context, args) => Func(context, args, "String") },
 
-                 { "now", "new Date" },
-                 { "today", "new Date" },
-                 { "datetime", "new Date" },
-                 { "date", "new Date" }
-             };
+        { "now", (context, args) => Func(context, args, "new Date") },
+        { "today", (context, args) => Func(context, args, "new Date") },
+        { "datetime", (context, args) => Func(context, args, "new Date") },
+        { "date", (context, args) => Func(context, args, "new Date") },
 
-        private static Dictionary<string, string> JSDoubleFunctionMap 
-            = new Dictionary<string, string> () 
-            {
-                { "int", "Math.floor(Number" },
-                { "long", "Math.floor(Number" },
-            };
+        { "int", (context, args) => NestedFunc(context, args, "Math.floor(Number") },
+        { "long", (context, args) => NestedFunc(context, args, "Math.floor(Number") },
 
-        private static Dictionary<string, string> JSMethodMap
-            = new Dictionary<string, string>()
-            {
-                { "startswith", "startsWith" },
-                { "substring", "substring" },
-                { "replace", "replace" },
-                { "lowercase", "toLowerCase" },
-                { "uppercase", "toUpperCase" }
-            };
+        { "lowercase", (context, args) => Method(context, args, "toLowerCase") },
+        { "uppercase", (context, args) => Method(context, args, "toUpperCase") },
+        { "substring", (context, args) => Method(context, args, "substring") },
+        { "split", (context, args) => Method(context, args, "split") },
+        { "replace", (context, args) => Method(context, args, "replace") },
+        { "trim", (context, args) => Method(context, args, "trim") },
+        { "length", (context, args) => Property(context, args, "length", "0") },
+        { "contains", (context, args) => Method(context, args, "includes", "false") },
+        { "startswith", (context, args) => Method(context, args, "startsWith", "false") }, // Keeping for backward compatability
+        { "startsWith", (context, args) => Method(context, args, "startsWith", "false") },
+        { "endsWith", (context, args) => Method(context, args, "endsWith", "false") },
+        { "indexOf", (context, args) => Method(context, args, "indexOf") },
+        { "lastIndexOf", (context, args) => Method(context, args, "lastIndexOf") },
+        { "reverse", (context, args) => Method(context, args, _ => "split('').reverse().join('')") },
 
-        private static Dictionary<string, string> JSFunctionDefaultResultMap
-            = new Dictionary<string, string>()
-             {
-                { "startsWith", "false" },
-                { "substring", "''" },
-                { "toLowerCase", "''" },
-                { "toUpperCase", "''" },
-                { "replace", "''" }
-             };
-        private string name;
-        private IReadOnlyList<IExpression<string>> args;
+        { "get", (context, args) => IndexedAccessor(context, args) },
+    };
 
-        public ToJsFunction(IMonad<string> monad, string name, IReadOnlyList<IExpression<string>> args)
+    private readonly string name;
+    private readonly IReadOnlyList<IExpression<string>> args;
+
+    public ToJsFunction(IMonad<string> monad, string name, IReadOnlyList<IExpression<string>> args)
+    {
+        this.Monad = monad;
+        this.name = name;
+        this.args = args;
+    }
+
+    public IMonad<string> Monad { get; }
+
+    public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+
+    public string Evaluate(IContext<string> context)
+    {
+        if (JsFunctions.TryGetValue(name, out var jsFunctionCreator))
         {
-            this.Monad = monad;
-            this.name = name;
-            this.args = args;
+            return jsFunctionCreator(context, args);
         }
 
-        public IMonad<string> Monad { get; }
+        return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
+    }
 
-        public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+    private static string NestedFunc(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs, string jsDoubleFunc,
+        string defaultValue = "undefined")
+    {
+        return IsContextEmpty(context)
+            ? $"({jsDoubleFunc}({string.Join(",", functionArgs.Select(s => s.Evaluate(context)))})))"
+            : CheckedMethodCall(context.Value, jsDoubleFunc,
+                string.Join(",", functionArgs.Select(s => s.Evaluate(context))), defaultValue);
+    }
 
-        public string Evaluate(IContext<string> context)
-        {
-            if (JSMethodMap.TryGetValue(name, out var jsMethod))
-            {
-                if (IsContextEmpty(context) && args.Count == 0) return GetDefaultVal(jsMethod);
-                return IsContextEmpty(context)
-                    ? WarpVariableForNullChecking(args[0].Evaluate(context), jsMethod, string.Join(",", args.Skip(1).Select(s => s.Evaluate(context))))
-                    : WarpVariableForNullChecking(context.Value, jsMethod, string.Join(",", args.Select(s => s.Evaluate(context))));
-            }
-            if (JSFunctionMap.TryGetValue(name, out var jsFunc))
-            {
-                return IsContextEmpty(context)
-                    ? $"({jsFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))}))"
-                    : WarpVariableForNullChecking(context.Value, jsFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
-            }
-            if (JSDoubleFunctionMap.TryGetValue(name, out var jsDoubleFunc))
-            {
-                return IsContextEmpty(context)
-                    ? $"({jsDoubleFunc}({string.Join(",", args.Select(s => s.Evaluate(context)))})))"
-                    : WarpVariableForNullCheckingDoubleFunc(context.Value, jsDoubleFunc, string.Join(",", args.Select(s => s.Evaluate(context))));
-            }
-            return $"({name}({string.Join(",", args.Select(s => s.Evaluate(context)))}))";
-        }
+    private static string Func(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs, string jsMethodName,
+        string defaultValue = "undefined")
+    {
+        return IsContextEmpty(context)
+            ? $"({jsMethodName}({string.Join(",", functionArgs.Select(s => s.Evaluate(context)))}))"
+            : CheckedMethodCall(context.Value, jsMethodName, string.Join(",", functionArgs.Select(s => s.Evaluate(context))), defaultValue);
+    }
 
-        private bool IsContextEmpty(IContext<string> context)
-        {
-            return string.IsNullOrEmpty(context.Value) || context.Value == "{ }";
-        }
+    private static string Method(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs, string jsFunctionName,
+        string defaultValue = "undefined")
+    {
+        return IsContextEmpty(context) && functionArgs.Count == 0
+            ? defaultValue
+            : IsContextEmpty(context)
+                ? CheckedMethodCall(functionArgs[0].Evaluate(context), jsFunctionName,
+                    string.Join(",", functionArgs.Skip(1).Select(s => s.Evaluate(context))), defaultValue)
+                : CheckedMethodCall(context.Value, jsFunctionName, string.Join(",", functionArgs.Select(s => s.Evaluate(context))),
+                    defaultValue);
+    }
 
-        private string WarpVariableForNullChecking(string variable, string func, string args)
-        {
-            var defaultReturnVal = GetDefaultVal(func);
-            return $"({variable} ? {variable}.{func}({args}) : {defaultReturnVal})";
-        }
+    private static string Method(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs,
+        Func<string, string> jsFunctionName, string defaultValue = "undefined")
+    {
+        return IsContextEmpty(context) && functionArgs.Count == 0
+            ? defaultValue
+            : IsContextEmpty(context)
+                ? CheckedAccess(functionArgs[0].Evaluate(context),
+                    jsFunctionName(string.Join(",", functionArgs.Skip(1).Select(s => s.Evaluate(context)))), defaultValue)
+                : CheckedAccess(context.Value, jsFunctionName(string.Join(",", functionArgs.Select(s => s.Evaluate(context)))),
+                    defaultValue);
+    }
 
-        private string WarpVariableForNullCheckingDoubleFunc(string variable, string func, string args)
-        {
-            var defaultReturnVal = GetDefaultVal(func);
-            return $"({variable} ? {variable}.{func}({args})) : {defaultReturnVal})";
-        }
+    private static string IndexedAccessor(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs,
+        string defaultValue = "undefined")
+    {
+        return $"({functionArgs[0].Evaluate(context)}?.[{functionArgs[1].Evaluate(context)}] ?? {defaultValue})";
+    }
 
-        private string GetDefaultVal(string func)
-        {
-            return JSFunctionDefaultResultMap.TryGetValue(func, out var defaultVal)
-                ? defaultVal
-                : "false";
-        }
+    private static string Property(IContext<string> context, IReadOnlyList<IExpression<string>> functionArgs, string propertyName,
+        string defaultValue = "undefined")
+    {
+        return CheckedAccess(functionArgs[0].Evaluate(context), propertyName, defaultValue);
+    }
+
+    private static bool IsContextEmpty(IContext<string> context)
+    {
+        return string.IsNullOrEmpty(context.Value) || context.Value == "{ }";
+    }
+
+    private static string CheckedMethodCall(string variable, string method, string methodArgs, string defaultValue)
+    {
+        return $"({variable}?.{method}({methodArgs}) ?? {defaultValue})";
+    }
+
+    private static string CheckedAccess(string variable, string method, string defaultValue)
+    {
+        return $"({variable}?.{method} ?? {defaultValue})";
     }
 }
