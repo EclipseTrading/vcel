@@ -9,7 +9,7 @@
     <Authors>Brian Flynn,Jeff Weng,Aaron Bloom,Will Liu,Trevor Leung,Rex Mo</Authors>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <Features>strict</Features>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
