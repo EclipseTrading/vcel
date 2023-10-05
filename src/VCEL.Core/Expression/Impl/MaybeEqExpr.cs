@@ -5,7 +5,7 @@ using VCEL.Monad.Maybe;
 
 namespace VCEL.Core.Expression.Impl
 {
-    public class MaybeEqExpr<TMonad> : IExpression<TMonad> where TMonad : Maybe<object>
+    public class MaybeEqExpr<TMonad> : IExpression<TMonad> where TMonad : struct, IMaybe<object?>
     {
         public MaybeEqExpr(
             IMonad<TMonad> monad,

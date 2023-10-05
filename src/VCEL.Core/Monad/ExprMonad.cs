@@ -5,13 +5,23 @@ namespace VCEL.Monad
     public class ExprMonad : IMonad<object?>
     {
         public object? Unit { get; } = null;
-        public object? Lift(object? value) 
+        public object? Lift<TValue>(TValue value)
         {
-            return value; 
+            return value;
         }
         public object? Bind(object? m, Func<object?, object?> f)
         {
             return f(m);
+        }
+
+        public object? Bind(object? m, IContext<object?> context, Func<object?, IContext<object?>, object?> f)
+        {
+            return f(m, context);
+        }
+
+        public object? Bind<TValue>(object? m, IContext<object?> context, Func<object?, IContext<object?>, TValue, object?> f, TValue value)
+        {
+            return f(m, context, value);
         }
 
         public object? Bind(object? a, object? b, Func<object?, object?, object?> f)

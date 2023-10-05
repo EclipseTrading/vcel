@@ -14,7 +14,10 @@ namespace VCEL.Core.Expression.Impl
             Monad = monad;
             Left = left;
             Right = right;
+            EvaluateFunc = Evaluate;
         }
+
+        private System.Func<object?, object?, T> EvaluateFunc { get; }
         public IExpression<T> Left { get; }
         public IExpression<T> Right { get; }
         public IMonad<T> Monad { get; }
@@ -25,7 +28,7 @@ namespace VCEL.Core.Expression.Impl
         {
             var l = Left.Evaluate(context);
             var r = Right.Evaluate(context);
-            return Monad.Bind(l, r, Evaluate);
+            return Monad.Bind(l, r, EvaluateFunc);
         }
 
         public abstract T Evaluate(object? lv, object? rv);

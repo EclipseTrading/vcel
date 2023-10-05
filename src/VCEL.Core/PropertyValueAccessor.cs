@@ -18,16 +18,24 @@ namespace VCEL
 
         public TMonad GetValue(IContext<TMonad> context)
         {
-            var oc = context as ObjectContext<TMonad>;
-            var type = oc?.Object?.GetType();
-            if (!propSet || prop?.DeclaringType != type)
+            if (context is not ObjectContext<TMonad> { Object: { } obj } oc)
             {
-                prop = type?.GetProperty(propName);
-                propSet = true;
+                return monad.Unit;
             }
+
+            var type = obj.GetType();
+            if (propSet && prop?.DeclaringType == type)
+            {
+                return prop == null
+                    ? monad.Unit
+                    : monad.Lift(prop?.GetValue(oc.Object));
+            }
+
+            prop = type.GetProperty(propName);
+            propSet = true;
             return prop == null
                 ? monad.Unit
-                : monad.Lift(prop?.GetValue(oc?.Object));
+                : monad.Lift(prop?.GetValue(oc.Object));
         }
     }
 }

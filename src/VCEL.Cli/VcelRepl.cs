@@ -23,6 +23,7 @@ namespace VCEL.Cli
             EXPR,
             CSHARP
         }
+
         private Mode mode = Mode.EXPR;
 
 
@@ -66,7 +67,7 @@ namespace VCEL.Cli
                 return;
             }
 
-            switch(this.mode)
+            switch (this.mode)
             {
                 case Mode.EXPR:
                     EvaluateExpression(input);
@@ -86,9 +87,11 @@ namespace VCEL.Cli
             }
             catch (Exception exception)
             {
-                AnsiConsole.MarkupLine($"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                AnsiConsole.MarkupLine(
+                    $"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
                 AnsiConsole.WriteException(exception);
             }
+
             if (parsed == null)
             {
                 return;
@@ -100,7 +103,8 @@ namespace VCEL.Cli
 
                 foreach (var parseError in parsed.ParseErrors)
                 {
-                    AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]").Insert(parseError.Start, "[red underline]"));
+                    AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
+                        .Insert(parseError.Start, "[red underline]"));
                     AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
                         parseError.Message.FormatAsError(),
                         parseError.Line,
@@ -108,6 +112,7 @@ namespace VCEL.Cli
                         parseError.Stop,
                         parseError.Token.EscapeMarkup());
                 }
+
                 return;
             }
 
@@ -118,32 +123,27 @@ namespace VCEL.Cli
             }
             catch (Exception exception)
             {
-                AnsiConsole.MarkupLine($"Exception when evaluating the expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                AnsiConsole.MarkupLine(
+                    $"Exception when evaluating the expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
                 AnsiConsole.WriteException(exception);
             }
-            if (outcome == null)
+
+            if (outcome is not { Value: { } value })
             {
                 return;
             }
 
-            if (outcome?.HasValue == true)
+            history.Add((input, parsed, outcome.Value));
+            var formattedValue = (value switch
             {
-                history.Add((input, parsed, outcome));
-                var formattedValue = (outcome.Value switch
-                {
-                    string s => s,
-                    IEnumerable<object> e => $"[{string.Join(", ", e)}]",
-                    null => "null",
-                    _ => outcome.Value.ToString(),
-                }).EscapeMarkup();
-                var formattedValueType = outcome.Value?.GetType().Name.EscapeMarkup() ?? "null";
-                var padding = new string(' ', Console.WindowWidth - (formattedValue.Length + formattedValueType.Length));
-                AnsiConsole.MarkupLine("[gold1]{0}[/]{1}[green3]{2}[/]", formattedValue, padding, formattedValueType);
-            }
-            else
-            {
-                AnsiConsole.WriteLine("Expression has no outcome value");
-            }
+                string s => s,
+                IEnumerable<object> e => $"[{string.Join(", ", e)}]",
+                null => "null",
+                _ => outcome.Value.ToString(),
+            }).EscapeMarkup();
+            var formattedValueType = value?.GetType().Name.EscapeMarkup() ?? "null";
+            var padding = new string(' ', Console.WindowWidth - (formattedValue.Length + formattedValueType.Length));
+            AnsiConsole.MarkupLine("[gold1]{0}[/]{1}[green3]{2}[/]", formattedValue, padding, formattedValueType);
         }
 
         private void ToCSharpCode(string input)
@@ -155,9 +155,11 @@ namespace VCEL.Cli
             }
             catch (Exception exception)
             {
-                AnsiConsole.MarkupLine($"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                AnsiConsole.MarkupLine(
+                    $"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
                 AnsiConsole.WriteException(exception);
             }
+
             if (parsed == null)
             {
                 return;
@@ -169,7 +171,8 @@ namespace VCEL.Cli
 
                 foreach (var parseError in parsed.ParseErrors)
                 {
-                    AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]").Insert(parseError.Start, "[red underline]"));
+                    AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
+                        .Insert(parseError.Start, "[red underline]"));
                     AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
                         parseError.Message.FormatAsError(),
                         parseError.Line,
@@ -177,10 +180,11 @@ namespace VCEL.Cli
                         parseError.Stop,
                         parseError.Token.EscapeMarkup());
                 }
+
                 return;
             }
 
-            string outcome = parsed.Expression.Evaluate(new {});
+            string outcome = parsed.Expression.Evaluate(new { });
             AnsiConsole.MarkupLine(outcome.FormatAsValue());
         }
 
@@ -211,9 +215,11 @@ namespace VCEL.Cli
                     {
                         AnsiConsole.MarkupLine($"{".set".FormatAsCommand()} command history index must be a valid integer value");
                     }
+
                     break;
                 case ".set":
-                    AnsiConsole.MarkupLine($"{".set".FormatAsCommand()} command must define exactly one property name and optionally a history index");
+                    AnsiConsole.MarkupLine(
+                        $"{".set".FormatAsCommand()} command must define exactly one property name and optionally a history index");
                     break;
                 case ".parse" when inputParts.Length is 2:
                     ParseCommand(inputParts[1]);
@@ -228,7 +234,8 @@ namespace VCEL.Cli
                     ToggleCommand(inputParts);
                     break;
                 default:
-                    AnsiConsole.MarkupLine($"{firstPart.FormatAsCommand()} command is not recognised. Run {".help".FormatAsCommand()} for help");
+                    AnsiConsole.MarkupLine(
+                        $"{firstPart.FormatAsCommand()} command is not recognised. Run {".help".FormatAsCommand()} for help");
                     break;
             }
         }
@@ -241,8 +248,10 @@ namespace VCEL.Cli
             AnsiConsole.MarkupLine(".version".FormatAsHelpItem("Shows version"));
             AnsiConsole.MarkupLine(".exit".FormatAsHelpItem("Exits the application"));
             AnsiConsole.MarkupLine(".set".FormatAsHelpItem("Adds the most recent expression outcome as a named property", "NAME"));
-            AnsiConsole.MarkupLine(".set".FormatAsHelpItem("Adds the expression outcome at the provided history index as a named property", "NAME", "INDEX"));
-            AnsiConsole.MarkupLine(".parse".FormatAsHelpItem("Parse expressions in the file into CSharp code. Display failed ones", "FILENAME"));
+            AnsiConsole.MarkupLine(".set".FormatAsHelpItem("Adds the expression outcome at the provided history index as a named property",
+                "NAME", "INDEX"));
+            AnsiConsole.MarkupLine(".parse".FormatAsHelpItem("Parse expressions in the file into CSharp code. Display failed ones",
+                "FILENAME"));
             AnsiConsole.MarkupLine(".list".FormatAsHelpItem("Shows a list of set properties; their names, values and types"));
             AnsiConsole.MarkupLine(".history".FormatAsHelpItem("Shows the history of evaluated expressions and their outcomes"));
             AnsiConsole.MarkupLine(".toggle".FormatAsHelpItem("Change the mode of the parser, accepts {EXPR, CSHARP, JS}", "MODE"));
@@ -256,6 +265,7 @@ namespace VCEL.Cli
                 AnsiConsole.MarkupLine($"{".set".FormatAsCommand()} history index must be a valid index");
                 return;
             }
+
             var value = history[history.Count - 1 - index];
             context[propertyName] = value.Outcome.Value;
             AnsiConsole.MarkupLine($"{propertyName.FormatAsOption()} = {value.Expression} = {value.Outcome.FormatAsValue()}");
@@ -303,16 +313,17 @@ namespace VCEL.Cli
                         }
                         catch (Exception e)
                         {
-                            AnsiConsole.MarkupLine($"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
+                            AnsiConsole.MarkupLine(
+                                $"Exception when parsing expression. {"This should be considered a bug in VCEL.".FormatAsErrorHighlighted()}");
                             AnsiConsole.WriteException(e);
                             AnsiConsole.MarkupLine($"Vcel expression:{$"{processedExpr}".FormatAsValue()}");
                         }
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                AnsiConsole.MarkupLine( $"Failed to process {filePath}: {e.Message}");
+                AnsiConsole.MarkupLine($"Failed to process {filePath}: {e.Message}");
             }
         }
 
@@ -323,12 +334,14 @@ namespace VCEL.Cli
                 AnsiConsole.WriteLine("Empty");
                 return;
             }
+
             var list = new Table();
             list.AddColumns("Property name", "Value", "Type");
             foreach ((var key, var value) in context)
             {
                 list.AddRow(key.FormatAsOption(), value.FormatAsValue(), value.FormatAsType());
             }
+
             AnsiConsole.Write(list);
         }
 
@@ -339,6 +352,7 @@ namespace VCEL.Cli
                 AnsiConsole.WriteLine("Empty");
                 return;
             }
+
             var historyTable = new Table();
             historyTable.AddColumns("History index", "Expression", "Outcome", "Type", "Dependencies");
             for (var i = 0; i < history.Count; i++)
@@ -348,6 +362,7 @@ namespace VCEL.Cli
                 var dependencies = string.Join(", ", parsed.Expression.Dependencies.Select(dep => $"{dep.Name}({dep.GetType().Name})"));
                 historyTable.AddRow(historyIndex, expression, outcome.FormatAsValue(), outcome.FormatAsType(), dependencies);
             }
+
             AnsiConsole.Write(historyTable);
         }
 
@@ -366,6 +381,7 @@ namespace VCEL.Cli
                         break;
                 }
             }
+
             AnsiConsole.MarkupLine($"Current mode is {$"{this.mode.ToString()}".FormatAsValue()}.");
         }
     }

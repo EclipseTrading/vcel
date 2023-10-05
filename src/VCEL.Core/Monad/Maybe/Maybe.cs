@@ -1,21 +1,27 @@
-﻿namespace VCEL.Monad.Maybe
+﻿namespace VCEL.Monad.Maybe;
+
+public interface IMaybe<out T>
 {
-    public class Maybe<T>
+    bool HasValue { get; }
+    T Value { get; }
+}
+
+public struct Maybe<T> : IMaybe<T>
+{
+    public Maybe(T value)
     {
-        public Maybe(T value)
-        {
-            Value = value;
-            HasValue = true;
-        }
-
-        internal Maybe() 
-        { 
-            Value = default!;
-        }
-
-        public bool HasValue { get; }
-        public T Value { get; }
-        public static Maybe<T> Some(T value) => new Maybe<T>(value);
-        public static Maybe<T> None { get; } = new Maybe<T>();
+        Value = value;
+        HasValue = true;
     }
+
+    public Maybe()
+    {
+        Value = default!;
+        HasValue = false;
+    }
+
+    public bool HasValue { get; }
+    public T Value { get; }
+    public static Maybe<T> Some(T value) => new(value);
+    public static Maybe<T> None { get; } = new();
 }

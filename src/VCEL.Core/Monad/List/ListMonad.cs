@@ -8,7 +8,7 @@ namespace VCEL.Core.Monad.List
     public class ListMonad<T> : IMonad<List<T>>
     {
         public List<T> Unit { get; } = new List<T>(new List<T>());
-        public List<T> Lift(object? value)
+        public List<T> Lift<TValue>(TValue value)
         {
             return value is T t ? new List<T> { t } : new List<T>();
         }
@@ -17,6 +17,26 @@ namespace VCEL.Core.Monad.List
         {
             var results = m
                 .Select(e => f(e))
+                .SelectMany(l => l)
+                .ToList();
+
+            return new List<T>(results);
+        }
+
+        public List<T> Bind(List<T> m, IContext<List<T>> context, Func<object?, IContext<List<T>>, List<T>> f)
+        {
+            var results = m
+                .Select(e => f(e, context))
+                .SelectMany(l => l)
+                .ToList();
+
+            return new List<T>(results);
+        }
+
+        public List<T> Bind<TValue>(List<T> m, IContext<List<T>> context, Func<object?, IContext<List<T>>, TValue, List<T>> f, TValue value)
+        {
+            var results = m
+                .Select(e => f(e, context, value))
                 .SelectMany(l => l)
                 .ToList();
 
