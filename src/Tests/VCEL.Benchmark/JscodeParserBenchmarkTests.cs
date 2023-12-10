@@ -11,7 +11,7 @@ namespace VCEL.Benchmark
     [MemoryDiagnoser]
     public class JscodeParserBenchmarkTests
     {
-        private readonly static IExpressionParser<string> jsCodeparser = new ExpressionParser<string>(new ToJsCodeFactory<string>(ConcatStringMonad.Instance));
+        private readonly static IExpressionParser<string> jsCodeparser = new ExpressionParser<string>(new ToJsCodeFactory(ConcatStringMonad.Instance));
         private readonly static IExpressionParser<object?> vcelParser = VCExpression.DefaultParser();
 
 

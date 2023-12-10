@@ -1,7 +1,6 @@
-﻿namespace VCEL
+﻿namespace VCEL;
+
+public interface IValueAccessor<T>
 {
-    public interface IValueAccessor<T>
-    {
-        T GetValue(IContext<T> o);
-    }
+    T GetValue(IContext<T> o);
 }

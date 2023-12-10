@@ -12,7 +12,7 @@ public class ToJsCodeTests
 
     public ToJsCodeTests()
     {
-        var jsParserfactory = new ToJsCodeFactory<string>(ConcatStringMonad.Instance);
+        var jsParserfactory = new ToJsCodeFactory(ConcatStringMonad.Instance);
         parser = new ExpressionParser<string>(jsParserfactory);
     }
 

@@ -4,6 +4,7 @@
     <Authors>Brian Flynn</Authors>
     <Product>View Client Expression Language</Product>
     <Description>Spring Expression Like Expression Language</Description>
+    <RootNamespace>VCEL</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

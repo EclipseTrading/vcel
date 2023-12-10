@@ -26,6 +26,6 @@ namespace VCEL.Core.Monad.List
         public List<T> Bind(List<T> a, List<T> b, Func<object?, object?, List<T>> f)
             => BindEx.Bind(a, b, f, this);
 
-        public static ListMonad<T> Instance { get; } = new ListMonad<T>();
+        public static ListMonad<T> Instance { get; } = new();
     }
 }

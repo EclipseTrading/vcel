@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL
+namespace VCEL;
+
+public interface IExpression<TMonad>
 {
-    public interface IExpression<TMonad>
-    {
-        TMonad Evaluate(IContext<TMonad> context);
-        IMonad<TMonad> Monad { get; }
-        IEnumerable<IDependency> Dependencies { get; }
-    }
+    TMonad Evaluate(IContext<TMonad> context);
+    IMonad<TMonad> Monad { get; }
+    IEnumerable<IDependency> Dependencies { get; }
 }

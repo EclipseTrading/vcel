@@ -24,7 +24,7 @@
                 baseAccessor = accessor;
             }
             return baseAccessor == null || overrideContext == null
-                ? ctx.Monad.Unit
+                ? ctx.Monad.Unit!
                 : baseAccessor.GetValue(overrideContext.BaseContext);
         }
     }

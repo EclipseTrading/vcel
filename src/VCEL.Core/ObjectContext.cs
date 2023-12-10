@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using VCEL.Core;
 using VCEL.Monad;
 
 namespace VCEL

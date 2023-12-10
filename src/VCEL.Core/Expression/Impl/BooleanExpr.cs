@@ -39,7 +39,7 @@ namespace VCEL.Core.Expression.Impl
                             Right.Evaluate(context), 
                             BindR);
                 }
-                return Monad.Unit;
+                return Monad.Unit!;
 
                 TMonad BindR(object? rv)
                 {
