@@ -12,16 +12,28 @@ namespace Intrinsics.Benchmark;
 [RankColumn]
 public class IntrinsicsBenchmarks
 {
-    private readonly IntrinsicAddOp intrinsicAdd = new(
-        IntrinsicsMonad.Instance,
-        new Property<float[]>(IntrinsicsMonad.Instance, "a"),
-        new Property<float[]>(IntrinsicsMonad.Instance, "b"));
+    private readonly static IntrinsicBinaryOp<float> intrinsicAdd = new(
+        IntrinsicsMonad<float>.Instance,
+        new Property<ReadOnlyMemory<float>>(IntrinsicsMonad<float>.Instance, "a"),
+        new Property<ReadOnlyMemory<float>>(IntrinsicsMonad<float>.Instance, "b"),
+        AvxGeneric.Add);
 
-    private readonly AddExpr<float> addOp = new(
+    private readonly static IntrinsicBinaryOp<float> intrinsicsMult = new IntrinsicBinaryOp<float>(
+        IntrinsicsMonad<float>.Instance,
+        intrinsicAdd,
+        new Property<ReadOnlyMemory<float>>(IntrinsicsMonad<float>.Instance, "a"),
+        AvxGeneric.Multiply);
+
+    private readonly static AddExpr<float> addOp = new(
         ExprMonad<float>.FloatMonad,
         new Property<float>(ExprMonad<float>.FloatMonad, "a"),
         new Property<float>(ExprMonad<float>.FloatMonad, "b")
     );
+
+    private readonly static MultExpr<float> multOp = new(
+        ExprMonad<float>.FloatMonad,
+        addOp,
+        new Property<float>(ExprMonad<float>.FloatMonad, "a"));
 
     private int lastLen = 0;
 
@@ -29,7 +41,7 @@ public class IntrinsicsBenchmarks
     [ArgumentsSource(nameof(Data))]
     public void RunIntrinsicsAdd(List<Dictionary<string, object>> rows, int iters)
     {
-        var res = intrinsicAdd.Evaluate(new IntrinsicContext(rows));
+        var res = intrinsicsMult.Evaluate(new IntrinsicContext<float>(rows));
         lastLen = res.Length;
     }
 
@@ -40,7 +52,7 @@ public class IntrinsicsBenchmarks
         float res = 0;
         for (var i = 0; i < rows.Count; i++)
         {
-            res = addOp.Evaluate(new DictionaryContext<float>(ExprMonad<float>.FloatMonad, rows[i]));
+            res = multOp.Evaluate(new DictionaryContext<float>(ExprMonad<float>.FloatMonad, rows[i]));
         }
         
         lastLen = (int)res;
@@ -57,7 +69,7 @@ public class IntrinsicsBenchmarks
             var a = (float)rows[i]["a"];
             var b = (float)rows[i]["b"];
             
-            res = a + b;
+            res = (a * b) + a;
         }
         
         lastLen = (int)res;
@@ -65,7 +77,7 @@ public class IntrinsicsBenchmarks
     
     public IEnumerable<object[]> Data()
     {
-        int[] iters = [1, 5, 10, 100, 1000, 10000];
+        int[] iters = [1, 5, 10, 500];
         foreach (var iter in iters)
         {
             var rows = new List<Dictionary<string, object>>();
@@ -82,5 +94,4 @@ public class IntrinsicsBenchmarks
             yield return new object[] { rows, iter };
         }
     }
-
 }

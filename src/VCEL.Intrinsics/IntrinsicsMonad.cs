@@ -2,29 +2,29 @@
 
 namespace VCEL.Intrinsics;
 
-public class IntrinsicsMonad : IMonad<float[]>
+public class IntrinsicsMonad<T> : IMonad<ReadOnlyMemory<T>>
+    where T : struct
 {
-    public float[] Unit => Array.Empty<float>();
-    public float[] Lift(object? value)
+    public ReadOnlyMemory<T> Unit => ReadOnlyMemory<T>.Empty;
+    public ReadOnlyMemory<T> Lift(object? value)
     {
         return value switch
         {
-            float[] arr => arr,
-            float f => new[] { f },
+            ReadOnlyMemory<T> arr => arr,
             _ => throw new ArgumentException()
         };
     }
 
-    public float[] Bind(float[] a, Func<object?, float[]> f)
+    public ReadOnlyMemory<T> Bind(ReadOnlyMemory<T> a, Func<object?, ReadOnlyMemory<T>> f)
     {
         return f(a);
     }
 
-    public float[] Bind(float[] a, float[] b, Func<object?, object?, float[]> f)
+    public ReadOnlyMemory<T> Bind(ReadOnlyMemory<T> a, ReadOnlyMemory<T> b, Func<object?, object?, ReadOnlyMemory<T>> f)
     {
         return f(a, b);
     }
     
     
-    public static IntrinsicsMonad Instance { get; } = new();
+    public static IntrinsicsMonad<T> Instance { get; } = new();
 }

@@ -3,40 +3,42 @@ using VCEL.Monad;
 
 namespace VCEL.Intrinsics;
 
-public class IntrinsicContext(IReadOnlyList<Dictionary<string, object>> rows) : IContext<float[]>
+public class IntrinsicContext<T>(IReadOnlyList<Dictionary<string, object>> rows) : IContext<ReadOnlyMemory<T>>
+    where T : struct
 {
-    public bool TryGetAccessor(string propName, out IValueAccessor<float[]> accessor)
+    public bool TryGetAccessor(string propName, out IValueAccessor<ReadOnlyMemory<T>> accessor)
     {
         var extra = rows.Count % 8 == 0 ? 0 : 8 - rows.Count % 8; 
         
-        var data = new float[rows.Count + extra];
+        var data = new T[rows.Count + extra];
         for (var i = 0; i < rows.Count; i++)
         {
-            data[i] = (float)rows[i][propName];
+            data[i] = (T)rows[i][propName];
         }
         
-        accessor = new IntrinsicsAccessor(data);
+        accessor = new IntrinsicsAccessor<T>(data);
         return true;
     }
 
-    public IContext<float[]> OverrideName(string name, float[] br)
+    public IContext<ReadOnlyMemory<T>> OverrideName(string name, ReadOnlyMemory<T> br)
     {
         throw new NotImplementedException();
     }
 
-    public IMonad<float[]> Monad => IntrinsicsMonad.Instance;
-    public bool TryGetContext(object o, [UnscopedRef] out IContext<float[]> context)
+    public IMonad<ReadOnlyMemory<T>> Monad => IntrinsicsMonad<T>.Instance;
+    public bool TryGetContext(object o, [UnscopedRef] out IContext<ReadOnlyMemory<T>> context)
     {
         context = null!;
         return false;
     }
 
-    public float[] Value => Array.Empty<float>();
+    public ReadOnlyMemory<T> Value => ReadOnlyMemory<T>.Empty;
 }
 
-public class IntrinsicsAccessor(float[] data) : IValueAccessor<float[]>
+public class IntrinsicsAccessor<T>(ReadOnlyMemory<T> data) : IValueAccessor<ReadOnlyMemory<T>>
+    where T : struct
 {
-    public float[] GetValue(IContext<float[]> _)
+    public ReadOnlyMemory<T> GetValue(IContext<ReadOnlyMemory<T>> _)
     {
         return data;
     }
