@@ -33,7 +33,6 @@ namespace VCEL.JS
             this.propName = propName;
             this.overridePropertyFunc = overridePropertyFunc;
         }
-
         public string GetValue(IContext<string> context)
         {
             if (overridePropertyFunc != null && overridePropertyFunc.TryGetValue(propName, out var func))
@@ -50,7 +49,9 @@ namespace VCEL.JS
             var jsObjContext = context as JsObjectContext;
             return monad.Lift(jsObjContext?.Object is string
                 ? $"{context.Value}.{finalPropOrMethod}"
-                : $"{Constants.DefaultContext}.{finalPropOrMethod}");
+                : finalPropOrMethod.Equals("_") 
+                    ? $"{Constants.ViewClientContext}.{finalPropOrMethod}" 
+                    : $"{Constants.DefaultContext}.{finalPropOrMethod}");
         }
     }
 }
