@@ -50,7 +50,7 @@ namespace VCEL.JS
             return monad.Lift(jsObjContext?.Object is string
                 ? $"{context.Value}.{finalPropOrMethod}"
                 : finalPropOrMethod.Equals("_") 
-                    ? $"{Constants.ViewClientContext}.{finalPropOrMethod}" 
+                    ? $"{finalPropOrMethod}" 
                     : $"{Constants.DefaultContext}.{finalPropOrMethod}");
         }
     }

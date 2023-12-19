@@ -27,7 +27,7 @@ public class ToJsCodeTests
     [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
     [TestCase("(D > 123456789)", "(vcelContext.D > 123456789)")]
     [TestCase("(D > 1234567890)", "(vcelContext.D > 1234567890)")]
-    [TestCase("(_.env.user == 'jdoe2')", "(underscoreContext._.env.user === 'jdoe2')")]
+    [TestCase("(_.env.user == 'jdoe2')", "(_.env.user === 'jdoe2')")]
     [TestCase("(env._.user == 'jdoe2')", "(vcelContext.env._.user === 'jdoe2')")]
     [TestCase("(D > 12345678901)", "(vcelContext.D > 12345678901)")]
     [TestCase("(D > 133148940000)", "(vcelContext.D > 133148940000)")]
