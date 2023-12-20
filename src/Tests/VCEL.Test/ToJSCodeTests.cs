@@ -27,6 +27,18 @@ public class ToJsCodeTests
     [TestCase("(D > 500000 or D < -500000)", "((vcelContext.D > 500000) || (vcelContext.D < -500000))")]
     [TestCase("(D > 123456789)", "(vcelContext.D > 123456789)")]
     [TestCase("(D > 1234567890)", "(vcelContext.D > 1234567890)")]
+    [TestCase("(_.env.user == 'jdoe2')", "(_.env.user === 'jdoe2')")]
+    [TestCase("(_.env.user in ['jdoe2', 'tswift'])", "['jdoe2','tswift'].includes(_.env.user)")]
+    [TestCase("_.env.machine matches '(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)'", "new RegExp(/(?:.+,|^)([0-9]\\d\\d)(?:,.+|$)/gm).test(_.env.machine)")]
+    [TestCase("_.env.user.startswith('jdoe')==false and P < Prev(P)",
+        "(((_.env.user?.startsWith('jdoe') ?? false) === false) && (vcelContext.P < (Prev(vcelContext.P))))")]
+    [TestCase("let usr = _.env.user in match | usr == 'jdoe2' = true | otherwise = false",
+        "(() => {let usr = _.env.user; return (() => { " +
+        "switch(true) {" +
+        "case ((usr?.valueOf() ?? null) === 'jdoe2'): return true; " +
+        "default: return false" + 
+        "}})();})()")]
+    [TestCase("(env._.user == 'jdoe2')", "(vcelContext.env._.user === 'jdoe2')")]
     [TestCase("(D > 12345678901)", "(vcelContext.D > 12345678901)")]
     [TestCase("(D > 133148940000)", "(vcelContext.D > 133148940000)")]
     [TestCase("(D > 133148940000000)", "(vcelContext.D > 133148940000000)")]
