@@ -4,9 +4,10 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Mathematics;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
+using Perfolizer.Horology;
 
 namespace Spel.Benchmark;
 
@@ -14,28 +15,30 @@ class Program
 {
     public static void Main(string[] args)
     {
-        // new DefaultConfig()
-        var config = new ManualConfig()
+        var config = ManualConfig
+            .CreateEmpty()
             .AddDiagnoser(MemoryDiagnoser.Default)
             .AddExporter(MarkdownExporter.Default)
+            .AddLogger(new ConsoleLogger())
             .AddColumn(new RankColumn(NumeralSystem.Roman))
-            .AddJob(Job
-                .ShortRun
-                .WithWarmupCount(1).WithIterationCount(1)
+            .AddJob(Job.ShortRun
+                .AsBaseline()
                 .WithRuntime(CoreRuntime.Core60)
-                .WithLaunchCount(1)
-                .WithToolchain(InProcessNoEmitToolchain.Instance)
+                // .WithToolchain(InProcessNoEmitToolchain.Instance)
+                .WithWarmupCount(3)
+                .WithIterationCount(3)
+                .WithIterationTime(TimeInterval.FromMilliseconds(200))
             )
-            .AddJob(Job
-                .ShortRun
-                .WithWarmupCount(1).WithIterationCount(1)
-                .WithRuntime(CoreRuntime.Core70)
-                .WithLaunchCount(1)
-                .WithToolchain(InProcessNoEmitToolchain.Instance)
+            .AddJob(Job.ShortRun
+                .WithRuntime(CoreRuntime.Core80)
+                // .WithToolchain(InProcessNoEmitToolchain.Instance)
+                .WithWarmupCount(3)
+                .WithIterationCount(3)
+                .WithIterationTime(TimeInterval.FromMilliseconds(200))
             );
 
         _ = BenchmarkSwitcher
             .FromTypes(new[] { typeof(LogicalEvaluatorBenchmarks) })
-            .Run(args);
+            .Run(args, config);
     }
 }
