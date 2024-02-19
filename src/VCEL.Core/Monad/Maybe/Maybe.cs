@@ -6,7 +6,7 @@ public interface IMaybe<out T>
     T Value { get; }
 }
 
-public struct Maybe<T> : IMaybe<T>
+public readonly struct Maybe<T> : IMaybe<T>
 {
     public Maybe(T value)
     {
