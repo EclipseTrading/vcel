@@ -139,7 +139,7 @@ namespace VCEL.Cli
                 string s => s,
                 IEnumerable<object> e => $"[{string.Join(", ", e)}]",
                 null => "null",
-                _ => outcome.Value.ToString(),
+                _ => value.ToString(),
             }).EscapeMarkup();
             var formattedValueType = value?.GetType().Name.EscapeMarkup() ?? "null";
             var padding = new string(' ', Console.WindowWidth - (formattedValue.Length + formattedValueType.Length));
