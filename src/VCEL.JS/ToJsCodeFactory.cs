@@ -8,7 +8,7 @@ using VCEL.Monad;
 
 namespace VCEL.JS
 {
-    public class ToJsCodeFactory<IContext> : ExpressionFactory<string>
+    public class ToJsCodeFactory<TContext> : ExpressionFactory<string>
     {
         public ToJsCodeFactory(
             IMonad<string> monad,

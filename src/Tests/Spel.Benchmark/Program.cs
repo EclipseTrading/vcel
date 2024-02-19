@@ -39,6 +39,6 @@ class Program
 
         _ = BenchmarkSwitcher
             .FromTypes(new[] { typeof(LogicalEvaluatorBenchmarks) })
-            .Run(args, config);
+            .Run(args);
     }
 }

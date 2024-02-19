@@ -1,31 +1,37 @@
-﻿namespace VCEL
+﻿using System;
+
+namespace VCEL;
+
+internal struct OverrideAccessor<TMonad> : IValueAccessor<TMonad>
 {
-    internal class OverrideAccessor<TMonad> : IValueAccessor<TMonad>
+    private readonly string propName;
+    private IValueAccessor<TMonad>? baseAccessor;
+
+    public OverrideAccessor(string propName)
     {
-        private readonly string propName;
-        private IValueAccessor<TMonad>? baseAccessor;
+        this.propName = propName;
+        baseAccessor = null;
+    }
 
-        public OverrideAccessor(string propName)
+    public TMonad GetValue(IContext<TMonad> ctx)
+    {
+        TMonad? v;
+        if (ctx is not OverrideContext<TMonad> overrideContext)
         {
-            this.propName = propName;
+            throw new InvalidOperationException("OverrideAccessor must be used within an OverrideContext");
         }
 
-        public TMonad GetValue(IContext<TMonad> ctx)
+        if (overrideContext.Overrides.TryGetValue(propName, out v))
         {
-            var overrideContext = ctx as OverrideContext<TMonad>;
-            TMonad? v = default;
-            if (overrideContext?.Overrides.TryGetValue(propName, out v) ?? false)
-            {
-                return v;
-            }
-            IValueAccessor<TMonad>? accessor = default;
-            if (baseAccessor == null && (overrideContext?.BaseContext.TryGetAccessor(propName, out accessor) ?? false))
-            {
-                baseAccessor = accessor;
-            }
-            return baseAccessor == null || overrideContext == null
-                ? ctx.Monad.Unit
-                : baseAccessor.GetValue(overrideContext.BaseContext);
+            return v;
         }
+
+        if (baseAccessor == null && overrideContext.BaseContext.TryGetAccessor(propName, out var accessor))
+        {
+            baseAccessor = accessor;
+        }
+        return baseAccessor == null
+            ? ctx.Monad.Unit
+            : baseAccessor.GetValue(overrideContext.BaseContext);
     }
 }

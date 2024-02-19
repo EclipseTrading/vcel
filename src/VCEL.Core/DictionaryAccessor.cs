@@ -1,22 +1,21 @@
-﻿namespace VCEL.Core
+﻿namespace VCEL.Core;
+
+public readonly struct DictionaryAccessor<T> : IValueAccessor<T>
 {
-    public class DictionaryAccessor<T> : IValueAccessor<T>
+    private readonly string propName;
+
+    public DictionaryAccessor(string propName)
     {
-        private string propName;
+        this.propName = propName;
+    }
 
-        public DictionaryAccessor(string propName)
+    public T GetValue(IContext<T> o)
+    {
+        var dictContext = (DictionaryContext<T>)o;
+        if (!dictContext.Dict.TryGetValue(propName, out var value))
         {
-            this.propName = propName;
+            return o.Monad.Unit;
         }
-
-        public T GetValue(IContext<T> o)
-        {
-            var dictContext = (DictionaryContext<T>)o;
-            if (!dictContext.Dict.TryGetValue(propName, out var value))
-            {
-                return o.Monad.Unit;
-            }
-            return o.Monad.Lift(value);
-        }
+        return o.Monad.Lift(value);
     }
 }

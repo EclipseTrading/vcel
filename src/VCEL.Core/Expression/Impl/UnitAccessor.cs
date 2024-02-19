@@ -1,19 +1,18 @@
 ﻿using VCEL.Monad;
 
-namespace VCEL.Core.Expression.Impl
+namespace VCEL.Core.Expression.Impl;
+
+internal readonly struct UnitAccessor<TMonad> : IValueAccessor<TMonad>
 {
-    internal class UnitAccessor<TMonad> : IValueAccessor<TMonad>
+    private readonly IMonad<TMonad> monad;
+
+    public UnitAccessor(IMonad<TMonad> monad)
     {
-        private IMonad<TMonad> monad;
+        this.monad = monad;
+    }
 
-        public UnitAccessor(IMonad<TMonad> monad)
-        {
-            this.monad = monad;
-        }
-
-        public TMonad GetValue(IContext<TMonad> o)
-        {
-            return monad.Unit;
-        }
+    public TMonad GetValue(IContext<TMonad> o)
+    {
+        return monad.Unit;
     }
 }
