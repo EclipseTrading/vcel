@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="Antlr4" Version="4.6.6" />
     <PackageVersion Include="Antlr4.Runtime" Version="4.6.6" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.8" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.7.0" />
@@ -17,5 +17,6 @@
     <PackageVersion Include="Spring.Core" Version="2.0.1" />
     <PackageVersion Include="System.CodeDom" Version="7.0.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="7.0.0" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
   </ItemGroup>
 </Project>

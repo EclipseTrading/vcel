@@ -17,6 +17,7 @@ namespace VCEL.Expression
         {
         }
 
+        [Obsolete("Obsolete")]
         protected MissingFunctionException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

@@ -1,30 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using VCEL.Monad;
 
-namespace VCEL.JS
+namespace VCEL.JS;
+
+public class JsObjectContext : IContext<string>
 {
-    public class JsObjectContext : ObjectContext<string>
+    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
+    
+    public IMonad<string> Monad { get; }
+
+    public object Object { get; }
+    
+    public JsObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
     {
-        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
+        this.overridePropertyFunc = overridePropertyFunc;
+        Monad = monad;
+        Object = obj;
+    }
 
-        public JsObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
-            : base(monad, obj)
-        {
-            this.overridePropertyFunc = overridePropertyFunc;
-        }
+    public IContext<string> OverrideName(string name, string br)
+        => new OverrideContext<string>(
+            this,
+            ImmutableDictionary<string, string>.Empty.SetItem(name, br));
 
-        public override bool TryGetAccessor(string propName, out IValueAccessor<string> accessor)
-        {
-            accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
-            accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
-            return true;
-        }
+    public string Value => Monad.Lift(Object);
 
-        public override bool TryGetContext(object o, out IContext<string> context)
-        {
-            context = new JsObjectContext(Monad, o, overridePropertyFunc);
-            return true;
-        }
+    public bool TryGetAccessor(string propName, out IValueAccessor<string> accessor)
+    {
+        accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
+        return true;
+    }
+
+    public bool TryGetContext(object o, out IContext<string> context)
+    {
+        context = new JsObjectContext(Monad, o, overridePropertyFunc);
+        return true;
     }
 }

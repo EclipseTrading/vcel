@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <StartupObject>Spel.Benchmark.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="Spring.Core" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" />
   </ItemGroup>
 
   <ItemGroup>

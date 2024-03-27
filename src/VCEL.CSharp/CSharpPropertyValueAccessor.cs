@@ -2,35 +2,34 @@
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.CSharp
+namespace VCEL.CSharp;
+
+public readonly struct CSharpPropertyValueAccessor : IValueAccessor<string>
 {
-    public class CSharpPropertyValueAccessor : IValueAccessor<string>
+    private readonly IMonad<string> monad;
+    private readonly string propName;
+    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropFunc;
+
+    public CSharpPropertyValueAccessor(
+        IMonad<string> monad,
+        string propName,
+        IReadOnlyDictionary<string, Func<string>>? overridePropFunc = null)
     {
-        private readonly IMonad<string> monad;
-        private readonly string propName;
-        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropFunc;
+        this.monad = monad;
+        this.propName = propName;
+        this.overridePropFunc = overridePropFunc;
+    }
 
-        public CSharpPropertyValueAccessor(
-            IMonad<string> monad,
-            string propName,
-            IReadOnlyDictionary<string, Func<string>>? overridePropFunc = null)
+    public string GetValue(IContext<string> context)
+    {
+        if (overridePropFunc != null && overridePropFunc.TryGetValue(propName, out var func))
         {
-            this.monad = monad;
-            this.propName = propName;
-            this.overridePropFunc = overridePropFunc;
+            return monad.Lift(func());
         }
 
-        public string GetValue(IContext<string> context)
-        {
-            if (overridePropFunc != null && overridePropFunc.TryGetValue(propName, out var func))
-            {
-                return monad.Lift(func());
-            }
-
-            var finalPropOrMethod = $"({context.Value}.{propName})";
-            return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
-                            $"? ((double)({finalPropOrMethod})) " +
-                            $": ({finalPropOrMethod}))");
-        }
+        var finalPropOrMethod = $"({context.Value}.{propName})";
+        return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
+                          $"? ((double)({finalPropOrMethod})) " +
+                          $": ({finalPropOrMethod}))");
     }
 }

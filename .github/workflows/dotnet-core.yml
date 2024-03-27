@@ -21,10 +21,10 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install dependencies
       working-directory: src
-      run: dotnet restore
+      run: dotnet restore -p:TargetFramework=net6.0
     - name: Build
       working-directory: src
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore -p:TargetFramework=net6.0
     - name: Test
       working-directory: src
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal -p:TargetFramework=net6.0

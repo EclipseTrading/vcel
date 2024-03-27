@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VCEL.Monad;
@@ -16,8 +17,10 @@ namespace VCEL.Core.Expression.Impl
             ConditionExpr = conditionExpr;
             TrueExpr = trueExpr;
             FalseExpr = falseExpr;
+            BindFunc = Bind;
         }
 
+        private Func<object?, IContext<TMonad>, TMonad> BindFunc { get; }
         public IExpression<TMonad> ConditionExpr { get; }
         public IExpression<TMonad> TrueExpr { get; }
         public IExpression<TMonad> FalseExpr { get; }
@@ -34,14 +37,14 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var c = ConditionExpr.Evaluate(context);
-            return Monad.Bind(c, BindC);
+            return Monad.Bind(c, context, BindFunc);
+        }
 
-            TMonad BindC(object? res)
-            {
-                return res is bool b
-                    ? (b ? TrueExpr.Evaluate(context) : FalseExpr.Evaluate(context))
-                    : Monad.Unit;
-            }
+        private TMonad Bind(object? res, IContext<TMonad> context)
+        {
+            return res is bool b
+                ? b ? TrueExpr.Evaluate(context) : FalseExpr.Evaluate(context)
+                : Monad.Unit;
         }
     }
 }

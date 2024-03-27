@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VCEL.Monad;
 
@@ -14,7 +15,12 @@ namespace VCEL.Core.Expression.Impl
             Monad = monad;
             Left = left;
             Right = right;
+            BindFunc = Bind;
+            BindRightFunc = BindRight;
         }
+
+        private Func<object?, IContext<TMonad>, TMonad> BindFunc { get; }
+        private Func<object?,IContext<TMonad>,bool,TMonad> BindRightFunc { get; }
 
         public IExpression<TMonad> Left { get; }
         public IExpression<TMonad> Right { get; }
@@ -27,28 +33,29 @@ namespace VCEL.Core.Expression.Impl
         public TMonad Evaluate(IContext<TMonad> context)
         {
             var l = Left.Evaluate(context);
-            return Monad.Bind(l, Bind);
-
-            TMonad Bind(object? lv)
-            {
-                if(lv is bool lb)
-                {
-                    return ShortCircuit(lb, out var res)
-                        ? Monad.Lift(res)
-                        : Monad.Bind(
-                            Right.Evaluate(context), 
-                            BindR);
-                }
-                return Monad.Unit;
-
-                TMonad BindR(object? rv)
-                {
-                    return rv is bool rb 
-                        ? Monad.Lift(Evaluate(lb, rb)) 
-                        : Monad.Unit;
-                }
-            }
+            return Monad.Bind(l, context, BindFunc);
         }
+
+        private TMonad Bind(object? lv, IContext<TMonad> context)
+        {
+            return lv is bool lb
+                ? ShortCircuit(lb, out var res)
+                    ? Monad.Lift(res)
+                    : Monad.Bind(
+                        Right.Evaluate(context),
+                        context,
+                        BindRightFunc,
+                        lb)
+                : Monad.Unit;
+        }
+
+        private TMonad BindRight(object? rv, IContext<TMonad> context, bool lb)
+        {
+            return rv is bool rb
+                ? Monad.Lift(Evaluate(lb, rb))
+                : Monad.Unit;
+        }
+
         public abstract bool Evaluate(bool l, bool r);
         public abstract bool ShortCircuit(bool l, out bool res);
     }

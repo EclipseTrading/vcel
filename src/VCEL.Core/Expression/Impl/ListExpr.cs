@@ -25,7 +25,7 @@ namespace VCEL.Core.Expression.Impl
                 (c, n) =>  Monad.Bind(
                         c,
                         n is NullExpr<TMonad> 
-                            ? Monad.Lift(null!) // We want to support lists with nulls even in a maybe context
+                            ? Monad.Lift<object?>(null) // We want to support lists with nulls even in a maybe context
                             : n.Evaluate(context),
                         (list, value) =>
                         {

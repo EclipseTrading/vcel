@@ -15,24 +15,42 @@ namespace VCEL.Core.Monad.Tasks
             return r;
         }
 
-        public Task<object?> Lift(object? value)
+        public async Task<object?> Bind(Task<object?> m, IContext<Task<object?>> context,
+            Func<object?, IContext<Task<object?>>, Task<object?>> f)
         {
-            if(!(value is Task task))
+            var b = await m;
+            var r = await f(b, context);
+            return r;
+        }
+
+        public async Task<object?> Bind<TValue>(Task<object?> m, IContext<Task<object?>> context,
+            Func<object?, IContext<Task<object?>>, TValue, Task<object?>> f, TValue value)
+        {
+            var b = await m;
+            var r = await f(b, context, value);
+            return r;
+        }
+
+        public Task<object?> Lift<TValue>(TValue value)
+        {
+            if (!(value is Task task))
             {
-                return Task.FromResult(value);
+                return Task.FromResult((object?)value);
             }
 
-            if(value is Task<object?> to)
+            if (value is Task<object?> to)
             {
                 return to;
             }
+
             var type = value?.GetType();
-            if(type?.GetGenericArguments().Length == 1)
+            if (type?.GetGenericArguments().Length == 1)
             {
                 return GetTaskResult(task, type.GetGenericArguments()[0]);
             }
+
             // Type is a Task with no return value
-            return Task.FromResult(value);
+            return Task.FromResult((object?)value);
         }
 
         public static TaskMonad Instance { get; } = new TaskMonad();

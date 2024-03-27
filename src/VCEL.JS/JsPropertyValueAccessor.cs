@@ -4,54 +4,53 @@ using System.Text.RegularExpressions;
 using VCEL.Core.Helper;
 using VCEL.Monad;
 
-namespace VCEL.JS
+namespace VCEL.JS;
+
+public readonly struct JsPropertyValueAccessor : IValueAccessor<string>
 {
-    public class JsPropertyValueAccessor : IValueAccessor<string>
+    private readonly IReadOnlyDictionary<string, string> jsDatePropertyMethods = new Dictionary<string, string>()
     {
-        private readonly IReadOnlyDictionary<string, string> jsDatePropertyMethods = new Dictionary<string, string>()
-        {
-            { "Now", "getTime()" },
-            { "Today", "getDate()" },
-            { "Year", "getFullYear()" },
-            { "Month", "getMonth()" },
-            { "Day", "getDay()" },
-            { "Date", "getDate()" },
-            { "Hour", "getHours()" },
-            { "Millisecond", "getMilliseconds()"},
-            { "Minute", "getMinutes()"},
-            { "Second", "getSeconds()"}
-        };
+        { "Now", "getTime()" },
+        { "Today", "getDate()" },
+        { "Year", "getFullYear()" },
+        { "Month", "getMonth()" },
+        { "Day", "getDay()" },
+        { "Date", "getDate()" },
+        { "Hour", "getHours()" },
+        { "Millisecond", "getMilliseconds()"},
+        { "Minute", "getMinutes()"},
+        { "Second", "getSeconds()"}
+    };
 
-        private readonly string jsDateObjPattern = @"\(new Date\(([0-9]+|)\)\)";
-        private readonly IMonad<string> monad;
-        private readonly string propName;
-        private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
+    private readonly string jsDateObjPattern = @"\(new Date\(([0-9]+|)\)\)";
+    private readonly IMonad<string> monad;
+    private readonly string propName;
+    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
 
-        public JsPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
+    public JsPropertyValueAccessor(IMonad<string> monad, string propName, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
+    {
+        this.monad = monad;
+        this.propName = propName;
+        this.overridePropertyFunc = overridePropertyFunc;
+    }
+    public string GetValue(IContext<string> context)
+    {
+        if (overridePropertyFunc != null && overridePropertyFunc.TryGetValue(propName, out var func))
         {
-            this.monad = monad;
-            this.propName = propName;
-            this.overridePropertyFunc = overridePropertyFunc;
+            return monad.Lift(func());
         }
-        public string GetValue(IContext<string> context)
+
+        string finalPropOrMethod = propName;
+        if (Regex.Match(context.Value, jsDateObjPattern).Success && jsDatePropertyMethods.TryGetValue(propName, out var jsDateMethod))
         {
-            if (overridePropertyFunc != null && overridePropertyFunc.TryGetValue(propName, out var func))
-            {
-                return monad.Lift(func());
-            }
-
-            string finalPropOrMethod = propName;
-            if (Regex.Match(context.Value, jsDateObjPattern).Success && jsDatePropertyMethods.TryGetValue(propName, out var jsDateMethod))
-            {
-                finalPropOrMethod = jsDateMethod;
-            }
-
-            var jsObjContext = context as JsObjectContext;
-            return monad.Lift(jsObjContext?.Object is string
-                ? $"{context.Value}.{finalPropOrMethod}"
-                : finalPropOrMethod.Equals("_") 
-                    ? $"{finalPropOrMethod}" 
-                    : $"{Constants.DefaultContext}.{finalPropOrMethod}");
+            finalPropOrMethod = jsDateMethod;
         }
+
+        var jsObjContext = context as JsObjectContext;
+        return monad.Lift(jsObjContext?.Object is string
+            ? $"{context.Value}.{finalPropOrMethod}"
+            : finalPropOrMethod.Equals("_") 
+                ? $"{finalPropOrMethod}" 
+                : $"{Constants.DefaultContext}.{finalPropOrMethod}");
     }
 }
