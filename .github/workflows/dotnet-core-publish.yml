@@ -24,14 +24,14 @@ jobs:
       working-directory: src
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore /p:Version=${{ env.RELEASE_VERSION }} -p:TargetFramework=net6.0
+      run: dotnet build --configuration Release --no-restore /p:Version=${{ env.RELEASE_VERSION }}
       working-directory: src
     - name: Test
       working-directory: src
-      run: dotnet test --no-restore --verbosity normal -p:TargetFramework=net6.0
+      run: dotnet test --no-restore --verbosity normal
     - name: Pack NuGet
       working-directory: src
-      run: dotnet pack --configuration Release /p:Version=${{ env.RELEASE_VERSION }} -p:TargetFramework=net6.0
+      run: dotnet pack --configuration Release /p:Version=${{ env.RELEASE_VERSION }}
     - name: Push NuGet - VCEL.Core
       working-directory: src
       run: dotnet nuget push -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json VCEL.Core/bin/Release/VCEL.Core.${{ env.RELEASE_VERSION }}.nupkg
