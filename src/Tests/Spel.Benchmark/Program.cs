@@ -21,14 +21,14 @@ class Program
             .AddExporter(MarkdownExporter.Default)
             .AddLogger(new ConsoleLogger())
             .AddColumn(new RankColumn(NumeralSystem.Roman))
-            .AddJob(Job.ShortRun
-                .AsBaseline()
-                .WithRuntime(CoreRuntime.Core60)
-                // .WithToolchain(InProcessNoEmitToolchain.Instance)
-                .WithWarmupCount(3)
-                .WithIterationCount(3)
-                .WithIterationTime(TimeInterval.FromMilliseconds(200))
-            )
+            // .AddJob(Job.ShortRun
+            //     .AsBaseline()
+            //     .WithRuntime(CoreRuntime.Core60)
+            //     // .WithToolchain(InProcessNoEmitToolchain.Instance)
+            //     .WithWarmupCount(3)
+            //     .WithIterationCount(3)
+            //     .WithIterationTime(TimeInterval.FromMilliseconds(200))
+            // )
             .AddJob(Job.ShortRun
                 .WithRuntime(CoreRuntime.Core80)
                 // .WithToolchain(InProcessNoEmitToolchain.Instance)
@@ -38,7 +38,7 @@ class Program
             );
 
         _ = BenchmarkSwitcher
-            .FromTypes(new[] { typeof(LogicalEvaluatorBenchmarks) })
+            .FromTypes([typeof(LogicalEvaluatorBenchmarks)])
             .Run(args);
     }
 }
