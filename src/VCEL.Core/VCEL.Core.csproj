@@ -28,9 +28,5 @@
     </Antlr4>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Lang\VCELLexer.g4" />
-    <Content Include="Lang\VCELParser.g4" />
-  </ItemGroup>
 
 </Project>
