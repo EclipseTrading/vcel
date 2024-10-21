@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <ProductName>VCEL</ProductName>
+    <Description>General Purpose Expression Language</Description>
     <Company>Eclipse Trading</Company>
     <Copyright>Copyright (c) Eclipse Trading</Copyright>
     <RepositoryUrl>https://github.com/EclipseTrading/vcel</RepositoryUrl>
@@ -9,7 +10,7 @@
     <Authors>Brian Flynn,Jeff Weng,Aaron Bloom,Will Liu,Trevor Leung,Rex Mo</Authors>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Features>strict</Features>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -29,6 +30,11 @@
     <NoWarn>
       $(NoWarn),
       NU1701, <!-- Our dependency on Spring.Core -->
+      NUnit1001,
+      NUnit2005,
+      NUnit2007,
+      NUnit2047,
+      NUnit2050,
     </NoWarn>
   </PropertyGroup>
 
