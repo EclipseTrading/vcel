@@ -39,6 +39,7 @@ namespace VCEL.Expression
         IExpression<T> TimeSpan(TimeSpan timeSpan);
         IExpression<T> Set(ISet<object> set);
         IExpression<T> Value(object? o);
+        IExpression<T> Variable(string name);
 
         // Collections
         IExpression<T> List(IReadOnlyList<IExpression<T>> l);

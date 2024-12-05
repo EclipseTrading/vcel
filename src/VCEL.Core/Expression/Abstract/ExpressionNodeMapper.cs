@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using VCEL.Core.Expression.Impl;
 using VCEL.Expression;
 
@@ -60,6 +59,7 @@ namespace VCEL.Core.Expression.Abstract
                 TimeSpan n => factory.TimeSpan(n.Value),
                 Set n => factory.Set(n.Value),
                 Value n => factory.Value(n.ValueProperty),
+                Variable v => factory.Variable(v.Name),
                 _ => throw new Exception($"Expression node type not handled '{node?.Type}'"),
             };
         }
@@ -108,7 +108,8 @@ namespace VCEL.Core.Expression.Abstract
                 DateTimeOffsetExpr<T> e => new DateTimeOffset(e.Value),
                 TimeSpanExpr<T> e => new TimeSpan(e.Value),
                 SetExpr<T> e => new Set(e.Value),
-                ValueExpr<T, object> e => new Value(e.Value),                
+                ValueExpr<T, object> e => new Value(e.Value),
+                VariableExpr<T> e => new Variable(e.Name),
                 _ => throw new Exception($"Expression node type not handled '{node?.GetType()}'"),
             };
         }
