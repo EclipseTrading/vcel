@@ -20,9 +20,9 @@ public class InBenchmarkTests
 
     public InBenchmarkTests()
     {
-        var vcelString10 = $"{{{string.Join(", ", Enumerable.Range(1, 10).Select(i => $"'ABCDE{i}'"))}}}";
-        var vcelString50 = $"{{{string.Join(", ", Enumerable.Range(1, 50).Select(i => $"'ABCDE{i}'"))}}}";
-        var vcelString100 = $"{{{string.Join(", ", Enumerable.Range(1, 100).Select(i => $"'ABCDE{i}'"))}}}";
+        var vcelString10 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 10).Select(i => $"'ABCDE{i}'"))}}}";
+        var vcelString50 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 50).Select(i => $"'ABCDE{i}'"))}}}";
+        var vcelString100 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 100).Select(i => $"'ABCDE{i}'"))}}}";
         vcelExpressionFor10Items = VCExpression.ParseDefault(vcelString10).Expression;
         csharpExpressionFor10Items = CSharpExpression.ParseDelegate(vcelString10).Expression;
         vcelExpressionFor50Items = VCExpression.ParseDefault(vcelString50).Expression;
