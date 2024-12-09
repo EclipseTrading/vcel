@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-using NUnit.Framework;
 using VCEL.Core.Expression.Abstract;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
@@ -21,7 +21,7 @@ namespace VCEL.Test.Expression.Abstract
             Assert.That(((Ternary<object>)ternaryExpr).TrueExpr, Is.TypeOf<NullExpr<object>>());
             Assert.That(((Ternary<object>)ternaryExpr).FalseExpr, Is.TypeOf<NullExpr<object>>());
         }
-        
+
         [Test]
         public void ShouldMapToExpressionTernaryWithValues()
         {
@@ -132,6 +132,12 @@ namespace VCEL.Test.Expression.Abstract
         {
             var valueExpr = ToExpression(new Value(42));
             Assert.That(valueExpr, Is.TypeOf<ValueExpr<object, object>>());
+        }
+
+        public void ShouldMapToExpressionVariable()
+        {
+            var varExpr = ToExpression(new Variable("variable"));
+            Assert.That(varExpr, Is.TypeOf<VariableExpr<object>>());
         }
 
         [Test]

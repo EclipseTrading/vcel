@@ -155,6 +155,12 @@ namespace VCEL.Core.Lang
             });
         }
 
+        public override ParseResult<T> VisitVariable([NotNull] VCELParser.VariableContext context)
+        {
+            var name = context.ID().GetText();
+            return new ParseResult<T>(exprFactory.Variable(name));
+        }
+
         public override ParseResult<T> VisitListItem([NotNull] VCELParser.ListItemContext context)
         {
             var result = Visit(context.arithExpr());
