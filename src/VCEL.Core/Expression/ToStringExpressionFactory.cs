@@ -43,11 +43,11 @@ namespace VCEL.Core.Expression
                     return $"{P.TokenName(P.OPEN_BRACE)} {value.lower.Evaluate(context)}, {value.upper.Evaluate(context)} {P.TokenName(P.CLOSE_BRACE)}";
                 }));
 
-        public IExpression<string> Ternary(IExpression<string> conditional, IExpression<string> trueCond,
-            IExpression<string> falseCond)
+        public IExpression<string> Ternary(IExpression<string> conditional, IExpression<string> trueCondition,
+            IExpression<string> falseCondition)
             => new ToStringValueExpr<(IExpression<string> conditional, IExpression<string> trueCond, IExpression<string> falseCond)>(
-                monad, (conditional, trueCond, falseCond), (value, context) =>
-                    $"{conditional.Evaluate(context)} {P.TokenName(P.QUEST)} {trueCond.Evaluate(context)} {P.TokenName(P.COLON)} {falseCond.Evaluate(context)}");
+                monad, (conditional, trueCondition, falseCondition), (value, context) =>
+                    $"{conditional.Evaluate(context)} {P.TokenName(P.QUEST)} {trueCondition.Evaluate(context)} {P.TokenName(P.COLON)} {falseCondition.Evaluate(context)}");
 
         public IExpression<string> Let(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)
             => new ToStringValueExpr<(IReadOnlyList<(string, IExpression<string>)> bindings, IExpression<string> expr)>(
@@ -89,10 +89,10 @@ namespace VCEL.Core.Expression
         public IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.IN, l, r);
 
-        public IExpression<string> Spread(IExpression<string> expr) 
+        public IExpression<string> Spread(IExpression<string> list) 
             => new ToStringValueExpr<IExpression<string>>(
                 monad, 
-                expr, 
+                list, 
                 (value, context) => $"{P.TokenName(P.SPREAD)}{value.Evaluate(context)}");
 
         public IExpression<string> Matches(IExpression<string> l, IExpression<string> r)
@@ -124,11 +124,11 @@ namespace VCEL.Core.Expression
             => new ToStringValueExpr<bool>(monad, b, (value, _) => P.TokenName(value ? P.TRUE : P.FALSE));
 
         public IExpression<string> DateTimeOffset(DateTimeOffset dateTimeOffset)
-            => new ToStringValueExpr<DateTimeOffset>(monad, dateTimeOffset, (value, _) => value.ToString("@yyyy-MM-ddThh:mm:ss.fffK"));
+            => new ToStringValueExpr<DateTimeOffset>(monad, dateTimeOffset, (value, _) => value.ToString("@yyyy-MM-ddThh:mm:ss.fffK", CultureInfo.InvariantCulture));
 
         public IExpression<string> TimeSpan(TimeSpan timeSpan)
             => new ToStringValueExpr<TimeSpan>(monad, timeSpan,
-                (value, _) => value.ToString(value.Days >= 1 ? "d'.'hh':'mm':'ss'.'fff" : "hh':'mm':'ss'.'fff"));
+                (value, _) => value.ToString(value.Days >= 1 ? "d'.'hh':'mm':'ss'.'fff" : "hh':'mm':'ss'.'fff", CultureInfo.InvariantCulture));
 
         public IExpression<string> Set(ISet<object> set)
             => new ToStringValueExpr<ISet<object>>(monad, set, (value, context) =>

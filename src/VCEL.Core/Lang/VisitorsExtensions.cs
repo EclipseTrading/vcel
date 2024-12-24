@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VCEL.Core.Lang
 {
-    public static class VisitorsEx
+    public static class VisitorsExtensions
     {
         public static T Visit<T>(this IVisitorProvider provider, IParseTree parseTree)
             => provider.GetVisitor<T>().Visit(parseTree);

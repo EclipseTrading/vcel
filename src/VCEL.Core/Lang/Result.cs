@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace VCEL.Core.Lang
@@ -7,7 +8,7 @@ namespace VCEL.Core.Lang
         public Result(T expression)
         {
             this.Expression = expression;
-            this.ParseErrors = new ParseError[0];
+            this.ParseErrors = [];
             this.Success = true;
         }
 

@@ -8,7 +8,7 @@ namespace VCEL.JS;
 
 public readonly struct JsPropertyValueAccessor : IValueAccessor<string>
 {
-    private readonly IReadOnlyDictionary<string, string> jsDatePropertyMethods = new Dictionary<string, string>()
+    private readonly Dictionary<string, string> jsDatePropertyMethods = new()
     {
         { "Now", "getTime()" },
         { "Today", "getDate()" },
@@ -49,7 +49,7 @@ public readonly struct JsPropertyValueAccessor : IValueAccessor<string>
         var jsObjContext = context as JsObjectContext;
         return monad.Lift(jsObjContext?.Object is string
             ? $"{context.Value}.{finalPropOrMethod}"
-            : finalPropOrMethod.Equals("_") 
+            : finalPropOrMethod.Equals("_", StringComparison.Ordinal) 
                 ? $"{finalPropOrMethod}" 
                 : $"{Constants.DefaultContext}.{finalPropOrMethod}");
     }

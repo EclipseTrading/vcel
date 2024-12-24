@@ -4,7 +4,7 @@ namespace VCEL.Monad
 {
     public class ExprMonad : IMonad<object?>
     {
-        public object? Unit { get; } = null;
+        public object? Unit { get; }
         public object? Lift<TValue>(TValue value)
         {
             return value;

@@ -9,13 +9,13 @@ public readonly struct DictionaryAccessor<T> : IValueAccessor<T>
         this.propName = propName;
     }
 
-    public T GetValue(IContext<T> o)
+    public T GetValue(IContext<T> context)
     {
-        var dictContext = (DictionaryContext<T>)o;
+        var dictContext = (DictionaryContext<T>)context;
         if (!dictContext.Dict.TryGetValue(propName, out var value))
         {
-            return o.Monad.Unit;
+            return context.Monad.Unit;
         }
-        return o.Monad.Lift(value);
+        return context.Monad.Lift(value);
     }
 }

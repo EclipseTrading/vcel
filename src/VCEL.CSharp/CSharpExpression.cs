@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Helper;
@@ -36,7 +37,7 @@ namespace VCEL.CSharp
             if (type == null)
                 return new ParseResult<object?>(emitResult!.Diagnostics.Select(
                     x => new ParseError(
-                        $"{x.GetMessage()} ({csharpExpr})",
+                        $"{x.GetMessage(CultureInfo.CurrentCulture)} ({csharpExpr})",
                         x.Id,
                         x.Location.GetLineSpan().StartLinePosition.Line,
                         x.Location.GetLineSpan().StartLinePosition.Line,
@@ -59,7 +60,7 @@ namespace VCEL.CSharp
             if (type == null)
                 return  new ParseResult<object?>(emitResult!.Diagnostics.Select(
                     x => new ParseError(
-                        x.GetMessage(),
+                        x.GetMessage(CultureInfo.CurrentCulture),
                         x.Id,
                         x.Location.GetLineSpan().StartLinePosition.Line,
                         x.Location.GetLineSpan().StartLinePosition.Line,
@@ -71,8 +72,7 @@ namespace VCEL.CSharp
             return new ParseResult<object?>(new CSharpDelegateExpr(null!, func));
         }
 
-        private static IExpressionParser<string> CSharpParser(IFunctions<string>? functions = null)
-            => new ExpressionParser<string>(
-                new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
+        private static ExpressionParser<string> CSharpParser(IFunctions<string>? functions = null)
+            => new(new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
     }
 }

@@ -3,7 +3,7 @@ using VCEL.Core;
 
 namespace VCEL;
 
-public static class ObjectContextEx
+public static class ObjectContextExtensions
 {
     public static TMonad Evaluate<TMonad>(this IExpression<TMonad> expr, object o)
     {

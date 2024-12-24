@@ -55,7 +55,7 @@ namespace VCEL.Core.Monad.Tasks
 
         public static TaskMonad Instance { get; } = new TaskMonad();
 
-        private async Task<object?> GetTaskResult(Task task, Type genericType)
+        private static async Task<object?> GetTaskResult(Task task, Type genericType)
         {
             await task;
             var genericTaskType = typeof(Task<>).MakeGenericType(genericType);
@@ -64,6 +64,6 @@ namespace VCEL.Core.Monad.Tasks
         }
 
         public Task<object?> Bind(Task<object?> a, Task<object?> b, Func<object?, object?, Task<object?>> f)
-            => BindEx.Bind(a, b, f, this);
+            => BindExtensions.Bind(a, b, f, this);
     }
 }

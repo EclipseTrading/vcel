@@ -41,12 +41,12 @@ namespace VCEL.Core.Expression.Impl
                 int frCmp = -1;
                 int toCmp = 1;
 
-                if (first?.GetType() == l?.GetType() || UpCastEx.UpCast(ref first!, ref l!))
+                if (first?.GetType() == l?.GetType() || UpCastExtensions.UpCast(ref first!, ref l!))
                 {
                     frCmp = left.CompareTo(first);
                 }
 
-                if (second?.GetType() == l?.GetType() || UpCastEx.UpCast(ref second!, ref l!))
+                if (second?.GetType() == l?.GetType() || UpCastExtensions.UpCast(ref second!, ref l!))
                 {
                     toCmp = left.CompareTo(second);
                 }

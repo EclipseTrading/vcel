@@ -1,7 +1,7 @@
 ﻿using System;
 namespace VCEL.Monad
 {
-    public static class BindEx
+    public static class BindExtensions
     {
         public static TMonad Bind<TMonad>(TMonad a, TMonad b, Func<object?, object?, TMonad> f, IMonad<TMonad> m)
         {

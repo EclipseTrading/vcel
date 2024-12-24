@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace VCEL.Core.Expression.Impl;
@@ -26,7 +27,7 @@ public static class VcelIndexable
 
     public static bool StartsWith(object? arg1, object? arg2) => arg1 switch
     {
-        string str => str.StartsWith(arg2?.ToString() ?? string.Empty),
+        string str => str.StartsWith(arg2?.ToString() ?? string.Empty, StringComparison.Ordinal),
         object?[] array => array.FirstOrDefault()?.Equals(arg2) ?? false,
         List<object?> list => list.FirstOrDefault()?.Equals(arg2) ?? false,
         _ => false,
@@ -34,7 +35,7 @@ public static class VcelIndexable
 
     public static bool EndsWith(object? arg1, object? arg2) => arg1 switch
     {
-        string str => arg2?.ToString() is { } value && str.EndsWith(value),
+        string str => arg2?.ToString() is { } value && str.EndsWith(value, StringComparison.Ordinal),
         object?[] array => array.LastOrDefault()?.Equals(arg2) ?? false,
         List<object?> list => list.LastOrDefault()?.Equals(arg2) ?? false,
         _ => false,

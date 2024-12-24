@@ -48,8 +48,8 @@ namespace VCEL.Expression
             => new InSetExpr<T>(Monad, l, set);
         public virtual IExpression<T> In(IExpression<T> l, IExpression<T> r)
             => new InExpr<T>(Monad, l, r);
-        public virtual IExpression<T> Spread(IExpression<T> expr)
-            => new SpreadExpr<T>(Monad, expr);
+        public virtual IExpression<T> Spread(IExpression<T> list)
+            => new SpreadExpr<T>(Monad, list);
         public virtual IExpression<T> Between(IExpression<T> l, IExpression<T> lower, IExpression<T> upper)
             => new BetweenExpr<T>(Monad, l, lower, upper);
         public virtual IExpression<T> Matches(IExpression<T> l, IExpression<T> r)
@@ -61,10 +61,10 @@ namespace VCEL.Expression
         public virtual IExpression<T> String(string s) => new StringExpr<T>(Monad, s);
         public virtual IExpression<T> DateTimeOffset(DateTimeOffset dateTimeOffset) => new DateTimeOffsetExpr<T>(Monad, dateTimeOffset);
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan) => new TimeSpanExpr<T>(Monad, timeSpan);
-        public virtual IExpression<T> Set(ISet<object> s) => new SetExpr<T>(Monad, s);
+        public virtual IExpression<T> Set(ISet<object> set) => new SetExpr<T>(Monad, set);
         public virtual IExpression<T> Value(object? o) => o == null ? Null() : new ValueExpr<T, object>(Monad, o);
-        public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
-            => new ListExpr<T>(Monad, exprs);
+        public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> l)
+            => new ListExpr<T>(Monad, l);
         public virtual IExpression<T> Add(IExpression<T> l, IExpression<T> r)
             => new AddExpr<T>(Monad, l, r);
         public virtual IExpression<T> Multiply(IExpression<T> l, IExpression<T> r)

@@ -4,7 +4,7 @@ using System.Dynamic;
 
 namespace VCEL.Core.Helper
 {
-    public static class DynamicEx
+    public static class DynamicExtensions
     {
         public static object ToDynamic(this object value)
         {
