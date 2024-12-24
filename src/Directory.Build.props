@@ -30,11 +30,6 @@
     <NoWarn>
       $(NoWarn),
       NU1701, <!-- Our dependency on Spring.Core -->
-      NUnit1001,
-      NUnit2005,
-      NUnit2007,
-      NUnit2047,
-      NUnit2050,
     </NoWarn>
   </PropertyGroup>
 
