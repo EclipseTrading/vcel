@@ -17,4 +17,8 @@
       <PackageReference Include="System.Collections.Immutable" />
     </ItemGroup>
 
+    <ItemGroup>
+      <InternalsVisibleTo Include="VCEL.Test" />
+    </ItemGroup>
+
 </Project>

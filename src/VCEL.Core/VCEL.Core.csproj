@@ -29,4 +29,8 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="VCEL.Test" />
+  </ItemGroup>
+
 </Project>
