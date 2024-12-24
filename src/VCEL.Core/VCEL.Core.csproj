@@ -15,13 +15,15 @@
             <Error>true</Error>
             <Listener>false</Listener>
             <Package>VCEL.Core</Package>
-            <JavaExec>/usr/bin/java</JavaExec>
+            <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
+            <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
         </Antlr4>
         <Antlr4 Include="Lang\VCELParser.g4">
             <Error>true</Error>
             <Listener>false</Listener>
             <Package>VCEL.Core.Lang</Package>
-            <JavaExec>/usr/bin/java</JavaExec>
+            <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
+            <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
         </Antlr4>
     </ItemGroup>
 
