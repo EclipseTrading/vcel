@@ -1,33 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <Authors>Brian Flynn</Authors>
-    <Product>View Client Expression Language</Product>
-    <Description>Spring Expression Like Expression Language</Description>
-  </PropertyGroup>
+    <PropertyGroup>
+        <RootNamespace>VCEL</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Antlr4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Antlr4.Runtime" />
-    <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="Spring.Core" NoWarn="NU1701" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Antlr4.Runtime.Standard" />
+        <PackageReference Include="Antlr4BuildTasks" PrivateAssets="all" />
+        <PackageReference Include="Newtonsoft.Json" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Antlr4 Update="Lang\VCELLexer.g4">
-      <DefaultCustomToolNamespace>$([MSBuild]::ValueOrDefault('$(RootNamespace).%(DefaultCustomToolNamespace)', '').TrimEnd('.'))</DefaultCustomToolNamespace>
-      <CustomToolNamespace>$([MSBuild]::ValueOrDefault(%(CustomToolNamespace), %(DefaultCustomToolNamespace)))</CustomToolNamespace>
-      <Listener>false</Listener>
-    </Antlr4>
-    <Antlr4 Update="Lang\VCELParser.g4">
-      <Listener>false</Listener>
-    </Antlr4>
-  </ItemGroup>
-
+    <ItemGroup>
+        <Antlr4 Include="Lang\VCELLexer.g4">
+            <Error>true</Error>
+            <Listener>false</Listener>
+            <Package>VCEL.Core</Package>
+            <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
+            <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
+        </Antlr4>
+        <Antlr4 Include="Lang\VCELParser.g4">
+            <Error>true</Error>
+            <Listener>false</Listener>
+            <Package>VCEL.Core.Lang</Package>
+            <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
+            <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
+        </Antlr4>
+    </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="VCEL.Test" />
