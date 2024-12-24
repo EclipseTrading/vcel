@@ -51,6 +51,7 @@ public class DefaultFunctions<T> : IFunctions<T>
         RegisterEnsureOneArg("tan", arg => VcelMath.Tan(arg));
         RegisterEnsureOneArg("tanh", arg => VcelMath.Tanh(arg));
         RegisterEnsureOneArg("truncate", arg => VcelMath.Truncate(arg));
+        RegisterEnsureOneArg("isNaN", arg => VcelMath.IsNaN(arg));
         RegisterEnsureOneArg("datetime", arg => VcelDateTime.ToDateTime(arg));
         RegisterEnsureOneArg("date", arg => VcelDateTime.ToDate(arg));
 
