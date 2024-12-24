@@ -35,6 +35,8 @@ internal class ToJsFunction : IExpression<string>
             { "tan", (context, args) => Func(context, args, "Math.tan") },
             { "tanh", (context, args) => Func(context, args, "Math.tanh") },
             { "truncate", (context, args) => Func(context, args, "Math.trunc") },
+            { "isNaN", (context, args) => Func(context, args, "Number.isNaN") },
+
             { "double", (context, args) => Func(context, args, "Number") },
             { "decimal", (context, args) => Func(context, args, "Number") },
             { "string", (context, args) => Func(context, args, "String") },

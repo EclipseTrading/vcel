@@ -143,7 +143,7 @@ public class ToJsCodeTests
     [TestCase("tan(x)", "(Math.tan(vcelContext.x))")]
     [TestCase("tanh(x)", "(Math.tanh(vcelContext.x))")]
     [TestCase("truncate(x)", "(Math.trunc(vcelContext.x))")]
-    [TestCase("isNaN(x)", "(isNaN(vcelContext.x))")]
+    [TestCase("isNaN(x)", "(Number.isNaN(vcelContext.x))")]
     [TestCase("string(x)", "(String(vcelContext.x))")]
     [TestCase("string(date(1583310915341))", "(String((new Date(1583310915341))))")]
     [TestCase("now()", "(new Date())")]
