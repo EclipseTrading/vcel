@@ -9,4 +9,8 @@
     <ProjectReference Include="..\VCEL.Core\VCEL.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="VCEL.Test" />
+  </ItemGroup>
+
 </Project>
