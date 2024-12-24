@@ -35,6 +35,7 @@ public class DefaultCSharpFunctions : IFunctions<string>
         Register("tan", args => $"VcelMath.Tan({Join(args)})");
         Register("tanh", args => $"VcelMath.Tanh({Join(args)})");
         Register("truncate", args => $"VcelMath.Truncate({Join(args)})");
+        RegisterEnsureOneArg("isNaN", arg => $"VcelMath.IsNaN({arg})");
         Register("int", args => $"VcelType.Integer({Join(args)})");
         Register("long", args => $"VcelType.Long({Join(args)})");
         Register("double", args => $"VcelType.Double({Join(args)})");

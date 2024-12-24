@@ -33,6 +33,7 @@ public class FunctionTests
     [TestCase("tan(null)", null)]
     [TestCase("tanh(null)", null)]
     [TestCase("truncate(null)", null)]
+    [TestCase("isNaN(null)", null)]
     public void EvalNullDefaultFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -66,6 +67,7 @@ public class FunctionTests
     [TestCase("tan(A)", null)]
     [TestCase("tanh(A)", null)]
     [TestCase("truncate(A)", null)]
+    [TestCase("isNaN(A)", null)]
     public void EvalNullDependencyDefaultFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -111,6 +113,8 @@ public class FunctionTests
     [TestCase("truncate(0.5)", 0)]
     [TestCase("truncate(0.9)", 0)]
     [TestCase("truncate(-1.9)", -1)]
+    [TestCase("isNaN(1)", false)]
+    [TestCase("isNaN(sqrt(-1))", true)]
     public void EvalMathematicsFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
