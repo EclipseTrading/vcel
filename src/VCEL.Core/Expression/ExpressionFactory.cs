@@ -63,6 +63,7 @@ namespace VCEL.Expression
         public virtual IExpression<T> TimeSpan(TimeSpan timeSpan) => new TimeSpanExpr<T>(Monad, timeSpan);
         public virtual IExpression<T> Set(ISet<object> s) => new SetExpr<T>(Monad, s);
         public virtual IExpression<T> Value(object? o) => o == null ? Null() : new ValueExpr<T, object>(Monad, o);
+        public virtual IExpression<T> Variable(string name) => new VariableExpr<T>(Monad, $"#{name}");
         public virtual IExpression<T> List(IReadOnlyList<IExpression<T>> exprs)
             => new ListExpr<T>(Monad, exprs);
         public virtual IExpression<T> Add(IExpression<T> l, IExpression<T> r)
