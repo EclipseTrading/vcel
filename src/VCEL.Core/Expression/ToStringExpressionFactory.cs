@@ -37,8 +37,8 @@ namespace VCEL.Core.Expression
             => new ToStringBinaryOp(monad, P.MULTIPLY, l, r);
 
         public IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
-            => new ToStringBinaryOp(monad, P.BETWEEN, l, 
-                new ToStringValueExpr<(IExpression<string> lower, IExpression<string> upper)>(monad, (lower , upper), (value, context) =>
+            => new ToStringBinaryOp(monad, P.BETWEEN, l,
+                new ToStringValueExpr<(IExpression<string> lower, IExpression<string> upper)>(monad, (lower, upper), (value, context) =>
                 {
                     return $"{P.TokenName(P.OPEN_BRACE)} {value.lower.Evaluate(context)}, {value.upper.Evaluate(context)} {P.TokenName(P.CLOSE_BRACE)}";
                 }));
@@ -58,7 +58,7 @@ namespace VCEL.Core.Expression
                 });
 
         public IExpression<string> Guard(
-            IReadOnlyList<(IExpression<string>, 
+            IReadOnlyList<(IExpression<string>,
             IExpression<string>)> guardClauses,
             IExpression<string>? otherwise = null)
             => new ToStringValueExpr<(IReadOnlyList<(IExpression<string>, IExpression<string>)>, IExpression<string>? otherwise)>(monad,
@@ -89,10 +89,10 @@ namespace VCEL.Core.Expression
         public IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToStringBinaryOp(monad, P.IN, l, r);
 
-        public IExpression<string> Spread(IExpression<string> expr) 
+        public IExpression<string> Spread(IExpression<string> expr)
             => new ToStringValueExpr<IExpression<string>>(
-                monad, 
-                expr, 
+                monad,
+                expr,
                 (value, context) => $"{P.TokenName(P.SPREAD)}{value.Evaluate(context)}");
 
         public IExpression<string> Matches(IExpression<string> l, IExpression<string> r)
@@ -139,6 +139,9 @@ namespace VCEL.Core.Expression
 
         public IExpression<string> Value(object? o)
             => new ToStringValueExpr<object?>(monad, o, (value, _) => value?.ToString() ?? P.TokenName(P.NULL));
+
+        public IExpression<string> Variable(string name)
+            => new ToStringValueExpr<string>(monad, name, (value, _) => $"#{value}");
 
         public IExpression<string> List(IReadOnlyList<IExpression<string>> l)
             => new ToStringValueExpr<IReadOnlyList<IExpression<string>>>(monad, l, (value, context) =>

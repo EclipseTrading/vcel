@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-using NUnit.Framework;
 using VCEL.Core.Expression.Abstract;
 using VCEL.Core.Expression.Func;
 using VCEL.Core.Expression.Impl;
@@ -37,6 +37,15 @@ namespace VCEL.Test.Expression.Abstract
             Assert.That(((Ternary)ternaryExpr).FalseExpression, Is.TypeOf<Value>());
             Assert.That(((Value)((Ternary)ternaryExpr).FalseExpression).ValueProperty, Is.EqualTo(12));
         }
+
+        [Test]
+        public void ShouldMapToVariableNode()
+        {
+            var varNode = ToExpressionNode(new VariableExpr<object?>(ExprMonad.Instance, "variable"));
+            Assert.That(varNode, Is.TypeOf<Variable>());
+            Assert.That(((Variable)varNode).Name, Is.EqualTo("variable"));
+        }
+
 
         [Test]
         public void ShouldMapToExpressionLet()
@@ -97,14 +106,14 @@ namespace VCEL.Test.Expression.Abstract
         }
 
         [Test]
-        public void ShouldMapToExpressionIn() 
+        public void ShouldMapToExpressionIn()
         {
             var inExpr = ToExpressionNode(new InExpr<object?>(ExprMonad.Instance, nullExpr, nullExpr));
             Assert.That(inExpr, Is.TypeOf<In>());
         }
 
         [Test]
-        public void ShouldMapToExpressionSpread() 
+        public void ShouldMapToExpressionSpread()
         {
             var spreadExpr = ToExpressionNode(new SpreadExpr<object?>(ExprMonad.Instance, nullExpr));
             Assert.That(spreadExpr, Is.TypeOf<Spread>());

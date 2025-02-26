@@ -17,6 +17,7 @@
         Or,
         Not,
         Value,
+        Variable,
         List,
         Add,
         Multiply,
