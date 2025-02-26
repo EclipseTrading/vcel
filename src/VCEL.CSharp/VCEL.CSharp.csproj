@@ -14,7 +14,10 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
       <PackageReference Include="Microsoft.CSharp" />
       <PackageReference Include="System.CodeDom" />
-      <PackageReference Include="System.Collections.Immutable" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <InternalsVisibleTo Include="VCEL.Test" />
     </ItemGroup>
 
 </Project>

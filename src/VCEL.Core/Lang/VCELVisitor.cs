@@ -32,9 +32,6 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitErrorNode([NotNull] IErrorNode node)
             => new ParseResult<T>(new ParseError("Error node matched", node.GetText(), node.Symbol.Line, node.Symbol.StartIndex, node.Symbol.StopIndex));
 
-        public override ParseResult<T> VisitExpr([NotNull] VCELParser.ExprContext context)
-            => CheckAndVisitChildren(context);
-
         public override ParseResult<T> VisitParen([NotNull] VCELParser.ParenContext context)
             => Compose(context, r => exprFactory.Paren(r), 1);
 
@@ -371,18 +368,6 @@ namespace VCEL.Core.Lang
                 return new ParseResult<T>(
                     new ParseError(ex.Message, t.Text, t.Line, t.StartIndex, t.StopIndex));
             }
-        }
-
-        private ParseResult<T> CheckAndVisitChildren(ParserRuleContext context)
-        {
-            if (context.exception != null)
-            {
-                var e = context.exception;
-                var t = context.exception.OffendingToken;
-                return new ParseResult<T>(new ParseError(e.Message, t.Text, t.Line, t.StartIndex, t.StopIndex));
-            }
-
-            return VisitChildren(context);
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Linq;
+using VCEL.Core.Expression.Func;
+using VCEL.CSharp.Expression.Func;
+using VCEL.JS.Expression;
 using VCEL.Test.Shared;
 
 namespace VCEL.Test;
@@ -30,6 +33,7 @@ public class FunctionTests
     [TestCase("tan(null)", null)]
     [TestCase("tanh(null)", null)]
     [TestCase("truncate(null)", null)]
+    [TestCase("isNaN(null)", null)]
     public void EvalNullDefaultFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -63,6 +67,7 @@ public class FunctionTests
     [TestCase("tan(A)", null)]
     [TestCase("tanh(A)", null)]
     [TestCase("truncate(A)", null)]
+    [TestCase("isNaN(A)", null)]
     public void EvalNullDependencyDefaultFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -108,6 +113,8 @@ public class FunctionTests
     [TestCase("truncate(0.5)", 0)]
     [TestCase("truncate(0.9)", 0)]
     [TestCase("truncate(-1.9)", -1)]
+    [TestCase("isNaN(1)", false)]
+    [TestCase("isNaN(sqrt(-1))", true)]
     public void EvalMathematicsFunction(string exprString, object expected)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
@@ -363,7 +370,8 @@ public class FunctionTests
     [TestCase("workday(@2022-11-04, 7, [ @2022-11-09 ])", "2022-11-16")]
     [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-16 ])", "2022-11-17")]
     [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-16, @2022-11-22 ])", "2022-11-17")]
-    [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-10, @2022-11-11, @2022-11-16, @2022-11-22 ])", "2022-11-21")]
+    [TestCase("workday(@2022-11-04, 7, [ @2022-11-09, @2022-11-10, @2022-11-11, @2022-11-16, @2022-11-22 ])",
+        "2022-11-21")]
     [TestCase("workday(@2022-11-05, 0", "2022-11-05")]
     [TestCase("workday(startDay1, 0)", "2022-11-4")]
     [TestCase("workday(startDay1, 1)", "2022-11-7")]
@@ -443,7 +451,8 @@ public class FunctionTests
     [TestCase("string(3)", "3")]
     [TestCase("string(3.1)", "3.1")]
     [TestCase("string('False')", "False")]
-    [TestCase("string('3.1234567891011121314151617181920212223242526')", "3.1234567891011121314151617181920212223242526")]
+    [TestCase("string('3.1234567891011121314151617181920212223242526')",
+        "3.1234567891011121314151617181920212223242526")]
     [TestCase("string('hello world')", "hello world")]
     [TestCase("bool(1)", true)]
     [TestCase("bool(0)", false)]
@@ -513,5 +522,33 @@ public class FunctionTests
             var result = expr.Evaluate(new { });
             Assert.That(result, Is.EqualTo(expct));
         }
+    }
+
+    [Test]
+    public void EnsureCrossImplementationFunctions()
+    {
+        var ignoredList = new[]
+        {
+            "workday", // not implemented in JS yet
+            "startswith", // legacy for JS only, should use "startsWith"
+        };
+
+        var jsFunctionNames = ToJsFunction.JsFunctions.Keys;
+        var defaultFunctionNames = new DefaultFunctions<string>().Functions.Keys;
+        var defaultCSharpFunctionNames = new DefaultCSharpFunctions().Functions.Keys;
+
+        var superSet = jsFunctionNames.Union(defaultFunctionNames).Union(defaultCSharpFunctionNames)
+            .Except(ignoredList).ToList();
+
+        var missingJsFunctions = superSet.Except(jsFunctionNames).ToList();
+        var missingDefaultFunctions = superSet.Except(defaultFunctionNames).ToList();
+        var missingDefaultCSharpFunctions = superSet.Except(defaultCSharpFunctionNames).ToList();
+
+        Assert.That(missingJsFunctions, Is.Empty,
+            $"Missing JS functions: {string.Join(", ", missingJsFunctions)}");
+        Assert.That(missingDefaultFunctions, Is.Empty,
+            $"Missing Default functions: {string.Join(", ", missingDefaultFunctions)}");
+        Assert.That(missingDefaultCSharpFunctions, Is.Empty,
+            $"Missing Default C# functions: {string.Join(", ", missingDefaultCSharpFunctions)}");
     }
 }

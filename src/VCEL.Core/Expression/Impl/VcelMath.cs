@@ -73,5 +73,7 @@ namespace VCEL.Core.Expression.Impl
         public static double? Tanh(object? arg) => arg == null ? default(double?) : Math.Tanh(Convert.ToDouble(arg));
 
         public static double? Truncate(object? arg) => arg == null ? default(double?) : Math.Truncate(Convert.ToDouble(arg));
+
+        public static bool? IsNaN(object? arg) => arg == null ? default(bool?) : double.IsNaN(Convert.ToDouble(arg));
     }
 }

@@ -7,7 +7,7 @@ namespace VCEL.CSharp.Expression.Func;
 
 public class DefaultCSharpFunctions : IFunctions<string>
 {
-    private readonly Dictionary<string, Function<string>> functions = new();
+    internal readonly Dictionary<string, Function<string>> Functions = new();
 
     public DefaultCSharpFunctions()
     {
@@ -35,6 +35,7 @@ public class DefaultCSharpFunctions : IFunctions<string>
         Register("tan", args => $"VcelMath.Tan({Join(args)})");
         Register("tanh", args => $"VcelMath.Tanh({Join(args)})");
         Register("truncate", args => $"VcelMath.Truncate({Join(args)})");
+        RegisterEnsureOneArg("isNaN", arg => $"VcelMath.IsNaN({arg})");
         Register("int", args => $"VcelType.Integer({Join(args)})");
         Register("long", args => $"VcelType.Long({Join(args)})");
         Register("double", args => $"VcelType.Double({Join(args)})");
@@ -68,11 +69,9 @@ public class DefaultCSharpFunctions : IFunctions<string>
         RegisterEnsureTwoArgs("get", (arg1, arg2) => $"VcelIndexable.Get({arg1}, {arg2})");
     }
 
-    public Function<string>? GetFunction(string name)
-        => functions.TryGetValue(name, out var f) ? f : null;
+    public Function<string>? GetFunction(string name) => Functions.GetValueOrDefault(name);
 
-    public bool HasFunction(string name)
-        => functions.ContainsKey(name);
+    public bool HasFunction(string name) => Functions.ContainsKey(name);
 
     public void Register(string name, Func<object?[], IContext<string>, string?> func)
         => this.Register(name, func, new FuncDependency(name));
@@ -81,7 +80,7 @@ public class DefaultCSharpFunctions : IFunctions<string>
         => this.Register(name, (args, _) => func(args), new FuncDependency(name));
 
     private void Register(string name, Func<object?[], IContext<string>, string?> func, params IDependency[] deps)
-        => functions[name] = new Function<string>(func, deps);
+        => Functions[name] = new Function<string>(func, deps);
 
     public void RegisterEnsureOneArg(string name, Func<object?, string?> func)
         => Register(name, (args, _) => args?.Length != 1 || args[0] == null ? null : func(args[0]), new FuncDependency(name));

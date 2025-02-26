@@ -7,7 +7,7 @@ namespace VCEL.Core.Expression.Func;
 
 public class DefaultFunctions<T> : IFunctions<T>
 {
-    private readonly Dictionary<string, Function<T>> functions = new();
+    internal readonly Dictionary<string, Function<T>> Functions = new();
 
     public DefaultFunctions()
     {
@@ -51,6 +51,7 @@ public class DefaultFunctions<T> : IFunctions<T>
         RegisterEnsureOneArg("tan", arg => VcelMath.Tan(arg));
         RegisterEnsureOneArg("tanh", arg => VcelMath.Tanh(arg));
         RegisterEnsureOneArg("truncate", arg => VcelMath.Truncate(arg));
+        RegisterEnsureOneArg("isNaN", arg => VcelMath.IsNaN(arg));
         RegisterEnsureOneArg("datetime", arg => VcelDateTime.ToDateTime(arg));
         RegisterEnsureOneArg("date", arg => VcelDateTime.ToDate(arg));
 
@@ -77,15 +78,9 @@ public class DefaultFunctions<T> : IFunctions<T>
         RegisterEnsureTwoArgsAllowNull<object?, object?, object?>("get", VcelIndexable.Get);
     }
 
-    public Function<T>? GetFunction(string name)
-    {
-        return functions.TryGetValue(name, out var f) ? f : null;
-    }
+    public Function<T>? GetFunction(string name) => Functions.GetValueOrDefault(name);
 
-    public bool HasFunction(string name)
-    {
-        return functions.ContainsKey(name);
-    }
+    public bool HasFunction(string name) => Functions.ContainsKey(name);
 
     public void Register(string name, Func<object?[], IContext<T>, object?> func)
     {
@@ -133,11 +128,11 @@ public class DefaultFunctions<T> : IFunctions<T>
 
     protected void Register(string name, Func<object?[], IContext<T>, object?> func, params IDependency[] deps)
     {
-        functions[name] = new Function<T>(func, deps);
+        Functions[name] = new Function<T>(func, deps);
     }
 
     protected void Register(string name, Func<object?[], object?> func, params IDependency[] deps)
     {
-        functions[name] = new Function<T>((args, _) => func(args), deps);
+        Functions[name] = new Function<T>((args, _) => func(args), deps);
     }
 }
