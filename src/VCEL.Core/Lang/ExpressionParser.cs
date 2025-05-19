@@ -2,27 +2,26 @@
 using Antlr4.Runtime;
 using VCEL.Expression;
 
-namespace VCEL.Core.Lang
+namespace VCEL.Core.Lang;
+
+public class ExpressionParser<T> : IExpressionParser<T>
 {
-    public class ExpressionParser<T> : IExpressionParser<T>
+    private readonly IExpressionFactory<T> expressionFactory;
+
+    public ExpressionParser(IExpressionFactory<T> expressionFactory)
     {
-        private readonly IExpressionFactory<T> expressionFactory;
+        this.expressionFactory = expressionFactory;
+    }
 
-        public ExpressionParser(IExpressionFactory<T> expressionFactory)
-        {
-            this.expressionFactory = expressionFactory;
-        }
+    public ParseResult<T> Parse(string expression)
+    {
+        var inputStream = new AntlrInputStream(expression);
+        var lexer = new VCELLexer(inputStream);
+        var commonTokenStream = new CommonTokenStream(lexer);
 
-        public ParseResult<T> Parse(string expression)
-        {
-            var inputStream = new AntlrInputStream(expression);
-            var lexer = new VCELLexer(inputStream);
-            var commonTokenStream = new CommonTokenStream(lexer);
-
-            var parser = new VCELParser(commonTokenStream);
-            var expr = parser.expression();
-            var visitors = new VCELVisitors<T>(expressionFactory);            
-            return visitors.Visit<ParseResult<T>>(expr);
-        }
+        var parser = new VCELParser(commonTokenStream);
+        var expr = parser.expression();
+        var visitors = new VCELVisitors<T>(expressionFactory);            
+        return visitors.Visit<ParseResult<T>>(expr);
     }
 }

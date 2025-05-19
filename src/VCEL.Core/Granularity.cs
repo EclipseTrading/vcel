@@ -1,7 +1,6 @@
-﻿namespace VCEL
+﻿namespace VCEL;
+
+public enum Granularity
 {
-    public enum Granularity
-    {
-        Now, Today
-    }
+    Now, Today
 }

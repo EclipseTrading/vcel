@@ -1,14 +1,13 @@
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class Spread : IExpressionNode 
 {
-    public class Spread : IExpressionNode 
+    public Spread(IExpressionNode list) 
     {
-        public Spread(IExpressionNode list) 
-        {
-            List = list;
-        }
-
-        public IExpressionNode List { get; }
-
-        public NodeType Type => NodeType.Spread;
+        List = list;
     }
+
+    public IExpressionNode List { get; }
+
+    public NodeType Type => NodeType.Spread;
 }

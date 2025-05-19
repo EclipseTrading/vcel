@@ -1,7 +1,6 @@
-namespace VCEL.Core.Lang
+namespace VCEL.Core.Lang;
+
+public interface IVisitorProvider
 {
-    public interface IVisitorProvider
-    {
-        VCELParserBaseVisitor<T> GetVisitor<T>();
-    }
+    VCELParserBaseVisitor<T> GetVisitor<T>();
 }

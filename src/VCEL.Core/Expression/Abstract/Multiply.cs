@@ -1,19 +1,18 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class Multiply : IBinary, IExpressionNode
 {
-    public class Multiply : IBinary, IExpressionNode
+    public Multiply(IExpressionNode left, IExpressionNode right)
     {
-        public Multiply(IExpressionNode left, IExpressionNode right)
-        {
-            Left = left;
-            Right = right;
-        }
-
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.Multiply;
-
-        public IExpressionNode Left { get; }
-        public IExpressionNode Right { get; }
+        Left = left;
+        Right = right;
     }
+
+    [JsonProperty("$type")]
+    public NodeType Type => NodeType.Multiply;
+
+    public IExpressionNode Left { get; }
+    public IExpressionNode Right { get; }
 }

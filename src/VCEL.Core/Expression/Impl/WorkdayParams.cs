@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VCEL.Core.Expression.Impl
+namespace VCEL.Core.Expression.Impl;
+
+public class WorkdayParams
 {
-    public class WorkdayParams
+    public WorkdayParams(DateTime startDay, int noOfDays, IReadOnlyList<DateTime> skippedDates)
     {
-        public WorkdayParams(DateTime startDay, int noOfDays, IReadOnlyList<DateTime> skippedDates)
-        {
-            StartDay = startDay;
-            NoOfDays = noOfDays;
-            SkippedDates = skippedDates;
-        }
-        public DateTime StartDay { get; }
-        public int NoOfDays { get; }
-        public IReadOnlyList<DateTime> SkippedDates { get; }
+        StartDay = startDay;
+        NoOfDays = noOfDays;
+        SkippedDates = skippedDates;
     }
+    public DateTime StartDay { get; }
+    public int NoOfDays { get; }
+    public IReadOnlyList<DateTime> SkippedDates { get; }
 }

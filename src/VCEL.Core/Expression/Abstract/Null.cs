@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class Null : IExpressionNode
 {
-    public class Null : IExpressionNode
-    {
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.Null;
-    }
+    [JsonProperty("$type")]
+    public NodeType Type => NodeType.Null;
 }

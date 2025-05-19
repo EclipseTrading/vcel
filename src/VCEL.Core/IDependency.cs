@@ -1,7 +1,6 @@
-﻿namespace VCEL
+﻿namespace VCEL;
+
+public interface IDependency
 {
-    public interface IDependency
-    {
-        string Name { get; }
-    }
+    string Name { get; }
 }

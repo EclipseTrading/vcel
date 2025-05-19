@@ -1,17 +1,16 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class String : IExpressionNode
 {
-    public class String : IExpressionNode
+    [JsonProperty("$type")]
+    public NodeType Type => NodeType.String;
+
+    public String(string value)
     {
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.String;
-
-        public String(string value)
-        {
-            Value = value;
-        }
-
-        public string Value { get; }
+        Value = value;
     }
+
+    public string Value { get; }
 }

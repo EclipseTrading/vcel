@@ -2,31 +2,30 @@
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.JS.Expression
+namespace VCEL.JS.Expression;
+
+internal class ToJsPropertyOp : IExpression<string>
 {
-    internal class ToJsPropertyOp : IExpression<string>
+    private readonly string name;
+
+    public ToJsPropertyOp(string name, IMonad<string> monad)
     {
-        private readonly string name;
+        this.name = name;
+        this.Monad = monad;
+    }
 
-        public ToJsPropertyOp(string name, IMonad<string> monad)
+    public IMonad<string> Monad { get; }
+
+    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+
+    public string Evaluate(IContext<string> context)
+    {
+        if (context.TryGetAccessor(name, out var accessor))
         {
-            this.name = name;
-            this.Monad = monad;
+            var result = accessor.GetValue(context);
+            return result;
         }
 
-        public IMonad<string> Monad { get; }
-
-        public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
-
-        public string Evaluate(IContext<string> context)
-        {
-            if (context.TryGetAccessor(name, out var accessor))
-            {
-                var result = accessor.GetValue(context);
-                return result;
-            }
-
-            return name;
-        }
+        return name;
     }
 }

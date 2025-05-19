@@ -1,19 +1,18 @@
 ﻿using Newtonsoft.Json;
 
-namespace VCEL.Core.Expression.Abstract
+namespace VCEL.Core.Expression.Abstract;
+
+public class GreaterOrEqual : IBinary, IExpressionNode
 {
-    public class GreaterOrEqual : IBinary, IExpressionNode
+    public GreaterOrEqual(IExpressionNode left, IExpressionNode right)
     {
-        public GreaterOrEqual(IExpressionNode left, IExpressionNode right)
-        {
-            Left = left;
-            Right = right;
-        }
-
-        [JsonProperty("$type")]
-        public NodeType Type => NodeType.GreaterOrEqual;
-
-        public IExpressionNode Left { get; }
-        public IExpressionNode Right { get; }
+        Left = left;
+        Right = right;
     }
+
+    [JsonProperty("$type")]
+    public NodeType Type => NodeType.GreaterOrEqual;
+
+    public IExpressionNode Left { get; }
+    public IExpressionNode Right { get; }
 }
