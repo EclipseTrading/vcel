@@ -52,9 +52,9 @@ public interface IMonad<TMonad>
     /// Bind is the core operation of a monad. It allows us to chain together operations that return a monad.
     /// This version of bind is used when we have two monads that we want to combine.
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="m"></param>
     /// <param name="b"></param>
     /// <param name="f"></param>
     /// <returns></returns>
-    TMonad Bind(TMonad a, TMonad b, Func<object?, object?, TMonad> f);
+    TMonad Bind(TMonad m, TMonad b, Func<object?, object?, TMonad> f);
 }

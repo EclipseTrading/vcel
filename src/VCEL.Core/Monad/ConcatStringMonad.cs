@@ -12,9 +12,9 @@ namespace VCEL.Expression
 
         public static ConcatStringMonad Instance { get; } = new ConcatStringMonad();
 
-        public string Bind(string a, string b, Func<object, object, string> f)
+        public string Bind(string m, string b, Func<object, object, string> f)
         {
-            return f(a, b);
+            return f(m, b);
         }
 
         public string Bind(string m, IContext<string> context, Func<object?, IContext<string>, string> f)

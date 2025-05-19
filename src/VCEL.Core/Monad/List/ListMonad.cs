@@ -43,8 +43,8 @@ namespace VCEL.Core.Monad.List
             return new List<T>(results);
         }
 
-        public List<T> Bind(List<T> a, List<T> b, Func<object?, object?, List<T>> f)
-            => BindExtensions.Bind(a, b, f, this);
+        public List<T> Bind(List<T> m, List<T> b, Func<object?, object?, List<T>> f)
+            => BindExtensions.Bind(m, b, f, this);
 
 #pragma warning disable CA1000
         public static ListMonad<T> Instance { get; } = new ListMonad<T>();

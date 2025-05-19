@@ -24,9 +24,9 @@ namespace VCEL.Monad
             return f(m, context, value);
         }
 
-        public object? Bind(object? a, object? b, Func<object?, object?, object?> f)
+        public object? Bind(object? m, object? b, Func<object?, object?, object?> f)
         {
-            return f(a, b);
+            return f(m, b);
         }
 
         public static ExprMonad Instance { get; } = new ExprMonad();

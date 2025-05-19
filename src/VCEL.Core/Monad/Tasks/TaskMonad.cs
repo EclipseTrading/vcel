@@ -63,7 +63,7 @@ namespace VCEL.Core.Monad.Tasks
             return resultProp?.GetValue(task);
         }
 
-        public Task<object?> Bind(Task<object?> a, Task<object?> b, Func<object?, object?, Task<object?>> f)
-            => BindExtensions.Bind(a, b, f, this);
+        public Task<object?> Bind(Task<object?> m, Task<object?> b, Func<object?, object?, Task<object?>> f)
+            => BindExtensions.Bind(m, b, f, this);
     }
 }
