@@ -20,7 +20,7 @@ public static class CSharpExpression
         if (!parseResult.Success)
             return new ParseResult<string>(parseResult.ParseErrors);
 
-        var csharpString =  parseResult.Expression.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var csharpString =  parseResult.Expression.Evaluate(new CSharpObjectContext(ConcatCSharpMonad.Instance, Constants.DefaultContext));
         return new ParseResult<string>(new CSharpStringExpr(null!, csharpString));
     }
 
@@ -32,7 +32,7 @@ public static class CSharpExpression
             return new ParseResult<object?>(parseResult.ParseErrors);
 
         var expr = parseResult.Expression;
-        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatCSharpMonad.Instance, Constants.DefaultContext));
         var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr);
         if (type == null)
             return new ParseResult<object?>(emitResult!.Diagnostics.Select(
@@ -55,7 +55,7 @@ public static class CSharpExpression
         var parseResult = CSharpParser(functions).Parse(exprString);
         var expr = parseResult.Expression;
 
-        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatCSharpMonad.Instance, Constants.DefaultContext));
         var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr);
         if (type == null)
             return  new ParseResult<object?>(emitResult!.Diagnostics.Select(
@@ -73,5 +73,5 @@ public static class CSharpExpression
     }
 
     private static ExpressionParser<string> CSharpParser(IFunctions<string>? functions = null)
-        => new(new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
+        => new(new ToCSharpCodeFactory(ConcatCSharpMonad.Instance, functions ?? new DefaultCSharpFunctions()));
 }

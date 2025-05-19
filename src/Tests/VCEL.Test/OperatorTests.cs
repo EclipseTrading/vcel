@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using VCEL.Core.Lang;
 using VCEL.Test.Shared;
 
@@ -150,7 +151,8 @@ public class OperatorTests
     {
         foreach (var expr in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(expr.Success, "Default expression parse");
+            Assert.True(expr.Success,
+                $"Expression should parse\n{string.Join("\n", expr.ParseErrors.Select(e => $"{e.GetExprError(exprString)}\n{e.Message}"))}");
             var result = expr.Expression.Evaluate(o ?? new { });
             Assert.That(result, Is.EqualTo(expected).Within(precision), "Default expression evaluated");
         }

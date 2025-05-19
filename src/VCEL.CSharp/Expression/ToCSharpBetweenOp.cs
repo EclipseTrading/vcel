@@ -30,6 +30,6 @@ internal class ToCSharpBetweenOp : IExpression<string>
         var l = Left.Evaluate(context);
         var lw = Lower.Evaluate(context);
         var up = Upper.Evaluate(context);
-        return $"(CSharpHelper.IsBetween<object>({l}, {lw}, {up}))";
+        return $"(CSharpHelper.IsBetween({l}, {lw}, {up}))";
     }
 }

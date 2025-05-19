@@ -14,7 +14,10 @@ public static class Expressions
     public const string In = @"'ABC' in { 'ABC', 'DEF', 'GHI' }";
     public const string InEnd = @"'XYZ' in { 'ABC', 'DEF', 'GHI', 'IJK', 'LMN', 'OPQ', 'RST', 'UVW', 'ZYZ' }";
     public const string Matches = @"'ABC' matches 'A.*'";
-    public const string MatchesComplex = @"'8888' matches '(?:.+,|^)(690|700|780|799|768|750|1372|1821|1481|2954|1733|1760|1748|1770|1710|2421|2430|4458|4429|6999|6997|6888|6999|8520|8111|8222|8333|8444|8777|8888|8963|8965|8931)(?:,.+|$)'";
+
+    public const string MatchesComplex =
+        @"'8888' matches '(?:.+,|^)(690|700|780|799|768|750|1372|1821|1481|2954|1733|1760|1748|1770|1710|2421|2430|4458|4429|6999|6997|6888|6999|8520|8111|8222|8333|8444|8777|8888|8963|8965|8931)(?:,.+|$)'";
+
     public const string Between = @"5 between { 4, 6 }";
     public const string And = @"true and false";
     public const string Or = @"true or false";
@@ -25,10 +28,12 @@ public static class Expressions
     public const string TestExpr2 = "(P / O) < 0";
     public const string TestExpr3 = "((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01";
     public const string TestExpr4 = "(P / O) < 0 ? abs(P / O) : 1 - (P / O) > -0.01";
-    public const string TestExpr5 = @"(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and 
+
+    public const string TestExpr5 = @"(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and
 (((P / O) < 0 ? abs((P / O)) : 1 - (P / O)) <= 0.03)
     ? 0.01
     : 0.02";
+
     public const string TestExpr6 = "counterpartyName != null and " +
                                     "(counterpartyName.startsWith('A') or " +
                                     "counterpartyName.startsWith('B') or " +
@@ -45,11 +50,15 @@ public static class Expressions
                                     "counterpartyName.startsWith('M') or " +
                                     "counterpartyName.startsWith('N') or " +
                                     "counterpartyName.startsWith('O'))";
+
     public const string TestExpr7 = "A and (B or C or D or E or F or G or H or I or J or K or L)";
     public const string TestExpr8 = "A and B or C or D or E or F or G or H or I or J or K or L";
 
+    public const string TestExpr10 =
+        "(tsA == null ? false : (now() - tsA) < now()) or (tsB == null ? false : (now() - tsB) < now())";
+
     public const string TestExpr5LetGuard = @"
-let 
+let
     v = P / O,
     x = v < 0 ? abs(v) : 1 - v
 in match
@@ -61,72 +70,74 @@ in match
     public const string TernaryArith1 = @"
 (
     (
-        (K matches 'XXX') 
-        ? (S - C)*M 
+        (K matches 'XXX')
+        ? (S - C)*M
         : (C - S)*M
     ) - tP
 ) * M * Q";
+
     public const string TernaryArith2 = "(B - Up)/Up between {0,0.01} ? PS*M*tO:0";
     public const string TernaryArith3 = "(aOs ==null ?0:aOs )+ mO";
 
     public const string NestedTernary1 = @"
-(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and 
-(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.03) 
-    ? 0.01 
-    : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.03) and 
-      (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.10) 
-       ? 0.05 
-       : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.1) and 
-         (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.225) 
-         ? 0.15 
-         : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.225) and 
-           (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.4) 
-           ? 0.3 
-           : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.4) and 
-             (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.6) 
-             ? 0.5 
-             : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.6) and 
-               (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.775) 
-               ? 0.7 
-               : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.775) and 
-                 (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.9) 
-                 ? 0.85 
-                 : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.9) and 
-                   (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.97) 
-                   ? 0.95 
+(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> -0.01) and
+(((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.03)
+    ? 0.01
+    : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.03) and
+      (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.10)
+       ? 0.05
+       : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.1) and
+         (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.225)
+         ? 0.15
+         : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.225) and
+           (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.4)
+           ? 0.3
+           : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.4) and
+             (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.6)
+             ? 0.5
+             : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.6) and
+               (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.775)
+               ? 0.7
+               : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.775) and
+                 (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.9)
+                 ? 0.85
+                 : (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))> 0.9) and
+                   (((P / O) < 0 ? abs((P / O)) : 1 - (P / O))<=0.97)
+                   ? 0.95
                    : 0.99";
+
     public const string NestedTernary2 = @"
-((D < 0 ? abs(D) : 1 - D) > -0.01) and 
-((D < 0 ? abs(D) : 1 - D)<=0.03) 
-    ? 0.01 
-    : ((D < 0 ? abs(D) : 1 - D)> 0.03) and 
-      ((D < 0 ? abs(D) : 1 - D)<=0.10) 
-        ? 0.05 
-        : ((D < 0 ? abs(D) : 1 - D)> 0.1) and 
-          ((D < 0 ? abs(D) : 1 - D)<=0.225) 
-            ? 0.15 
-            : ((D < 0 ? abs(D) : 1 - D)> 0.225) and 
-              ((D < 0 ? abs(D) : 1 - D)<=0.4) 
-                ? 0.3 
-                : ((D < 0 ? abs(D) : 1 - D)> 0.4) and 
-                  ((D < 0 ? abs(D) : 1 - D)<=0.6) 
-                    ? 0.5 
-                    : ((D < 0 ? abs(D) : 1 - D)> 0.6) and 
-                      ((D < 0 ? abs(D) : 1 - D)<=0.775) 
-                        ? 0.7 
-                        : ((D < 0 ? abs(D) : 1 - D)> 0.775) and 
-                          ((D < 0 ? abs(D) : 1 - D)<=0.9) 
-                            ? 0.85 
-                            : ((D < 0 ? abs(D) : 1 - D)> 0.9) and 
-                              ((D < 0 ? abs(D) : 1 - D)<=0.97) 
-                                ? 0.95 
+((D < 0 ? abs(D) : 1 - D) > -0.01) and
+((D < 0 ? abs(D) : 1 - D)<=0.03)
+    ? 0.01
+    : ((D < 0 ? abs(D) : 1 - D)> 0.03) and
+      ((D < 0 ? abs(D) : 1 - D)<=0.10)
+        ? 0.05
+        : ((D < 0 ? abs(D) : 1 - D)> 0.1) and
+          ((D < 0 ? abs(D) : 1 - D)<=0.225)
+            ? 0.15
+            : ((D < 0 ? abs(D) : 1 - D)> 0.225) and
+              ((D < 0 ? abs(D) : 1 - D)<=0.4)
+                ? 0.3
+                : ((D < 0 ? abs(D) : 1 - D)> 0.4) and
+                  ((D < 0 ? abs(D) : 1 - D)<=0.6)
+                    ? 0.5
+                    : ((D < 0 ? abs(D) : 1 - D)> 0.6) and
+                      ((D < 0 ? abs(D) : 1 - D)<=0.775)
+                        ? 0.7
+                        : ((D < 0 ? abs(D) : 1 - D)> 0.775) and
+                          ((D < 0 ? abs(D) : 1 - D)<=0.9)
+                            ? 0.85
+                            : ((D < 0 ? abs(D) : 1 - D)> 0.9) and
+                              ((D < 0 ? abs(D) : 1 - D)<=0.97)
+                                ? 0.95
                                 : 0.99";
 
     public const string LetGuard = @"
 let
     ud = P / O,
     d = (ud < 0 ? abs(ud) : 1 - ud)
-in match 
+in match
     | d <= 0.03  = 0.01
     | d <= 0.1   = 0.05
     | d <= 0.225 = 0.15
@@ -137,6 +148,7 @@ in match
     | d <= 0.97  = 0.95
     | otherwise 0.99
 ";
+
     public const string LiteralExpr1 = "1.";
     public const string LiteralExpr2 = "1.0";
     public const string LiteralExpr3 = "'ORDER'";
@@ -178,54 +190,58 @@ in match
 (
     (
         (
-            (VO > 0.8 or VO < -0.8) and 
+            (VO > 0.8 or VO < -0.8) and
             (
-                (sD < 0.95 and sD > 0.05) or 
+                (sD < 0.95 and sD > 0.05) or
                 (sD < -0.05 and sD > -0.95)
             )
-        ) or 
+        ) or
         (
-            (VO > 0.4 or VO < -0.4) and 
+            (VO > 0.4 or VO < -0.4) and
             (
-                (sD < 0.7 and sD > 0.3) or 
+                (sD < 0.7 and sD > 0.3) or
                 (sD < -0.3 and sD > -0.7)
             )
         )
-    ) and 
+    ) and
     (TC > 400 or TC < -400)
 )";
+
     public const string BoolExpr2 = @"
 (
-    (UL == 'ABC' or UL == 'DE') and 
+    (UL == 'ABC' or UL == 'DE') and
     (SC > 0.0015 or SC < -0.0015 or Q > 10)
 ) or (
-    UL == 'FG' and 
+    UL == 'FG' and
     (SC > 10 or SC < -10 or Q > 10)
 ) or (
-    UL == 'HIJ' and 
-    (SC > 0.01 or SC < -0.01 or Q > 10) and 
+    UL == 'HIJ' and
+    (SC > 0.01 or SC < -0.01 or Q > 10) and
     K != 'Spot'
 ) or (
-    UL == 'KLM' and 
-    (SC > 0.01 or SC < -0.01 or Q > 10) and 
+    UL == 'KLM' and
+    (SC > 0.01 or SC < -0.01 or Q > 10) and
     K != 'Spot'
 ) or (
-    UL == 'NOP' and 
-    (SC > 0.01 or SC < -0.01 or Q > 10) and 
+    UL == 'NOP' and
+    (SC > 0.01 or SC < -0.01 or Q > 10) and
     K != 'Spot'))
 ";
 
-    public const string BoolExpr3 = "((PS == null or PS <= 0) and msg.StartsWith(' started')) and ts.Hour >= 10 and ((ts - T(System.DateTime).Now).TotalSeconds > -15)";
+    public const string BoolExpr3 =
+        "((PS == null or PS <= 0) and msg.StartsWith(' started')) and ts.Hour >= 10 and ((ts - T(System.DateTime).Now).TotalSeconds > -15)";
+
     public const string BoolExpr4 = @"
-(   
-    (BDP and SDP) and 
-    (hB and hA) and (qB and qA) and 
+(
+    (BDP and SDP) and
+    (hB and hA) and (qB and qA) and
     (abs(tO - tO1) <= 0.001))
         ? ((mO > 0 and vO > 0)
-            ? true 
-            : false) 
+            ? true
+            : false)
         : true
 ";
+
     public const string VarFilter1 = "((BE != #BE and SE != #SE) and (fc == '2800' or fc == '2828'))";
 
 

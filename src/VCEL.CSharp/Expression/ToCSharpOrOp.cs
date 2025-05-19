@@ -17,6 +17,6 @@ internal class ToCSharpOrOp : BinaryExprBase<string>
     {
         return Equals(lv, "null")
             ? "null"
-            : $"(((bool){lv}) ? true : ((bool?){rv}))";
+            : $"({lv} == true) ? true : {rv}";
     }
 }

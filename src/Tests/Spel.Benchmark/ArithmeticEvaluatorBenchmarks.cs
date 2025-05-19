@@ -14,9 +14,7 @@ using VCEx = IExpression<object?>;
 using VCMaybeEx = IExpression<Maybe<object>>;
 using CSharpEx = IExpression<object?>;
 
-[MemoryDiagnoser]
-[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
-[RankColumn]
+[Config(typeof(InProcessShortRunConfig))]
 public class ArithmeticEvaluatorBenchmarks
 {
     private static readonly TestRow Row = new TestRow { O = 1.0, P = 1.0 };

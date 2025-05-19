@@ -98,7 +98,7 @@ in match
 | otherwise 0.99")]
     public void ToStringM(string expression)
     {
-        var exprFactory = new ToStringExpressionFactory(ConcatStringMonad.Instance);
+        var exprFactory = new ToStringExpressionFactory(ConcatCSharpMonad.Instance);
 
         var parser = new ExpressionParser<string>(exprFactory);
         var parsed = parser.Parse(expression);

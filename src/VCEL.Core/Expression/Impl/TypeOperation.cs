@@ -1,179 +1,276 @@
-﻿namespace VCEL.Core.Expression.Impl;
+using System;
+
+namespace VCEL.Core.Expression.Impl;
 
 public static class TypeOperation
 {
+    // public static bool EqualsChecked<T, T2>(T? left, T2? right)
+    //     where T : class
+    // {
+    //     if (left == null || right == null)
+    //     {
+    //         return (left == null && right == null);
+    //     }
+    //
+    //     if (left.GetType() == right.GetType())
+    //     {
+    //         return Equals(left, right);
+    //     }
+    //
+    //     return EqualsMixedType(left, right);
+    // }
+
+    // public static bool EqualsChecked<TLeft, TRight>(TLeft left, TRight right)
+    // {
+    //     if (left == null || right == null)
+    //     {
+    //         return (left == null && right == null);
+    //     }
+    //
+    //     // if (left.GetType() == right.GetType())
+    //     // {
+    //     //     return Equals(left, right);
+    //     // }
+    //
+    //     return EqualsMixedType(left, right);
+    // }
+
     public static bool EqualsChecked(object? left, object? right)
     {
         if (left == null || right == null)
         {
             return (left == null && right == null);
         }
-        if (left.GetType() == right.GetType())
-        {
-            return Equals(left, right);
-        }
+
+        // if (left.GetType() == right.GetType())
+        // {
+        //     return left.Equals(right);
+        // }
+
         return EqualsMixedType(left, right);
     }
 
-    private static bool EqualsMixedType(object? left, object? right)
+    public static bool EqualsChecked(object? left, double right)
     {
-        switch (left)
+        if (left == null)
         {
-            case double doubleLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return doubleLeft == doubleRight;
-                    case int intRight: return doubleLeft == intRight;
-                    case long longRight: return doubleLeft == longRight;
-                    case decimal decimalRight: return doubleLeft < (double)decimal.MaxValue && doubleLeft > (double)decimal.MinValue && (decimal)doubleLeft == decimalRight;
-                    case float floatRight: return doubleLeft == floatRight;
-                    case short shortRight: return doubleLeft == shortRight;
-                    case uint uintRight: return doubleLeft == uintRight;
-                    case ulong ulongRight: return doubleLeft == ulongRight;
-                    case ushort ushortRight: return doubleLeft == ushortRight;
-
-                    default: return Equals(doubleLeft, right);
-                }
-            }
-            case int intLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return intLeft == doubleRight;
-                    case int intRight: return intLeft == intRight;
-                    case long longRight: return intLeft == longRight;
-                    case decimal decimalRight: return intLeft == decimalRight;
-                    case float floatRight: return intLeft == floatRight;
-                    case short shortRight: return intLeft == shortRight;
-                    case uint uintRight: return intLeft == uintRight;
-                    case ulong ulongRight: return intLeft >= 0 && (ulong)intLeft == ulongRight;
-                    case ushort ushortRight: return intLeft == ushortRight;
-
-                    default: return Equals(intLeft, right);
-                }
-            }
-            case long longLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return longLeft == doubleRight;
-                    case int intRight: return longLeft == intRight;
-                    case long longRight: return longLeft == longRight;
-                    case decimal decimalRight: return longLeft == decimalRight;
-                    case float floatRight: return longLeft == floatRight;
-                    case short shortRight: return longLeft == shortRight;
-                    case uint uintRight: return longLeft == uintRight;
-                    case ulong ulongRight: return longLeft >= 0 && (ulong)longLeft == ulongRight;
-                    case ushort ushortRight: return longLeft == ushortRight;
-
-                    default: return Equals(longLeft, right);
-                }
-            }
-            case decimal decimalLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return doubleRight < (double)decimal.MaxValue && doubleRight > (double)decimal.MinValue && decimalLeft == (decimal)doubleRight;
-                    case int intRight: return decimalLeft == intRight;
-                    case long longRight: return decimalLeft == longRight;
-                    case decimal decimalRight: return decimalLeft == decimalRight;
-                    case float floatRight: return floatRight < (float)decimal.MaxValue && floatRight > (float)decimal.MinValue && decimalLeft == (decimal)floatRight;
-                    case short shortRight: return decimalLeft == shortRight;
-                    case uint uintRight: return decimalLeft == uintRight;
-                    case ulong ulongRight: return decimalLeft == ulongRight;
-                    case ushort ushortRight: return decimalLeft == ushortRight;
-
-                    default: return Equals(decimalLeft, right);
-                }
-            }
-            case float floatLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return floatLeft == doubleRight;
-                    case int intRight: return floatLeft == intRight;
-                    case long longRight: return floatLeft == longRight;
-                    case decimal decimalRight: return floatLeft < (float)decimal.MaxValue && floatLeft > (float)decimal.MinValue && (decimal)floatLeft == decimalRight;
-                    case float floatRight: return floatLeft == floatRight;
-                    case short shortRight: return floatLeft == shortRight;
-                    case uint uintRight: return floatLeft == uintRight;
-                    case ulong ulongRight: return floatLeft == ulongRight;
-                    case ushort ushortRight: return floatLeft == ushortRight;
-
-                    default: return Equals(floatLeft, right);
-                }
-            }
-            case short shortLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return shortLeft == doubleRight;
-                    case int intRight: return shortLeft == intRight;
-                    case long longRight: return shortLeft == longRight;
-                    case decimal decimalRight: return shortLeft == decimalRight;
-                    case float floatRight: return shortLeft == floatRight;
-                    case short shortRight: return shortLeft == shortRight;
-                    case uint uintRight: return shortLeft == uintRight;
-                    case ulong ulongRight: return shortLeft >= 0 && (ulong)shortLeft == ulongRight;
-                    case ushort ushortRight: return shortLeft == ushortRight;
-
-                    default: return Equals(shortLeft, right);
-                }
-            }
-            case uint uintLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return uintLeft == doubleRight;
-                    case int intRight: return uintLeft == intRight;
-                    case long longRight: return uintLeft == longRight;
-                    case decimal decimalRight: return uintLeft == decimalRight;
-                    case float floatRight: return uintLeft == floatRight;
-                    case short shortRight: return uintLeft == shortRight;
-                    case uint uintRight: return uintLeft == uintRight;
-                    case ulong ulongRight: return uintLeft == ulongRight;
-                    case ushort ushortRight: return uintLeft == ushortRight;
-
-                    default: return Equals(uintLeft, right);
-                }
-            }
-            case ulong ulongLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return ulongLeft == doubleRight;
-                    case int intRight: return intRight >= 0 && ulongLeft == (ulong)intRight;
-                    case long longRight: return longRight >= 0 && ulongLeft == (ulong)longRight;
-                    case decimal decimalRight: return ulongLeft == decimalRight;
-                    case float floatRight: return ulongLeft == floatRight;
-                    case short shortRight: return shortRight >= 0 && ulongLeft == (ulong)shortRight;
-                    case uint uintRight: return ulongLeft == uintRight;
-                    case ulong ulongRight: return ulongLeft == ulongRight;
-                    case ushort ushortRight: return ulongLeft == ushortRight;
-
-                    default: return Equals(ulongLeft, right);
-                }
-            }
-            case ushort ushortLeft:
-            {
-                switch (right)
-                {
-                    case double doubleRight: return ushortLeft == doubleRight;
-                    case int intRight: return ushortLeft == intRight;
-                    case long longRight: return ushortLeft == longRight;
-                    case decimal decimalRight: return ushortLeft == decimalRight;
-                    case float floatRight: return ushortLeft == floatRight;
-                    case short shortRight: return ushortLeft == shortRight;
-                    case uint uintRight: return ushortLeft == uintRight;
-                    case ulong ulongRight: return ushortLeft == ulongRight;
-                    case ushort ushortRight: return ushortLeft == ushortRight;
-
-                    default: return Equals(ushortLeft, right);
-                }
-            }
-
-            default: return Equals(left, right);
+            return false;
         }
+
+        if (left is double)
+        {
+            return right.Equals(left);
+        }
+
+        return EqualsMixedType(left, right);
     }
+
+    public static bool EqualsChecked(object? left, int right)
+    {
+        if (left == null)
+        {
+            return false;
+        }
+
+        if (left is int)
+        {
+            return right.Equals(left);
+        }
+
+        return EqualsMixedType(left, right);
+    }
+
+    public static bool EqualsChecked(object? left, bool right)
+    {
+        if (left == null)
+        {
+            return false;
+        }
+
+        if (left is bool)
+        {
+            return right.Equals(left);
+        }
+
+        return EqualsMixedType(left, right);
+    }
+
+
+    // public static bool EqualsChecked<T2>(object? left, T2? right)
+    //     where T2 : class
+    // {
+    //     if (left == null || right == null)
+    //     {
+    //         return (left == null && right == null);
+    //     }
+    //
+    //     if (left.GetType() == right.GetType())
+    //     {
+    //         return Equals(left, right);
+    //     }
+    //
+    //     return EqualsMixedType(left, right);
+    // }
+
+    // public static bool EqualsChecked<TLeft, TObject>(TLeft left, TObject? right)
+    //     where TLeft : struct, IEquatable<TLeft>
+    //     where TObject : class
+    // {
+    //     if (right == null)
+    //     {
+    //         return false;
+    //     }
+    //
+    //     if (left.GetType() == right.GetType())
+    //     {
+    //         return left.Equals(right);
+    //     }
+    //
+    //     return EqualsMixedType(left, right);
+    // }
+
+    // public static bool EqualsChecked<TRight>(object? left, TRight right)
+    //     where TRight : struct, IEquatable<TRight>
+    // {
+    //     if (left == null)
+    //     {
+    //         return false;
+    //     }
+    //
+    //     if (left.GetType() == right.GetType())
+    //     {
+    //         return right.Equals(left);
+    //     }
+    //
+    //     return EqualsMixedType(left, right);
+    // }
+
+    // public static bool EqualsChecked<T>(T left, T right)
+    //     where T : unmanaged, IEquatable<T> => left.Equals(right);
+
+    private static bool EqualsMixedType<T, T2>(T left, T2 right) => left switch
+    {
+        double doubleLeft => right switch
+        {
+            double doubleRight => doubleLeft == doubleRight,
+            int intRight => doubleLeft == intRight,
+            long longRight => doubleLeft == longRight,
+            decimal decimalRight => doubleLeft is < (double)decimal.MaxValue and > (double)decimal.MinValue &&
+                                    (decimal)doubleLeft == decimalRight,
+            float floatRight => doubleLeft == floatRight,
+            short shortRight => doubleLeft == shortRight,
+            uint uintRight => doubleLeft == uintRight,
+            ulong ulongRight => doubleLeft == ulongRight,
+            ushort ushortRight => doubleLeft == ushortRight,
+            _ => Equals(doubleLeft, right),
+        },
+        int intLeft => right switch
+        {
+            double doubleRight => intLeft == doubleRight,
+            int intRight => intLeft == intRight,
+            long longRight => intLeft == longRight,
+            decimal decimalRight => intLeft == decimalRight,
+            float floatRight => intLeft == floatRight,
+            short shortRight => intLeft == shortRight,
+            uint uintRight => intLeft == uintRight,
+            ulong ulongRight => intLeft >= 0 && (ulong)intLeft == ulongRight,
+            ushort ushortRight => intLeft == ushortRight,
+            _ => Equals(intLeft, right),
+        },
+        long longLeft => right switch
+        {
+            double doubleRight => longLeft == doubleRight,
+            int intRight => longLeft == intRight,
+            long longRight => longLeft == longRight,
+            decimal decimalRight => longLeft == decimalRight,
+            float floatRight => longLeft == floatRight,
+            short shortRight => longLeft == shortRight,
+            uint uintRight => longLeft == uintRight,
+            ulong ulongRight => longLeft >= 0 && (ulong)longLeft == ulongRight,
+            ushort ushortRight => longLeft == ushortRight,
+            _ => Equals(longLeft, right),
+        },
+        decimal decimalLeft => right switch
+        {
+            double doubleRight => doubleRight is < (double)decimal.MaxValue and > (double)decimal.MinValue &&
+                                  decimalLeft == (decimal)doubleRight,
+            int intRight => decimalLeft == intRight,
+            long longRight => decimalLeft == longRight,
+            decimal decimalRight => decimalLeft == decimalRight,
+            float floatRight => floatRight is < (float)decimal.MaxValue and > (float)decimal.MinValue &&
+                                decimalLeft == (decimal)floatRight,
+            short shortRight => decimalLeft == shortRight,
+            uint uintRight => decimalLeft == uintRight,
+            ulong ulongRight => decimalLeft == ulongRight,
+            ushort ushortRight => decimalLeft == ushortRight,
+            _ => Equals(decimalLeft, right),
+        },
+        float floatLeft => right switch
+        {
+            double doubleRight => floatLeft == doubleRight,
+            int intRight => floatLeft == intRight,
+            long longRight => floatLeft == longRight,
+            decimal decimalRight => floatLeft is < (float)decimal.MaxValue and > (float)decimal.MinValue &&
+                                    (decimal)floatLeft == decimalRight,
+            float floatRight => floatLeft == floatRight,
+            short shortRight => floatLeft == shortRight,
+            uint uintRight => floatLeft == uintRight,
+            ulong ulongRight => floatLeft == ulongRight,
+            ushort ushortRight => floatLeft == ushortRight,
+            _ => Equals(floatLeft, right),
+        },
+        short shortLeft => right switch
+        {
+            double doubleRight => shortLeft == doubleRight,
+            int intRight => shortLeft == intRight,
+            long longRight => shortLeft == longRight,
+            decimal decimalRight => shortLeft == decimalRight,
+            float floatRight => shortLeft == floatRight,
+            short shortRight => shortLeft == shortRight,
+            uint uintRight => shortLeft == uintRight,
+            ulong ulongRight => shortLeft >= 0 && (ulong)shortLeft == ulongRight,
+            ushort ushortRight => shortLeft == ushortRight,
+            _ => Equals(shortLeft, right),
+        },
+        uint uintLeft => right switch
+        {
+            double doubleRight => uintLeft == doubleRight,
+            int intRight => uintLeft == intRight,
+            long longRight => uintLeft == longRight,
+            decimal decimalRight => uintLeft == decimalRight,
+            float floatRight => uintLeft == floatRight,
+            short shortRight => uintLeft == shortRight,
+            uint uintRight => uintLeft == uintRight,
+            ulong ulongRight => uintLeft == ulongRight,
+            ushort ushortRight => uintLeft == ushortRight,
+            _ => Equals(uintLeft, right),
+        },
+        ulong ulongLeft => right switch
+        {
+            double doubleRight => ulongLeft == doubleRight,
+            int intRight => intRight >= 0 && ulongLeft == (ulong)intRight,
+            long longRight => longRight >= 0 && ulongLeft == (ulong)longRight,
+            decimal decimalRight => ulongLeft == decimalRight,
+            float floatRight => ulongLeft == floatRight,
+            short shortRight => shortRight >= 0 && ulongLeft == (ulong)shortRight,
+            uint uintRight => ulongLeft == uintRight,
+            ulong ulongRight => ulongLeft == ulongRight,
+            ushort ushortRight => ulongLeft == ushortRight,
+            _ => Equals(ulongLeft, right),
+        },
+        ushort ushortLeft => right switch
+        {
+            double doubleRight => ushortLeft == doubleRight,
+            int intRight => ushortLeft == intRight,
+            long longRight => ushortLeft == longRight,
+            decimal decimalRight => ushortLeft == decimalRight,
+            float floatRight => ushortLeft == floatRight,
+            short shortRight => ushortLeft == shortRight,
+            uint uintRight => ushortLeft == uintRight,
+            ulong ulongRight => ushortLeft == ulongRight,
+            ushort ushortRight => ushortLeft == ushortRight,
+            _ => Equals(ushortLeft, right),
+        },
+        _ => Equals(left, right),
+    };
 }

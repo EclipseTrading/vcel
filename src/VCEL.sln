@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCEL.Cli", "VCEL.Cli\VCEL.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCEL.CSharp", "VCEL.CSharp\VCEL.CSharp.csproj", "{4ADA41D1-A9D9-4BDF-A682-CB4BC91020B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCEL.Tool", "VCEL.Tool\VCEL.Tool.csproj", "{8FCC72F1-9936-47D1-B26F-6FD7259E9AF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{4ADA41D1-A9D9-4BDF-A682-CB4BC91020B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ADA41D1-A9D9-4BDF-A682-CB4BC91020B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ADA41D1-A9D9-4BDF-A682-CB4BC91020B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FCC72F1-9936-47D1-B26F-6FD7259E9AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FCC72F1-9936-47D1-B26F-6FD7259E9AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FCC72F1-9936-47D1-B26F-6FD7259E9AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FCC72F1-9936-47D1-B26F-6FD7259E9AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

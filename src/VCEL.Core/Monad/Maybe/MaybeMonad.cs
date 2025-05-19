@@ -8,14 +8,14 @@ public class MaybeMonad : IMonad<Maybe<object>>
 
     public Maybe<object> Lift<TValue>(TValue value) => Maybe<object>.Some(value!);
 
-    public Maybe<object> Bind(Maybe<object> m, Func<object, Maybe<object>> f)
+    public Maybe<object> Bind(Maybe<object> a, Func<object, Maybe<object>> f)
     {
-        if (!m.HasValue)
+        if (!a.HasValue)
         {
             return Maybe<object>.None;
         }
 
-        return f(m.Value);
+        return f(a.Value);
     }
 
     public Maybe<object> Bind(Maybe<object> m, IContext<Maybe<object>> context, Func<object?, IContext<Maybe<object>>, Maybe<object>> f)
@@ -38,14 +38,14 @@ public class MaybeMonad : IMonad<Maybe<object>>
         return f(m.Value, context, value);
     }
 
-    public Maybe<object> Bind(Maybe<object> m, Maybe<object> b, Func<object, object, Maybe<object>> f)
+    public Maybe<object> Bind(Maybe<object> a, Maybe<object> b, Func<object, object, Maybe<object>> f)
     {
-        if (!m.HasValue || !b.HasValue)
+        if (!a.HasValue || !b.HasValue)
         {
             return Maybe<object>.None;
         }
 
-        return f(m.Value, b.Value);
+        return f(a.Value, b.Value);
     }
 
     public static MaybeMonad Instance { get; } = new MaybeMonad();

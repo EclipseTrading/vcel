@@ -12,34 +12,26 @@ using VCEL.Monad.Maybe;
 
 namespace VCEL.Cli;
 
-internal sealed class VcelRepl
+internal sealed class VcelRepl(string verion, Dictionary<string, object> context)
 {
     private const string Name = "VCEL CLI";
     private const string NameFormatted = "[gold1]" + Name + "[/]";
 
-    private readonly string version;
-    private readonly Dictionary<string, object> context;
-    private readonly List<(string Expression, ParseResult<Maybe<object>> Parsed, Maybe<object> Outcome)> history;
+    private readonly List<(string Expression, ParseResult<Maybe<object>> Parsed, Maybe<object> Outcome)>
+        history = new();
 
     private enum Mode
     {
-        EXPR,
-        CSHARP,
+        Expression,
+        CSharp,
         JS,
     }
 
-    private Mode mode = Mode.EXPR;
-
-    public VcelRepl(string verion, Dictionary<string, object> context)
-    {
-        this.version = verion;
-        this.context = context;
-        history = new();
-    }
+    private Mode mode = Mode.Expression;
 
     public void Run()
     {
-        AnsiConsole.MarkupLine($"{NameFormatted} v{version.EscapeMarkup()}");
+        AnsiConsole.MarkupLine($"{NameFormatted} v{verion.EscapeMarkup()}");
         Console.Title = Name;
 
         AnsiConsole.MarkupLine($"Type {".help".FormatAsCommand()} for more information.");
@@ -72,10 +64,10 @@ internal sealed class VcelRepl
 
         switch (this.mode)
         {
-            case Mode.EXPR:
+            case Mode.Expression:
                 EvaluateExpression(input);
                 break;
-            case Mode.CSHARP:
+            case Mode.CSharp:
                 ToCSharpCode(input);
                 break;
             case Mode.JS:
@@ -111,7 +103,7 @@ internal sealed class VcelRepl
             {
                 AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
                     .Insert(parseError.Start, "[red underline]"));
-                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, 
+                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture,
                     "{0} (line {1}, start {2}, stop {3}, token '{4}')",
                     parseError.Message.FormatAsError(),
                     parseError.Line,
@@ -227,7 +219,7 @@ internal sealed class VcelRepl
             {
                 AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
                     .Insert(parseError.Start, "[red underline]"));
-                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, 
+                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture,
                     "{0} (line {1}, start {2}, stop {3}, token '{4}')",
                     parseError.Message.FormatAsError(),
                     parseError.Line,
@@ -253,7 +245,7 @@ internal sealed class VcelRepl
                 HelpCommand();
                 break;
             case ".version":
-                AnsiConsole.MarkupLine($"v{version.EscapeMarkup()}");
+                AnsiConsole.MarkupLine($"v{verion.EscapeMarkup()}");
                 break;
             case ".exit":
                 Environment.Exit(0);
@@ -286,8 +278,8 @@ internal sealed class VcelRepl
             case ".history":
                 HistoryCommand();
                 break;
-            case ".toggle":
-                ToggleCommand(inputParts);
+            case ".mode":
+                ModeCommand(inputParts);
                 break;
             default:
                 AnsiConsole.MarkupLine(
@@ -298,7 +290,7 @@ internal sealed class VcelRepl
 
     private void HelpCommand()
     {
-        AnsiConsole.MarkupLine($"{NameFormatted} v{version.EscapeMarkup()}");
+        AnsiConsole.MarkupLine($"{NameFormatted} v{verion.EscapeMarkup()}");
         AnsiConsole.MarkupLine($"Commands (always start with '{".".FormatAsCommand()}'):");
         AnsiConsole.MarkupLine(".help".FormatAsHelpItem("Shows help information"));
         AnsiConsole.MarkupLine(".version".FormatAsHelpItem("Shows version"));
@@ -318,7 +310,7 @@ internal sealed class VcelRepl
         AnsiConsole.MarkupLine(
             ".history".FormatAsHelpItem("Shows the history of evaluated expressions and their outcomes"));
         AnsiConsole.MarkupLine(
-            ".toggle".FormatAsHelpItem("Change the mode of the parser, accepts {EXPR, CSHARP, JS}",
+            ".mode".FormatAsHelpItem("Change the mode of the parser, accepts {EXPR, CSHARP, JS}",
                 "MODE"));
         AnsiConsole.MarkupLine("\nInput is evaluated as an expression if not a command.");
     }
@@ -431,20 +423,26 @@ internal sealed class VcelRepl
         AnsiConsole.Write(historyTable);
     }
 
-    private void ToggleCommand(string[] inputParts)
+    private void ModeCommand(string[] inputParts)
     {
         if (inputParts.Length is 2)
         {
-            var choice = inputParts[1].ToUpper(CultureInfo.InvariantCulture);
-            mode = choice switch
+            if (!Enum.TryParse<Mode>(inputParts[1].Trim(), ignoreCase: true, out var parsed))
             {
-                "EXPR" => Mode.EXPR,
-                "CSHARP" => Mode.CSHARP,
-                "JS" => Mode.JS,
-                _ => mode
+                AnsiConsole.MarkupLine(
+                    $"{inputParts[1].FormatAsCommand()} is not a valid mode. Valid modes are {string.Join(", ", Enum.GetNames<Mode>().Select(x => x.FormatAsValue()))}");
+                return;
+            }
+
+            mode = parsed switch
+            {
+                Mode.Expression => Mode.Expression,
+                Mode.CSharp => Mode.CSharp,
+                Mode.JS => Mode.JS,
+                _ => throw new Exception($"Unknown mode {parsed}"),
             };
         }
 
-        AnsiConsole.MarkupLine($"Current mode is {$"{mode}".FormatAsValue()}.");
+        AnsiConsole.MarkupLine($"Mode set to {$"{mode}".FormatAsValue()}.");
     }
 }

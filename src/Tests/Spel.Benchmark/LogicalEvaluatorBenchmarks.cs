@@ -16,11 +16,7 @@ using VCEx = IExpression<object?>;
 using VCMaybeEx = IExpression<Maybe<object>>;
 using CSharpEx = IExpression<object?>;
 
-// [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
-[SimpleJob(RuntimeMoniker.Net60, warmupCount: 3, iterationCount: 3, baseline: true)]
-// [SimpleJob(RuntimeMoniker.Net80, warmupCount: 1, iterationCount: 1)]
-[MemoryDiagnoser]
-// [InProcess]
+[Config(typeof(InProcessShortRunConfig))]
 public class LogicalEvaluatorBenchmarks
 {
     private static readonly TestRow Row = new() { O = 1.0, P = 1.0 };

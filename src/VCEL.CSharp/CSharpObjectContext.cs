@@ -5,20 +5,15 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp;
 
-public readonly struct CSharpObjectContext : IContext<string>
+public readonly struct CSharpObjectContext(
+    IMonad<string> monad,
+    object obj,
+    IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null
+) : IContext<string>
 {
-    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
-        
-    public IMonad<string> Monad { get; }
+    public IMonad<string> Monad { get; } = monad;
 
-    public object Object { get; }
-
-    public CSharpObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
-    {
-        this.overridePropertyFunc = overridePropertyFunc;
-        Monad = monad;
-        Object = obj;
-    }
+    public object Object { get; } = obj;
 
     public IContext<string> OverrideName(string name, string br)
         => new OverrideContext<string>(

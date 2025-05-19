@@ -24,9 +24,9 @@ public class ExprMonad : IMonad<object?>
         return f(m, context, value);
     }
 
-    public object? Bind(object? m, object? b, Func<object?, object?, object?> f)
+    public object? Bind(object? a, object? b, Func<object?, object?, object?> f)
     {
-        return f(m, b);
+        return f(a, b);
     }
 
     public static ExprMonad Instance { get; } = new ExprMonad();

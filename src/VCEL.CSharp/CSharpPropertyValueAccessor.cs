@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using VCEL.Monad;
 
 namespace VCEL.CSharp;
 
-public readonly struct CSharpPropertyValueAccessor : IValueAccessor<string>
+public readonly struct CSharpPropertyValueAccessor(
+    IMonad<string> monad,
+    string propName,
+    IReadOnlyDictionary<string, Func<string>>? overridePropFunc = null)
+    : IValueAccessor<string>
 {
-    private readonly IMonad<string> monad;
-    private readonly string propName;
-    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropFunc;
-
-    public CSharpPropertyValueAccessor(
-        IMonad<string> monad,
-        string propName,
-        IReadOnlyDictionary<string, Func<string>>? overridePropFunc = null)
-    {
-        this.monad = monad;
-        this.propName = propName;
-        this.overridePropFunc = overridePropFunc;
-    }
+    private static volatile int atomic;
 
     public string GetValue(IContext<string> context)
     {
@@ -27,9 +20,13 @@ public readonly struct CSharpPropertyValueAccessor : IValueAccessor<string>
             return monad.Lift(func());
         }
 
-        var finalPropOrMethod = $"({context.Value}.{propName})";
-        return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
-                          $"? ((double)({finalPropOrMethod})) " +
-                          $": ({finalPropOrMethod}))");
+        var finalPropOrMethod = $"{context.Value}.{propName}";
+        // var finalPropOrMethod = $"({context.Value}[\"{propName}\"])";
+        var outVariableName = $"__outVar{Interlocked.Increment(ref atomic)}";
+        var varVariableName = $"__var{atomic}";
+        return monad.Lift(
+            $"({nameof(CSharpHelper)}.{nameof(CSharpHelper.TryToDouble)}({finalPropOrMethod} is var {varVariableName} ? {varVariableName} : {varVariableName}, out double {outVariableName})" +
+            $" ? {outVariableName}" +
+            $" : {varVariableName})");
     }
 }

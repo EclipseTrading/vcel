@@ -9,9 +9,7 @@ using VCEL.Test.Shared;
 
 namespace Spel.Benchmark;
 
-[MemoryDiagnoser]
-[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
-[RankColumn]
+[Config(typeof(InProcessShortRunConfig))]
 public class NestedTernaryEvaluatorBenchmarks
 {
     private static readonly IExpression SpelExpr = Expression.Parse(Expressions.NestedTernary1);

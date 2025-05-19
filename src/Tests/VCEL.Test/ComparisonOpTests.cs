@@ -205,6 +205,10 @@ public class ComparisonOpTests
     [TestCase("'A' in {'A', 'A', 'A' }", true)]
     [TestCase("'A' in {'B', 'B', 'B' }", false)]
     [TestCase("'A' in {'D', 'B', 'C' }", false)]
+    [TestCase("1 in {'D', 'B', 'C' }", false)]
+    [TestCase("'A' in {1, 2, 3 }", false)]
+    [TestCase("'A' in {1, 2, 'A' }", true)]
+    [TestCase("'A' in {1, 2, 'B' }", false)]
     [TestCase("'A' + 'B' in {'AB', 'B', 'C' }", true)]
     [TestCase("3 in {1, 2, 3 }", true)]
     [TestCase("4 in {1, 2, 3 }", false)]
@@ -224,7 +228,7 @@ public class ComparisonOpTests
         => Compare(exprString, expected, new { a = 3, b = 2, c = 1  });
 
 
-    [TestCase("'x' in [ ...a, 'b' ]", true)]        
+    [TestCase("'x' in [ ...a, 'b' ]", true)]
     [TestCase("'z' in [ ...a, 'b' ]", false)]
     public void InSpread(string exprString, bool expected)
         => Compare(exprString, expected, new { a = new [] { "x", "y" } });

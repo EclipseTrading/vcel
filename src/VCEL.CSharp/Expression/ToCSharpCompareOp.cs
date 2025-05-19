@@ -3,22 +3,19 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
 
-internal class ToCSharpCompareOp : BinaryExprBase<string>
+internal sealed class ToCSharpCompareOp(
+    string opName,
+    IMonad<string> monad,
+    IExpression<string> left,
+    IExpression<string> right)
+    : BinaryExprBase<string>(monad, left, right)
 {
-    private readonly string opName;
-
-    public ToCSharpCompareOp(
-        string opName,
-        IMonad<string> monad,
-        IExpression<string> left,
-        IExpression<string> right)
-        : base(monad, left, right)
+    public override string Evaluate(object? lv, object? rv) => opName switch
     {
-        this.opName = opName;
-    }
-
-    public override string Evaluate(object? lv, object? rv)
-    {
-        return $@"(CSharpHelper.UpCastCompare({lv}, {rv}, ""{opName}""))";
-    }
+        ">" => $"{nameof(CSharpHelper)}.{nameof(CSharpHelper.UpCastCompareGreaterThan)}({lv}, {rv})",
+        ">=" => $"{nameof(CSharpHelper)}.{nameof(CSharpHelper.UpCastCompareGreaterThanOrEqual)}({lv}, {rv})",
+        "<" => $"{nameof(CSharpHelper)}.{nameof(CSharpHelper.UpCastCompareLessThan)}({lv}, {rv})",
+        "<=" => $"{nameof(CSharpHelper)}.{nameof(CSharpHelper.UpCastCompareLessThanOrEqual)}({lv}, {rv})",
+        _ => "false",
+    };
 }

@@ -24,32 +24,41 @@ public static class CodeGenCSharpClass
 
     private static string GenerateFile(string name, string csharpExpr)
     {
-        return $@"
-                using System.Collections.Generic;
-                using System.Runtime.CompilerServices;
-                using System.Linq;
-                using System;
-                using System.Text.RegularExpressions;
-                using VCEL.Core.Expression.Impl;
-                using VCEL.Core.Helper;
-                using VCEL.CSharp;
+        return $$"""
 
-                namespace VCEL.CSharp.CodeGen 
-                {{
-                    {GenerateClass(name, csharpExpr)}
-                }}";
+                                 using System.Collections.Generic;
+                                 using System.Runtime.CompilerServices;
+                                 using System.Linq;
+                                 using System;
+                                 using System.Text.RegularExpressions;
+                                 using VCEL.Core.Expression.Impl;
+                                 using VCEL.Core.Helper;
+                                 using VCEL.CSharp;
+
+                                 namespace VCEL.CSharp.CodeGen
+                                 {
+                                     {{GenerateClass(name, csharpExpr)}}
+                                 }
+                 """;
     }
 
     private static string GenerateClass(string name, string csharpExpr)
     {
-        return $@"
-                    public class {name}
-                    {{
-                        public static object Evaluate(dynamic vcelContext)
-                        {{
-                            return {csharpExpr};
-                        }}
-                    }}";
+        return $$"""
+
+                                     public class {{name}}
+                                     {
+                                         public static object Evaluate(dynamic vcelContext)
+                                         {
+                                             return {{csharpExpr}};
+                                             //return {{csharpExpr}} switch {
+                                             //   true => {{nameof(BoxedConstants)}}.{{nameof(BoxedConstants.True)}},
+                                             //   false => {{nameof(BoxedConstants)}}.{{nameof(BoxedConstants.False)}},
+                                             //   var __result => __result,
+                                             //};
+                                         }
+                                     }
+                 """;
     }
 
     private static (Type?, EmitResult?) GenerateType(string? name, string src)
@@ -76,11 +85,16 @@ public static class CodeGenCSharpClass
         var source = SourceText.From(src);
         var syntaxTree = SyntaxFactory.ParseSyntaxTree(source, null, $"{name}.cs");
         var compilation = CSharpCompilation.Create($"{name}.dll",
-            new[] {syntaxTree},
+            [syntaxTree],
             refs,
             new CSharpCompilationOptions(
-                outputKind:OutputKind.DynamicallyLinkedLibrary,
-                optimizationLevel: OptimizationLevel.Release)
+                    outputKind: OutputKind.DynamicallyLinkedLibrary,
+                    optimizationLevel: OptimizationLevel.Release)
+                .WithSpecificDiagnosticOptions(new Dictionary<string, ReportDiagnostic>
+                {
+                    { "CS0183", ReportDiagnostic.Suppress },
+                    { "CS0184", ReportDiagnostic.Suppress },
+                })
         );
         byte[]? image = null;
         using (var ms = new MemoryStream())

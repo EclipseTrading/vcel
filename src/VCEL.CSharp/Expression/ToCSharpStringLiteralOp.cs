@@ -7,17 +7,11 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
 
-internal class ToCSharpStringLiteralOp : IExpression<string>
+internal sealed class ToCSharpStringLiteralOp(string str, IMonad<string> monad) : IExpression<string>
 {
-    private readonly string str;
+    private readonly string str = ToLiteral(str);
     private static readonly CodeGeneratorOptions CodeGeneratorOptions = new();
-    public IMonad<string> Monad { get; }
-
-    public ToCSharpStringLiteralOp(string str, IMonad<string> monad)
-    {
-        Monad = monad;
-        this.str = ToLiteral(str);
-    }
+    public IMonad<string> Monad { get; } = monad;
 
     public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
 
@@ -36,10 +30,5 @@ internal class ToCSharpStringLiteralOp : IExpression<string>
                 return writer.ToString();
             }
         }
-    }
-
-    public static string UnWarpStringLiteral(string str)
-    {
-        return str.TrimStart('@').Trim('\"');
     }
 }

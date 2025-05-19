@@ -8,9 +8,7 @@ using VCEL.Test.Shared;
 
 namespace Spel.Benchmark;
 
-[MemoryDiagnoser]
-[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
-[RankColumn]
+[Config(typeof(InProcessShortRunConfig))]
 public class ParserBenchmarks
 {
     private static readonly ExpressionParser<object?> vcelDefaultParser = new(new ExpressionFactory<object?>(ExprMonad.Instance));

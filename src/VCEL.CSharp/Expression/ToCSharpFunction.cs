@@ -6,25 +6,16 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
 
-internal class ToCSharpFunction : IExpression<string>
+internal sealed class ToCSharpFunction(
+    IMonad<string> monad,
+    string name,
+    IReadOnlyList<IExpression<string>> args,
+    IFunctions<string>? functions
+) : IExpression<string>
 {
-    private readonly string name;
-    private readonly IReadOnlyList<IExpression<string>> args;
-    private readonly IFunctions<string> functions;
+    private readonly IFunctions<string> functions = functions ?? new DefaultCSharpFunctions();
 
-    public ToCSharpFunction(
-        IMonad<string> monad,
-        string name,
-        IReadOnlyList<IExpression<string>> args,
-        IFunctions<string> functions)
-    {
-        this.Monad = monad;
-        this.name = name;
-        this.args = args;
-        this.functions = functions ?? new DefaultCSharpFunctions();
-    }
-
-    public IMonad<string> Monad { get; }
+    public IMonad<string> Monad { get; } = monad;
 
     public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
 
@@ -33,7 +24,7 @@ internal class ToCSharpFunction : IExpression<string>
         if (functions.HasFunction(name))
         {
             var function = functions.GetFunction(name)!;
-            var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
+            var argValues = args.Select(object? (s) => s.Evaluate(context)).ToArray();
             return function.Func.Invoke(argValues, context)?.ToString() ?? "";
         }
 
