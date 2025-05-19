@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.JS.Expression
+namespace VCEL.JS.Expression;
+
+internal class ToJsTimeSpan : IExpression<string>
 {
-    internal class ToJsTimeSpan : IExpression<string>
+    private TimeSpan timeSpan;
+
+    public ToJsTimeSpan(IMonad<string> monad, TimeSpan timeSpan)
     {
-        private TimeSpan timeSpan;
+        this.Monad = monad;
+        this.timeSpan = timeSpan;
+    }
 
-        public ToJsTimeSpan(IMonad<string> monad, TimeSpan timeSpan)
-        {
-            this.Monad = monad;
-            this.timeSpan = timeSpan;
-        }
+    public IMonad<string> Monad { get; }
 
-        public IMonad<string> Monad { get; }
+    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
 
-        public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
-
-        public string Evaluate(IContext<string> context)
-        {
-            var totalMs = timeSpan.TotalMilliseconds;
-            return $"{totalMs}";
-        }
+    public string Evaluate(IContext<string> context)
+    {
+        var totalMs = timeSpan.TotalMilliseconds;
+        return $"{totalMs}";
     }
 }

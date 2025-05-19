@@ -4,41 +4,40 @@ using VCEL.Core.Expression.Func;
 using VCEL.CSharp.Expression.Func;
 using VCEL.Monad;
 
-namespace VCEL.CSharp.Expression
+namespace VCEL.CSharp.Expression;
+
+internal class ToCSharpFunction : IExpression<string>
 {
-    internal class ToCSharpFunction : IExpression<string>
+    private readonly string name;
+    private readonly IReadOnlyList<IExpression<string>> args;
+    private readonly IFunctions<string> functions;
+
+    public ToCSharpFunction(
+        IMonad<string> monad,
+        string name,
+        IReadOnlyList<IExpression<string>> args,
+        IFunctions<string> functions)
     {
-        private readonly string name;
-        private readonly IReadOnlyList<IExpression<string>> args;
-        private readonly IFunctions<string> functions;
+        this.Monad = monad;
+        this.name = name;
+        this.args = args;
+        this.functions = functions ?? new DefaultCSharpFunctions();
+    }
 
-        public ToCSharpFunction(
-            IMonad<string> monad,
-            string name,
-            IReadOnlyList<IExpression<string>> args,
-            IFunctions<string> functions)
+    public IMonad<string> Monad { get; }
+
+    public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+
+    public string Evaluate(IContext<string> context)
+    {
+        if (functions.HasFunction(name))
         {
-            this.Monad = monad;
-            this.name = name;
-            this.args = args;
-            this.functions = functions ?? new DefaultCSharpFunctions();
+            var function = functions.GetFunction(name)!;
+            var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
+            return function.Func.Invoke(argValues, context)?.ToString() ?? "";
         }
 
-        public IMonad<string> Monad { get; }
-
-        public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
-
-        public string Evaluate(IContext<string> context)
-        {
-            if (functions.HasFunction(name))
-            {
-                var function = functions.GetFunction(name)!;
-                var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
-                return function.Func.Invoke(argValues, context)?.ToString() ?? "";
-            }
-
-            // TODO should return missing function
-            return "";
-        }
+        // TODO should return missing function
+        return "";
     }
 }

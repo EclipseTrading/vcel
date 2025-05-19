@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace VCEL.Core.Lang
+namespace VCEL.Core.Lang;
+
+[ExcludeFromCodeCoverage]
+[SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case")]
+public partial class VCELParser
 {
-    [ExcludeFromCodeCoverage]
-    [SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case")]
-    public partial class VCELParser
+    public static string TokenName(int tokenType)
     {
-        public static string TokenName(int tokenType)
-        {
-            return DefaultVocabulary.GetLiteralName(tokenType).Trim('\'');
-        }
+        return DefaultVocabulary.GetLiteralName(tokenType).Trim('\'');
     }
 }

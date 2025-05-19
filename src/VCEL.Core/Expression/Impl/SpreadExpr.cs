@@ -2,25 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using VCEL.Monad;
 
-namespace VCEL.Core.Expression.Impl
+namespace VCEL.Core.Expression.Impl;
+
+public class SpreadExpr<TMonad> : IExpression<TMonad>
 {
-    public class SpreadExpr<TMonad> : IExpression<TMonad>
+    public SpreadExpr(IMonad<TMonad> monad, IExpression<TMonad> list)
     {
-        public SpreadExpr(IMonad<TMonad> monad, IExpression<TMonad> list)
-        {
-            Monad = monad;
-            List = list;
-        }
+        Monad = monad;
+        List = list;
+    }
 
-        public IMonad<TMonad> Monad { get;}
-        public IExpression<TMonad> List { get; }
+    public IMonad<TMonad> Monad { get;}
+    public IExpression<TMonad> List { get; }
 
-        public IEnumerable<IDependency> Dependencies => List.Dependencies;
+    public IEnumerable<IDependency> Dependencies => List.Dependencies;
 
-        public TMonad Evaluate(IContext<TMonad> context)
-        {
-            var value = List.Evaluate(context);
-            return Monad.Bind(value, v => v is ICollection c ? Monad.Lift(c) : Monad.Unit);
-        }
+    public TMonad Evaluate(IContext<TMonad> context)
+    {
+        var value = List.Evaluate(context);
+        return Monad.Bind(value, v => v is ICollection c ? Monad.Lift(c) : Monad.Unit);
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace VCEL.Core.Expression.Abstract
+﻿namespace VCEL.Core.Expression.Abstract;
+
+public interface IBinary
 {
-    public interface IBinary
-    {
-        IExpressionNode Left { get; }
-        IExpressionNode Right { get; }
-    }
+    IExpressionNode Left { get; }
+    IExpressionNode Right { get; }
 }

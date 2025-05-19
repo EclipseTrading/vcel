@@ -5,42 +5,41 @@ using System.Collections.Generic;
 using System.IO;
 using VCEL.Monad;
 
-namespace VCEL.CSharp.Expression
+namespace VCEL.CSharp.Expression;
+
+internal class ToCSharpStringLiteralOp : IExpression<string>
 {
-    internal class ToCSharpStringLiteralOp : IExpression<string>
+    private readonly string str;
+    private static readonly CodeGeneratorOptions CodeGeneratorOptions = new();
+    public IMonad<string> Monad { get; }
+
+    public ToCSharpStringLiteralOp(string str, IMonad<string> monad)
     {
-        private readonly string str;
-        private static readonly CodeGeneratorOptions CodeGeneratorOptions = new();
-        public IMonad<string> Monad { get; }
+        Monad = monad;
+        this.str = ToLiteral(str);
+    }
 
-        public ToCSharpStringLiteralOp(string str, IMonad<string> monad)
+    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+
+    public string Evaluate(IContext<string> context)
+    {
+        return $"@{this.str}";
+    }
+
+    private static string ToLiteral(string input)
+    {
+        using (var writer = new StringWriter())
         {
-            Monad = monad;
-            this.str = ToLiteral(str);
-        }
-
-        public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
-
-        public string Evaluate(IContext<string> context)
-        {
-            return $"@{this.str}";
-        }
-
-        private static string ToLiteral(string input)
-        {
-            using (var writer = new StringWriter())
+            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
             {
-                using (var provider = CodeDomProvider.CreateProvider("CSharp"))
-                {
-                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, CodeGeneratorOptions);
-                    return writer.ToString();
-                }
+                provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, CodeGeneratorOptions);
+                return writer.ToString();
             }
         }
+    }
 
-        public static string UnWarpStringLiteral(string str)
-        {
-            return str.TrimStart('@').Trim('\"');
-        }
+    public static string UnWarpStringLiteral(string str)
+    {
+        return str.TrimStart('@').Trim('\"');
     }
 }
