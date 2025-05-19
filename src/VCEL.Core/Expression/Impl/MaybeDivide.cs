@@ -29,7 +29,7 @@ namespace VCEL.Core.Expression.Impl
             }
         }
 
-        private bool IsZeroOrNonNumeric(object? rv)
+        private static bool IsZeroOrNonNumeric(object? rv)
         {
             return !(rv is IConvertible)
                 || rv is double d && d == 0.0

@@ -32,7 +32,7 @@ namespace VCEL.Core.Lang
                     MaybeMonad.Instance,
                     functions));
 
-        private static IFunctions<T> CreateFunctions<T>((string, Func<object?[], object?>)[] funcs)
+        private static DefaultFunctions<T> CreateFunctions<T>((string, Func<object?[], object?>)[] funcs)
         {
             var functions = new DefaultFunctions<T>();
             foreach (var (name, f) in funcs)

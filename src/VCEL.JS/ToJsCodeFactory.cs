@@ -34,18 +34,18 @@ namespace VCEL.JS
         public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeInOp(Monad, l, r);
 
-        public override IExpression<string> Spread(IExpression<string> expr)
-            => new ToJsStringOp((c) => $"...{expr.Evaluate(c)}", Monad);
+        public override IExpression<string> Spread(IExpression<string> list)
+            => new ToJsStringOp((c) => $"...{list.Evaluate(c)}", Monad);
 
-        public override IExpression<string> List(IReadOnlyList<IExpression<string>> exprs)
+        public override IExpression<string> List(IReadOnlyList<IExpression<string>> l)
             => new ToJsStringOp((context) =>
             {
-                var items = exprs.Select(e => e.Evaluate(context));
+                var items = l.Select(e => e.Evaluate(context));
                 return $"[{string.Join(",", items)}]";
             }, Monad);
 
-        public override IExpression<string> Set(ISet<object> s)
-            => new ToJsStringOp((context) => $"[{string.Join(",", s.Select(str => $"'{str}'"))}]", Monad);
+        public override IExpression<string> Set(ISet<object> set)
+            => new ToJsStringOp((context) => $"[{string.Join(",", set.Select(str => $"'{str}'"))}]", Monad);
 
         public override IExpression<string> And(IExpression<string> l, IExpression<string> r)
             => new ToJsCodeBinaryOp("&&", Monad, l, r);

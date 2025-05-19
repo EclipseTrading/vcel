@@ -37,7 +37,7 @@ namespace VCEL.Core.Expression.Impl
             => TryUpCastOneSide(l, r, out ol, out or)
                 || TryUpCastOneSide(r, l, out or, out ol);
 
-        private bool TryUpCastOneSide(
+        private static bool TryUpCastOneSide(
             object? l,
             object? r,
             out object? ol,

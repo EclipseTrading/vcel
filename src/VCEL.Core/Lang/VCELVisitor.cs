@@ -44,7 +44,7 @@ namespace VCEL.Core.Lang
                 : new ValueParseResult<T>(new ParseError($"Unable to parse '{d}' as double", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
 
         public override ParseResult<T> VisitFloatLiteral([NotNull] VCELParser.FloatLiteralContext context)
-            => float.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var f)
+            => float.TryParse(context.GetText().AsSpan(0, context.GetText().Length - 1), out var f)
                 ? new ValueParseResult<T>(exprFactory.Value(f), f)
                 : new ValueParseResult<T>(new ParseError($"Unable to parse '{f} as float", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
 
@@ -64,7 +64,7 @@ namespace VCEL.Core.Lang
         }
 
         public override ParseResult<T> VisitLongLiteral([NotNull] VCELParser.LongLiteralContext context)
-            => long.TryParse(context.GetText().Substring(0, context.GetText().Length - 1), out var l)
+            => long.TryParse(context.GetText().AsSpan(0, context.GetText().Length - 1), out var l)
                 ? new ValueParseResult<T>(exprFactory.Long(l), l)
                 : new ValueParseResult<T>(new ParseError($"Unable to parse {l} as long", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
 
@@ -81,7 +81,7 @@ namespace VCEL.Core.Lang
         }
 
         public override ParseResult<T> VisitDateTimeLiteral([NotNull] VCELParser.DateTimeLiteralContext context)
-            => DateTimeOffset.TryParse(context.GetText().Substring(1), out var d)
+            => DateTimeOffset.TryParse(context.GetText().AsSpan(1), out var d)
                 ? new ValueParseResult<T>(exprFactory.DateTimeOffset(d), d)
                 : new ValueParseResult<T>(new ParseError($"Unable to parse {d} as DateTimeOffset", context.GetText(), context.Start.Line, context.Start.StartIndex, context.Stop.StopIndex));
 
@@ -144,7 +144,7 @@ namespace VCEL.Core.Lang
         {
             var left = Visit(context.left);
             var right = Visit(context.right);
-            return Compose(left, right, (l, r) =>
+            return VCELVisitor<T>.Compose(left, right, (l, r) =>
             {
                 return r is ValueParseResult<T> valueParsedSet && valueParsedSet.Value is ISet<object> setValue
                     ? exprFactory.InSet(l, setValue)
@@ -163,7 +163,7 @@ namespace VCEL.Core.Lang
         }
 
         public override ParseResult<T> VisitMatches([NotNull] VCELParser.MatchesContext context)
-            => ComposeWithChildren(context, (childNodes) =>
+            => VCELVisitor<T>.ComposeWithChildren(context, (childNodes) =>
             {
                 var results = childNodes.Select(n => Visit(n)).ToList();
                 if (results.Any(r => !r.Success))
@@ -273,7 +273,7 @@ namespace VCEL.Core.Lang
                 context,
                 e => exprFactory.Function(context.GetChild(0).GetText(), e),
                 context.ChildCount == 3
-                    ? new int[0]
+                    ? []
                     : Enumerable.Range(0, (context.ChildCount - 2) / 2).Select(i => i * 2 + 2).ToArray());
         public override ParseResult<T> VisitMemberExpr([NotNull] VCELParser.MemberExprContext context)
             => Compose(context, (a, b) => exprFactory.Member(a, b), 0, 2);
@@ -302,7 +302,7 @@ namespace VCEL.Core.Lang
         public override ParseResult<T> VisitNot([NotNull] VCELParser.NotContext context)
             => Compose(context, r => exprFactory.Not(r), 1);
 
-        private ParseResult<T> Compose(ParseResult<T> left, ParseResult<T> right, Func<IExpression<T>, IExpression<T>, IExpression<T>> factory)
+        private static ParseResult<T> Compose(ParseResult<T> left, ParseResult<T> right, Func<IExpression<T>, IExpression<T>, IExpression<T>> factory)
         {
             if (!left.Success || !right.Success)
             {
@@ -333,7 +333,7 @@ namespace VCEL.Core.Lang
                 return new ParseResult<T>(f(results.Select(r => r.Expression).ToList()));
             }, nodes);
 
-        private ParseResult<T> ComposeWithChildren(ParserRuleContext context, Func<IReadOnlyList<IParseTree>, ParseResult<T>> f, params int[] nodes)
+        private static ParseResult<T> ComposeWithChildren(ParserRuleContext context, Func<IReadOnlyList<IParseTree>, ParseResult<T>> f, params int[] nodes)
         {
             if (context.exception != null)
             {

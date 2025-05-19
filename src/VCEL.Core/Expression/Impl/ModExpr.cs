@@ -16,7 +16,7 @@ namespace VCEL.Core.Expression.Impl
             var r = rv;
 
             if (lv?.GetType() != rv?.GetType()
-                && !UpCastEx.UpCast(ref l!, ref r!))
+                && !UpCastExtensions.UpCast(ref l!, ref r!))
             {
                 return Monad.Unit;
             }

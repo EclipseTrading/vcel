@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using VCEL.Core.Expression.Impl;
 
@@ -60,8 +61,8 @@ public class DefaultFunctions<T> : IFunctions<T>
         FunctionHelper.RegisterEnsureArgs<T, object>("workday", args => VcelDateTime.Workday(VcelDateTime.ParseWorkdayParams(args)),
             Register, 2, 3, allowNullArgument: false);
 
-        RegisterEnsureOneArg("lowercase", arg => arg?.ToString()?.ToLower());
-        RegisterEnsureOneArg("uppercase", arg => arg?.ToString()?.ToUpper());
+        RegisterEnsureOneArg("lowercase", arg => arg?.ToString()?.ToLower(CultureInfo.InvariantCulture));
+        RegisterEnsureOneArg("uppercase", arg => arg?.ToString()?.ToUpper(CultureInfo.InvariantCulture));
 
         Register("substring", VcelString.Substring);
         RegisterEnsureTwoArgsAllowNull<object?, object?, object?[]?>("split", (arg1, arg2) => VcelString.Split(arg1?.ToString(), arg2?.ToString()));

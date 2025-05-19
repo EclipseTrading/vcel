@@ -32,17 +32,17 @@ namespace VCEL.CSharp
         public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
             => new ToCSharpInOp(Monad, l, r);
 
-        public override IExpression<string> Spread(IExpression<string> expr)
-            => new ToCSharpSpreadOp(Monad, expr);
+        public override IExpression<string> Spread(IExpression<string> list)
+            => new ToCSharpSpreadOp(Monad, list);
 
-        public override IExpression<string> Set(ISet<object> s)
-            => new ToCSharpStringOp((context) => $"(new HashSet<object>{{{string.Join(",", s.Select(x => x is string ? $@"""{x}""" : x?.ToString() ?? "\"null\""))}}})", Monad);
+        public override IExpression<string> Set(ISet<object> set)
+            => new ToCSharpStringOp((context) => $"(new HashSet<object>{{{string.Join(",", set.Select(x => x is string ? $@"""{x}""" : x?.ToString() ?? "\"null\""))}}})", Monad);
 
-        public override IExpression<string> List(IReadOnlyList<IExpression<string>> exprs)
+        public override IExpression<string> List(IReadOnlyList<IExpression<string>> l)
         {
             string GetItems(IContext<string> context) 
             {
-                var lists = exprs.Select(e => e is ToCSharpSpreadOp spread 
+                var lists = l.Select(e => e is ToCSharpSpreadOp spread 
                     ? $"(IEnumerable<object>)(object){e.Evaluate(context)}"
                     : $"new object [] {{ {e.Evaluate(context)} }}");
                 return $@"(new IEnumerable<object>[] {{ {string.Join(", ", lists)} }}.SelectMany(e => e)).ToList()";
@@ -126,8 +126,8 @@ namespace VCEL.CSharp
         public override IExpression<string> Between(IExpression<string> l, IExpression<string> lower, IExpression<string> upper)
             => new ToCSharpBetweenOp(Monad, l, lower, upper);
 
-        public override IExpression<string> Member(IExpression<string> l, IExpression<string> r)
-            => new ToCSharpMemberOp(Monad, l, r);
+        public override IExpression<string> Member(IExpression<string> obj, IExpression<string> memberExpr)
+            => new ToCSharpMemberOp(Monad, obj, memberExpr);
 
         // This makes sure double value doesn't get down casted implicitly to integer.
         public override IExpression<string> Double(double d)

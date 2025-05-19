@@ -21,7 +21,7 @@ namespace VCEL.Core.Expression.Impl
 
         public IEnumerable<IDependency> Dependencies => Enumerable.Empty<IDependency>();
 
-        public TMonad Evaluate(IContext<TMonad> _)
+        public TMonad Evaluate(IContext<TMonad> context)
         {
             return liftedValue;
         }

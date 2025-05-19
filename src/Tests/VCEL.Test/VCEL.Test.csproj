@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AnalysisMode>Default</AnalysisMode>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\VCEL.Core\VCEL.Core.csproj" />
-    <ProjectReference Include="..\..\VCEL.CSharp\VCEL.CSharp.csproj" />
-    <ProjectReference Include="..\..\VCEL.JS\VCEL.JS.csproj" />
-    <ProjectReference Include="..\VCEL.Test.Shared\VCEL.Test.Shared.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="NUnit" />
+        <PackageReference Include="NUnit3TestAdapter" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\VCEL.Core\VCEL.Core.csproj" />
+        <ProjectReference Include="..\..\VCEL.CSharp\VCEL.CSharp.csproj" />
+        <ProjectReference Include="..\..\VCEL.JS\VCEL.JS.csproj" />
+        <ProjectReference Include="..\VCEL.Test.Shared\VCEL.Test.Shared.csproj" />
+    </ItemGroup>
 
 </Project>

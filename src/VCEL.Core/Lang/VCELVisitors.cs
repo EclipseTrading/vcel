@@ -5,7 +5,7 @@ namespace VCEL.Core.Lang
 {
     public class VCELVisitors<T> : IVisitorProvider
     {
-        private readonly IDictionary<System.Type, object> providers = new Dictionary<System.Type, object>();
+        private readonly Dictionary<System.Type, object> providers = [];
 
         public VCELVisitors()
         {

@@ -42,7 +42,7 @@ namespace VCEL.Core.Expression.Impl
             } 
 
             if (lv?.GetType() != rv?.GetType()
-                && !UpCastEx.UpCast(ref l!, ref r!))
+                && !UpCastExtensions.UpCast(ref l!, ref r!))
             {
                 return Monad.Unit;
             }

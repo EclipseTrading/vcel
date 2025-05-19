@@ -4,7 +4,7 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression
 {
-    internal class ToStringBinaryOp : BinaryExprBase<string>
+    internal sealed class ToStringBinaryOp : BinaryExprBase<string>
     {
         private readonly string opName;
 

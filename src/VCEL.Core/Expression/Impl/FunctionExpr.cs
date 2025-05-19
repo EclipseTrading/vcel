@@ -8,7 +8,8 @@ namespace VCEL.Core.Expression.Impl
 {
     public class FunctionExpr<TMonad> : IExpression<TMonad>
     {
-        protected readonly Function<TMonad>? function;
+        protected Function<TMonad>? Function { get; }
+
         public FunctionExpr(
             IMonad<TMonad> monad,
             string name,
@@ -18,14 +19,14 @@ namespace VCEL.Core.Expression.Impl
             Monad = monad;
             Name = name;
             Args = args;
-            this.function = function;
+            this.Function = function;
         }
 
         public IMonad<TMonad> Monad { get; }
         public string Name { get; }
         public IReadOnlyList<IExpression<TMonad>> Args { get; }
         public IEnumerable<IDependency> Dependencies
-            => function?.Dependencies.Union(Args.SelectMany(a => a.Dependencies)).Distinct() ?? Array.Empty<IDependency>();
+            => Function?.Dependencies.Union(Args.SelectMany(a => a.Dependencies)).Distinct() ?? Array.Empty<IDependency>();
 
         public virtual TMonad Evaluate(IContext<TMonad> context)
         {
@@ -45,7 +46,7 @@ namespace VCEL.Core.Expression.Impl
                                 resolved[i] = o;
                                 return EvalInner(i + 1);
                             })
-                        : Monad.Lift(function?.Func(resolved.ToArray(), context));
+                        : Monad.Lift(Function?.Func(resolved.ToArray(), context));
             }
         }
 

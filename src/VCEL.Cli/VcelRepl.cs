@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using VCEL.Core.Lang;
@@ -11,7 +12,7 @@ using VCEL.Monad.Maybe;
 
 namespace VCEL.Cli;
 
-internal class VcelRepl
+internal sealed class VcelRepl
 {
     private const string Name = "VCEL CLI";
     private const string NameFormatted = "[gold1]" + Name + "[/]";
@@ -110,7 +111,8 @@ internal class VcelRepl
             {
                 AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
                     .Insert(parseError.Start, "[red underline]"));
-                AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
+                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, 
+                    "{0} (line {1}, start {2}, stop {3}, token '{4}')",
                     parseError.Message.FormatAsError(),
                     parseError.Line,
                     parseError.Start,
@@ -148,7 +150,8 @@ internal class VcelRepl
         }).EscapeMarkup();
         var formattedValueType = value?.GetType().Name.EscapeMarkup() ?? "null";
         var padding = new string(' ', Console.WindowWidth - (formattedValue.Length + formattedValueType.Length));
-        AnsiConsole.MarkupLine("[gold1]{0}[/]{1}[green3]{2}[/]", formattedValue, padding, formattedValueType);
+        AnsiConsole.MarkupLine(CultureInfo.InvariantCulture,
+            "[gold1]{0}[/]{1}[green3]{2}[/]", formattedValue, padding, formattedValueType);
     }
 
     private static void ToCSharpCode(string input)
@@ -178,7 +181,8 @@ internal class VcelRepl
             {
                 AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
                     .Insert(parseError.Start, "[red underline]"));
-                AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
+                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture,
+                    "{0} (line {1}, start {2}, stop {3}, token '{4}')",
                     parseError.Message.FormatAsError(),
                     parseError.Line,
                     parseError.Start,
@@ -193,7 +197,7 @@ internal class VcelRepl
         AnsiConsole.MarkupLine(outcome.FormatAsValue());
     }
 
-    private void ToJsCode(string input)
+    private static void ToJsCode(string input)
     {
         var jsParserFactory = new ToJsCodeFactory<string>(ConcatStringMonad.Instance);
         var parser = new ExpressionParser<string>(jsParserFactory);
@@ -223,7 +227,8 @@ internal class VcelRepl
             {
                 AnsiConsole.MarkupLine(input.EscapeMarkup().Insert(parseError.Stop + 1, "[/]")
                     .Insert(parseError.Start, "[red underline]"));
-                AnsiConsole.MarkupLine("{0} (line {1}, start {2}, stop {3}, token '{4}')",
+                AnsiConsole.MarkupLine(CultureInfo.InvariantCulture, 
+                    "{0} (line {1}, start {2}, stop {3}, token '{4}')",
                     parseError.Message.FormatAsError(),
                     parseError.Line,
                     parseError.Start,
@@ -416,7 +421,7 @@ internal class VcelRepl
         for (var i = 0; i < history.Count; i++)
         {
             var (expression, parsed, outcome) = history[i];
-            var historyIndex = (history.Count - 1 - i).ToString();
+            var historyIndex = (history.Count - 1 - i).ToString(CultureInfo.InvariantCulture);
             var dependencies = string.Join(
                 ", ", parsed.Expression.Dependencies.Select(dep => $"{dep.Name}({dep.GetType().Name})"));
             historyTable.AddRow(
@@ -430,7 +435,7 @@ internal class VcelRepl
     {
         if (inputParts.Length is 2)
         {
-            var choice = inputParts[1].ToUpper();
+            var choice = inputParts[1].ToUpper(CultureInfo.InvariantCulture);
             mode = choice switch
             {
                 "EXPR" => Mode.EXPR,

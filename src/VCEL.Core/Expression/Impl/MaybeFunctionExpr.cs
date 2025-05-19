@@ -22,7 +22,7 @@ namespace VCEL.Core.Expression.Impl
             var parsedArgs = Args
                 .Select(arg => arg.Evaluate(context).Value);
 
-            return Monad.Lift(function?.Func(parsedArgs.ToArray(), context));
+            return Monad.Lift(Function?.Func(parsedArgs.ToArray(), context));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace VCEL.Core.Lang
             return Compose(lower, upper);
         }
 
-        private Result<(IExpression<T>, IExpression<T>)> Compose(ParseResult<T> item1, ParseResult<T> item2)
+        private static Result<(IExpression<T>, IExpression<T>)> Compose(ParseResult<T> item1, ParseResult<T> item2)
         {
             if (!item1.Success || !item2.Success)
             {

@@ -14,21 +14,21 @@ namespace VCEL.Core.Expression.Impl
         {
         }
 
-        public override T Evaluate(object? l, object? r)
+        public override T Evaluate(object? lv, object? rv)
         {
-            if(l is IComparable cl && r?.GetType() == l?.GetType())
+            if(lv is IComparable cl && rv?.GetType() == lv?.GetType())
             {
-                return Monad.Lift(cl.CompareTo(r) >= 0);
+                return Monad.Lift(cl.CompareTo(rv) >= 0);
             }
 
-            if (l == null || r == null)
+            if (lv == null || rv == null)
             {
                 return Monad.Unit;
             }
 
-            if (UpCastEx.UpCast(ref l, ref r) && l is IComparable lc)
+            if (UpCastExtensions.UpCast(ref lv, ref rv) && lv is IComparable lc)
             {
-                return Monad.Lift(lc.CompareTo(r) >= 0);
+                return Monad.Lift(lc.CompareTo(rv) >= 0);
             }
 
             return Monad.Unit;

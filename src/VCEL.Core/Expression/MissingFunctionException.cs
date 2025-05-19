@@ -2,4 +2,4 @@
 
 namespace VCEL.Expression;
 
-internal class MissingFunctionException(string message) : Exception(message);
+internal sealed class MissingFunctionException(string message) : Exception(message);

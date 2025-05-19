@@ -5,7 +5,7 @@ using VCEL.Monad;
 
 namespace VCEL.Core.Expression
 {
-    internal class ToStringValueExpr<T> : IExpression<string>
+    internal sealed class ToStringValueExpr<T> : IExpression<string>
     {
         private readonly T value;
         private readonly Func<T, IContext<string>, string> convert;

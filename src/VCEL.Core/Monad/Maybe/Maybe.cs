@@ -22,6 +22,8 @@ public readonly struct Maybe<T> : IMaybe<T>
 
     public bool HasValue { get; }
     public T Value { get; }
+#pragma warning disable CA1000
     public static Maybe<T> Some(T value) => new(value);
     public static Maybe<T> None { get; } = new();
+#pragma warning restore CA1000
 }

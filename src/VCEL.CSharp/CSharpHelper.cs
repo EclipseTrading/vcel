@@ -36,7 +36,7 @@ namespace VCEL.CSharp
             var rv = r;
             if (lv.GetType() != rv.GetType())
             {
-                if (!UpCastEx.UpCast(ref lv, ref rv))
+                if (!UpCastExtensions.UpCast(ref lv, ref rv))
                     return false;
             }
 

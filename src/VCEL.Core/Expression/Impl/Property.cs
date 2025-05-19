@@ -6,7 +6,7 @@ namespace VCEL.Core.Expression.Impl
 {
     public class Property<TMonad> : IExpression<TMonad>
     {
-        private readonly IDictionary<Type, IValueAccessor<TMonad>> accessors = new Dictionary<Type, IValueAccessor<TMonad>>();
+        private readonly Dictionary<Type, IValueAccessor<TMonad>> accessors = new();
         private Type? lastType;
         private IValueAccessor<TMonad>? lastAccessor;
 
