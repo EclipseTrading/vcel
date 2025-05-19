@@ -15,6 +15,7 @@
             <Error>true</Error>
             <Listener>false</Listener>
             <Package>VCEL.Core</Package>
+            <!-- Requires Java v11 or later: https://github.com/kaby76/Antlr4BuildTasks -->
             <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
             <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
         </Antlr4>
@@ -22,6 +23,7 @@
             <Error>true</Error>
             <Listener>false</Listener>
             <Package>VCEL.Core.Lang</Package>
+            <!-- Requires Java v11 or later: https://github.com/kaby76/Antlr4BuildTasks -->
             <JavaExec Condition="'$(OS)' == 'Windows_NT'">$(JAVA_HOME)\bin\java.exe</JavaExec>
             <JavaExec Condition="'$(OS)' != 'Windows_NT'">/usr/bin/java</JavaExec>
         </Antlr4>
