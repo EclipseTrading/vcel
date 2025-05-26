@@ -16,13 +16,13 @@ namespace VCEL.CSharp.CodeGen;
 
 public static class CodeGenCSharpClass
 {
-    public static (Type?, EmitResult?) Generate(string name, string csharpExpr)
+    public static (Type?, EmitResult?) Generate(string name, string csharpExpr, string[]? members = null)
     {
-        var src = GenerateFile(name, csharpExpr);
+        var src = GenerateFile(name, csharpExpr, members);
         return GenerateType(name, src);
     }
 
-    private static string GenerateFile(string name, string csharpExpr)
+    private static string GenerateFile(string name, string csharpExpr, string[]? members = null)
     {
         return $@"
                 using System.Collections.Generic;
@@ -36,15 +36,17 @@ public static class CodeGenCSharpClass
 
                 namespace VCEL.CSharp.CodeGen 
                 {{
-                    {GenerateClass(name, csharpExpr)}
+                    {GenerateClass(name, csharpExpr, members)}
                 }}";
     }
 
-    private static string GenerateClass(string name, string csharpExpr)
+    private static string GenerateClass(string name, string csharpExpr, string[]? members = null)
     {
         return $@"
                     public class {name}
                     {{
+                        {(members == null ? string.Empty : string.Join('\n', members))}
+
                         public static object Evaluate(dynamic vcelContext)
                         {{
                             return {csharpExpr};
@@ -76,10 +78,10 @@ public static class CodeGenCSharpClass
         var source = SourceText.From(src);
         var syntaxTree = SyntaxFactory.ParseSyntaxTree(source, null, $"{name}.cs");
         var compilation = CSharpCompilation.Create($"{name}.dll",
-            new[] {syntaxTree},
+            new[] { syntaxTree },
             refs,
             new CSharpCompilationOptions(
-                outputKind:OutputKind.DynamicallyLinkedLibrary,
+                outputKind: OutputKind.DynamicallyLinkedLibrary,
                 optimizationLevel: OptimizationLevel.Release)
         );
         byte[]? image = null;

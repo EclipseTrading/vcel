@@ -8,7 +8,7 @@ internal class ToCSharpStringOp : IExpression<string>
 {
     private readonly Func<IContext<string>, string> funcStr;
 
-    public ToCSharpStringOp(Func<IContext<string>, string> funcStr, IMonad<string> monad)
+    public ToCSharpStringOp(Func<IContext<string>, string> funcStr, IMonad<string> monad, IEnumerable<IDependency>? dependencies = null)
     {
         this.funcStr = funcStr;
         this.Monad = monad;
@@ -16,7 +16,7 @@ internal class ToCSharpStringOp : IExpression<string>
 
     public IMonad<string> Monad { get; }
 
-    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {
