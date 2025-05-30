@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.CSharp;
@@ -8,7 +9,7 @@ namespace VCEL.CSharp;
 public readonly struct CSharpObjectContext : IContext<string>
 {
     private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
-        
+
     public IMonad<string> Monad { get; }
 
     public object Object { get; }
@@ -18,6 +19,17 @@ public readonly struct CSharpObjectContext : IContext<string>
         this.overridePropertyFunc = overridePropertyFunc;
         Monad = monad;
         Object = obj;
+    }
+
+    public CSharpObjectContext WithOverrides(IReadOnlyDictionary<string, Func<string>> overridePropertyFunc)
+    {
+        // Combine the existing overrides with the new ones
+        var combinedOverrides = this.overridePropertyFunc?.ToDictionary() ?? new Dictionary<string, Func<string>>();
+        foreach (var kvp in overridePropertyFunc)
+        {
+            combinedOverrides[kvp.Key] = kvp.Value;
+        }
+        return new CSharpObjectContext(Monad, Object, combinedOverrides);
     }
 
     public IContext<string> OverrideName(string name, string br)
