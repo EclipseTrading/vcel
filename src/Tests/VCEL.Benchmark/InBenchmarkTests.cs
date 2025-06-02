@@ -1,69 +1,71 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
+using VCEL.Core.Helper;
 using VCEL.Core.Lang;
 using VCEL.CSharp;
 
 namespace VCEL.Benchmark;
 
-[SimpleJob(RuntimeMoniker.Net60)]
 [MemoryDiagnoser]
+[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
+[RankColumn]
 public class InBenchmarkTests
 {
-    private static readonly ObjectContext<object> context = new ();
     private readonly IExpression<object?> vcelExpressionFor10Items;
     private readonly IExpression<object?> vcelExpressionFor50Items;
-    private readonly IExpression<object?> vcelExpressionFor100Items;
     private readonly IExpression<object?> csharpExpressionFor10Items;
     private readonly IExpression<object?> csharpExpressionFor50Items;
-    private readonly IExpression<object?> csharpExpressionFor100Items;
+    private readonly IExpression<object?> csharpNextGenExpressionFor10Items;
+    private readonly IExpression<object?> csharpNextGenExpressionFor50Items;
+    record Row(string a);
 
+    private static readonly object testRow = new { a = 1 };
     public InBenchmarkTests()
     {
-        var vcelString10 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 10).Select(i => $"'ABCDE{i}'"))}}}";
-        var vcelString50 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 50).Select(i => $"'ABCDE{i}'"))}}}";
-        var vcelString100 = $"'1' in {{{string.Join(", ", Enumerable.Range(1, 100).Select(i => $"'ABCDE{i}'"))}}}";
+        var vcelString10 = $"a in {{{string.Join(", ", Enumerable.Range(1, 10).Select(i => $"'ABCDE{i}'"))}}}";
+        var vcelString50 = $"a in {{{string.Join(", ", Enumerable.Range(1, 50).Select(i => $"'ABCDE{i}'"))}}}";
         vcelExpressionFor10Items = VCExpression.ParseDefault(vcelString10).Expression;
-        csharpExpressionFor10Items = CSharpExpression.ParseDelegate(vcelString10).Expression;
+        csharpExpressionFor10Items = CSharpExpression.ParseMethod(vcelString10).Expression;
+        csharpNextGenExpressionFor10Items = CSharpExpression.ParseMethodWithMembers(vcelString10).Expression;
         vcelExpressionFor50Items = VCExpression.ParseDefault(vcelString50).Expression;
-        csharpExpressionFor50Items = CSharpExpression.ParseDelegate(vcelString50).Expression;
-        vcelExpressionFor100Items = VCExpression.ParseDefault(vcelString100).Expression;
-        csharpExpressionFor100Items = CSharpExpression.ParseDelegate(vcelString100).Expression;
+        csharpExpressionFor50Items = CSharpExpression.ParseMethod(vcelString50).Expression;
+        csharpNextGenExpressionFor50Items = CSharpExpression.ParseMethodWithMembers(vcelString50).Expression;
     }
         
     [Benchmark]
     public void VcelCsharp10()
     {
-        csharpExpressionFor10Items.Evaluate(context);
+        csharpExpressionFor10Items.Evaluate(testRow);
     }
     
     [Benchmark]
     public void VcelCsharp50()
     {
-        csharpExpressionFor50Items.Evaluate(context);
+        csharpExpressionFor50Items.Evaluate(testRow);
+    }
+        
+    [Benchmark]
+    public void VcelCsharpNextGen10()
+    {
+        csharpNextGenExpressionFor10Items.Evaluate(testRow);
     }
     
     [Benchmark]
-    public void VcelCsharp100()
+    public void VcelCsharpNextGen50()
     {
-        csharpExpressionFor100Items.Evaluate(context);
+        csharpNextGenExpressionFor50Items.Evaluate(testRow);
     }
     
     [Benchmark]
     public void VcelCore10()
     {
-        vcelExpressionFor10Items.Evaluate(context);
+        vcelExpressionFor10Items.Evaluate(testRow);
     }
     
     [Benchmark]
     public void VcelCore50()
     {
-        vcelExpressionFor50Items.Evaluate(context);
-    }
-    
-    [Benchmark]
-    public void VcelCore100()
-    {
-        vcelExpressionFor100Items.Evaluate(context);
+        vcelExpressionFor50Items.Evaluate(testRow);
     }
 }

@@ -30,4 +30,12 @@ public class NewToCSharpCodeFactory : ToCSharpCodeFactory
 
         return new ToCSharpStringOp(GetItems, Monad);
     }
+
+    public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
+    {
+        return new NewToCSharpInOp(Monad, l, Set(set));    
+    }
+
+    public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
+        => new NewToCSharpInOp(Monad, l, r);
 }

@@ -3,9 +3,9 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
 
-internal class ToCSharpInOp : BinaryExprBase<string>
+internal class NewToCSharpInOp : BinaryExprBase<string>
 {
-    public ToCSharpInOp(
+    public NewToCSharpInOp(
         IMonad<string> monad,
         IExpression<string> l,
         IExpression<string> r)
@@ -14,6 +14,6 @@ internal class ToCSharpInOp : BinaryExprBase<string>
     }
     public override string Evaluate(object? lv, object? rv)
     {
-        return Equals(rv, "null") ? "null" : $@"{rv}.Any(elem => TypeOperation.EqualsChecked({lv}, elem))";
+        return Equals(rv, "null") ? "null" : $@"{rv}.Contains({lv})";
     }
 }
