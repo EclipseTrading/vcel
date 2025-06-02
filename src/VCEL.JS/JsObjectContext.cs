@@ -1,23 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.JS;
 
-public class JsObjectContext : IContext<string>
+public sealed class JsObjectContext(
+    IMonad<string> monad,
+    object obj,
+    IReadOnlyDictionary<string, Func<string>>? propertyFunc = null
+) : IContext<string>
 {
-    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
-    
-    public IMonad<string> Monad { get; }
+    public IMonad<string> Monad { get; } = monad;
 
-    public object Object { get; }
-    
-    public JsObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
+    public object Object { get; } = obj;
+
+    public JsObjectContext WithOverrides(IReadOnlyDictionary<string, Func<string>> overridePropertyFunc)
     {
-        this.overridePropertyFunc = overridePropertyFunc;
-        Monad = monad;
-        Object = obj;
+        if (propertyFunc is null)
+        {
+            return new JsObjectContext(Monad, Object, overridePropertyFunc);
+        }
+
+        // Combine the existing overrides with the new ones
+        var combinedOverrides = propertyFunc.ToDictionary();
+        foreach (var kvp in overridePropertyFunc)
+        {
+            combinedOverrides[kvp.Key] = kvp.Value;
+        }
+
+        return new JsObjectContext(Monad, Object, combinedOverrides);
     }
 
     public IContext<string> OverrideName(string name, string br)
@@ -29,13 +42,13 @@ public class JsObjectContext : IContext<string>
 
     public bool TryGetAccessor(string propName, out IValueAccessor<string> accessor)
     {
-        accessor = new JsPropertyValueAccessor(Monad, propName, overridePropertyFunc);
+        accessor = new JsPropertyValueAccessor(Monad, propName, propertyFunc);
         return true;
     }
 
     public bool TryGetContext(object o, out IContext<string> context)
     {
-        context = new JsObjectContext(Monad, o, overridePropertyFunc);
+        context = new JsObjectContext(Monad, o, propertyFunc);
         return true;
     }
 }

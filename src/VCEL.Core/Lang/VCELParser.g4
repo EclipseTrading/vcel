@@ -5,12 +5,7 @@ options {
 }
 
 expression
-	: letexpr EOF
-	| expr EOF
-	;
-
-letexpr
-	: LET assignExpr (COMMA assignExpr)* IN expr
+	: expr EOF
 	;
 
 assignExpr
@@ -18,15 +13,20 @@ assignExpr
 	;
 
 expr
-	: guardExpr #Guard
-	| <assoc=right>expr '?' expr ':' expr #Ternary
-	| booleanExpr #BoolExpr
+  : letexpr #LetExpression
+  | guardExpr #Guard
+  | <assoc=right>expr '?' expr ':' expr #Ternary
+  | booleanExpr #BoolExpr
+  ;
+
+letexpr
+	: LET assignExpr (COMMA assignExpr)* IN expr
 	;
 
 guardClause: BAR test=booleanExpr ASSIGN assign=arithExpr;
 
 guardExpr
-	: MATCH (matcher=ID)? (varName=ID)? 
+	: MATCH (matcher=ID)? (varName=ID)?
 		guardClause+
 		(BAR otherwiseExpr otherwise=arithExpr)?
 	;
@@ -76,7 +76,7 @@ arithExpr
 	;
 
 listItem
-	: arithExpr      
+	: arithExpr
 	| SPREAD arithExpr
 	;
 
