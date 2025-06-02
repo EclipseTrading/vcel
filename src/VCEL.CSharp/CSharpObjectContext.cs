@@ -6,29 +6,30 @@ using VCEL.Monad;
 
 namespace VCEL.CSharp;
 
-public readonly struct CSharpObjectContext : IContext<string>
+public readonly struct CSharpObjectContext(
+    IMonad<string> monad,
+    object obj,
+    IReadOnlyDictionary<string, Func<string>>? propertyFunc = null
+) : IContext<string>
 {
-    private readonly IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc;
+    public IMonad<string> Monad { get; } = monad;
 
-    public IMonad<string> Monad { get; }
-
-    public object Object { get; }
-
-    public CSharpObjectContext(IMonad<string> monad, object obj, IReadOnlyDictionary<string, Func<string>>? overridePropertyFunc = null)
-    {
-        this.overridePropertyFunc = overridePropertyFunc;
-        Monad = monad;
-        Object = obj;
-    }
+    public object Object { get; } = obj;
 
     public CSharpObjectContext WithOverrides(IReadOnlyDictionary<string, Func<string>> overridePropertyFunc)
     {
+        if (propertyFunc is null) 
+        {
+            return new CSharpObjectContext(Monad, Object, overridePropertyFunc);
+        }
+        
         // Combine the existing overrides with the new ones
-        var combinedOverrides = this.overridePropertyFunc?.ToDictionary() ?? new Dictionary<string, Func<string>>();
+        var combinedOverrides = propertyFunc.ToDictionary();
         foreach (var kvp in overridePropertyFunc)
         {
             combinedOverrides[kvp.Key] = kvp.Value;
         }
+
         return new CSharpObjectContext(Monad, Object, combinedOverrides);
     }
 
@@ -41,13 +42,13 @@ public readonly struct CSharpObjectContext : IContext<string>
 
     public bool TryGetAccessor(string propName, out IValueAccessor<string> accessor)
     {
-        accessor = new CSharpPropertyValueAccessor(Monad, propName, overridePropertyFunc);
+        accessor = new CSharpPropertyValueAccessor(Monad, propName, propertyFunc);
         return true;
     }
 
     public bool TryGetContext(object o, out IContext<string> context)
     {
-        context = new CSharpObjectContext(Monad, o, overridePropertyFunc);
+        context = new CSharpObjectContext(Monad, o, propertyFunc);
         return true;
     }
 }
