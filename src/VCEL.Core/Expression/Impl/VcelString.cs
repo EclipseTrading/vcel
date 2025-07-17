@@ -11,7 +11,7 @@ public static class VcelString
 
     public static string? Substring(string? source, int start, int length) =>
         VcelIndexable.WithinBounds(start, source?.Length ?? 0) &&
-        VcelIndexable.WithinBounds(start + length, source?.Length ?? 0)
+        VcelIndexable.WithinBounds(length, source?.Length ?? 0)
             ? source?[start..(start + length)]
             : null;
 

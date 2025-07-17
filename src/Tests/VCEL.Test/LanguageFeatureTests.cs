@@ -10,7 +10,9 @@ public class LanguageFeatureTests
     public void LetOp()
     {
         var exprStr = "let x = 1, y = 2 in x + y";
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new object());
 
         Assert.That(result.HasValue);
@@ -24,6 +26,52 @@ public class LanguageFeatureTests
         }
     }
 
+    [Test]
+    public void NestedLet()
+    {
+        var exprStr = "let x = 1, y = 2 in let z = x + y in z + 1";
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
+        var result = expr.Evaluate(new object());
+
+        Assert.That(result.HasValue);
+        Assert.That(result.Value, Is.EqualTo(4));
+        foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+        {
+            Assert.That(parseResult.Success, Is.True);
+            var expr2 = parseResult.Expression;
+            var result2 = expr2.Evaluate(new object());
+            Assert.That(result2, Is.EqualTo(4));
+        }
+    }
+
+    [Test]
+    public void NestedLetUnderTernary()
+    {
+        var exprStr = "A ? let x = 1, y = 2 in x + y : let z = 3, w = 4 in z + w";
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
+        var resultTrue = expr.Evaluate(new { A = true });
+        var resultFalse = expr.Evaluate(new { A = false });
+
+        Assert.That(resultTrue.HasValue);
+        Assert.That(resultTrue.Value, Is.EqualTo(3));
+        Assert.That(resultFalse.HasValue);
+        Assert.That(resultFalse.Value, Is.EqualTo(7));
+
+        foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
+        {
+            Assert.That(parseResult.Success, Is.True);
+            var expr2 = parseResult.Expression;
+            var result2True = expr2.Evaluate(new { A = true });
+            var result2False = expr2.Evaluate(new { A = false });
+            Assert.That(result2True, Is.EqualTo(3));
+            Assert.That(result2False, Is.EqualTo(7));
+        }
+    }
+    
     [TestCase(-0.01, 0.01)]
     [TestCase(0.04, 0.05)]
     [TestCase(0.21, 0.15)]
@@ -84,7 +132,9 @@ match
     | A < 0.97  = 0.95
     | A >= 0.97 = 0.99";
 
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new { A = a });
         Assert.That(result.HasValue);
         Assert.That(result.Value, Is.EqualTo(expected));
@@ -105,7 +155,7 @@ match
     public void StringLetGuard(double a, double l, string expected)
     {
         var exprStr = @"
-let 
+let
    p = a / l
 in (match
    | p < 0.5  = 'Low'
@@ -114,7 +164,9 @@ in (match
    | p < 1.25 = 'Breach'
    | otherwise 'Critical')
 ";
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new { a, l });
         Assert.That(result.HasValue);
         Assert.That(result.Value, Is.EqualTo(expected));
@@ -147,7 +199,9 @@ in (match
     [TestCase("(A ? B : C) + 1", false, 5, 10, 11)]
     public void TernaryOp(string exprStr, object a, object b, object c, object expected)
     {
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new { A = a, B = b, C = c });
 
         Assert.That(result.HasValue);
@@ -164,7 +218,9 @@ in (match
     [TestCase("A ? B + 1 : C + 2", null, 5, 10)]
     public void TernaryMaybeNone(string exprStr, object a, object b, object c)
     {
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new { A = a, B = b, C = c });
         Assert.That(result.HasValue, Is.False);
     }
@@ -178,7 +234,9 @@ in (match
     [TestCase("null != A ? 1 : 2", null, 2)]
     public void TernaryNullCase(string exprStr, object a, object c)
     {
-        var expr = VCExpression.ParseMaybe(exprStr).Expression;
+        var parsed = VCExpression.ParseMaybe(exprStr);
+        Assert.That(parsed.Success, Is.True);
+        var expr = parsed.Expression;
         var result = expr.Evaluate(new { A = a });
         Assert.That(result.HasValue, Is.True);
         if (result.HasValue)
