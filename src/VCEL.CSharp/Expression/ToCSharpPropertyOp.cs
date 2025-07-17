@@ -6,26 +6,26 @@ namespace VCEL.CSharp.Expression;
 
 internal class ToCSharpPropertyOp : IExpression<string>
 {
-    private readonly string name;
 
     public ToCSharpPropertyOp(string name, IMonad<string> monad)
     {
-        this.name = name;
+        Name = name;
         this.Monad = monad;
     }
 
+    public string Name { get; }
     public IMonad<string> Monad { get; }
 
     public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {
-        if (context.TryGetAccessor(name, out var accessor))
+        if (context.TryGetAccessor(Name, out var accessor))
         {
             var result = accessor.GetValue(context);
             return result;
         }
 
-        return name;
+        return Name;
     }
 }

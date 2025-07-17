@@ -11,31 +11,12 @@ public class NewToCSharpCodeFactory : ToCSharpCodeFactory
     {
     }
 
-    public override IExpression<string> Set(ISet<object> set)
-     => new ToCSharpSetOp(set, Monad);
+    public override IExpression<string> Set(ISet<object> set) => new ToCSharpSetOp(Monad, set);
 
-    public override IExpression<string> List(IReadOnlyList<IExpression<string>> l)
+    public override IExpression<string> In(IExpression<string> l, IExpression<string> r) => (l, r) switch
     {
-        string GetItems(IContext<string> context)
-        {
-            var lists = l.Select(e => e switch
-            {
-                ToCSharpSpreadOp spread => $"(IEnumerable<object>)(object){e.Evaluate(context)}",
-                ToCSharpSetOp set => $".. {e.Evaluate(context)}",
-                _ => $"new object [] {{ {e.Evaluate(context)} }}"
-            });
-
-            return $@"(new IEnumerable<object>[] {{ {string.Join(", ", lists)} }}.SelectMany(e => e)).ToList()";
-        }
-
-        return new ToCSharpStringOp(GetItems, Monad);
-    }
-
-    public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-    {
-        return new NewToCSharpInOp(Monad, l, Set(set));    
-    }
-
-    public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
-        => new NewToCSharpInOp(Monad, l, r);
+        (ToCSharpPropertyOp pro, ToCSharpSetOp set) when set.Set.All(i => i is string) => new ToCSharpInStringSetOp(Monad, pro, set),
+        (ToCSharpPropertyOp pro, ToCSharpSetOp set) when set.Set.All(CSharpHelper.IsNumber) => new ToCSharpInNumericSetOp(Monad, pro, set),
+        _ => base.In(l, r)
+    };
 }
