@@ -5,9 +5,9 @@ using VCEL.CSharp.Expression;
 using VCEL.Monad;
 
 namespace VCEL.CSharp;
-public class NewToCSharpCodeFactory : ToCSharpCodeFactory
+public sealed class AdvanceToCSharpCodeFactory : ToCSharpCodeFactory
 {
-    public NewToCSharpCodeFactory(IMonad<string> monad, IFunctions<string>? functions = null) : base(monad, functions)
+    public AdvanceToCSharpCodeFactory(IMonad<string> monad, IFunctions<string>? functions = null) : base(monad, functions)
     {
     }
 

@@ -53,8 +53,12 @@ public static class CSharpExpression
     public static ParseResult<object?> ParseMethodWithMembers(string exprString, IFunctions<string>? functions = null)
     {
         var parseResult = CSharpMemberParser(functions).Parse(exprString);
-        var expr = parseResult.Expression;
+        if (!parseResult.Success)
+        {
+            return new ParseResult<object?>(parseResult.ParseErrors);
+        }
 
+        var expr = parseResult.Expression;
         var members = expr.Dependencies.OfType<CSharpMemberDependency>().Select(c => c.Declaration).ToArray();
 
         var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
@@ -127,5 +131,5 @@ public static class CSharpExpression
         => new(new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
 
     private static ExpressionParser<string> CSharpMemberParser(IFunctions<string>? functions = null)
-        => new(new NewToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
-} 
+        => new(new AdvanceToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
+}
