@@ -13,7 +13,7 @@ internal sealed class ToCSharpLetExpr(
 {
     public IMonad<string> Monad { get; } = monad;
 
-    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {

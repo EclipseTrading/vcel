@@ -12,7 +12,6 @@ internal class ToCSharpInOp : BinaryExprBase<string>
         : base(monad, l, r)
     {
     }
-
     public override string Evaluate(object? lv, object? rv)
     {
         return Equals(rv, "null") ? "null" : $@"{rv}.Any(elem => TypeOperation.EqualsChecked({lv}, elem))";

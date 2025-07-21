@@ -20,7 +20,7 @@ public static class CSharpExpression
         if (!parseResult.Success)
             return new ParseResult<string>(parseResult.ParseErrors);
 
-        var csharpString =  parseResult.Expression.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var csharpString = parseResult.Expression.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
         return new ParseResult<string>(new CSharpStringExpr(null!, csharpString));
     }
 
@@ -49,16 +49,46 @@ public static class CSharpExpression
         return new ParseResult<object?>(new CSharpMethodExpr(null!, method));
     }
 
+    // For functional testing
+    public static ParseResult<object?> ParseMethodWithMembers(string exprString, IFunctions<string>? functions = null)
+    {
+        var parseResult = CSharpMemberParser(functions).Parse(exprString);
+        if (!parseResult.Success)
+        {
+            return new ParseResult<object?>(parseResult.ParseErrors);
+        }
+
+        var expr = parseResult.Expression;
+        var members = expr.Dependencies.OfType<CSharpMemberDependency>().Select(c => c.Declaration).ToArray();
+
+        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr, members);
+        if (type == null)
+            return new ParseResult<object?>(emitResult!.Diagnostics.Select(
+                x => new ParseError(
+                    x.GetMessage(CultureInfo.CurrentCulture),
+                    x.Id,
+                    x.Location.GetLineSpan().StartLinePosition.Line,
+                    x.Location.GetLineSpan().StartLinePosition.Line,
+                    x.Location.GetLineSpan().EndLinePosition.Line)).ToList());
+
+        var method = type.GetMethod("Evaluate");
+        if (method == null)
+            throw new Exception("Method not found");
+        return new ParseResult<object?>(new CSharpMethodExpr(null!, method));
+    }
+
     // For performance testing
     public static ParseResult<object?> ParseDelegate(string exprString, IFunctions<string>? functions = null)
     {
         var parseResult = CSharpParser(functions).Parse(exprString);
         var expr = parseResult.Expression;
 
+        var members = expr.Dependencies.OfType<CSharpMemberDependency>().Select(c => c.Declaration).ToArray();
         var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
-        var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr);
+        var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr, members);
         if (type == null)
-            return  new ParseResult<object?>(emitResult!.Diagnostics.Select(
+            return new ParseResult<object?>(emitResult!.Diagnostics.Select(
                 x => new ParseError(
                     x.GetMessage(CultureInfo.CurrentCulture),
                     x.Id,
@@ -68,10 +98,38 @@ public static class CSharpExpression
 
         var method = type.GetMethod("Evaluate");
         Debug.Assert(method != null, nameof(method) + " != null");
-        var func = (Func<object?, object?>) Delegate.CreateDelegate(typeof(Func<object?, object?>), null, method);
+        var func = (Func<object?, object?>)Delegate.CreateDelegate(typeof(Func<object?, object?>), null, method);
+        return new ParseResult<object?>(new CSharpDelegateExpr(null!, func));
+    }
+
+    // For performance testing
+    public static ParseResult<object?> ParseDelegateWithMembers(string exprString, IFunctions<string>? functions = null)
+    {
+        var parseResult = CSharpMemberParser(functions).Parse(exprString);
+        var expr = parseResult.Expression;
+
+        var members = expr.Dependencies.OfType<CSharpMemberDependency>().Select(c => c.Declaration).ToArray();
+
+        var csharpExpr = expr.Evaluate(new CSharpObjectContext(ConcatStringMonad.Instance, Constants.DefaultContext));
+        var (type, emitResult) = CodeGenCSharpClass.Generate("VcelTesting", csharpExpr, members);
+        if (type == null)
+            return new ParseResult<object?>(emitResult!.Diagnostics.Select(
+                x => new ParseError(
+                    x.GetMessage(CultureInfo.CurrentCulture),
+                    x.Id,
+                    x.Location.GetLineSpan().StartLinePosition.Line,
+                    x.Location.GetLineSpan().StartLinePosition.Line,
+                    x.Location.GetLineSpan().EndLinePosition.Line)).ToList());
+
+        var method = type.GetMethod("Evaluate");
+        Debug.Assert(method != null, nameof(method) + " != null");
+        var func = (Func<object?, object?>)Delegate.CreateDelegate(typeof(Func<object?, object?>), null, method);
         return new ParseResult<object?>(new CSharpDelegateExpr(null!, func));
     }
 
     private static ExpressionParser<string> CSharpParser(IFunctions<string>? functions = null)
         => new(new ToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
+
+    private static ExpressionParser<string> CSharpMemberParser(IFunctions<string>? functions = null)
+        => new(new AdvanceToCSharpCodeFactory(ConcatStringMonad.Instance, functions ?? new DefaultCSharpFunctions()));
 }

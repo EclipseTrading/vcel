@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
@@ -23,7 +24,7 @@ internal class ToCSharpTernary : IExpression<string>
 
     public IMonad<string> Monad { get; }
 
-    public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => condition.Dependencies.Union(trueExpr.Dependencies).Union(falseExpr.Dependencies);
 
     public string Evaluate(IContext<string> context)
     {

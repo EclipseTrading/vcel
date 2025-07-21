@@ -17,7 +17,7 @@ internal class ToCSharpPowOp : IExpression<string>
 
     public IMonad<string> Monad { get; }
 
-    public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {

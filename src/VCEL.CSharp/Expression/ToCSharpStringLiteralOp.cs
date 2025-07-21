@@ -19,7 +19,7 @@ internal class ToCSharpStringLiteralOp : IExpression<string>
         this.str = ToLiteral(str);
     }
 
-    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {

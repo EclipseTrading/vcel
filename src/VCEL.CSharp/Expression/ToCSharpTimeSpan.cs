@@ -16,7 +16,7 @@ internal class ToCSharpTimeSpan : IExpression<string>
 
     public IMonad<string> Monad { get; }
 
-    public IEnumerable<IDependency> Dependencies => throw new NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => [];
 
     public string Evaluate(IContext<string> context)
     {

@@ -21,12 +21,12 @@ internal class ToCSharpGuardExpr : IExpression<string>
 
     public IMonad<string> Monad { get; }
 
-    public IEnumerable<IDependency> Dependencies => throw new System.NotImplementedException();
+    public IEnumerable<IDependency> Dependencies => guardClauses.SelectMany(g => g.Item1.Dependencies.Union(g.Item2.Dependencies)).Union(otherwise?.Dependencies ?? []);
 
     public string Evaluate(IContext<string> context)
     {
         var guardCases = guardClauses.Select(gc => $"({gc.Item1.Evaluate(context)}) ? ({gc.Item2.Evaluate(context)}) : ").ToList();
-        var otherCase =  otherwise == null ? "default" : $"({otherwise.Evaluate(context)})";
+        var otherCase = otherwise == null ? "default" : $"({otherwise.Evaluate(context)})";
         guardCases.Add(otherCase);
 
         var result = $"({string.Join(" ", guardCases.ToArray())})";
