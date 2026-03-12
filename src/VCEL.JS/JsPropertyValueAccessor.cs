@@ -41,7 +41,7 @@ public readonly struct JsPropertyValueAccessor : IValueAccessor<string>
         }
 
         string finalPropOrMethod = propName;
-        if (Regex.Match(context.Value, jsDateObjPattern).Success && jsDatePropertyMethods.TryGetValue(propName, out var jsDateMethod))
+        if (Regex.IsMatch(context.Value, jsDateObjPattern) && jsDatePropertyMethods.TryGetValue(propName, out var jsDateMethod))
         {
             finalPropOrMethod = jsDateMethod;
         }

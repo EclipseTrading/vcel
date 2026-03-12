@@ -241,14 +241,14 @@ in (match
         Assert.That(result.HasValue, Is.True);
         if (result.HasValue)
         {
-            Assert.AreEqual(c, result.Value);
+            Assert.That(result.Value, Is.EqualTo(c));
         }
 
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
         {
             var expr2 = parseResult.Expression;
             var result2 = expr2.Evaluate(new { A = a });
-            Assert.AreEqual(result2, c);
+            Assert.That(result2, Is.EqualTo(c));
         }
     }
 }

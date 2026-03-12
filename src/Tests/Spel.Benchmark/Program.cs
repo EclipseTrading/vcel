@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
@@ -22,23 +21,13 @@ class Program
             .AddLogger(new ConsoleLogger())
             .AddColumn(new RankColumn(NumeralSystem.Roman))
             .AddJob(Job.ShortRun
-                .AsBaseline()
-                .WithRuntime(CoreRuntime.Core60)
-                // .WithToolchain(InProcessNoEmitToolchain.Instance)
-                .WithWarmupCount(3)
-                .WithIterationCount(3)
-                .WithIterationTime(TimeInterval.FromMilliseconds(200))
-            )
-            .AddJob(Job.ShortRun
-                .WithRuntime(CoreRuntime.Core80)
-                // .WithToolchain(InProcessNoEmitToolchain.Instance)
                 .WithWarmupCount(3)
                 .WithIterationCount(3)
                 .WithIterationTime(TimeInterval.FromMilliseconds(200))
             );
 
         _ = BenchmarkSwitcher
-            .FromTypes(new[] { typeof(LogicalEvaluatorBenchmarks) })
-            .Run(args);
+            .FromTypes(new[] { typeof(LogicalEvaluatorBenchmarks), typeof(ParserBenchmarks) })
+            .Run(args, config);
     }
 }

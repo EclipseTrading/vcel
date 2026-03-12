@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using VCEL.Core.Lang;
 using VCEL.Expression;
 using VCEL.JS;
@@ -7,7 +6,6 @@ using VCEL.Test.Shared;
 
 namespace VCEL.Benchmark;
 
-[SimpleJob(RuntimeMoniker.Net60)]
 [MemoryDiagnoser]
 public class JscodeParserBenchmarkTests
 {

@@ -1,10 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using VCEL.Core.Expression.Impl;
 
 namespace VCEL.Benchmark;
 
-[SimpleJob(RuntimeMoniker.Net60)]
 [MemoryDiagnoser]
 public class TypeOperationBenchmarkTests
 {

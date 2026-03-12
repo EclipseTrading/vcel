@@ -34,14 +34,14 @@ public class ExternalFunctionTests
     public void AccessContextMemberFunction()
     {
         var parseResult = parser.Parse("GetValue()");
-        Assert.AreEqual(true, parseResult.Success);
+        Assert.That(parseResult.Success, Is.True);
 
 
         var obj = new TestObj("AccessContextMemberFunction");
         var result = parseResult.Expression.Evaluate(obj);
 
-        Assert.AreEqual(true, result.HasValue);
-        Assert.AreEqual("AccessContextMemberFunction", result.Value);
+        Assert.That(result.HasValue, Is.True);
+        Assert.That(result.Value, Is.EqualTo("AccessContextMemberFunction"));
     }
 }
 

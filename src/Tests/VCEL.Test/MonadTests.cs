@@ -102,7 +102,7 @@ in match
 
         var parser = new ExpressionParser<string>(exprFactory);
         var parsed = parser.Parse(expression);
-        Assert.That(parsed.Success, string.Join('\n', parsed.ParseErrors), Is.True);
+        Assert.That(parsed.Success, Is.True, string.Join('\n', parsed.ParseErrors));
 
         var expr = parsed.Expression;
         var result = expr.Evaluate(new { A = 0.5d });

@@ -21,7 +21,14 @@ public class DefaultOperatorTests
     public void Add(object l, object r, object expected)
     {
         var res = add.Evaluate(l, r);
-        Assert.That(res, Is.EqualTo(expected).Within(0.000001));
+        if (expected is string)
+        {
+            Assert.That(res, Is.EqualTo(expected));
+        }
+        else
+        {
+            Assert.That(res, Is.EqualTo(expected).Within(0.000001));
+        }
     }
 
     [TestCase(0, 0, 0)]

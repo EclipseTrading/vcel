@@ -12,10 +12,10 @@ public class EmptyExpressionTest
     public void TestEmptyExpr(string exprString)
     {
         var maybeExpr = VCExpression.ParseMaybe(exprString);
-        Assert.IsFalse(maybeExpr.Success);
+        Assert.That(maybeExpr.Success, Is.False);
         foreach (var expr in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.IsFalse(expr.Success);
+            Assert.That(expr.Success, Is.False);
         }
     }
 }

@@ -24,7 +24,7 @@ public class ComparisonOpTests
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprStr))
         {
             var result = parseResult.Expression.Evaluate(obj);
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 
@@ -264,13 +264,13 @@ public class ComparisonOpTests
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(parseResult.Success);
+            Assert.That(parseResult.Success, Is.True);
         }
 
         var parsedMaybe = VCExpression.ParseMaybe(exprString);
-        Assert.True(parsedMaybe.Success);
+        Assert.That(parsedMaybe.Success, Is.True);
         var maybeResult = parsedMaybe.Expression.Evaluate(new { });
-        Assert.False(maybeResult.HasValue);
+        Assert.That(maybeResult.HasValue, Is.False);
     }
 
     [TestCase("'ABC' matches 'A'", true)]
@@ -426,25 +426,25 @@ public class ComparisonOpTests
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(parseResult.Success, $"Default expression parse failed: {String.Join(", ", parseResult.ParseErrors.Select(err => err.Message))}");
+            Assert.That(parseResult.Success, Is.True, $"Default expression parse failed: {String.Join(", ", parseResult.ParseErrors.Select(err => err.Message))}");
             var result = parseResult.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(0.0001), "Default expression evaluated");
+            Assert.That(result, Is.EqualTo(expected), "Default expression evaluated");
         }
 
         var maybeExpr = VCExpression.ParseMaybe(exprString);
-        Assert.True(maybeExpr.Success, "Maybe expression parse");
+        Assert.That(maybeExpr.Success, Is.True, "Maybe expression parse");
         var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
         Assert.That(maybeResult.HasValue, Is.EqualTo(expected != null), "Maybe expression evaluate has value");
-        Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(0.0001), "Maybe expression evaluated");
+        Assert.That(maybeResult.Value, Is.EqualTo(expected), "Maybe expression evaluated");
     }
 
     private void CompareDefault(string exprString, bool expected, object? o = null)
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(parseResult.Success);
+            Assert.That(parseResult.Success, Is.True);
             var result = parseResult.Expression.Evaluate(o ?? new { });
-            Assert.That(result, Is.EqualTo(expected).Within(0.0001));
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 
@@ -459,16 +459,16 @@ public class ComparisonOpTests
     {
         foreach (var parseResult in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(parseResult.Success);
+            Assert.That(parseResult.Success, Is.True);
             var result = parseResult.Expression.Evaluate(o ?? new { });
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         var maybeExpr = VCExpression.ParseMaybe(exprString);
-        Assert.True(maybeExpr.Success);
+        Assert.That(maybeExpr.Success, Is.True);
         var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
-        Assert.True(maybeResult.HasValue);
-        Assert.AreEqual(expected, maybeResult.Value);
+        Assert.That(maybeResult.HasValue, Is.True);
+        Assert.That(maybeResult.Value, Is.EqualTo(expected));
     }
 
     [Test]

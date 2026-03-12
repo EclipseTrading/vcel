@@ -2,11 +2,14 @@
 
     <PropertyGroup>
         <AnalysisMode>Default</AnalysisMode>
+        <!-- Suppress NUnit1001 for TestCase attributes with null values - these are valid test cases -->
+        <NoWarn>$(NoWarn);NUnit1001</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <PackageReference Include="NUnit" />
+        <PackageReference Include="NUnit.Analyzers" />
         <PackageReference Include="NUnit3TestAdapter" />
     </ItemGroup>
 

@@ -31,7 +31,7 @@ public class ParserBenchmarks
         var expr = vcelDefaultParser.Parse(exprString);
     }
 
-    [Benchmark(Baseline = true)]
+    [Benchmark]
     public void ParseMaxWithSpel()
     {
         var exprString = "max('C', 'B', 'A')";

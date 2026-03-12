@@ -9,8 +9,8 @@ public class TypeOperationTests
     [TestCaseSource(nameof(Cases))]
     public void ShouldTest(object left, object right, bool expected)
     {
-        Assert.AreEqual(expected, TypeOperation.EqualsChecked(left, right), "Left Right");
-        Assert.AreEqual(expected, TypeOperation.EqualsChecked(right, left), "Right Left");
+        Assert.That(TypeOperation.EqualsChecked(left, right), Is.EqualTo(expected), "Left Right");
+        Assert.That(TypeOperation.EqualsChecked(right, left), Is.EqualTo(expected), "Right Left");
     }
 
     public static object?[] Cases =

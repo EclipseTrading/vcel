@@ -150,15 +150,15 @@ public class OperatorTests
     {
         foreach (var expr in CompositeExpression.ParseMultiple(exprString))
         {
-            Assert.True(expr.Success, "Default expression parse");
+            Assert.That(expr.Success, Is.True, "Default expression parse");
             var result = expr.Expression.Evaluate(o ?? new { });
             Assert.That(result, Is.EqualTo(expected).Within(precision), "Default expression evaluated");
         }
 
         var maybeExpr = VCExpression.ParseMaybe(exprString);
-        Assert.True(maybeExpr.Success, "Maybe expression parse");
+        Assert.That(maybeExpr.Success, Is.True, "Maybe expression parse");
         var maybeResult = maybeExpr.Expression.Evaluate(o ?? new { });
-        Assert.True(maybeResult.HasValue, "Maybe expression evaluate has value");
+        Assert.That(maybeResult.HasValue, Is.True, "Maybe expression evaluate has value");
         Assert.That(maybeResult.Value, Is.EqualTo(expected).Within(precision), "Maybe expression evaluated");
     }
 }

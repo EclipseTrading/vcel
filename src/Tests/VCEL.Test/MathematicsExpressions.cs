@@ -109,7 +109,7 @@ public class MathematicsExpressions
             var expr = parseResult.Expression;
 
             var result = expr.Evaluate(o1);
-            Assert.IsNull(result);
+            Assert.That(result, Is.Null);
         }
 
         var parseResult2 = VCExpression.ParseMaybe(exprStr);
@@ -118,6 +118,6 @@ public class MathematicsExpressions
         var expr2 = parseResult2.Expression;
 
         var result2 = expr2.Evaluate(new { });
-        Assert.IsFalse(result2.HasValue);
+        Assert.That(result2.HasValue, Is.False);
     }
 }

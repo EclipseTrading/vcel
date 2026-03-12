@@ -57,9 +57,9 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
+        Assert.That(result.Success, Is.True);
         Console.WriteLine(parsedExpr);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("(a + b) * c -(d - f)/g",
@@ -69,8 +69,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
 
@@ -81,8 +81,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("!value.a.b.c", "!vcelContext.value.a.b.c")]
@@ -95,9 +95,9 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
+        Assert.That(result.Success, Is.True);
         Console.WriteLine(parsedExpr);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("@2020-03-04T08:35:15.341Z.Year", "(new Date(1583310915341)).getFullYear()")]
@@ -108,8 +108,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("now()", "(new Date())")]
@@ -203,8 +203,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("a > b", "(vcelContext.a > vcelContext.b)")]
@@ -225,8 +225,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("a ? b : c", "(vcelContext.a ? vcelContext.b : vcelContext.c)")]
@@ -236,8 +236,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("buyerParticipants in {'MOR', 'BBY', 'CAM'}", "['MOR','BBY','CAM'].includes(vcelContext.buyerParticipants)")]
@@ -247,8 +247,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
 
@@ -279,8 +279,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
 
@@ -307,8 +307,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("2 between {1, 3}", "2 >= 1 && 2 <= 3")]
@@ -328,8 +328,8 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 
     [TestCase("2 in [ ...a, b, 'c' ]", "[...vcelContext.a,vcelContext.b,'c'].includes(2)")]
@@ -338,7 +338,7 @@ public class ToJsCodeTests
         var result = parser.Parse(expr);
         var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
 
-        Assert.AreEqual(result.Success, true);
-        Assert.AreEqual(expected, parsedExpr);
+        Assert.That(result.Success, Is.True);
+        Assert.That(parsedExpr, Is.EqualTo(expected));
     }
 }
