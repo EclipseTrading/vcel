@@ -54,6 +54,7 @@ public interface IExpressionFactory<T>
 
     // Variables
     IExpression<T> Property(string name);
+    IExpression<T> Variable(string name);
 
     // Functions
     IExpression<T> Function(string name, IReadOnlyList<IExpression<T>> args);

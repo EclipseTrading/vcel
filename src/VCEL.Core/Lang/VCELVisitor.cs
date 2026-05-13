@@ -38,6 +38,9 @@ public class VCELVisitor<T> : BaseVisitor<ParseResult<T>>
     public override ParseResult<T> VisitProperty([NotNull] VCELParser.PropertyContext context)
         => new ParseResult<T>(exprFactory.Property(context.GetText()));
 
+    public override ParseResult<T> VisitVariable(VCELParser.VariableContext context)
+        => new ParseResult<T>(exprFactory.Variable(context.GetText()));
+
     public override ParseResult<T> VisitDoubleLiteral([NotNull] VCELParser.DoubleLiteralContext context)
         => double.TryParse(context.GetText(), out var d)
             ? new ValueParseResult<T>(exprFactory.Double(d), d)
