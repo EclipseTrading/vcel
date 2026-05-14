@@ -14,7 +14,7 @@ public class Variable<TMonad> : IExpression<TMonad>
     {
         this.VariableName = variableName.TrimStart('#');
         Monad = monad;
-        this.Dependencies = [];
+        this.Dependencies = [new VariableDependency(this.VariableName)];
     }
 
     public IMonad<TMonad> Monad { get; }

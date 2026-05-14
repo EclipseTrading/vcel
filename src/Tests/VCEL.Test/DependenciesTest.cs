@@ -65,4 +65,36 @@ public class DependenciesTest
         var deps = expr.Expression.Dependencies.ToList();
         Assert.That(deps, Is.Empty);
     }
+
+    [Test]
+    public void VariableDep()
+    {
+        var expr = VCExpression.ParseDefault("#X + 1");
+        var deps = expr.Expression.Dependencies.ToList();
+        Assert.That(deps, Is.EquivalentTo(new IDependency[] { new VariableDependency("X") }));
+    }
+
+    [Test]
+    public void MultipleVariableDeps()
+    {
+        var expr = VCExpression.ParseDefault("#X + #Y");
+        var deps = expr.Expression.Dependencies.ToList();
+        Assert.That(deps, Is.EquivalentTo(new IDependency[] { new VariableDependency("X"), new VariableDependency("Y") }));
+    }
+
+    [Test]
+    public void MixedPropertyAndVariableDeps()
+    {
+        var expr = VCExpression.ParseDefault("A + #X");
+        var deps = expr.Expression.Dependencies.ToList();
+        Assert.That(deps, Is.EquivalentTo(new IDependency[] { new PropDependency("A"), new VariableDependency("X") }));
+    }
+
+    [Test]
+    public void VariableInTernary()
+    {
+        var expr = VCExpression.ParseDefault("#X ? A : #Y");
+        var deps = expr.Expression.Dependencies.ToList();
+        Assert.That(deps, Is.EquivalentTo(new IDependency[] { new VariableDependency("X"), new PropDependency("A"), new VariableDependency("Y") }));
+    }
 }
