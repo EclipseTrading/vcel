@@ -78,6 +78,7 @@ public class MonadTests
     [TestCase("42.09:00:00.123")]
     [TestCase("1.00:00:00.000")]
     [TestCase("func(1, 2, 'hello')")]
+    [TestCase("a in #b")]
     [TestCase(@"match
 | value < 1 = 0
 | value < 10 = 5

@@ -96,6 +96,9 @@ public class ExpressionFactory<T> : IExpressionFactory<T>
 
     public virtual IExpression<T> Property(string name)
         => new Property<T>(Monad, name);
+    
+    public IExpression<T> Variable(string name) 
+        => new Variable<T>(Monad, name);
 
     public virtual IExpression<T> Paren(IExpression<T> expr)
         => new ParenExpr<T>(Monad, expr);

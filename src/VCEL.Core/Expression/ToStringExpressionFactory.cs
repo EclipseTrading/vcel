@@ -21,6 +21,9 @@ public class ToStringExpressionFactory : IExpressionFactory<string>
     public IExpression<string> Property(string name)
         => new ToStringValueExpr<string>(monad, name, (value, _) => value);
 
+    public IExpression<string> Variable(string name)
+        => new ToStringValueExpr<string>(monad, name, (value, _) => value);
+
     public IExpression<string> Add(IExpression<string> l, IExpression<string> r)
         => new ToStringBinaryOp(monad, P.PLUS, l, r);
 
