@@ -19,6 +19,7 @@ public class LiteralTests
     [TestCase("5.5", 5.5d)]
     [TestCase("(true)", true)]
     [TestCase("('ABC')", "ABC")]
+    [TestCase("'''ABC'''", "'ABC'")]
     [TestCase("(1)", 1)]
     [TestCase("(1L)", 1L)]
     [TestCase("(0.5f)", 0.5f)]
