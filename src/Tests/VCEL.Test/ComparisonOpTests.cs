@@ -281,6 +281,7 @@ public class ComparisonOpTests
     [TestCase("(null + 'Y') ~ ('Y' + null)", true)]
     [TestCase("'\\' matches '\\'", true)]
     [TestCase("'\\' ~ '\\'", true)]
+    [TestCase("'1' ~ '\\'", false)]
     [TestCase("'ABC' matches 'A.*'", true)]
     [TestCase("'A' + 'BC' matches 'A.*'", true)]
     [TestCase("'X' matches 'Y.*'", false)]

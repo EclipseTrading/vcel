@@ -15,10 +15,6 @@ internal class ToCSharpMatchesOp : BinaryExprBase<string>
 
     public override string Evaluate(object? lv, object? rv)
     {
-        if (Equals(rv, "null") || Equals(lv, "null"))
-            return "false";
-
-        var pattern = $"{rv?.ToString()?.Trim('\'')}";
-        return $"(new Regex({pattern}).Match({lv}).Success)";
+        return $"(CSharpHelper.Matches({lv}, {rv}))";
     }
 }

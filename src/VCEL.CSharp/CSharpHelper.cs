@@ -7,6 +7,12 @@ namespace VCEL.CSharp;
 // They are used in code-gen csharp code so won't show up in normal 'usage' list in your IDE
 public static class CSharpHelper
 {
+    public static bool Matches(object? value, object? pattern)
+    {
+        return value is string input && pattern is string regexPattern
+            && (RegexHelper.CreateRegexPattern(regexPattern)?.IsMatch(input) ?? false);
+    }
+
     public static bool IsBetween<T>(T item, T start, T end)
     {
         return UpCastCompare(item, start, ">=") && UpCastCompare(item, end, "<=");
