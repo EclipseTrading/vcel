@@ -5,6 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Snapshots\CSharpCode.json" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnit3TestAdapter" />
