@@ -28,7 +28,7 @@ public readonly struct CSharpPropertyValueAccessor : IValueAccessor<string>
         }
 
         var finalPropOrMethod = $"({context.Value}.{propName})";
-        return monad.Lift($"(CSharpHelper.IsNumber({finalPropOrMethod}) " +
+        return monad.Lift($"(CSharpHelper.IsNumber((object)({finalPropOrMethod})) " +
                           $"? ((double)({finalPropOrMethod})) " +
                           $": ({finalPropOrMethod}))");
     }
