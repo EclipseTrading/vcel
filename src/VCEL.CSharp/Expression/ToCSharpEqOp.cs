@@ -15,6 +15,7 @@ internal class ToCSharpEqOp : BinaryExprBase<string>
 
     public override string Evaluate(object? lv, object? rv)
     {
-        return $"TypeOperation.EqualsChecked({lv}, {rv})";
+        // Keep the call statically bound so dynamic operands do not box its Boolean result.
+        return $"TypeOperation.EqualsChecked((object)({lv}), (object)({rv}))";
     }
 }
