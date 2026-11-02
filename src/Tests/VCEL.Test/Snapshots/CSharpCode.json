@@ -377,112 +377,112 @@
   {
     "Name": "ConditionalEqualityNull",
     "Expression": "Flag ? Code=='A' : null",
-    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null)"
+    "CSharp": "(((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null)"
   },
   {
     "Name": "ConditionalInequalityNull",
     "Expression": "Flag ? Code!='A' : null",
-    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null)"
+    "CSharp": "(((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null)"
   },
   {
     "Name": "ConditionalNullEquality",
     "Expression": "Flag ? null : Code=='A'",
-    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"))"
+    "CSharp": "(((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? null : TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")))"
   },
   {
     "Name": "ConditionalNullInequality",
     "Expression": "Flag ? null : Code!='A'",
-    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"))"
+    "CSharp": "(((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? null : !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")))"
   },
   {
     "Name": "ConditionalLiteralEquality",
     "Expression": "true ? 1==1 : null",
-    "CSharp": "((true ?? false) ? TypeOperation.EqualsChecked(1, 1) : null)"
+    "CSharp": "(((bool?)(true) ?? false) ? TypeOperation.EqualsChecked((object)(1), (object)(1)) : null)"
   },
   {
     "Name": "LetConditionalEqualityNull",
     "Expression": "let x=Flag ? Code=='A' : null in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalInequalityNull",
     "Expression": "let x=Flag ? Code!='A' : null in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalNullEquality",
     "Expression": "let x=Flag ? null : Code=='A' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? null : TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\"))); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalNullInequality",
     "Expression": "let x=Flag ? null : Code!='A' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? null : !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\"))); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityString",
     "Expression": "let x=Flag ? (Code=='A') : 'other' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : \"other\"); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : @\"other\"); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalInequalityInteger",
     "Expression": "let x=Flag ? Code!='A' : 1 in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : 1); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : 1); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalIntegerInequality",
     "Expression": "let x=Flag ? 1 : Code!='A' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? 1 : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? 1 : !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\"))); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityBoolean",
     "Expression": "let x=Flag ? Code=='A' : false in !x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : false); return (!x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : false); return (!x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityNullCheck",
     "Expression": "let x=Flag ? Code=='A' : null in x==null",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (TypeOperation.EqualsChecked(x, null));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return (TypeOperation.EqualsChecked((object)(x), (object)(null)));})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityCondition",
     "Expression": "let x=Flag ? Code=='A' : null in x ? 1 : 2",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (((x ?? false) ? 1 : 2));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return ((((bool?)(x) ?? false) ? 1 : 2));})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityList",
     "Expression": "let x=Flag ? Code=='A' : null in [x,x]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
   },
   {
     "Name": "LetNestedConditionalEquality",
     "Expression": "let x=Flag ? (Flag ? Code=='A' : null) : 'other' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null) : \"other\"); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null) : @\"other\"); return (x);})(vcelContext))"
   },
   {
     "Name": "LetEqualityConditionalNull",
     "Expression": "let equal=Code=='A',x=Flag ? equal : null in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : null); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")); var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? equal : null); return (x);})(vcelContext))"
   },
   {
     "Name": "LetInequalityConditionalString",
     "Expression": "let equal=Code!='A',x=Flag ? equal : 'other' in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : \"other\"); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")); var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? equal : @\"other\"); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalNegatedEquality",
     "Expression": "let x=Flag ? !(Code=='A') : null in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? !TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : null); return (x);})(vcelContext))"
   },
   {
     "Name": "LetNegatedInequalityConditionalNull",
     "Expression": "let equal=!(Code!='A'),x=Flag ? equal : null in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !!TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : null); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !!TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")); var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? equal : null); return (x);})(vcelContext))"
   },
   {
     "Name": "LetConditionalEqualityUnselectedBranch",
     "Expression": "let x=Flag ? Code=='A' : Fail in x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : (CSharpHelper.IsNumber((vcelContext.Fail)) ? ((double)((vcelContext.Fail))) : ((vcelContext.Fail)))); return (x);})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(@\"A\")) : (CSharpHelper.IsNumber((object)((vcelContext.Fail))) ? ((double)((vcelContext.Fail))) : ((vcelContext.Fail)))); return (x);})(vcelContext))"
   },
   {
     "Name": "GuardComparisonResult",
