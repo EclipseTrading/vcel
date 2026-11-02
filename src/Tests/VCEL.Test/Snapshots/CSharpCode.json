@@ -232,12 +232,12 @@
   {
     "Name": "EscapingLetValue",
     "Expression": "let x=A+1 in [x,x]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); return ((new List<object>(2) { (object)(x), (object)(x) }));})(vcelContext))"
   },
   {
     "Name": "AliasedLetValue",
     "Expression": "let x=A+1,y=x in [x,y]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); var y = x; return ((new IEnumerable<object>[] { new object [] { x }, new object [] { y } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); var y = x; return ((new List<object>(2) { (object)(x), (object)(y) }));})(vcelContext))"
   },
   {
     "Name": "LiteralLetArithmetic",
@@ -292,22 +292,22 @@
   {
     "Name": "List",
     "Expression": "[A,B+1,'text']",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) }, new object [] { \"text\" } }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new List<object>(3) { (object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject())), (object)(@\"text\") })"
   },
   {
     "Name": "EmptyList",
     "Expression": "[]",
-    "CSharp": "(new IEnumerable<object>[] {  }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new List<object>(0) {  })"
   },
   {
     "Name": "SetMembership",
     "Expression": "Code in {'A','B','C'}",
-    "CSharp": "(new HashSet<object>{\"A\",\"B\",\"C\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"B\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"C\")))"
   },
   {
     "Name": "ListMembership",
     "Expression": "A in [B,C+1]",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) } }.SelectMany(e => e)).ToList().Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "(new List<object>(2) { (object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), (object)(((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject())) }).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
   },
   {
     "Name": "SpreadList",
@@ -317,57 +317,57 @@
   {
     "Name": "EmptySetMembership",
     "Expression": "A in {}",
-    "CSharp": "(new HashSet<object>{}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "false"
   },
   {
     "Name": "SingletonList",
     "Expression": "[A]",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) } }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new List<object>(1) { (object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))) })"
   },
   {
     "Name": "NestedMixedList",
     "Expression": "[A,null,A,[B]]",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { null }, new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { (new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) } }.SelectMany(e => e)).ToList() } }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new List<object>(4) { (object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(null), (object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)((new List<object>(1) { (object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) })) })"
   },
   {
     "Name": "SingletonSetMembership",
     "Expression": "Code in {'A'}",
-    "CSharp": "(new HashSet<object>{\"A\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"A\")))"
   },
   {
     "Name": "DuplicateSetMembership",
     "Expression": "Code in {'A','A','B'}",
-    "CSharp": "(new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"B\")))"
   },
   {
     "Name": "MixedNumericSetMembership",
     "Expression": "A in {1,2.5,'3'}",
-    "CSharp": "(new HashSet<object>{1,2.5,\"3\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(1)) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(2.5)) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(\"3\")))"
   },
   {
     "Name": "RenderedDuplicateSetMembership",
     "Expression": "A in {1,1.0,1L}",
-    "CSharp": "(new HashSet<object>{1,1,1}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(1)))"
   },
   {
     "Name": "NullSetMembership",
     "Expression": "A in {null,'null'}",
-    "CSharp": "(new HashSet<object>{\"null\",\"null\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(\"null\")))"
   },
   {
     "Name": "LargerSetMembership",
     "Expression": "Code in {'A','B','C','D','E','F','G','H','I','J'}",
-    "CSharp": "(new HashSet<object>{\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\",\"J\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+    "CSharp": "(TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"B\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"C\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"D\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"E\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"F\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"G\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"H\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"I\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"J\")))"
   },
   {
     "Name": "SetMembershipTernary",
     "Expression": "(Code in {'A','B'})?1:2",
-    "CSharp": "(((bool?)((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))) ?? false) ? 1 : 2)"
+    "CSharp": "(((bool?)((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code)))), (object)(\"B\")))) ?? false) ? 1 : 2)"
   },
   {
     "Name": "LetSetMembership",
     "Expression": "let x=Code in (x in {'A','B'})",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))); return ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked(x, elem)));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))); return ((TypeOperation.EqualsChecked((object)(x), (object)(\"A\")) || TypeOperation.EqualsChecked((object)(x), (object)(\"B\"))));})(vcelContext))"
   },
   {
     "Name": "StandaloneSet",

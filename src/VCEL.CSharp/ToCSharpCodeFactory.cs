@@ -27,7 +27,7 @@ public class ToCSharpCodeFactory : ExpressionFactory<string>
         => new ToCSharpGuardExpr(Monad, guardClauses, otherwise);
 
     public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-        => new ToCSharpInOp(Monad, l, Set(set));    
+        => In(l, Set(set));
 
     public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
         => new ToCSharpInOp(Monad, l, r);
@@ -36,12 +36,17 @@ public class ToCSharpCodeFactory : ExpressionFactory<string>
         => new ToCSharpSpreadOp(Monad, list);
 
     public override IExpression<string> Set(ISet<object> set)
-        => new ToCSharpStringOp((context) => $"(new HashSet<object>{{{string.Join(",", set.Select(x => x is string ? $@"""{x}""" : x?.ToString() ?? "\"null\""))}}})", Monad);
+        => new ToCSharpLiteralSetOp(Monad, set);
 
     public override IExpression<string> List(IReadOnlyList<IExpression<string>> l)
     {
         string GetItems(IContext<string> context) 
         {
+            if (!l.Any(e => e is ToCSharpSpreadOp))
+            {
+                return $"(new List<object>({l.Count}) {{ {string.Join(", ", l.Select(e => $"(object)({e.Evaluate(context)})"))} }})";
+            }
+
             var lists = l.Select(e => e is ToCSharpSpreadOp spread 
                 ? $"(IEnumerable<object>)(object){e.Evaluate(context)}"
                 : $"new object [] {{ {e.Evaluate(context)} }}");
