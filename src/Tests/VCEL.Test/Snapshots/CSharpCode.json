@@ -511,7 +511,7 @@
   {
     "Name": "GuardStringMembershipResult",
     "Expression": "match | Flag=(Value in {'A','B'})",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  default)",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"B\")))) :  default)",
     "Members": []
   },
   {
@@ -529,7 +529,7 @@
   {
     "Name": "GuardMultipleStringMembershipResults",
     "Expression": "match | Flag=(Value in {'A','B'}) | Other==2=(Value in {'C','D'})",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other)))), (object)(2))) ? ((new HashSet<object>{\"C\",\"D\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  default)",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"B\")))) :  (TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other)))), (object)(2))) ? ((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"C\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"D\")))) :  default)",
     "Members": []
   },
   {
@@ -541,7 +541,7 @@
   {
     "Name": "GuardStringMembershipExplicitNull",
     "Expression": "match | Flag=(Value in {'A','B'}) | otherwise null",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (null))",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"B\")))) :  (null))",
     "Members": []
   },
   {
@@ -553,7 +553,7 @@
   {
     "Name": "GuardStringMembershipExplicitString",
     "Expression": "match | Flag=(Value in {'A','B'}) | otherwise 'missing'",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (\"missing\"))",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"A\")) || TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)(\"B\")))) :  (@\"missing\"))",
     "Members": []
   },
   {
@@ -605,7 +605,7 @@
   {
     "Name": "AdvancedGuardStringMembershipResult",
     "Expression": "match | Flag=(Value in {'A','B'})",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  default)",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false)) :  default)",
     "WithMembers": true,
     "Members": [
       "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
@@ -628,7 +628,7 @@
   {
     "Name": "AdvancedGuardMultipleStringMembershipResults",
     "Expression": "match | Flag=(Value in {'A','B'}) | Other==2=(Value in {'C','D'})",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other)))), (object)(2))) ? ((vcelContext.Value) is string ? snapshot_set_1.Contains((vcelContext.Value).ToString()) : false) :  default)",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false)) :  (TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other)))), (object)(2))) ? (((vcelContext.Value) is string ? snapshot_set_1.Contains((vcelContext.Value).ToString()) : false)) :  default)",
     "WithMembers": true,
     "Members": [
       "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];",
@@ -645,7 +645,7 @@
   {
     "Name": "AdvancedGuardStringMembershipExplicitNull",
     "Expression": "match | Flag=(Value in {'A','B'}) | otherwise null",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (null))",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false)) :  (null))",
     "WithMembers": true,
     "Members": [
       "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
@@ -661,7 +661,7 @@
   {
     "Name": "AdvancedGuardStringMembershipExplicitString",
     "Expression": "match | Flag=(Value in {'A','B'}) | otherwise 'missing'",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (\"missing\"))",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false)) :  (@\"missing\"))",
     "WithMembers": true,
     "Members": [
       "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
