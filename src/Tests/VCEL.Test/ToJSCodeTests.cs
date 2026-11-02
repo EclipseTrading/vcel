@@ -62,6 +62,28 @@ public class ToJsCodeTests
         Assert.AreEqual(expected, parsedExpr);
     }
 
+    [TestCase("''", "''")] // JS evaluates to an empty string.
+    [TestCase("'ABC'", "'ABC'")] // JS evaluates to the string ABC.
+    [TestCase("'true'", "'true'")] // JS evaluates to the string true, not a boolean.
+    [TestCase("'0'", "'0'")] // JS evaluates to the string 0, not a number.
+    [TestCase("('ABC')", "'ABC'")] // JS evaluates to the string ABC, without parentheses.
+    [TestCase("''''", "'\\''")] // JS evaluates to a single apostrophe: '
+    [TestCase("'''ABC'''", "'\\'ABC\\''")] // JS evaluates to 'ABC', including both apostrophes.
+    [TestCase("'''ABC'", "'\\'ABC'")] // JS evaluates to 'ABC, including the leading apostrophe.
+    [TestCase("'ABC'''", "'ABC\\''")] // JS evaluates to ABC', including the trailing apostrophe.
+    [TestCase("'it''s'", "'it\\'s'")] // JS evaluates to it's.
+    [TestCase("'a''b''c'", "'a\\'b\\'c'")] // JS evaluates to a'b'c.
+    [TestCase("'a''''b'", "'a\\'\\'b'")] // JS evaluates to a''b, retaining two consecutive apostrophes.
+    [TestCase("'\"ABC\"'", "'\"ABC\"'")] // JS evaluates to "ABC", including both double quotes.
+    public void TestJsParser_StringLiteral(string expr, string expected)
+    {
+        var result = parser.Parse(expr);
+        Assert.AreEqual(true, result.Success);
+
+        var parsedExpr = result.Expression.Evaluate(new JsObjectContext(ConcatStringMonad.Instance, new { }));
+        Assert.AreEqual(expected, parsedExpr);
+    }
+
     [TestCase("(a + b) * c -(d - f)/g",
         "(((vcelContext.a + vcelContext.b) * vcelContext.c) - ((vcelContext.d - vcelContext.f) / vcelContext.g))")]
     public void TestJsParser_Paren(string expr, string expected)
