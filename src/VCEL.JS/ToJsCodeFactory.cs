@@ -93,7 +93,7 @@ public class ToJsCodeFactory<TContext> : ExpressionFactory<string>
         => new ToJsStringOp((context) => b ? "true" : "false", Monad);
 
     public override IExpression<string> String(string s)
-        => new ToJsStringOp((context) => $"'{s}'", Monad);
+        => new ToJsStringOp((context) => $"'{s.Replace("'", "\\'")}'", Monad);
 
     public override IExpression<string> Null()
         => new ToJsStringOp((context) => "null", Monad);

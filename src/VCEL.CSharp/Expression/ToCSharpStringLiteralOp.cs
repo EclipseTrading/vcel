@@ -23,7 +23,7 @@ internal class ToCSharpStringLiteralOp : IExpression<string>
 
     public string Evaluate(IContext<string> context)
     {
-        return $"@{this.str}";
+        return this.str;
     }
 
     private static string ToLiteral(string input)

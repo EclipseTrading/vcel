@@ -79,7 +79,7 @@ public class VCELVisitor<T> : BaseVisitor<ParseResult<T>>
 
     public override ParseResult<T> VisitStringLiteral([NotNull] VCELParser.StringLiteralContext context)
     {
-        var s = context.GetText().Substring(1, context.GetText().Length - 2);
+        var s = context.GetText().Substring(1, context.GetText().Length - 2).Replace("''", "'");
         return new ValueParseResult<T>(exprFactory.String(s), s);
     }
 

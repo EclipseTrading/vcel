@@ -19,10 +19,19 @@ public class LiteralTests
     [TestCase("5.5", 5.5d)]
     [TestCase("(true)", true)]
     [TestCase("('ABC')", "ABC")]
+    [TestCase("'''ABC'''", "'ABC'")]
     [TestCase("(1)", 1)]
     [TestCase("(1L)", 1L)]
     [TestCase("(0.5f)", 0.5f)]
     [TestCase("(0.5)", 0.5d)]
+    [TestCase("''", "")]
+    [TestCase("''''", "'")]
+    [TestCase("'''ABC'", "'ABC")]
+    [TestCase("'ABC'''", "ABC'")]
+    [TestCase("'it''s'", "it's")]
+    [TestCase("'a''b''c'", "a'b'c")]
+    [TestCase("'a\\b'", "a\\b")]
+    [TestCase("'a\\'''", "a\\'")]
     public void TestPrimitives(string exprString, object expected)
     {
         foreach (var expr in CompositeExpression.ParseMultiple(exprString))
