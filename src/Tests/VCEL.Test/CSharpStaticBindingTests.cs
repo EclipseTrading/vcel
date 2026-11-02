@@ -50,10 +50,10 @@ public class CSharpStaticBindingTests
     }
 
     [TestCase("Value in {'A','B'}",
-        "(vcelContext.Value) is string ? str_set_ID.Contains((string)(vcelContext.Value).ToString()) : false",
+        "((vcelContext.Value) is string ? str_set_ID.Contains((string)(vcelContext.Value).ToString()) : false)",
         "private static readonly HashSet<string> str_set_ID = [\"A\",\"B\"];")]
     [TestCase("Value in {1,2}",
-        "CSharpHelper.IsNumber((object)(vcelContext.Value)) ? numeric_set_ID.Contains((double)(vcelContext.Value)) : false",
+        "(CSharpHelper.IsNumber((object)(vcelContext.Value)) ? numeric_set_ID.Contains((double)(vcelContext.Value)) : false)",
         "private static readonly HashSet<double> numeric_set_ID = [1d,2d];")]
     public void AdvancedSetCodeSnapshot(string text, string expected, string member)
     {
