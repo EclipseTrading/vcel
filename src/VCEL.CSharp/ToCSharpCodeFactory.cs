@@ -109,7 +109,7 @@ public class ToCSharpCodeFactory : ExpressionFactory<string>
         => new ToCSharpStringOp((context) => $"-{expression.Evaluate(context)}", Monad);
 
     public override IExpression<string> Not(IExpression<string> e)
-        => new ToCSharpStringOp((context) => $"!{e.Evaluate(context)}", Monad);
+        => new ToCSharpNotOp(Monad, e);
 
     public override IExpression<string> Matches(IExpression<string> l, IExpression<string> r)
         => new ToCSharpMatchesOp(Monad, l, r);

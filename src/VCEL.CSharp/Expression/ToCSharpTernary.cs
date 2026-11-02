@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using VCEL.Core.Expression.Impl;
 using VCEL.Monad;
 
 namespace VCEL.CSharp.Expression;
@@ -28,6 +29,18 @@ internal class ToCSharpTernary : IExpression<string>
 
     public string Evaluate(IContext<string> context)
     {
-        return $"(((bool?)({condition.Evaluate(context)}) ?? false) ? {trueExpr.Evaluate(context)} : {falseExpr.Evaluate(context)})";
+        return $"(((bool?)({condition.Evaluate(context)}) ?? false) ? {EvaluateValue(trueExpr, context)} : {EvaluateValue(falseExpr, context)})";
+    }
+
+    internal static string EvaluateValue(IExpression<string> expression, IContext<string> context)
+    {
+        var code = expression.Evaluate(context);
+        while (expression is ParenExpr<string> or ToCSharpNotOp)
+        {
+            expression = expression is ParenExpr<string> paren ? paren.Expr : ((ToCSharpNotOp)expression).Operand;
+        }
+
+        // Equality used to be dynamic; retain that type at value boundaries, not in conditions.
+        return expression is ToCSharpEqOp or ToCSharpNotEqOp ? $"((dynamic)({code}))" : code;
     }
 }
