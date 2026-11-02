@@ -452,7 +452,7 @@
   {
     "Name": "LetConditionalEqualityList",
     "Expression": "let x=Flag ? Code=='A' : null in [x,x]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((bool?)((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.Code))) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return ((new List<object>(2) { (object)(x), (object)(x) }));})(vcelContext))"
   },
   {
     "Name": "LetNestedConditionalEquality",
