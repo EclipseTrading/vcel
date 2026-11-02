@@ -28,4 +28,11 @@ internal class ToCSharpPropertyOp : IExpression<string>
 
         return Name;
     }
+
+    internal bool TryGetRawValue(IContext<string> context, out string value)
+    {
+        value = "";
+        return context.TryGetAccessor(Name, out var accessor) &&
+               accessor is CSharpPropertyValueAccessor property && property.TryGetRawValue(context, out value);
+    }
 }

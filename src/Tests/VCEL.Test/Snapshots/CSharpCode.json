@@ -47,37 +47,37 @@
   {
     "Name": "Add",
     "Expression": "A+B",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "Subtraction",
     "Expression": "A-B",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "Multiply",
     "Expression": "A*B",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) * (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Multiply((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "Divide",
     "Expression": "A/B",
-    "CSharp": "((double?)(CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) / (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Divide(CSharpArithmeticValue.DivisionOperand((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A))))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((double?)(dynamic)__vcelLeft / (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "OperatorPrecedence",
     "Expression": "A+B*C-D/E",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + ((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) * (CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C))))) - ((double?)(CSharpHelper.IsNumber((object)((vcelContext.D))) ? ((double)((vcelContext.D))) : ((vcelContext.D))) / (CSharpHelper.IsNumber((object)((vcelContext.E))) ? ((double)((vcelContext.E))) : ((vcelContext.E)))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Subtract(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Multiply((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), (CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * (dynamic)__vcelRight))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + (dynamic)__vcelRight))), CSharpArithmeticValue.Divide(CSharpArithmeticValue.DivisionOperand((CSharpHelper.IsNumber((object)((vcelContext.D))) ? CSharpArithmeticValue.Literal((double)((vcelContext.D))) : CSharpArithmeticValue.Result((object)((vcelContext.D))))), (CSharpHelper.IsNumber((object)((vcelContext.E))) ? CSharpArithmeticValue.Literal((double)((vcelContext.E))) : CSharpArithmeticValue.Result((object)((vcelContext.E)))), static (__vcelLeft, __vcelRight) => (object)(((double?)(dynamic)__vcelLeft / (dynamic)__vcelRight))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "GroupedArithmetic",
     "Expression": "(A+B)*(C-D)",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) * ((CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C))) - (CSharpHelper.IsNumber((object)((vcelContext.D))) ? ((double)((vcelContext.D))) : ((vcelContext.D)))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Multiply(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + (dynamic)__vcelRight))), CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), (CSharpHelper.IsNumber((object)((vcelContext.D))) ? CSharpArithmeticValue.Literal((double)((vcelContext.D))) : CSharpArithmeticValue.Result((object)((vcelContext.D)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "LiteralSubtree",
     "Expression": "A*(5/2)",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) * ((double?)5 / 2))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Multiply((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(((double?)5 / 2)), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * ((double?)5 / 2))))).ToObject())"
   },
   {
     "Name": "NullOperand",
@@ -92,32 +92,32 @@
   {
     "Name": "LongOperand",
     "Expression": "A+9007199254740993L",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 9007199254740993)"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(9007199254740993), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 9007199254740993)))).ToObject())"
   },
   {
     "Name": "UnaryMinus",
     "Expression": "-A",
-    "CSharp": "-(CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Negate((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))))).ToObject())"
   },
   {
     "Name": "NegatedArithmetic",
     "Expression": "-(A-B)",
-    "CSharp": "-((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Negate(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight))))).ToObject())"
   },
   {
     "Name": "UnaryArithmeticComposition",
     "Expression": "(-A+B)*C",
-    "CSharp": "((-(CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) * (CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C))))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Multiply(CSharpArithmeticValue.Add(CSharpArithmeticValue.Negate((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A))))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + (dynamic)__vcelRight))), (CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * (dynamic)__vcelRight)))).ToObject())"
   },
   {
     "Name": "ConstantArithmeticOperand",
     "Expression": "A+(2+3)",
-    "CSharp": "((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (2 + 3))"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal((2 + 3)), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + (2 + 3))))).ToObject())"
   },
   {
     "Name": "Power",
     "Expression": "(A-B)^2",
-    "CSharp": "(VcelMath.Pow(((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), 2))"
+    "CSharp": "(VcelMath.Pow(((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()), 2))"
   },
   {
     "Name": "Modulo",
@@ -127,7 +127,7 @@
   {
     "Name": "OfferPremium",
     "Expression": "((BBO_ask)-(Tv_tvAdjusted-StarPricingParameters_priceOffset))/(Tv_tvAdjusted-StarPricingParameters_priceOffset)*10000",
-    "CSharp": "(((double?)((CSharpHelper.IsNumber((object)((vcelContext.BBO_ask))) ? ((double)((vcelContext.BBO_ask))) : ((vcelContext.BBO_ask))) - ((CSharpHelper.IsNumber((object)((vcelContext.Tv_tvAdjusted))) ? ((double)((vcelContext.Tv_tvAdjusted))) : ((vcelContext.Tv_tvAdjusted))) - (CSharpHelper.IsNumber((object)((vcelContext.StarPricingParameters_priceOffset))) ? ((double)((vcelContext.StarPricingParameters_priceOffset))) : ((vcelContext.StarPricingParameters_priceOffset))))) / ((CSharpHelper.IsNumber((object)((vcelContext.Tv_tvAdjusted))) ? ((double)((vcelContext.Tv_tvAdjusted))) : ((vcelContext.Tv_tvAdjusted))) - (CSharpHelper.IsNumber((object)((vcelContext.StarPricingParameters_priceOffset))) ? ((double)((vcelContext.StarPricingParameters_priceOffset))) : ((vcelContext.StarPricingParameters_priceOffset))))) * 10000)"
+    "CSharp": "((dynamic)(CSharpArithmeticValue.Multiply(CSharpArithmeticValue.Divide(CSharpArithmeticValue.DivisionOperand(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.BBO_ask))) ? CSharpArithmeticValue.Literal((double)((vcelContext.BBO_ask))) : CSharpArithmeticValue.Result((object)((vcelContext.BBO_ask)))), CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.Tv_tvAdjusted))) ? CSharpArithmeticValue.Literal((double)((vcelContext.Tv_tvAdjusted))) : CSharpArithmeticValue.Result((object)((vcelContext.Tv_tvAdjusted)))), (CSharpHelper.IsNumber((object)((vcelContext.StarPricingParameters_priceOffset))) ? CSharpArithmeticValue.Literal((double)((vcelContext.StarPricingParameters_priceOffset))) : CSharpArithmeticValue.Result((object)((vcelContext.StarPricingParameters_priceOffset)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))), CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.Tv_tvAdjusted))) ? CSharpArithmeticValue.Literal((double)((vcelContext.Tv_tvAdjusted))) : CSharpArithmeticValue.Result((object)((vcelContext.Tv_tvAdjusted)))), (CSharpHelper.IsNumber((object)((vcelContext.StarPricingParameters_priceOffset))) ? CSharpArithmeticValue.Literal((double)((vcelContext.StarPricingParameters_priceOffset))) : CSharpArithmeticValue.Result((object)((vcelContext.StarPricingParameters_priceOffset)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight))), static (__vcelLeft, __vcelRight) => (object)(((double?)(dynamic)__vcelLeft / (dynamic)__vcelRight))), CSharpArithmeticValue.Literal(10000), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft * 10000)))).ToObject())"
   },
   {
     "Name": "Equal",
@@ -157,7 +157,7 @@
   {
     "Name": "ArithmeticComparison",
     "Expression": "A-B==1",
-    "CSharp": "TypeOperation.EqualsChecked(((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), 1)"
+    "CSharp": "TypeOperation.EqualsChecked(((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()), 1)"
   },
   {
     "Name": "Between",
@@ -212,32 +212,32 @@
   {
     "Name": "LetArithmetic",
     "Expression": "let adjusted=Tv-Offset in (Ask-adjusted)/adjusted*10000",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var adjusted = ((CSharpHelper.IsNumber((object)((vcelContext.Tv))) ? ((double)((vcelContext.Tv))) : ((vcelContext.Tv))) - (CSharpHelper.IsNumber((object)((vcelContext.Offset))) ? ((double)((vcelContext.Offset))) : ((vcelContext.Offset)))); return ((((double?)((CSharpHelper.IsNumber((object)((vcelContext.Ask))) ? ((double)((vcelContext.Ask))) : ((vcelContext.Ask))) - adjusted) / adjusted) * 10000));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var adjusted = ((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.Tv))) ? CSharpArithmeticValue.Literal((double)((vcelContext.Tv))) : CSharpArithmeticValue.Result((object)((vcelContext.Tv)))), (CSharpHelper.IsNumber((object)((vcelContext.Offset))) ? CSharpArithmeticValue.Literal((double)((vcelContext.Offset))) : CSharpArithmeticValue.Result((object)((vcelContext.Offset)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()); return ((((double?)((CSharpHelper.IsNumber((object)((vcelContext.Ask))) ? ((double)((vcelContext.Ask))) : ((vcelContext.Ask))) - adjusted) / adjusted) * 10000));})(vcelContext))"
   },
   {
     "Name": "MultipleLetBindings",
     "Expression": "let x=A+1,y=B+2 in x*y",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); var y = ((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) + 2); return ((x * y));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); var y = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(2), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 2)))).ToObject()); return ((x * y));})(vcelContext))"
   },
   {
     "Name": "NestedLet",
     "Expression": "let x=A+1 in let y=x+2 in y*3",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); return ((new Func<dynamic, object>(vcelContext => {var y = (x + 2); return ((y * 3));})(vcelContext)));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); return ((new Func<dynamic, object>(vcelContext => {var y = (x + 2); return ((y * 3));})(vcelContext)));})(vcelContext))"
   },
   {
     "Name": "SequentialLetBindings",
     "Expression": "let x=A-B,y=x+2 in -y*C",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))); var y = (x + 2); return ((-y * (CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C)))));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()); var y = (x + 2); return ((-y * (CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C)))));})(vcelContext))"
   },
   {
     "Name": "EscapingLetValue",
     "Expression": "let x=A+1 in [x,x]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
   },
   {
     "Name": "AliasedLetValue",
     "Expression": "let x=A+1,y=x in [x,y]",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); var y = x; return ((new IEnumerable<object>[] { new object [] { x }, new object [] { y } }.SelectMany(e => e)).ToList());})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()); var y = x; return ((new IEnumerable<object>[] { new object [] { x }, new object [] { y } }.SelectMany(e => e)).ToList());})(vcelContext))"
   },
   {
     "Name": "LiteralLetArithmetic",
@@ -247,12 +247,12 @@
   {
     "Name": "MatchInsideLet",
     "Expression": "let x=A-B in match | x<0=0 | otherwise x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))); return ((((CSharpHelper.UpCastCompare(x, 0, \"<\"))) ? (0) :  (x)));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()); return ((((CSharpHelper.UpCastCompare(x, 0, \"<\"))) ? (0) :  (x)));})(vcelContext))"
   },
   {
     "Name": "NumericFunction",
     "Expression": "abs(A-B)",
-    "CSharp": "VcelMath.Abs(((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))))"
+    "CSharp": "VcelMath.Abs(((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()))"
   },
   {
     "Name": "NestedFunctions",
@@ -292,7 +292,7 @@
   {
     "Name": "List",
     "Expression": "[A,B+1,'text']",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) + 1) }, new object [] { \"text\" } }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) }, new object [] { @\"text\" } }.SelectMany(e => e)).ToList()"
   },
   {
     "Name": "EmptyList",
@@ -307,7 +307,7 @@
   {
     "Name": "ListMembership",
     "Expression": "A in [B,C+1]",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) }, new object [] { ((CSharpHelper.IsNumber((object)((vcelContext.C))) ? ((double)((vcelContext.C))) : ((vcelContext.C))) + 1) } }.SelectMany(e => e)).ToList().Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.C))) ? CSharpArithmeticValue.Literal((double)((vcelContext.C))) : CSharpArithmeticValue.Result((object)((vcelContext.C)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) } }.SelectMany(e => e)).ToList().Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
   },
   {
     "Name": "SpreadList",
