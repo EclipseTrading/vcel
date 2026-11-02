@@ -135,6 +135,77 @@ public class CSharpCollectionAllocationTests
         Assert.That(row.Reads, Is.EqualTo(2));
     }
 
+    [TestCase(@"Code in {'A','\u0041'}", "A", true)]
+    [TestCase(@"Code in {'A','\U00000041'}", "missing", false)]
+    [TestCase(@"Code in {'A','\x41'}", "A", true)]
+    [TestCase(@"Code in {'\u0041','\x41'}", "missing", false)]
+    [TestCase(@"Code in {'CAT','C\u0041T'}", "CAT", true)]
+    [TestCase(@"Code in {'CAT','C\u0041T'}", "DOG", false)]
+    [TestCase(@"Code in {'\u0041','B'}", "A", true)]
+    [TestCase(@"Code in {'\u0041','B'}", "B", true)]
+    [TestCase(@"Code in {'\u0041','B'}", "missing", false)]
+    [TestCase(@"Code in {'\\','B'}", "\\", true)]
+    public void EscapedSetMembershipPreservesCompiledStringValues(string text, string value, bool expected)
+    {
+        var evaluate = Compile(text);
+        var row = new Row { Code = value };
+        Assert.That(evaluate(row), Is.EqualTo(expected).And.TypeOf<bool>());
+        Assert.That(AllocatedPerEvaluation(() => evaluate(row)), Is.LessThanOrEqualTo(24));
+    }
+
+    [TestCase("true and Code in {1,2}", 1, true)]
+    [TestCase("true and Code in {1,2}", 3, false)]
+    [TestCase("false or Code in {1,2}", 2, true)]
+    [TestCase("Code in {1,2} ? 'yes' : 'no'", 1, "yes")]
+    [TestCase("match | Code in {1,2}=1 | otherwise 2", 3, 2)]
+    [TestCase("true and Code in {'A','B'}", "A", true)]
+    [TestCase("true and Code in {'A','B'}", "missing", false)]
+    [TestCase("false or Code in {'A','B'}", "B", true)]
+    [TestCase("Code in {'A','B'} ? 'yes' : 'no'", "A", "yes")]
+    [TestCase("match | Code in {'A','B'}=1 | otherwise 2", "missing", 2)]
+    [TestCase("true and Code in {1,2}", null, false)]
+    [TestCase("true and Code in {'A','B'}", null, false)]
+    [TestCase("true and Code in {1,2}", "1", false)]
+    [TestCase("true and Code in {'A','B'}", 1, false)]
+    public void MemberFactorySetLiteralsPreserveComposition(string text, object? value, object expected)
+    {
+        var parsed = CSharpExpression.ParseMethodWithMembers(text);
+        Assert.That(parsed.Success, Is.True,
+            () => string.Join(Environment.NewLine, parsed.ParseErrors.Select(error => error.Message)));
+        var result = parsed.Expression.Evaluate(new Row { Code = value });
+        Assert.That(result, Is.EqualTo(expected));
+        Assert.That(result?.GetType(), Is.EqualTo(expected.GetType()));
+    }
+
+    [TestCase(false, false)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public void InSetUsesTheSameGenerationAndDependenciesAsIn(bool advanced, bool numeric)
+    {
+        ToCSharpCodeFactory factory = advanced
+            ? new AdvanceToCSharpCodeFactory(VCEL.Expression.ConcatStringMonad.Instance)
+            : new ToCSharpCodeFactory(VCEL.Expression.ConcatStringMonad.Instance);
+        var values = numeric ? new HashSet<object> { 1, 2 } : new HashSet<object> { "A", "B" };
+        var property = factory.Property("Code");
+        var direct = factory.InSet(property, values);
+        var dispatched = factory.In(property, factory.Set(values));
+        var directMembers = direct.Dependencies.OfType<CSharpMemberDependency>().ToArray();
+        var dispatchedMembers = dispatched.Dependencies.OfType<CSharpMemberDependency>().ToArray();
+        Assert.That(directMembers, Has.Length.EqualTo(advanced ? 1 : 0));
+        Assert.That(dispatchedMembers, Has.Length.EqualTo(directMembers.Length));
+        var directCode = direct.Evaluate(new object());
+        var dispatchedCode = dispatched.Evaluate(new object());
+        for (var i = 0; i < directMembers.Length; i++)
+        {
+            dispatchedCode = dispatchedCode.Replace(dispatchedMembers[i].Name, directMembers[i].Name, StringComparison.Ordinal);
+            Assert.That(dispatchedMembers[i].Declaration.Replace(
+                dispatchedMembers[i].Name, directMembers[i].Name, StringComparison.Ordinal),
+                Is.EqualTo(directMembers[i].Declaration));
+        }
+        Assert.That(directCode, Is.EqualTo(dispatchedCode));
+    }
+
     [Test]
     public void ListMembershipStillBuildsAllElementsBeforeReadingTheValue()
     {
