@@ -147,12 +147,12 @@
   {
     "Name": "GreaterThan",
     "Expression": "A>10",
-    "CSharp": "(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 10, \">\"))"
+    "CSharp": "(CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(10), \">\"))"
   },
   {
     "Name": "LessOrEqual",
     "Expression": "A<=B",
-    "CSharp": "(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))), \"<=\"))"
+    "CSharp": "(CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), \"<=\"))"
   },
   {
     "Name": "ArithmeticComparison",
@@ -182,7 +182,7 @@
   {
     "Name": "MixedBoolean",
     "Expression": "A>0 and (B==null or B<10)",
-    "CSharp": "(((bool)(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 0, \">\"))) ? ((bool?)(((bool)TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), (object)(null))) ? true : ((bool?)(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))), 10, \"<\"))))) : false)"
+    "CSharp": "(((bool)(CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(0), \">\"))) ? ((bool?)(((bool)TypeOperation.EqualsChecked((object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), (object)(null))) ? true : ((bool?)(CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), (object)(10), \"<\"))))) : false)"
   },
   {
     "Name": "TernaryProperty",
@@ -197,12 +197,12 @@
   {
     "Name": "NestedTernary",
     "Expression": "A>0?B>0?1:2:3",
-    "CSharp": "(((bool?)((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 0, \">\"))) ?? false) ? (((bool?)((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B))), 0, \">\"))) ?? false) ? 1 : 2) : 3)"
+    "CSharp": "(((bool?)((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(0), \">\"))) ?? false) ? (((bool?)((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.B))) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), (object)(0), \">\"))) ?? false) ? 1 : 2) : 3)"
   },
   {
     "Name": "MatchWithOtherwise",
     "Expression": "match | A<10='Low' | A<20='Medium' | otherwise 'High'",
-    "CSharp": "(((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 10, \"<\"))) ? (\"Low\") :  ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 20, \"<\"))) ? (\"Medium\") :  (\"High\"))"
+    "CSharp": "(((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(10), \"<\"))) ? (@\"Low\") :  ((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(20), \"<\"))) ? (@\"Medium\") :  (@\"High\"))"
   },
   {
     "Name": "MatchWithoutOtherwise",
@@ -247,7 +247,7 @@
   {
     "Name": "MatchInsideLet",
     "Expression": "let x=A-B in match | x<0=0 | otherwise x",
-    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()); return ((((CSharpHelper.UpCastCompare(x, 0, \"<\"))) ? (0) :  (x)));})(vcelContext))"
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((dynamic)(CSharpArithmeticValue.Subtract((CSharpHelper.IsNumber((object)((vcelContext.A))) ? CSharpArithmeticValue.Literal((double)((vcelContext.A))) : CSharpArithmeticValue.Result((object)((vcelContext.A)))), (CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft - (dynamic)__vcelRight)))).ToObject()); return ((((CSharpHelper.UpCastCompare((object)(x), (object)(0), \"<\"))) ? (0) :  (x)));})(vcelContext))"
   },
   {
     "Name": "NumericFunction",

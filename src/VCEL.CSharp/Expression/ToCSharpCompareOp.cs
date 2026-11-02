@@ -19,6 +19,6 @@ internal class ToCSharpCompareOp : BinaryExprBase<string>
 
     public override string Evaluate(object? lv, object? rv)
     {
-        return $@"(CSharpHelper.UpCastCompare({lv}, {rv}, ""{opName}""))";
+        return $@"(CSharpHelper.UpCastCompare((object)({lv}), (object)({rv}), ""{opName}""))";
     }
 }

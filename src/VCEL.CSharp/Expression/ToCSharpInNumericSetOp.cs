@@ -33,6 +33,6 @@ internal class ToCSharpInNumericSetOp : IExpression<string>
     public string Evaluate(IContext<string> context)
     {
         var contextPropName = $"({context.Value}.{propertyExpr.Name})";
-        return $@"(CSharpHelper.IsNumber({contextPropName}) ? {setMemberName}.Contains((double){contextPropName}) : false)";
+        return $@"(CSharpHelper.IsNumber((object){contextPropName}) ? {setMemberName}.Contains((double){contextPropName}) : false)";
     }
 }
