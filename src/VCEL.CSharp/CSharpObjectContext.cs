@@ -33,6 +33,16 @@ public readonly struct CSharpObjectContext(
         return new CSharpObjectContext(Monad, Object, combinedOverrides);
     }
 
+    internal string GetFallbackParameterName(string preferred)
+    {
+        while (propertyFunc?.ContainsKey(preferred) == true)
+        {
+            preferred += "_";
+        }
+
+        return preferred;
+    }
+
     public IContext<string> OverrideName(string name, string br)
         => new OverrideContext<string>(
             this,
