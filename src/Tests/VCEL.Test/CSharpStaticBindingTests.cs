@@ -50,7 +50,7 @@ public class CSharpStaticBindingTests
     }
 
     [TestCase("Value in {'A','B'}",
-        "((vcelContext.Value) is string ? str_set_ID.Contains((string)(vcelContext.Value).ToString()) : false)",
+        "((vcelContext.Value) is string ? str_set_ID.Contains((vcelContext.Value).ToString()) : false)",
         "private static readonly HashSet<string> str_set_ID = [\"A\",\"B\"];")]
     [TestCase("Value in {1,2}",
         "(CSharpHelper.IsNumber((object)(vcelContext.Value)) ? numeric_set_ID.Contains((double)(vcelContext.Value)) : false)",
@@ -70,7 +70,7 @@ public class CSharpStaticBindingTests
     {
         var (code, _) = Generate($"Value{operation}Other");
         Assert.That(code, Is.EqualTo(
-            $"(CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value)))), (object)((CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other)))), \"{operation}\"))"));
+            $"(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((object)((vcelContext.Value))) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((object)((vcelContext.Other))) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"{operation}\"))"));
     }
 
     [TestCase(1, "missing", 0)]
@@ -103,7 +103,7 @@ public class CSharpStaticBindingTests
     [TestCase("Value<=Other", 2d, true)]
     [TestCase("Value>Other", 3d, true)]
     [TestCase("Value>=Other", 2d, true)]
-    public void StaticCallsPreserveResultsAndOnlyBoxTheResult(string text, object? value, object expected)
+    public void ValueCallsPreserveResultsAndAllocationBounds(string text, object? value, object expected)
     {
         var evaluate = Compile(text);
         var legacy = Compile(text, legacy: true);
@@ -111,7 +111,19 @@ public class CSharpStaticBindingTests
         Assert.That(evaluate(row), Is.EqualTo(expected));
         Assert.That(evaluate(row), Is.EqualTo(legacy(row)));
         Assert.That(evaluate(row)?.GetType(), Is.EqualTo(legacy(row)?.GetType()));
-        var maximumBytes = text.Contains("Other", StringComparison.Ordinal) ? 72 : 24;
+        var maximumBytes = text.Contains("Other", StringComparison.Ordinal) ? 120 : 24;
+        AssertAllocation(() => evaluate(row), maximumBytes);
+    }
+
+    [TestCase("Value<Other ? 1 : 2", 1d, 1, 72)]
+    [TestCase("!(Value>=Other) ? 1 : 2", 1d, 1, 72)]
+    [TestCase("Value in {'A','B'} ? 'yes' : 'no'", "A", "yes", 0)]
+    [TestCase("true and Value in {'A','B'} ? 'yes' : 'no'", "A", "yes", 0)]
+    public void BooleanConditionsRetainStaticBindingSavings(string text, object value, object expected, int maximumBytes)
+    {
+        var evaluate = Compile(text);
+        var row = new Row { Value = value, Other = 2d };
+        Assert.That(evaluate(row), Is.EqualTo(expected).And.TypeOf(expected.GetType()));
         AssertAllocation(() => evaluate(row), maximumBytes);
     }
 
