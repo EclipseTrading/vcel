@@ -27,7 +27,7 @@ public class ToCSharpCodeFactory : ExpressionFactory<string>
         => new ToCSharpGuardExpr(Monad, guardClauses, otherwise);
 
     public override IExpression<string> InSet(IExpression<string> l, ISet<object> set)
-        => In(l, Set(set));
+        => new ToCSharpInOp(Monad, l, Set(set));
 
     public override IExpression<string> In(IExpression<string> l, IExpression<string> r)
         => new ToCSharpInOp(Monad, l, r);
