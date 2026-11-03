@@ -13,6 +13,9 @@ internal class ToCSharpAndOp : BinaryExprBase<string>
     {
     }
 
+    public override string Evaluate(IContext<string> context)
+        => Monad.Bind(CSharpConditionCode.Evaluate(Left, context), CSharpConditionCode.Evaluate(Right, context), Evaluate);
+
     public override string Evaluate(object? lv, object? rv)
     {
         return Equals(lv, "null")

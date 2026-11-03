@@ -15,6 +15,9 @@ internal class ToCSharpNotEqOp : BinaryExprBase<string>
 
     public override string Evaluate(object? lv, object? rv)
     {
-        return $"!TypeOperation.EqualsChecked((object)({lv}), (object)({rv}))";
+        return $"!TypeOperation.EqualsChecked({lv}, {rv})";
     }
+
+    internal string EvaluateCondition(IContext<string> context)
+        => $"!TypeOperation.EqualsChecked((object)({Left.Evaluate(context)}), (object)({Right.Evaluate(context)}))";
 }
