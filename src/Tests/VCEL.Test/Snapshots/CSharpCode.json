@@ -202,7 +202,7 @@
   {
     "Name": "MatchWithOtherwise",
     "Expression": "match | A<10='Low' | A<20='Medium' | otherwise 'High'",
-    "CSharp": "(((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(10), \"<\"))) ? (@\"Low\") :  ((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(20), \"<\"))) ? (@\"Medium\") :  (@\"High\"))"
+    "CSharp": "(((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(10), \"<\"))) ? (\"Low\") :  ((CSharpHelper.UpCastCompare((object)((CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A)))), (object)(20), \"<\"))) ? (\"Medium\") :  (\"High\"))"
   },
   {
     "Name": "MatchWithoutOtherwise",
@@ -661,7 +661,7 @@
   {
     "Name": "AdvancedGuardStringMembershipExplicitString",
     "Expression": "match | Flag=(Value in {'A','B'}) | otherwise 'missing'",
-    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((string)(vcelContext.Value).ToString()) : false)) :  (@\"missing\"))",
+    "CSharp": "(((CSharpHelper.IsNumber((object)((vcelContext.Flag))) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (((vcelContext.Value) is string ? snapshot_set_0.Contains((string)(vcelContext.Value).ToString()) : false)) :  (\"missing\"))",
     "WithMembers": true,
     "Members": [
       "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
