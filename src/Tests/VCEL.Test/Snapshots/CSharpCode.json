@@ -292,7 +292,7 @@
   {
     "Name": "List",
     "Expression": "[A,B+1,'text']",
-    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) }, new object [] { @\"text\" } }.SelectMany(e => e)).ToList()"
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((object)((vcelContext.A))) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((dynamic)(CSharpArithmeticValue.Add((CSharpHelper.IsNumber((object)((vcelContext.B))) ? CSharpArithmeticValue.Literal((double)((vcelContext.B))) : CSharpArithmeticValue.Result((object)((vcelContext.B)))), CSharpArithmeticValue.Literal(1), static (__vcelLeft, __vcelRight) => (object)(((dynamic)__vcelLeft + 1)))).ToObject()) }, new object [] { \"text\" } }.SelectMany(e => e)).ToList()"
   },
   {
     "Name": "EmptyList",
