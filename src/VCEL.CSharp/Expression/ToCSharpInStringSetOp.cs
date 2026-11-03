@@ -37,4 +37,10 @@ internal class ToCSharpInStringSetOp : IExpression<string>
         var contextPropName = $"({context.Value}.{propertyExpr.Name})";
         return $@"({contextPropName} is string ? {setMemberName}.Contains({contextPropName}.ToString()) : false)";
     }
+
+    internal string EvaluateCondition(IContext<string> context)
+    {
+        var contextPropName = $"({context.Value}.{propertyExpr.Name})";
+        return $@"({contextPropName} is string ? {setMemberName}.Contains((string){contextPropName}.ToString()) : false)";
+    }
 }
