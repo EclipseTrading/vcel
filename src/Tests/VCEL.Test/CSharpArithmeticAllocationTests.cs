@@ -168,7 +168,9 @@ public class CSharpArithmeticAllocationTests
         var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         Assert.That(result, Is.EqualTo(expected));
         TestContext.WriteLine($"{text}: {allocated / (double)iterations} bytes/evaluation");
-        Assert.That(allocated, Is.LessThanOrEqualTo(24L * iterations));
+        // Allow fixed runtime overhead without permitting an extra box per evaluation.
+        const int runtimeOverheadAllowance = 8 * 1024;
+        Assert.That(allocated, Is.LessThanOrEqualTo(24L * iterations + runtimeOverheadAllowance));
     }
 
     [Test]
