@@ -28,6 +28,6 @@ internal class ToCSharpTernary : IExpression<string>
 
     public string Evaluate(IContext<string> context)
     {
-        return $"(({condition.Evaluate(context)} ?? false) ? {trueExpr.Evaluate(context)} : {falseExpr.Evaluate(context)})";
+        return $"(((bool?)({CSharpConditionCode.Evaluate(condition, context)}) ?? false) ? {trueExpr.Evaluate(context)} : {falseExpr.Evaluate(context)})";
     }
 }

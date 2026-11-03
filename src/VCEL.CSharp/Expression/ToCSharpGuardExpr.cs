@@ -25,7 +25,7 @@ internal class ToCSharpGuardExpr : IExpression<string>
 
     public string Evaluate(IContext<string> context)
     {
-        var guardCases = guardClauses.Select(gc => $"({gc.Item1.Evaluate(context)}) ? ({gc.Item2.Evaluate(context)}) : ").ToList();
+        var guardCases = guardClauses.Select(gc => $"({CSharpConditionCode.Evaluate(gc.Item1, context)}) ? ({gc.Item2.Evaluate(context)}) : ").ToList();
         var otherCase = otherwise == null ? "default" : $"({otherwise.Evaluate(context)})";
         guardCases.Add(otherCase);
 
