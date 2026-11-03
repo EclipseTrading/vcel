@@ -106,7 +106,7 @@ public class ToCSharpCodeFactory : ExpressionFactory<string>
         => new ToCSharpPropertyOp(name, Monad);
 
     public override IExpression<string> UnaryMinus(IExpression<string> expression)
-        => new ToCSharpStringOp((context) => $"-{expression.Evaluate(context)}", Monad);
+        => new ToCSharpUnaryMinus(Monad, expression);
 
     public override IExpression<string> Not(IExpression<string> e)
         => new ToCSharpNotOp(Monad, e);

@@ -15,4 +15,6 @@ internal class ToCSharpDivideOp : BinaryExprBase<string>
 
     public override string Evaluate(object? lv, object? rv)
         =>  $"((double?){lv} / {rv})";
+
+    public override string Evaluate(IContext<string> context) => CSharpArithmeticCode.Evaluate(this, context);
 }
