@@ -157,14 +157,20 @@ public class CSharpStaticBindingTests
         Assert.That(current!.GetType(), Is.EqualTo(previous!.GetType()));
     }
 
-    [TestCase("<")]
-    [TestCase("<=")]
-    [TestCase(">")]
-    [TestCase(">=")]
-    public void ComparisonsPreserveTypesNullsAndExceptions(string operation)
+    [TestCase("<", false)]
+    [TestCase("<=", false)]
+    [TestCase(">", false)]
+    [TestCase(">=", false)]
+    [TestCase("<", true)]
+    [TestCase("<=", true)]
+    [TestCase(">", true)]
+    [TestCase(">=", true)]
+    public void ComparisonsPreserveTypesNullsAndExceptions(string operation, bool asCondition)
     {
-        var current = Compile($"Value{operation}Other");
-        var previous = Compile($"Value{operation}Other", legacy: true);
+        var comparison = $"Value{operation}Other";
+        var text = asCondition ? $"{comparison} ? 1 : 2" : comparison;
+        var current = Compile(text);
+        var previous = Compile(text, legacy: true);
         var values = new object?[] { null, 1, 2L, 3f, 4d, 5m, "A", "B", true,
             double.NaN, double.PositiveInfinity, new object(),
             new DateTime(2026, 1, 1), TimeSpan.FromSeconds(1) };
@@ -173,6 +179,8 @@ public class CSharpStaticBindingTests
             foreach (var right in values)
             {
                 var row = new Row { Value = left, Other = right };
+                var context = $"{text}: {left ?? "null"} ({left?.GetType().Name}) / " +
+                              $"{right ?? "null"} ({right?.GetType().Name})";
                 object? expected;
                 try
                 {
@@ -180,34 +188,46 @@ public class CSharpStaticBindingTests
                 }
                 catch (Exception error)
                 {
-                    Assert.That(Assert.Catch(() => current(row))!.GetType(), Is.EqualTo(error.GetType()));
+                    var actualError = Assert.Catch(() => current(row), context);
+                    Assert.That(actualError?.GetType(), Is.EqualTo(error.GetType()), context);
                     continue;
                 }
 
-                Assert.That(current(row), Is.EqualTo(expected), $"{left} {operation} {right}");
+                var actual = current(row);
+                Assert.That(actual, Is.EqualTo(expected), context);
+                Assert.That(actual?.GetType(), Is.EqualTo(expected?.GetType()), context);
             }
         }
     }
 
-    [Test]
-    public void ComparisonsKeepCustomComparableDispatch()
-    {
-        var left = new ComparableValue(1);
-        var right = new ComparableValue(2);
-        Assert.That(Compile("Value<Other")(new Row { Value = left, Other = right }), Is.True);
-        Assert.That(left.Comparisons, Is.EqualTo(new[] { right }));
-    }
-
-    [Test]
-    public void ComparisonsPreserveGetterOrderAndExceptionShortCircuiting()
+    [TestCase("Value<Other", true)]
+    [TestCase("Value<Other ? 1 : 2", 1)]
+    public void ComparisonsKeepCustomComparableDispatch(string text, object expected)
     {
         foreach (var legacy in new[] { true, false })
         {
+            var left = new ComparableValue(1);
+            var right = new ComparableValue(2);
+            Assert.That(Compile(text, legacy)(new Row { Value = left, Other = right }),
+                Is.EqualTo(expected).And.TypeOf(expected.GetType()));
+            Assert.That(left.Comparisons, Is.EqualTo(new[] { right }));
+        }
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ComparisonsPreserveGetterOrderAndExceptionShortCircuiting(bool asCondition)
+    {
+        var text = asCondition ? "Value<Other ? 1 : 2" : "Value<Other";
+        var failingText = asCondition ? "Fail<Other ? 1 : 2" : "Fail<Other";
+        object expected = asCondition ? (object)1 : true;
+        foreach (var legacy in new[] { true, false })
+        {
             var row = new ObservedRow(1d, 1d);
-            Assert.That(Compile("Value<Other", legacy)(row), Is.True);
+            Assert.That(Compile(text, legacy)(row), Is.EqualTo(expected).And.TypeOf(expected.GetType()));
             Assert.That(row.Reads, Is.EqualTo(new[] { "Value", "Value", "Other", "Other" }));
             row.Reads.Clear();
-            Assert.Throws<InvalidOperationException>(() => Compile("Fail<Other", legacy)(row));
+            Assert.Throws<InvalidOperationException>(() => Compile(failingText, legacy)(row));
             Assert.That(row.Reads, Is.EqualTo(new[] { "Fail" }));
         }
     }
