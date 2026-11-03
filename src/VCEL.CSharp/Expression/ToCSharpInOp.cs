@@ -16,4 +16,9 @@ internal class ToCSharpInOp : BinaryExprBase<string>
     {
         return Equals(rv, "null") ? "null" : $@"{rv}.Any(elem => TypeOperation.EqualsChecked({lv}, elem))";
     }
+
+    public override string Evaluate(IContext<string> context)
+        => Right is ToCSharpLiteralSetOp set
+            ? set.Membership(Left.Evaluate(context))
+            : base.Evaluate(context);
 }
