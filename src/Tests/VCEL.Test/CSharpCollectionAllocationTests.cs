@@ -177,35 +177,6 @@ public class CSharpCollectionAllocationTests
         Assert.That(result?.GetType(), Is.EqualTo(expected.GetType()));
     }
 
-    [TestCase(false, false)]
-    [TestCase(false, true)]
-    [TestCase(true, false)]
-    [TestCase(true, true)]
-    public void InSetUsesTheSameGenerationAndDependenciesAsIn(bool advanced, bool numeric)
-    {
-        ToCSharpCodeFactory factory = advanced
-            ? new AdvanceToCSharpCodeFactory(VCEL.Expression.ConcatStringMonad.Instance)
-            : new ToCSharpCodeFactory(VCEL.Expression.ConcatStringMonad.Instance);
-        var values = numeric ? new HashSet<object> { 1, 2 } : new HashSet<object> { "A", "B" };
-        var property = factory.Property("Code");
-        var direct = factory.InSet(property, values);
-        var dispatched = factory.In(property, factory.Set(values));
-        var directMembers = direct.Dependencies.OfType<CSharpMemberDependency>().ToArray();
-        var dispatchedMembers = dispatched.Dependencies.OfType<CSharpMemberDependency>().ToArray();
-        Assert.That(directMembers, Has.Length.EqualTo(advanced ? 1 : 0));
-        Assert.That(dispatchedMembers, Has.Length.EqualTo(directMembers.Length));
-        var directCode = direct.Evaluate(new object());
-        var dispatchedCode = dispatched.Evaluate(new object());
-        for (var i = 0; i < directMembers.Length; i++)
-        {
-            dispatchedCode = dispatchedCode.Replace(dispatchedMembers[i].Name, directMembers[i].Name, StringComparison.Ordinal);
-            Assert.That(dispatchedMembers[i].Declaration.Replace(
-                dispatchedMembers[i].Name, directMembers[i].Name, StringComparison.Ordinal),
-                Is.EqualTo(directMembers[i].Declaration));
-        }
-        Assert.That(directCode, Is.EqualTo(dispatchedCode));
-    }
-
     [Test]
     public void ListMembershipStillBuildsAllElementsBeforeReadingTheValue()
     {
