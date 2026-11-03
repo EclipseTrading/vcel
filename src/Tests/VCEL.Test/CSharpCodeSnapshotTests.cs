@@ -12,6 +12,7 @@ using VCEL.Expression;
 
 namespace VCEL.Test;
 
+[SetCulture("en-US")]
 public class CSharpCodeSnapshotTests
 {
     public sealed class Snapshot
