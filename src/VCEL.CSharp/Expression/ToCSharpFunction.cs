@@ -33,7 +33,7 @@ internal class ToCSharpFunction : IExpression<string>
         if (functions.HasFunction(name))
         {
             var function = functions.GetFunction(name)!;
-            var argValues = args.Select(s => (object?)s.Evaluate(context)).ToArray();
+            var argValues = args.Select(s => (object?)ToCSharpTernary.EvaluateValue(s, context)).ToArray();
             return function.Func.Invoke(argValues, context)?.ToString() ?? "";
         }
 
