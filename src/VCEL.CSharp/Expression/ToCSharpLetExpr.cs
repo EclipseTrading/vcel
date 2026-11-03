@@ -26,7 +26,7 @@ internal sealed class ToCSharpLetExpr(
             ? ctx.WithOverrides(propFuncs)
             : new CSharpObjectContext(Monad, context.Value, propFuncs);
 
-        var letCauses = bindings.Select(b => $"var {b.Item1} = {ToCSharpTernary.EvaluateValue(b.Item2, cSharpObjectContext)}");
+        var letCauses = bindings.Select(b => $"var {b.Item1} = {b.Item2.Evaluate(cSharpObjectContext)}");
         var returnCause = expr.Evaluate(cSharpObjectContext);
 
         var result =

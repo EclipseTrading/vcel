@@ -8,9 +8,9 @@ namespace VCEL.Test;
 public class CSharpConditionalCompatibilityTests
 {
     [TestCase("match | true=(1==1)",
-        "((true) ? (((dynamic)(TypeOperation.EqualsChecked((object)(1), (object)(1))))) :  default)")]
+        "((true) ? (TypeOperation.EqualsChecked(1, 1)) :  default)")]
     [TestCase("true ? int(1==1) : 'other'",
-        "(((bool?)(true) ?? false) ? VcelType.Integer(((dynamic)(TypeOperation.EqualsChecked((object)(1), (object)(1))))) : \"other\")")]
+        "(((bool?)(true) ?? false) ? VcelType.Integer(TypeOperation.EqualsChecked(1, 1)) : \"other\")")]
     public void ValueBoundaryCodeMatchesSnapshot(string text, string expected)
     {
         var parsed = CSharpExpression.ParseCode(text);
@@ -106,7 +106,7 @@ public class CSharpConditionalCompatibilityTests
     [TestCase("match | Flag=(Code=='A')", false, 0)]
     [TestCase("match | Flag=(Code=='A')", true, 24)]
     [TestCase("match | Flag=(Code!='A')", false, 0)]
-    [TestCase("match | Flag=(Code!='A')", true, 24)]
+    [TestCase("match | Flag=(Code!='A')", true, 48)]
     public void MatchOnlyAllocatesSelectedBoolean(string text, bool flag, int expectedBytes)
     {
         var evaluate = Compile(text);
@@ -121,6 +121,19 @@ public class CSharpConditionalCompatibilityTests
         var evaluate = Compile("let x=Flag ? Code=='A' : null in x");
         var row = new Row { Flag = flag };
         AssertAllocation(evaluate, row, flag ? 24 : 0);
+    }
+
+    [TestCase("Code=='A' ? 1 : 2")]
+    [TestCase("(Code=='A' && Code!='B') ? 1 : 2")]
+    [TestCase("(Code=='B' || Code=='A') ? 1 : 2")]
+    [TestCase("!(Code!='A') ? 1 : 2")]
+    [TestCase("match | !(Code!='A')=1 | otherwise 2")]
+    public void BooleanConditionsDoNotBoxIntermediateEqualities(string text)
+    {
+        var evaluate = Compile(text);
+        var row = new Row();
+        Assert.That(evaluate(row), Is.EqualTo(1));
+        AssertAllocation(evaluate, row, 24);
     }
 
     private static void AssertAllocation(Func<object, object?> evaluate, Row row, int expectedBytes)
