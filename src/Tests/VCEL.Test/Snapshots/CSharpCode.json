@@ -1,0 +1,691 @@
+[
+  {
+    "Name": "NullLiteral",
+    "Expression": "null",
+    "CSharp": "null"
+  },
+  {
+    "Name": "BooleanLiteral",
+    "Expression": "true",
+    "CSharp": "true"
+  },
+  {
+    "Name": "IntegerLiteral",
+    "Expression": "123",
+    "CSharp": "123"
+  },
+  {
+    "Name": "LongLiteral",
+    "Expression": "2147483648L",
+    "CSharp": "2147483648"
+  },
+  {
+    "Name": "DoubleLiteral",
+    "Expression": "1.25",
+    "CSharp": "1.25"
+  },
+  {
+    "Name": "StringLiteral",
+    "Expression": "'quoted \"text\"'",
+    "CSharp": "\"quoted \\\"text\\\"\""
+  },
+  {
+    "Name": "Property",
+    "Expression": "Price",
+    "CSharp": "(CSharpHelper.IsNumber((vcelContext.Price)) ? ((double)((vcelContext.Price))) : ((vcelContext.Price)))"
+  },
+  {
+    "Name": "NestedMember",
+    "Expression": "Order.Price",
+    "CSharp": "(CSharpHelper.IsNumber(((CSharpHelper.IsNumber((vcelContext.Order)) ? ((double)((vcelContext.Order))) : ((vcelContext.Order))).Price)) ? ((double)(((CSharpHelper.IsNumber((vcelContext.Order)) ? ((double)((vcelContext.Order))) : ((vcelContext.Order))).Price))) : (((CSharpHelper.IsNumber((vcelContext.Order)) ? ((double)((vcelContext.Order))) : ((vcelContext.Order))).Price)))"
+  },
+  {
+    "Name": "LiteralArithmetic",
+    "Expression": "(2+3)*4-5/2",
+    "CSharp": "(((2 + 3) * 4) - ((double?)5 / 2))"
+  },
+  {
+    "Name": "Add",
+    "Expression": "A+B",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+  },
+  {
+    "Name": "Subtraction",
+    "Expression": "A-B",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+  },
+  {
+    "Name": "Multiply",
+    "Expression": "A*B",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) * (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+  },
+  {
+    "Name": "Divide",
+    "Expression": "A/B",
+    "CSharp": "((double?)(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) / (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+  },
+  {
+    "Name": "OperatorPrecedence",
+    "Expression": "A+B*C-D/E",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + ((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) * (CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C))))) - ((double?)(CSharpHelper.IsNumber((vcelContext.D)) ? ((double)((vcelContext.D))) : ((vcelContext.D))) / (CSharpHelper.IsNumber((vcelContext.E)) ? ((double)((vcelContext.E))) : ((vcelContext.E)))))"
+  },
+  {
+    "Name": "GroupedArithmetic",
+    "Expression": "(A+B)*(C-D)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) * ((CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C))) - (CSharpHelper.IsNumber((vcelContext.D)) ? ((double)((vcelContext.D))) : ((vcelContext.D)))))"
+  },
+  {
+    "Name": "LiteralSubtree",
+    "Expression": "A*(5/2)",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) * ((double?)5 / 2))"
+  },
+  {
+    "Name": "NullOperand",
+    "Expression": "A+null",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + null)"
+  },
+  {
+    "Name": "StringOperand",
+    "Expression": "A+' suffix'",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + \" suffix\")"
+  },
+  {
+    "Name": "LongOperand",
+    "Expression": "A+9007199254740993L",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 9007199254740993)"
+  },
+  {
+    "Name": "UnaryMinus",
+    "Expression": "-A",
+    "CSharp": "-(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A)))"
+  },
+  {
+    "Name": "NegatedArithmetic",
+    "Expression": "-(A-B)",
+    "CSharp": "-((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))))"
+  },
+  {
+    "Name": "UnaryArithmeticComposition",
+    "Expression": "(-A+B)*C",
+    "CSharp": "((-(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) * (CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C))))"
+  },
+  {
+    "Name": "ConstantArithmeticOperand",
+    "Expression": "A+(2+3)",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + (2 + 3))"
+  },
+  {
+    "Name": "Power",
+    "Expression": "(A-B)^2",
+    "CSharp": "(VcelMath.Pow(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), 2))"
+  },
+  {
+    "Name": "Modulo",
+    "Expression": "mod(A,3)",
+    "CSharp": "VcelMath.Mod((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))),3)"
+  },
+  {
+    "Name": "OfferPremium",
+    "Expression": "((BBO_ask)-(Tv_tvAdjusted-StarPricingParameters_priceOffset))/(Tv_tvAdjusted-StarPricingParameters_priceOffset)*10000",
+    "CSharp": "(((double?)((CSharpHelper.IsNumber((vcelContext.BBO_ask)) ? ((double)((vcelContext.BBO_ask))) : ((vcelContext.BBO_ask))) - ((CSharpHelper.IsNumber((vcelContext.Tv_tvAdjusted)) ? ((double)((vcelContext.Tv_tvAdjusted))) : ((vcelContext.Tv_tvAdjusted))) - (CSharpHelper.IsNumber((vcelContext.StarPricingParameters_priceOffset)) ? ((double)((vcelContext.StarPricingParameters_priceOffset))) : ((vcelContext.StarPricingParameters_priceOffset))))) / ((CSharpHelper.IsNumber((vcelContext.Tv_tvAdjusted)) ? ((double)((vcelContext.Tv_tvAdjusted))) : ((vcelContext.Tv_tvAdjusted))) - (CSharpHelper.IsNumber((vcelContext.StarPricingParameters_priceOffset)) ? ((double)((vcelContext.StarPricingParameters_priceOffset))) : ((vcelContext.StarPricingParameters_priceOffset))))) * 10000)"
+  },
+  {
+    "Name": "Equal",
+    "Expression": "feedcode=='515190'",
+    "CSharp": "TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.feedcode)) ? ((double)((vcelContext.feedcode))) : ((vcelContext.feedcode))), \"515190\")"
+  },
+  {
+    "Name": "NotEqual",
+    "Expression": "feedcode!='515190'",
+    "CSharp": "!TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.feedcode)) ? ((double)((vcelContext.feedcode))) : ((vcelContext.feedcode))), \"515190\")"
+  },
+  {
+    "Name": "EqualNull",
+    "Expression": "A==null",
+    "CSharp": "TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), null)"
+  },
+  {
+    "Name": "GreaterThan",
+    "Expression": "A>10",
+    "CSharp": "(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 10, \">\"))"
+  },
+  {
+    "Name": "LessOrEqual",
+    "Expression": "A<=B",
+    "CSharp": "(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))), \"<=\"))"
+  },
+  {
+    "Name": "ArithmeticComparison",
+    "Expression": "A-B==1",
+    "CSharp": "TypeOperation.EqualsChecked(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))), 1)"
+  },
+  {
+    "Name": "Between",
+    "Expression": "A between {1,10}",
+    "CSharp": "(CSharpHelper.IsBetween<object>((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 1, 10))"
+  },
+  {
+    "Name": "BooleanAnd",
+    "Expression": "A and B",
+    "CSharp": "(((bool)(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A)))) ? ((bool?)(CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))) : false)"
+  },
+  {
+    "Name": "BooleanOr",
+    "Expression": "A or B",
+    "CSharp": "(((bool)(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A)))) ? true : ((bool?)(CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))))"
+  },
+  {
+    "Name": "BooleanNot",
+    "Expression": "!A",
+    "CSharp": "!(CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A)))"
+  },
+  {
+    "Name": "MixedBoolean",
+    "Expression": "A>0 and (B==null or B<10)",
+    "CSharp": "(((bool)(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 0, \">\"))) ? ((bool?)(((bool)TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))), null)) ? true : ((bool?)(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))), 10, \"<\"))))) : false)"
+  },
+  {
+    "Name": "TernaryProperty",
+    "Expression": "A?B:C",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) ?? false) ? (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) : (CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C))))"
+  },
+  {
+    "Name": "TernaryComparison",
+    "Expression": "A==null?1:2",
+    "CSharp": "((TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), null) ?? false) ? 1 : 2)"
+  },
+  {
+    "Name": "NestedTernary",
+    "Expression": "A>0?B>0?1:2:3",
+    "CSharp": "(((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 0, \">\")) ?? false) ? (((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))), 0, \">\")) ?? false) ? 1 : 2) : 3)"
+  },
+  {
+    "Name": "MatchWithOtherwise",
+    "Expression": "match | A<10='Low' | A<20='Medium' | otherwise 'High'",
+    "CSharp": "(((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 10, \"<\"))) ? (\"Low\") :  ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), 20, \"<\"))) ? (\"Medium\") :  (\"High\"))"
+  },
+  {
+    "Name": "MatchWithoutOtherwise",
+    "Expression": "match | feedcode=='515190'=2000000 | feedcode=='530050'=1000000",
+    "CSharp": "((TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.feedcode)) ? ((double)((vcelContext.feedcode))) : ((vcelContext.feedcode))), \"515190\")) ? (2000000) :  (TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.feedcode)) ? ((double)((vcelContext.feedcode))) : ((vcelContext.feedcode))), \"530050\")) ? (1000000) :  default)"
+  },
+  {
+    "Name": "LetArithmetic",
+    "Expression": "let adjusted=Tv-Offset in (Ask-adjusted)/adjusted*10000",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var adjusted = ((CSharpHelper.IsNumber((vcelContext.Tv)) ? ((double)((vcelContext.Tv))) : ((vcelContext.Tv))) - (CSharpHelper.IsNumber((vcelContext.Offset)) ? ((double)((vcelContext.Offset))) : ((vcelContext.Offset)))); return ((((double?)((CSharpHelper.IsNumber((vcelContext.Ask)) ? ((double)((vcelContext.Ask))) : ((vcelContext.Ask))) - adjusted) / adjusted) * 10000));})(vcelContext))"
+  },
+  {
+    "Name": "MultipleLetBindings",
+    "Expression": "let x=A+1,y=B+2 in x*y",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); var y = ((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) + 2); return ((x * y));})(vcelContext))"
+  },
+  {
+    "Name": "NestedLet",
+    "Expression": "let x=A+1 in let y=x+2 in y*3",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); return ((new Func<dynamic, object>(vcelContext => {var y = (x + 2); return ((y * 3));})(vcelContext)));})(vcelContext))"
+  },
+  {
+    "Name": "SequentialLetBindings",
+    "Expression": "let x=A-B,y=x+2 in -y*C",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))); var y = (x + 2); return ((-y * (CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C)))));})(vcelContext))"
+  },
+  {
+    "Name": "EscapingLetValue",
+    "Expression": "let x=A+1 in [x,x]",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+  },
+  {
+    "Name": "AliasedLetValue",
+    "Expression": "let x=A+1,y=x in [x,y]",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) + 1); var y = x; return ((new IEnumerable<object>[] { new object [] { x }, new object [] { y } }.SelectMany(e => e)).ToList());})(vcelContext))"
+  },
+  {
+    "Name": "LiteralLetArithmetic",
+    "Expression": "let x=2147483647 in x+1",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = 2147483647; return ((x + 1));})(vcelContext))"
+  },
+  {
+    "Name": "MatchInsideLet",
+    "Expression": "let x=A-B in match | x<0=0 | otherwise x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = ((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))); return ((((CSharpHelper.UpCastCompare(x, 0, \"<\"))) ? (0) :  (x)));})(vcelContext))"
+  },
+  {
+    "Name": "NumericFunction",
+    "Expression": "abs(A-B)",
+    "CSharp": "VcelMath.Abs(((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) - (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B)))))"
+  },
+  {
+    "Name": "NestedFunctions",
+    "Expression": "round(abs(A),2)",
+    "CSharp": "VcelMath.Round(VcelMath.Abs((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A)))),2)"
+  },
+  {
+    "Name": "StringFunction",
+    "Expression": "substring(Name,0,3)",
+    "CSharp": "VcelString.Substring((CSharpHelper.IsNumber((vcelContext.Name)) ? ((double)((vcelContext.Name))) : ((vcelContext.Name))),0,3)"
+  },
+  {
+    "Name": "MemberFunction",
+    "Expression": "Name.startsWith('ABC')",
+    "CSharp": ""
+  },
+  {
+    "Name": "Regex",
+    "Expression": "Code matches 'A.*'",
+    "CSharp": "(CSharpHelper.Matches((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A.*\"))"
+  },
+  {
+    "Name": "DateLiteral",
+    "Expression": "@2026-01-02T00:00:00+08:00",
+    "CSharp": "(new DateTimeOffset(639029088000000000, TimeSpan.FromHours(8)))"
+  },
+  {
+    "Name": "TimeSpanLiteral",
+    "Expression": "01:02:03",
+    "CSharp": "new TimeSpan(37230000000)"
+  },
+  {
+    "Name": "DateArithmetic",
+    "Expression": "Date+01:00:00",
+    "CSharp": "((CSharpHelper.IsNumber((vcelContext.Date)) ? ((double)((vcelContext.Date))) : ((vcelContext.Date))) + new TimeSpan(36000000000))"
+  },
+  {
+    "Name": "List",
+    "Expression": "[A,B+1,'text']",
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { ((CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) + 1) }, new object [] { \"text\" } }.SelectMany(e => e)).ToList()"
+  },
+  {
+    "Name": "EmptyList",
+    "Expression": "[]",
+    "CSharp": "(new IEnumerable<object>[] {  }.SelectMany(e => e)).ToList()"
+  },
+  {
+    "Name": "SetMembership",
+    "Expression": "Code in {'A','B','C'}",
+    "CSharp": "(new HashSet<object>{\"A\",\"B\",\"C\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+  },
+  {
+    "Name": "ListMembership",
+    "Expression": "A in [B,C+1]",
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) }, new object [] { ((CSharpHelper.IsNumber((vcelContext.C)) ? ((double)((vcelContext.C))) : ((vcelContext.C))) + 1) } }.SelectMany(e => e)).ToList().Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+  },
+  {
+    "Name": "SpreadList",
+    "Expression": "[...items,'extra']",
+    "CSharp": "(new IEnumerable<object>[] { (IEnumerable<object>)(object)(CSharpHelper.IsNumber((vcelContext.items)) ? ((double)((vcelContext.items))) : ((vcelContext.items))), new object [] { \"extra\" } }.SelectMany(e => e)).ToList()"
+  },
+  {
+    "Name": "EmptySetMembership",
+    "Expression": "A in {}",
+    "CSharp": "(new HashSet<object>{}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+  },
+  {
+    "Name": "SingletonList",
+    "Expression": "[A]",
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) } }.SelectMany(e => e)).ToList()"
+  },
+  {
+    "Name": "NestedMixedList",
+    "Expression": "[A,null,A,[B]]",
+    "CSharp": "(new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { null }, new object [] { (CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))) }, new object [] { (new IEnumerable<object>[] { new object [] { (CSharpHelper.IsNumber((vcelContext.B)) ? ((double)((vcelContext.B))) : ((vcelContext.B))) } }.SelectMany(e => e)).ToList() } }.SelectMany(e => e)).ToList()"
+  },
+  {
+    "Name": "SingletonSetMembership",
+    "Expression": "Code in {'A'}",
+    "CSharp": "(new HashSet<object>{\"A\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+  },
+  {
+    "Name": "DuplicateSetMembership",
+    "Expression": "Code in {'A','A','B'}",
+    "CSharp": "(new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+  },
+  {
+    "Name": "MixedNumericSetMembership",
+    "Expression": "A in {1,2.5,'3'}",
+    "CSharp": "(new HashSet<object>{1,2.5,\"3\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+  },
+  {
+    "Name": "RenderedDuplicateSetMembership",
+    "Expression": "A in {1,1.0,1L}",
+    "CSharp": "(new HashSet<object>{1,1,1}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+  },
+  {
+    "Name": "NullSetMembership",
+    "Expression": "A in {null,'null'}",
+    "CSharp": "(new HashSet<object>{\"null\",\"null\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.A)) ? ((double)((vcelContext.A))) : ((vcelContext.A))), elem))"
+  },
+  {
+    "Name": "LargerSetMembership",
+    "Expression": "Code in {'A','B','C','D','E','F','G','H','I','J'}",
+    "CSharp": "(new HashSet<object>{\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\",\"J\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem))"
+  },
+  {
+    "Name": "SetMembershipTernary",
+    "Expression": "(Code in {'A','B'})?1:2",
+    "CSharp": "(((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), elem)) ?? false) ? 1 : 2)"
+  },
+  {
+    "Name": "LetSetMembership",
+    "Expression": "let x=Code in (x in {'A','B'})",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))); return ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked(x, elem)));})(vcelContext))"
+  },
+  {
+    "Name": "StandaloneSet",
+    "Expression": "{'A','B','A'}",
+    "CSharp": "(new HashSet<object>{\"A\",\"B\"})"
+  },
+  {
+    "Name": "ConditionalEqualityNull",
+    "Expression": "Flag ? Code=='A' : null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null)"
+  },
+  {
+    "Name": "ConditionalInequalityNull",
+    "Expression": "Flag ? Code!='A' : null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null)"
+  },
+  {
+    "Name": "ConditionalNullEquality",
+    "Expression": "Flag ? null : Code=='A'",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"))"
+  },
+  {
+    "Name": "ConditionalNullInequality",
+    "Expression": "Flag ? null : Code!='A'",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"))"
+  },
+  {
+    "Name": "ConditionalLiteralEquality",
+    "Expression": "true ? 1==1 : null",
+    "CSharp": "((true ?? false) ? TypeOperation.EqualsChecked(1, 1) : null)"
+  },
+  {
+    "Name": "LetConditionalEqualityNull",
+    "Expression": "let x=Flag ? Code=='A' : null in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalInequalityNull",
+    "Expression": "let x=Flag ? Code!='A' : null in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalNullEquality",
+    "Expression": "let x=Flag ? null : Code=='A' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalNullInequality",
+    "Expression": "let x=Flag ? null : Code!='A' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? null : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityString",
+    "Expression": "let x=Flag ? (Code=='A') : 'other' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : \"other\"); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalInequalityInteger",
+    "Expression": "let x=Flag ? Code!='A' : 1 in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : 1); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalIntegerInequality",
+    "Expression": "let x=Flag ? 1 : Code!='A' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? 1 : !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\")); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityBoolean",
+    "Expression": "let x=Flag ? Code=='A' : false in !x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : false); return (!x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityNullCheck",
+    "Expression": "let x=Flag ? Code=='A' : null in x==null",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (TypeOperation.EqualsChecked(x, null));})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityCondition",
+    "Expression": "let x=Flag ? Code=='A' : null in x ? 1 : 2",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (((x ?? false) ? 1 : 2));})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityList",
+    "Expression": "let x=Flag ? Code=='A' : null in [x,x]",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return ((new IEnumerable<object>[] { new object [] { x }, new object [] { x } }.SelectMany(e => e)).ToList());})(vcelContext))"
+  },
+  {
+    "Name": "LetNestedConditionalEquality",
+    "Expression": "let x=Flag ? (Flag ? Code=='A' : null) : 'other' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null) : \"other\"); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetEqualityConditionalNull",
+    "Expression": "let equal=Code=='A',x=Flag ? equal : null in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : null); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetInequalityConditionalString",
+    "Expression": "let equal=Code!='A',x=Flag ? equal : 'other' in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : \"other\"); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalNegatedEquality",
+    "Expression": "let x=Flag ? !(Code=='A') : null in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? !TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : null); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetNegatedInequalityConditionalNull",
+    "Expression": "let equal=!(Code!='A'),x=Flag ? equal : null in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var equal = !!TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\"); var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? equal : null); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "LetConditionalEqualityUnselectedBranch",
+    "Expression": "let x=Flag ? Code=='A' : Fail in x",
+    "CSharp": "(new Func<dynamic, object>(vcelContext => {var x = (((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag))) ?? false) ? TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Code)) ? ((double)((vcelContext.Code))) : ((vcelContext.Code))), \"A\") : (CSharpHelper.IsNumber((vcelContext.Fail)) ? ((double)((vcelContext.Fail))) : ((vcelContext.Fail)))); return (x);})(vcelContext))"
+  },
+  {
+    "Name": "GuardComparisonResult",
+    "Expression": "match | Flag=(Value<Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardLessEqualResult",
+    "Expression": "match | Flag=(Value<=Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<=\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardGreaterResult",
+    "Expression": "match | Flag=(Value>Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardGreaterEqualResult",
+    "Expression": "match | Flag=(Value>=Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">=\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardStringMembershipResult",
+    "Expression": "match | Flag=(Value in {'A','B'})",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardNegatedComparisonResult",
+    "Expression": "match | Flag=(!(Value<Other))",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (!(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardMultipleComparisonResults",
+    "Expression": "match | Flag=(Value<Other) | Other==2=(Value>Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), 2)) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardMultipleStringMembershipResults",
+    "Expression": "match | Flag=(Value in {'A','B'}) | Other==2=(Value in {'C','D'})",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), 2)) ? ((new HashSet<object>{\"C\",\"D\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardComparisonExplicitNull",
+    "Expression": "match | Flag=(Value<Other) | otherwise null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (null))",
+    "Members": []
+  },
+  {
+    "Name": "GuardStringMembershipExplicitNull",
+    "Expression": "match | Flag=(Value in {'A','B'}) | otherwise null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (null))",
+    "Members": []
+  },
+  {
+    "Name": "GuardComparisonExplicitBoolean",
+    "Expression": "match | Flag=(Value<Other) | otherwise false",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (false))",
+    "Members": []
+  },
+  {
+    "Name": "GuardStringMembershipExplicitString",
+    "Expression": "match | Flag=(Value in {'A','B'}) | otherwise 'missing'",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((new HashSet<object>{\"A\",\"B\"}).Any(elem => TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), elem))) :  (\"missing\"))",
+    "Members": []
+  },
+  {
+    "Name": "GuardIntegerDefault",
+    "Expression": "match | Flag=1",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (1) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardBooleanDefault",
+    "Expression": "match | Flag=true",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (true) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "GuardUnselectedComparison",
+    "Expression": "match | false=(Fail<Other)",
+    "CSharp": "((false) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Fail)) ? ((double)((vcelContext.Fail))) : ((vcelContext.Fail))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardComparisonResult",
+    "Expression": "match | Flag=(Value<Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardLessEqualResult",
+    "Expression": "match | Flag=(Value<=Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<=\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardGreaterResult",
+    "Expression": "match | Flag=(Value>Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardGreaterEqualResult",
+    "Expression": "match | Flag=(Value>=Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">=\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardStringMembershipResult",
+    "Expression": "match | Flag=(Value in {'A','B'})",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  default)",
+    "WithMembers": true,
+    "Members": [
+      "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
+    ]
+  },
+  {
+    "Name": "AdvancedGuardNegatedComparisonResult",
+    "Expression": "match | Flag=(!(Value<Other))",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (!(CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardMultipleComparisonResults",
+    "Expression": "match | Flag=(Value<Other) | Other==2=(Value>Other)",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), 2)) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \">\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardMultipleStringMembershipResults",
+    "Expression": "match | Flag=(Value in {'A','B'}) | Other==2=(Value in {'C','D'})",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (TypeOperation.EqualsChecked((CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), 2)) ? ((vcelContext.Value) is string ? snapshot_set_1.Contains((vcelContext.Value).ToString()) : false) :  default)",
+    "WithMembers": true,
+    "Members": [
+      "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];",
+      "private static readonly HashSet<string> snapshot_set_1 = [\"C\",\"D\"];"
+    ]
+  },
+  {
+    "Name": "AdvancedGuardComparisonExplicitNull",
+    "Expression": "match | Flag=(Value<Other) | otherwise null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (null))",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardStringMembershipExplicitNull",
+    "Expression": "match | Flag=(Value in {'A','B'}) | otherwise null",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (null))",
+    "WithMembers": true,
+    "Members": [
+      "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
+    ]
+  },
+  {
+    "Name": "AdvancedGuardComparisonExplicitBoolean",
+    "Expression": "match | Flag=(Value<Other) | otherwise false",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Value)) ? ((double)((vcelContext.Value))) : ((vcelContext.Value))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  (false))",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardStringMembershipExplicitString",
+    "Expression": "match | Flag=(Value in {'A','B'}) | otherwise 'missing'",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? ((vcelContext.Value) is string ? snapshot_set_0.Contains((vcelContext.Value).ToString()) : false) :  (\"missing\"))",
+    "WithMembers": true,
+    "Members": [
+      "private static readonly HashSet<string> snapshot_set_0 = [\"A\",\"B\"];"
+    ]
+  },
+  {
+    "Name": "AdvancedGuardIntegerDefault",
+    "Expression": "match | Flag=1",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (1) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardBooleanDefault",
+    "Expression": "match | Flag=true",
+    "CSharp": "(((CSharpHelper.IsNumber((vcelContext.Flag)) ? ((double)((vcelContext.Flag))) : ((vcelContext.Flag)))) ? (true) :  default)",
+    "WithMembers": true,
+    "Members": []
+  },
+  {
+    "Name": "AdvancedGuardUnselectedComparison",
+    "Expression": "match | false=(Fail<Other)",
+    "CSharp": "((false) ? ((CSharpHelper.UpCastCompare((CSharpHelper.IsNumber((vcelContext.Fail)) ? ((double)((vcelContext.Fail))) : ((vcelContext.Fail))), (CSharpHelper.IsNumber((vcelContext.Other)) ? ((double)((vcelContext.Other))) : ((vcelContext.Other))), \"<\"))) :  default)",
+    "WithMembers": true,
+    "Members": []
+  }
+]
