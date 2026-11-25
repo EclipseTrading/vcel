@@ -32,4 +32,10 @@ public readonly struct CSharpPropertyValueAccessor : IValueAccessor<string>
                           $"? ((double)({finalPropOrMethod})) " +
                           $": ({finalPropOrMethod}))");
     }
+
+    internal bool TryGetRawValue(IContext<string> context, out string value)
+    {
+        value = $"({context.Value}.{propName})";
+        return overridePropFunc == null || !overridePropFunc.ContainsKey(propName);
+    }
 }
